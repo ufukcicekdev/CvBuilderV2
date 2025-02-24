@@ -1,0 +1,23 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="250" cy="250" r="240" fill="#f5f5f5"/>
+  
+  <!-- 404 Text -->
+  <text x="50%" y="45%" font-size="120" font-weight="bold" text-anchor="middle" fill="#1976d2">404</text>
+  
+  <!-- Sad Face -->
+  <g transform="translate(250 280)">
+    <!-- Eyes -->
+    <circle cx="-50" cy="0" r="10" fill="#1976d2"/>
+    <circle cx="50" cy="0" r="10" fill="#1976d2"/>
+    
+    <!-- Sad Mouth -->
+    <path d="M -60 50 Q 0 20 60 50" stroke="#1976d2" stroke-width="8" fill="none"/>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="100" r="20" fill="#bbdefb"/>
+  <circle cx="400" cy="400" r="15" fill="#bbdefb"/>
+  <circle cx="400" cy="100" r="25" fill="#bbdefb"/>
+  <circle cx="100" cy="400" r="18" fill="#bbdefb"/>
+</svg> 

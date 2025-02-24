@@ -1,0 +1,122 @@
+{
+  "app": {
+    "name": "CV Builder",
+    "tagline": "Crea tu CV profesional y da un paso adelante en tu carrera",
+    "description": "Simplifica tu proceso de búsqueda de trabajo y encuentra el trabajo de tus sueños"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "jobs": "Ofertas de Trabajo",
+    "profile": "Mi Perfil",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "search": "Buscar",
+    "notifications": "Notificaciones",
+    "settings": "Configuración",
+    "help": "Ayuda"
+  },
+  "auth": {
+    "jobseeker": "Buscador de Empleo",
+    "employer": "Empleador",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "Olvidé mi Contraseña",
+    "rememberMe": "Recordarme",
+    "loginSuccess": "¡Inicio de sesión exitoso!",
+    "loginError": "Error al iniciar sesión. Por favor, verifica tus credenciales.",
+    "registerSuccess": "¡Registro exitoso!",
+    "registerError": "Error al registrarse. Por favor, verifica tu información.",
+    "orLoginWith": "o iniciar sesión con"
+  },
+  "footer": {
+    "quickLinks": "Enlaces Rápidos",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Uso",
+    "followUs": "Síguenos",
+    "copyright": "Todos los derechos reservados",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "email": "Correo Electrónico"
+  },
+  "pricing": {
+    "title": "Precios",
+    "description": "Elige el plan que se adapte a tus necesidades"
+  },
+  "home": {
+    "hero": {
+      "title": "Plataforma de Creación de CV de Nueva Generación",
+      "subtitle": "Crea CVs dinámicos e interactivos con tecnología de IA",
+      "cta": "Comenzar"
+    },
+    "features": {
+      "title": "¿Por qué CV Builder?",
+      "subtitle": "Características innovadoras que transforman tu proceso de búsqueda de empleo",
+      "realtime": {
+        "title": "Actualizaciones en Tiempo Real",
+        "description": "Actualiza tu CV en tiempo real. ¿Obtuviste un nuevo certificado? Agrégalo al instante y usa tu CV actualizado en las aplicaciones."
+      },
+      "video": {
+        "title": "Soporte de Video CV",
+        "description": "Preséntate con video. Muestra tu personalidad y habilidades de manera más efectiva. La forma más moderna de conectar con empleadores."
+      },
+      "aiAssistant": {
+        "title": "Asistente de IA",
+        "description": "Obtén sugerencias de IA para optimizar tu CV. Personaliza tu CV para ofertas de trabajo específicas y aumenta tus posibilidades de aceptación."
+      },
+      "analytics": {
+        "title": "Análisis de CV",
+        "description": "Rastrea el rendimiento de tu CV. ¿Qué empleadores vieron tu perfil? ¿Cuántas veces se vio tu CV? Todas las estadísticas al alcance de tu mano."
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "steps": [
+        {
+          "title": "Crear Perfil",
+          "description": "Ingresa tu información básica y crea tu perfil profesional"
+        },
+        {
+          "title": "Personalizar CV",
+          "description": "Elige entre plantillas modernas y personaliza tu CV"
+        },
+        {
+          "title": "Agregar Video",
+          "description": "Preséntate con un video corto y destácate"
+        },
+        {
+          "title": "Aplicar",
+          "description": "Aplica a ofertas de trabajo con un clic y avanza en tu carrera"
+        }
+      ]
+    },
+    "stats": {
+      "users": "Usuarios Activos",
+      "companies": "Empresas Asociadas",
+      "cvs": "CVs Creados",
+      "hires": "Contrataciones Exitosas"
+    }
+  },
+  "contact": {
+    "title": "Contacto",
+    "description": "Póngase en contacto con nosotros. Le responderemos lo antes posible.",
+    "name": "Su nombre",
+    "email": "Su correo electrónico",
+    "subject": "Asunto",
+    "message": "Su mensaje",
+    "send": "Enviar",
+    "successMessage": "Su mensaje se ha enviado correctamente. Le responderemos pronto.",
+    "errorMessage": "No se pudo enviar el mensaje. Por favor, inténtelo de nuevo más tarde.",
+    "subjects": {
+      "general": "Pregunta general",
+      "technical": "Soporte técnico",
+      "billing": "Facturación",
+      "feedback": "Comentarios",
+      "other": "Otro"
+    }
+  }
+} 

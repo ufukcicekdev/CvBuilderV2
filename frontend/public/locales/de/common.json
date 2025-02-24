@@ -1,0 +1,20 @@
+{
+  "contact": {
+    "title": "Kontakt",
+    "description": "Kontaktieren Sie uns. Wir melden uns schnellstmöglich bei Ihnen.",
+    "name": "Ihr Name",
+    "email": "Ihre E-Mail",
+    "subject": "Betreff",
+    "message": "Ihre Nachricht",
+    "send": "Senden",
+    "successMessage": "Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns in Kürze bei Ihnen.",
+    "errorMessage": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+    "subjects": {
+      "general": "Allgemeine Frage",
+      "technical": "Technischer Support",
+      "billing": "Zahlungsangelegenheiten",
+      "feedback": "Feedback",
+      "other": "Sonstiges"
+    }
+  }
+} 

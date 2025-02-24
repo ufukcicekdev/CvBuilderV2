@@ -1,0 +1,48 @@
+import { appWithTranslation } from 'next-i18next';
+import { AppProps } from 'next/app';
+import { Providers } from '../providers/Providers';
+import { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import nextI18NextConfig from '../next-i18next.config.js';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from 'stylis-plugin-rtl';
+import { AuthProvider } from '../contexts/AuthContext';
+
+const cacheRtl = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+const cacheLtr = createCache({
+  key: 'muiltr',
+});
+
+function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const isRTL = router.locale === 'ar';
+  const [isSSR, setIsSSR] = useState(true);
+
+  useEffect(() => {
+    setIsSSR(false);
+  }, []);
+
+  if (isSSR) {
+    return null;
+  }
+
+  return (
+    <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
+      <AuthProvider>
+        <Providers>
+          <Component {...pageProps} />
+          <Toaster position={isRTL ? "top-left" : "top-right"} />
+        </Providers>
+      </AuthProvider>
+    </CacheProvider>
+  );
+}
+
+export default appWithTranslation(MyApp, nextI18NextConfig); 

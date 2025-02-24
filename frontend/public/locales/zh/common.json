@@ -1,0 +1,104 @@
+{
+  "app": {
+    "name": "CV Builder",
+    "tagline": "创建您的专业简历，在职业生涯中更进一步",
+    "description": "简化您的求职过程，找到理想的工作"
+  },
+  "nav": {
+    "dashboard": "仪表板",
+    "jobs": "职位列表",
+    "profile": "我的简历",
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出",
+    "search": "搜索",
+    "notifications": "通知",
+    "settings": "设置",
+    "help": "帮助"
+  },
+  "auth": {
+    "jobseeker": "求职者",
+    "employer": "雇主",
+    "email": "电子邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码",
+    "rememberMe": "记住我",
+    "loginSuccess": "登录成功！",
+    "loginError": "登录失败。请检查您的凭据。",
+    "registerSuccess": "注册成功！",
+    "registerError": "注册失败。请检查您的信息。",
+    "orLoginWith": "或使用以下方式登录"
+  },
+  "footer": {
+    "quickLinks": "快速链接",
+    "home": "首页",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "followUs": "关注我们",
+    "copyright": "版权所有",
+    "address": "地址",
+    "phone": "电话",
+    "email": "电子邮箱"
+  },
+  "pricing": {
+    "title": "定价",
+    "description": "选择适合您需求的计划"
+  },
+  "home": {
+    "hero": {
+      "title": "新一代简历制作平台",
+      "subtitle": "创建人工智能驱动的动态交互式简历",
+      "cta": "立即开始"
+    },
+    "features": {
+      "title": "为什么选择 CV Builder？",
+      "subtitle": "创新功能改变您的求职过程",
+      "realtime": {
+        "title": "实时更新",
+        "description": "实时更新您的简历。获得新证书了吗？立即添加并在申请中使用更新后的简历。"
+      },
+      "video": {
+        "title": "视频简历支持",
+        "description": "通过视频介绍自己。更有效地展示您的个性和技能。与雇主建立联系的最现代方式。"
+      },
+      "aiAssistant": {
+        "title": "AI 助手",
+        "description": "获取 AI 建议以优化您的简历。为特定职位定制简历并提高录用机会。"
+      },
+      "analytics": {
+        "title": "简历分析",
+        "description": "跟踪您的简历表现。哪些雇主查看了您的简历？您的简历被查看了多少次？所有统计数据触手可及。"
+      }
+    },
+    "howItWorks": {
+      "title": "使用方法",
+      "steps": [
+        {
+          "title": "创建档案",
+          "description": "输入基本信息并创建专业档案"
+        },
+        {
+          "title": "自定义简历",
+          "description": "从现代模板中选择并个性化您的简历"
+        },
+        {
+          "title": "添加视频",
+          "description": "通过简短视频介绍自己并脱颖而出"
+        },
+        {
+          "title": "申请工作",
+          "description": "一键申请职位并推进职业发展"
+        }
+      ]
+    },
+    "stats": {
+      "users": "活跃用户",
+      "companies": "合作公司",
+      "cvs": "已创建简历",
+      "hires": "成功招聘"
+    }
+  }
+} 

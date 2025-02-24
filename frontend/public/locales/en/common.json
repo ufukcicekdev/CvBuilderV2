@@ -1,0 +1,195 @@
+{
+  "app": {
+    "name": "CV Builder",
+    "tagline": "Create your professional CV and take a step forward in your career",
+    "description": "Simplify your job search process and find your dream job"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "jobs": "Job Posts",
+    "profile": "My Profile",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "search": "Search",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "auth": {
+    "jobseeker": "Job Seeker",
+    "employer": "Employer",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password",
+    "rememberMe": "Remember Me",
+    "loginSuccess": "Login successful!",
+    "loginError": "Login failed. Please check your credentials.",
+    "registerSuccess": "Registration successful!",
+    "registerError": "Registration failed. Please check your information.",
+    "orLoginWith": "or login with",
+    "errors": {
+      "userNotFound": "No user found with this email",
+      "invalidPassword": "Invalid password",
+      "invalidCredentials": "Invalid credentials",
+      "emailExists": "This email is already in use",
+      "weakPassword": "Password is too weak"
+    }
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "followUs": "Follow Us",
+    "copyright": "All rights reserved",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "description": "Choose the plan that fits your needs",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "jobseeker": {
+      "title": "Job Seeker",
+      "price": {
+        "monthly": "2",
+        "yearly": "20"
+      },
+      "features": [
+        "Unlimited CV creation",
+        "Premium CV templates",
+        "CV download (PDF/Word)",
+        "Job application",
+        "Profile highlighting",
+        "24/7 support"
+      ]
+    },
+    "employer": {
+      "title": "Employer",
+      "price": {
+        "monthly": "20",
+        "yearly": "200"
+      },
+      "features": [
+        "Unlimited job posts",
+        "Candidate filtering",
+        "CV database access",
+        "Company profile",
+        "Statistics and reports",
+        "Priority support"
+      ]
+    },
+    "currency": "USD",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "selectPlan": "Select Plan",
+    "currentPlan": "Current Plan",
+    "saveYearly": "Save 15% with yearly billing"
+  },
+  "home": {
+    "hero": {
+      "title": "Next Generation CV Building Platform",
+      "subtitle": "Create AI-powered, dynamic and interactive CVs",
+      "cta": "Get Started"
+    },
+    "features": {
+      "title": "Why CV Builder?",
+      "subtitle": "Innovative features that transform your job search process",
+      "realtime": {
+        "title": "Real-time Updates",
+        "description": "Update your CV in real-time. Got a new certificate? Add it instantly and use your updated CV in applications."
+      },
+      "video": {
+        "title": "Video CV Support",
+        "description": "Introduce yourself with video. Show your personality and skills more effectively. The most modern way to connect with employers."
+      },
+      "aiAssistant": {
+        "title": "AI Assistant",
+        "description": "Get AI suggestions to optimize your CV. Customize your CV for specific job postings and increase your chances of acceptance."
+      },
+      "analytics": {
+        "title": "CV Analytics",
+        "description": "Track your CV's performance. Which employers viewed your profile? How many times was your CV viewed? All statistics at your fingertips."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "steps": [
+        {
+          "title": "Create Profile",
+          "description": "Enter your basic information and create your professional profile"
+        },
+        {
+          "title": "Customize CV",
+          "description": "Choose from modern templates and personalize your CV"
+        },
+        {
+          "title": "Add Video",
+          "description": "Introduce yourself with a short video and stand out"
+        },
+        {
+          "title": "Apply",
+          "description": "Apply to job postings with one click and advance your career"
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "User Experiences",
+      "subtitle": "Success stories"
+    },
+    "stats": {
+      "users": "Active Users",
+      "companies": "Partner Companies",
+      "cvs": "CVs Created",
+      "hires": "Successful Hires"
+    }
+  },
+  "common": {
+    "errors": {
+      "badRequest": "Invalid request",
+      "unauthorized": "Please login",
+      "forbidden": "You don't have permission for this action",
+      "notFound": "Request not found",
+      "serverError": "Server error occurred",
+      "unknown": "An unknown error occurred",
+      "networkError": "Network connection error",
+      "validationError": "Please check form fields"
+    },
+    "errors": {
+      "404": {
+        "title": "Page Not Found",
+        "description": "The page you're looking for doesn't exist or has been moved."
+      },
+      "500": {
+        "title": "Server Error",
+        "description": "Sorry, something went wrong. Please try again later."
+      },
+      "backToHome": "Back to Home",
+      "tryAgain": "Try Again"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "Get in touch with us. We'll get back to you as soon as possible.",
+    "name": "Your Name",
+    "email": "Your Email",
+    "subject": "Subject",
+    "message": "Your Message",
+    "send": "Send",
+    "successMessage": "Your message has been sent successfully. We'll get back to you soon.",
+    "errorMessage": "Failed to send your message. Please try again later.",
+    "subjects": {
+      "general": "General Question",
+      "technical": "Technical Support",
+      "billing": "Billing Related",
+      "feedback": "Feedback",
+      "other": "Other"
+    }
+  }
+} 

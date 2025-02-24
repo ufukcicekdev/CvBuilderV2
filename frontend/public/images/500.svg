@@ -1,0 +1,23 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="250" cy="250" r="240" fill="#fee2e2"/>
+  
+  <!-- 500 Text -->
+  <text x="50%" y="45%" font-size="120" font-weight="bold" text-anchor="middle" fill="#dc2626">500</text>
+  
+  <!-- Error Symbol -->
+  <g transform="translate(250 280)">
+    <!-- Warning Triangle -->
+    <path d="M -70 50 L 0 -40 L 70 50 Z" stroke="#dc2626" stroke-width="8" fill="none"/>
+    
+    <!-- Exclamation Mark -->
+    <circle cx="0" cy="35" r="8" fill="#dc2626"/>
+    <rect x="-8" y="-20" width="16" height="45" rx="8" fill="#dc2626"/>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="100" r="20" fill="#fecaca"/>
+  <circle cx="400" cy="400" r="15" fill="#fecaca"/>
+  <circle cx="400" cy="100" r="25" fill="#fecaca"/>
+  <circle cx="100" cy="400" r="18" fill="#fecaca"/>
+</svg> 
