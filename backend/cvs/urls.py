@@ -1,5 +1,11 @@
 from django.urls import path
 from . import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'cvs', views.CVViewSet, basename='cv')
+
+urlpatterns = router.urls
 
 urlpatterns = [
     path('', views.CVListCreateView.as_view(), name='cv-list-create'),
