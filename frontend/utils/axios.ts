@@ -1,28 +1,34 @@
-import axios, { AxiosRequestHeaders } from 'axios';
+import axios from 'axios';
+import { getSession, signOut } from 'next-auth/react';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
     headers: {
         'Content-Type': 'application/json',
-    }
+    },
+    withCredentials: true, // CSRF ve auth token'lar için önemli
 });
+
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            config.headers = {
-                ...config.headers,
-                Authorization: `Bearer ${token}`
-            } as AxiosRequestHeaders;
-            
-            console.log('Request config:', {
-                url: config.url,
-                method: config.method,
-                headers: config.headers,
-                token
-            });
+    async (config) => {
+        const session = await getSession();
+        if (session?.accessToken) {
+            config.headers.Authorization = `Bearer ${session.accessToken}`;
         }
         return config;
     },
@@ -33,53 +39,38 @@ axiosInstance.interceptors.request.use(
 
 // Response interceptor
 axiosInstance.interceptors.response.use(
-    (response) => {
-        console.log('Response:', {
-            url: response.config.url,
-            status: response.status,
-            data: response.data
-        });
-        return response;
-    },
+    (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
-        console.log('Error response:', {
-            url: originalRequest?.url,
-            status: error.response?.status,
-            error: error.response?.data
-        });
-
         if (error.response?.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                })
+                    .then(token => {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        return axiosInstance(originalRequest);
+                    })
+                    .catch(err => Promise.reject(err));
+            }
+
             originalRequest._retry = true;
+            isRefreshing = true;
 
             try {
-                const refreshToken = localStorage.getItem('refreshToken');
-                const response = await axios.post('/api/users/token/refresh/', {
-                    refresh: refreshToken
-                });
-
-                const { access: newAccessToken } = response.data;
-                localStorage.setItem('accessToken', newAccessToken);
-
-                if (!originalRequest.headers) {
-                    originalRequest.headers = {};
+                const session = await getSession();
+                if (session?.accessToken) {
+                    originalRequest.headers.Authorization = `Bearer ${session.accessToken}`;
+                    processQueue(null, session.accessToken);
+                    return axiosInstance(originalRequest);
                 }
-                originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-
-                console.log('Token refreshed:', {
-                    newToken: newAccessToken,
-                    headers: originalRequest.headers
-                });
-
-                return axiosInstance(originalRequest);
-
-            } catch (error) {
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('user');
-                window.location.href = '/login';
-                return Promise.reject(error);
+            } catch (refreshError) {
+                processQueue(refreshError, null);
+                await signOut({ redirect: true, callbackUrl: '/login' });
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
             }
         }
 

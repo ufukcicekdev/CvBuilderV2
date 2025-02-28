@@ -18,13 +18,14 @@ import axiosInstance from '../../utils/axios';
 
 interface LanguagesFormProps {
   cvId: string;
-  onPrev: () => void;
+  onPrev?: () => void;
   onStepComplete: (data: any) => void;
+  initialData?: any[];
 }
 
 interface LanguageItem {
   name: string;
-  level: string;
+  level: number;
   certificate?: string;
 }
 
@@ -38,7 +39,7 @@ const LANGUAGE_LEVELS = [
   'C1', 'C2'   // İleri
 ];
 
-export default function LanguagesForm({ cvId, onPrev, onStepComplete }: LanguagesFormProps) {
+const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
 
@@ -46,32 +47,35 @@ export default function LanguagesForm({ cvId, onPrev, onStepComplete }: Language
     control,
     register,
     handleSubmit,
+    watch,
     setValue,
     formState: { errors }
   } = useForm<LanguagesFormData>({
     defaultValues: {
       languages: [{
         name: '',
-        level: 'B1',
+        level: 3,
         certificate: ''
       }]
     }
   });
 
-  // Verileri yükle
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "languages"
+  });
+
   useEffect(() => {
     const loadLanguages = async () => {
       try {
         const response = await axiosInstance.get(`/cvs/${cvId}/`);
         if (response.data.languages && response.data.languages.length > 0) {
-          // Backend'den gelen veriyi form yapısına dönüştür
-          const formattedLanguages = response.data.languages.map(lang => ({
+          const formattedLanguages = response.data.languages.map((lang: any) => ({
             name: lang.name,
-            level: lang.level || 'B1',  // Eğer level yoksa default B1
+            level: lang.level,
             certificate: lang.certificate || ''
           }));
           
-          console.log('Formatted languages for form:', formattedLanguages);
           setValue('languages', formattedLanguages);
         }
       } catch (error) {
@@ -85,16 +89,10 @@ export default function LanguagesForm({ cvId, onPrev, onStepComplete }: Language
     }
   }, [cvId, setValue]);
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "languages"
-  });
-
   const onSubmit = async (data: LanguagesFormData) => {
     try {
       setLoading(true);
       
-      // Veriyi formatlayalım
       const formattedData = {
         languages: data.languages.map(lang => ({
           name: lang.name,
@@ -103,7 +101,6 @@ export default function LanguagesForm({ cvId, onPrev, onStepComplete }: Language
         }))
       };
 
-      // Parent component'e bildir
       await onStepComplete(formattedData);
       
     } catch (error) {
@@ -115,80 +112,96 @@ export default function LanguagesForm({ cvId, onPrev, onStepComplete }: Language
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography variant="h6" gutterBottom>
-        {t('cv.languages.title')}
-      </Typography>
-      <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-        {t('cv.languages.subtitle')}
-      </Typography>
+    <form onSubmit={handleSubmit(onSubmit)} id="languagesForm">
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          {t('cv.languages.title')}
+        </Typography>
 
-      {fields.map((field, index) => (
-        <Box key={field.id} sx={{ mb: 4, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label={t('cv.languages.name')}
-                {...register(`languages.${index}.name` as const, { required: true })}
-                error={!!errors.languages?.[index]?.name}
-                helperText={errors.languages?.[index]?.name && t('common.required')}
-              />
+        {fields.map((field, index) => (
+          <Box key={field.id} sx={{ mb: 4, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label={t('cv.languages.name')}
+                  {...register(`languages.${index}.name` as const, { required: true })}
+                  error={!!errors.languages?.[index]?.name}
+                  helperText={errors.languages?.[index]?.name && t('common.required')}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Box>
+                  <Typography component="legend" gutterBottom>
+                    {t('cv.languages.level')}
+                  </Typography>
+                  <Rating
+                    name={`languages.${index}.level`}
+                    value={watch(`languages.${index}.level`)}
+                    onChange={(_, newValue) => {
+                      setValue(`languages.${index}.level`, newValue || 0);
+                    }}
+                  />
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label={t('cv.languages.certificate')}
+                  {...register(`languages.${index}.certificate` as const)}
+                />
+              </Grid>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                select
-                fullWidth
-                label={t('cv.languages.level')}
-                defaultValue="B1"
-                {...register(`languages.${index}.level` as const, { required: true })}
-                error={!!errors.languages?.[index]?.level}
-                helperText={errors.languages?.[index]?.level && t('common.required')}
+            {fields.length > 1 && (
+              <IconButton 
+                onClick={() => remove(index)}
+                color="error"
+                sx={{ mt: 1 }}
               >
-                {LANGUAGE_LEVELS.map((level) => (
-                  <MenuItem key={level} value={level}>
-                    {level} - {t(`cv.languages.levels.${level.toLowerCase()}`)}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Box>
+        ))}
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label={t('cv.languages.certificate')}
-                {...register(`languages.${index}.certificate` as const)}
-                helperText={t('cv.languages.certificateHelper')}
-              />
-            </Grid>
-          </Grid>
+        <Button
+          startIcon={<AddIcon />}
+          onClick={() => append({
+            name: '',
+            level: 3,
+            certificate: ''
+          })}
+          sx={{ mt: 2 }}
+        >
+          {t('common.add')}
+        </Button>
+      </Box>
 
-          {fields.length > 1 && (
-            <IconButton 
-              onClick={() => remove(index)}
-              color="error"
-              sx={{ mt: 1 }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          )}
-        </Box>
-      ))}
-
-      <Button
-        type="button"
-        startIcon={<AddIcon />}
-        onClick={() => append({
-          name: '',
-          level: 'B1',
-          certificate: ''
-        })}
-        sx={{ mb: 2 }}
-      >
-        {t('cv.languages.addMore')}
-      </Button>
-
+      {/* Form butonları */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+        {onPrev && (
+          <Button
+            onClick={onPrev}
+            variant="contained"
+            disabled={loading}
+          >
+            {t('navigation.previous')}
+          </Button>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading}
+        >
+          {t('navigation.next')}
+        </Button>
+      </Box>
     </form>
   );
-} 
+};
+
+export default LanguagesForm; 

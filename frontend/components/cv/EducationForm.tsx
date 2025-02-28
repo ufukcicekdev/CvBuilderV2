@@ -27,24 +27,18 @@ interface EducationItem {
 
 interface EducationFormProps {
   cvId: string;
-  onPrev: () => void;
+  onPrev?: () => void;
   onStepComplete: (data: any) => void;
+  initialData?: any[];
 }
 
 interface EducationFormData {
   education: EducationItem[];
 }
 
-export default function EducationForm({ cvId, onPrev, onStepComplete }: EducationFormProps) {
+const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    school_name: '',
-    degree: '',
-    field_of_study: '',
-    education_start_date: '',
-    education_end_date: ''
-  });
 
   const {
     control,
@@ -53,7 +47,7 @@ export default function EducationForm({ cvId, onPrev, onStepComplete }: Educatio
     watch,
     setValue,
     formState: { errors }
-  } = useForm({
+  } = useForm<EducationFormData>({
     defaultValues: {
       education: [{
         school: '',
@@ -113,7 +107,8 @@ export default function EducationForm({ cvId, onPrev, onStepComplete }: Educatio
   const onSubmit = async (data: EducationFormData) => {
     try {
       setLoading(true);
-      
+
+      // Eğitim verilerini düzenle
       const formattedData = {
         education: data.education.map(edu => ({
           school: edu.school,
@@ -126,6 +121,7 @@ export default function EducationForm({ cvId, onPrev, onStepComplete }: Educatio
         }))
       };
 
+      // Parent component'e bildir
       await onStepComplete(formattedData);
       
     } catch (error) {
@@ -259,6 +255,27 @@ export default function EducationForm({ cvId, onPrev, onStepComplete }: Educatio
         </Button>
       </Box>
 
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+        {onPrev && (
+          <Button
+            onClick={onPrev}
+            variant="contained"
+            disabled={loading}
+          >
+            {t('common.previous')}
+          </Button>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading}
+        >
+          {t('common.next')}
+        </Button>
+      </Box>
     </form>
   );
-} 
+};
+
+export default EducationForm; 

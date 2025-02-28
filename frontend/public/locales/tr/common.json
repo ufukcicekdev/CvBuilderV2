@@ -400,6 +400,16 @@
     "errors": {
       "certificateFieldsRequired": "Lütfen sertifika adı, veren kurum ve veriliş tarihini doldurun"
     },
-    "progress": "İlerleme"
+    "progress": "İlerleme",
+    "template": {
+      "selectTitle": "CV Template Seçin",
+      "selectRequired": "Lütfen bir template seçin",
+      "preview": "Önizle",
+      "generateWeb": "Web Sayfası Oluştur",
+      "generatePDF": "PDF İndir",
+      "generating": "Oluşturuluyor...",
+      "generateSuccess": "CV başarıyla oluşturuldu",
+      "generateError": "CV oluşturulurken bir hata oluştu"
+    }
   }
 } 

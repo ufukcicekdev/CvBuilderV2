@@ -51,9 +51,15 @@ function Dashboard() {
   const fetchCVs = async () => {
     try {
       setLoading(true);
-      console.log('Fetching CVs...'); // Debug için
-      const response = await axiosInstance.get('/api/cvs/');
-      console.log('CV Response:', response.data); // Debug için
+      const token = localStorage.getItem('accessToken'); // 'token' yerine 'accessToken' kullanıyoruz
+      console.log('Token:', token); // Token'ı kontrol edelim
+      
+      const response = await axiosInstance.get('/api/cvs/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log('CV Response:', response.data);
       setCvs(response.data);
     } catch (error) {
       console.error('Error fetching CVs:', error);
@@ -71,7 +77,12 @@ function Dashboard() {
   const handleDeleteConfirm = async () => {
     if (selectedCvId) {
       try {
-        await axiosInstance.delete(`/api/cvs/${selectedCvId}/`);
+        const token = localStorage.getItem('accessToken');
+        await axiosInstance.delete(`/api/cvs/${selectedCvId}/`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         showToast.success(t('cv.deleteSuccess'));
         fetchCVs(); // Listeyi yenile
       } catch (error) {

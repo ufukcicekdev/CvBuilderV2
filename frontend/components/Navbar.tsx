@@ -34,10 +34,24 @@ export default function Navbar() {
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
   const [langMenuAnchor, setLangMenuAnchor] = useState<null | HTMLElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Sayfa yüklendiğinde ve her değişimde token kontrolü
+    const checkAuth = () => {
+      const token = localStorage.getItem('accessToken');
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth();
+    // Route değişikliklerinde de kontrol et
+    router.events.on('routeChangeComplete', checkAuth);
+
+    return () => {
+      router.events.off('routeChangeComplete', checkAuth);
+    };
+  }, [router]);
 
   const handleMobileMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -60,7 +74,12 @@ export default function Navbar() {
     handleLangMenuClose();
   };
 
-  const isAuthenticated = typeof window !== 'undefined' && localStorage.getItem('token');
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setIsLoggedIn(false);
+    router.push('/login');
+  };
 
   return (
     <AppBar position="static">
@@ -88,7 +107,7 @@ export default function Navbar() {
             <Button color="inherit" component={Link} href="/pricing">
               {t('nav.pricing')}
             </Button>
-            {isAuthenticated ? (
+            {isLoggedIn ? (
               <>
                 <Button color="inherit" component={Link} href="/dashboard">
                   {t('nav.dashboard')}
@@ -101,10 +120,7 @@ export default function Navbar() {
                 </Button>
                 <Button 
                   color="inherit" 
-                  onClick={() => {
-                    localStorage.removeItem('token');
-                    router.push('/');
-                  }}
+                  onClick={handleLogout}
                 >
                   {t('nav.logout')}
                 </Button>
@@ -143,7 +159,7 @@ export default function Navbar() {
               open={Boolean(mobileMenuAnchor)}
               onClose={handleMobileMenuClose}
             >
-              {isAuthenticated ? (
+              {isLoggedIn ? (
                 <>
                   <MenuItem component={Link} href="/dashboard" onClick={handleMobileMenuClose}>
                     {t('nav.dashboard')}
@@ -155,11 +171,7 @@ export default function Navbar() {
                     {t('nav.profile')}
                   </MenuItem>
                   <MenuItem 
-                    onClick={() => {
-                      localStorage.removeItem('token');
-                      router.push('/');
-                      handleMobileMenuClose();
-                    }}
+                    onClick={handleLogout}
                   >
                     {t('nav.logout')}
                   </MenuItem>

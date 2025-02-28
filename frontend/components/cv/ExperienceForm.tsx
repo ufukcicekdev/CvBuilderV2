@@ -19,8 +19,9 @@ import axios from 'axios';
 
 interface ExperienceFormProps {
   cvId: string;
-  onPrev: () => void;  // Geri butonu için
-  onStepComplete: (data: any) => void;  // İleri/kaydet için
+  onPrev?: () => void;
+  onStepComplete: (data: any) => void;
+  initialData?: any[];
 }
 
 interface ExperienceFormData {
@@ -36,7 +37,7 @@ interface ExperienceItem {
   description: string;
 }
 
-export default function ExperienceForm({ cvId, onPrev, onStepComplete }: ExperienceFormProps) {
+const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: ExperienceFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -240,6 +241,28 @@ export default function ExperienceForm({ cvId, onPrev, onStepComplete }: Experie
         </Button>
       </Box>
 
+      {/* Form butonları */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+        {onPrev && (
+          <Button
+            onClick={onPrev}
+            variant="contained"
+            disabled={loading}
+          >
+            {t('navigation.previous')}
+          </Button>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading}
+        >
+          {t('navigation.next')}
+        </Button>
+      </Box>
     </form>
   );
-} 
+};
+
+export default ExperienceForm; 
