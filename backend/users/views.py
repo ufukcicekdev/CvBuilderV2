@@ -51,7 +51,7 @@ class LoginView(generics.GenericAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
         
         user = authenticate(email=email, password=password)
-        
+        print("*********",user)
         if not user:
             return Response({
                 'error': 'Invalid credentials'
