@@ -2,54 +2,9 @@ from django.db import models
 from django.conf import settings
 from users.models import User
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
-
-class Certificate(models.Model):
-    cv = models.ForeignKey('CV', related_name='certificates', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    issuer = models.CharField(max_length=255)
-    date = models.DateField()
-    description = models.TextField(blank=True, null=True)
-    url = models.URLField(max_length=500, blank=True, null=True)
-    
-    # Sertifika dosyası için alan
-    document = models.FileField(
-        upload_to='certificates/',
-        blank=True, 
-        null=True,
-        help_text='PDF veya resim dosyası yükleyebilirsiniz'
-    )
-    
-    # Dosya tipi için alan
-    document_type = models.CharField(
-        max_length=10,
-        choices=[
-            ('pdf', 'PDF'),
-            ('image', 'Image'),
-        ],
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        ordering = ['-date']
-
-    def save(self, *args, **kwargs):
-        # Dosya yüklendiyse tipini belirle
-        if self.document:
-            file_name = self.document.name.lower()
-            if file_name.endswith('.pdf'):
-                self.document_type = 'pdf'
-            elif any(file_name.endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif']):
-                self.document_type = 'image'
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        # Dosyayı fiziksel olarak sil
-        if self.document:
-            self.document.delete()
-        super().delete(*args, **kwargs)
 
 class CV(models.Model):
     STATUS_CHOICES = (
@@ -118,7 +73,7 @@ class CVTranslation(models.Model):
     experience = models.JSONField(default=list)
     skills = models.JSONField(default=list)
     languages = models.JSONField(default=list)
-    certificates = models.JSONField(default=list)
+    certificates = models.JSONField(default=list)  # Her sertifika için: {id, name, issuer, date, description, document_url, document_type}
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -142,7 +97,6 @@ class CVTranslation(models.Model):
             'skills': self.skills,
             'languages': self.languages,
             'certificates': self.certificates,
-
         }
 
     def update_content(self, translated_content):

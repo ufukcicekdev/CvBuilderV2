@@ -35,6 +35,10 @@ interface CertificateData {
   documentUrl?: string;
 }
 
+interface CertificatesFormData {
+  certificates: CertificateData[];
+}
+
 const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: CertificatesFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
@@ -51,18 +55,9 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
     formState: { errors },
     setValue,
     watch
-  } = useForm({
+  } = useForm<CertificatesFormData>({
     defaultValues: {
-      certificates: [
-        {
-          name: '',
-          issuer: '',
-          date: '',
-          description: '',
-          document: undefined,
-          documentUrl: ''
-        }
-      ]
+      certificates: []
     }
   });
 
@@ -195,6 +190,34 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
     }
   };
 
+  const handleDelete = async (index: number) => {
+    try {
+      const certificate = watch(`certificates.${index}`) as CertificateData;
+      if (certificate.id) {
+        // Önce sertifikayı sil
+        await cvAPI.deleteCertificate(Number(cvId), certificate.id);
+        
+        // Formdan sertifikayı kaldır
+        remove(index);
+        
+        // Parent component'e güncel sertifika listesini bildir
+        const remainingCertificates = watch('certificates').filter((_, i) => i !== index);
+        await onStepComplete({ 
+          certificates: remainingCertificates,
+          language: router.locale 
+        });
+        
+        showToast.success(t('common.success'));
+      } else {
+        // Eğer sertifikanın ID'si yoksa sadece formdan kaldır
+        remove(index);
+      }
+    } catch (error) {
+      console.error('Error deleting certificate:', error);
+      showToast.error(t('common.errors.unknown'));
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box sx={{ mb: 4 }}>
@@ -215,14 +238,13 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
               }}
             >
               <IconButton
-                onClick={() => remove(index)}
+                onClick={() => handleDelete(index)}
                 sx={{
                   position: 'absolute',
                   top: 8,
                   right: 8,
-                  color: 'error.main',
                 }}
-                size="small"
+                color="error"
               >
                 <DeleteIcon />
               </IconButton>

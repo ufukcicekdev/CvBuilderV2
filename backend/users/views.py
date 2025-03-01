@@ -4,12 +4,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
 from .models import User
 from .serializers import UserSerializer, CustomTokenObtainPairSerializer, UserProfileSerializer
 import logging
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework_simplejwt.exceptions import InvalidToken
+from .authentication import TokenAuthentication
 
 logger = logging.getLogger(__name__)
 
@@ -29,11 +30,21 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            refresh = RefreshToken.for_user(user)
+            auth = TokenAuthentication()
+            result = auth.authenticate_credentials(
+                request.data.get('email'),
+                request.data.get('password')
+            )
+            
+            if 'error' in result:
+                return Response({'error': result['error']}, status=result['status'])
+            
             return Response({
                 'user': serializer.data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'tokens': {
+                    'access': result['access'],
+                    'refresh': result['refresh']
+                }
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -50,23 +61,13 @@ class LoginView(generics.GenericAPIView):
                 'error': 'Please provide both email and password'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        user = authenticate(email=email, password=password)
-        print("*********",user)
-        if not user:
-            return Response({
-                'error': 'Invalid credentials'
-            }, status=status.HTTP_401_UNAUTHORIZED)
+        auth = TokenAuthentication()
+        result = auth.authenticate_credentials(email, password)
         
-        refresh = RefreshToken.for_user(user)
+        if 'error' in result:
+            return Response({'error': result['error']}, status=result['status'])
         
-        return Response({
-            'user': {
-                'id': user.id,
-                'email': user.email,
-            },
-            'access': str(refresh.access_token),
-            'refresh': str(refresh),
-        })
+        return Response(result)
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
@@ -107,13 +108,40 @@ def upload_profile_picture(request):
         'picture_url': user.profile_picture.url
     })
 
-class CustomTokenRefreshView(TokenRefreshView):
-    def post(self, request, *args, **kwargs):
-        try:
-            response = super().post(request, *args, **kwargs)
-            return response
-        except InvalidToken:
+class TokenRefreshView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
             return Response(
-                {"detail": "Invalid refresh token"},
-                status=status.HTTP_401_UNAUTHORIZED
-            ) 
+                {'error': 'Refresh token is required'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        auth = TokenAuthentication()
+        result = auth.refresh_token(refresh_token)
+        
+        if 'error' in result:
+            return Response({'error': result['error']}, status=result['status'])
+        
+        return Response(result)
+
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
+            return Response(
+                {'error': 'Refresh token is required'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        auth = TokenAuthentication()
+        result = auth.blacklist_token(refresh_token)
+        
+        return Response(
+            {'message': result.get('message', 'Logged out')}, 
+            status=result.get('status', status.HTTP_200_OK)
+        ) 

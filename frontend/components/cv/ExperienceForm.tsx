@@ -50,14 +50,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     formState: { errors }
   } = useForm<ExperienceFormData>({
     defaultValues: {
-      experience: [{
-        company: '',
-        position: '',
-        startDate: '',
-        endDate: '',
-        current: false,
-        description: ''
-      }]
+      experience: []
     }
   });
 
@@ -156,7 +149,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
                 <TextField
                   fullWidth
                   label={t('cv.experience.company')}
-                  {...register(`experience.${index}.company` as const, { required: true })}
+                  {...register(`experience.${index}.company` as const)}
                   error={!!errors.experience?.[index]?.company}
                   helperText={errors.experience?.[index]?.company && t('common.required')}
                 />
@@ -165,7 +158,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
                 <TextField
                   fullWidth
                   label={t('cv.experience.position')}
-                  {...register(`experience.${index}.position` as const, { required: true })}
+                  {...register(`experience.${index}.position` as const)}
                   error={!!errors.experience?.[index]?.position}
                   helperText={errors.experience?.[index]?.position && t('common.required')}
                 />
@@ -176,7 +169,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
                   type="date"
                   label={t('cv.experience.startDate')}
                   InputLabelProps={{ shrink: true }}
-                  {...register(`experience.${index}.startDate` as const, { required: true })}
+                  {...register(`experience.${index}.startDate` as const)}
                   error={!!errors.experience?.[index]?.startDate}
                   helperText={errors.experience?.[index]?.startDate && t('common.required')}
                 />
@@ -215,15 +208,13 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
               </Grid>
             </Grid>
 
-            {fields.length > 1 && (
-              <IconButton 
-                onClick={() => remove(index)}
-                color="error"
-                sx={{ mt: 1 }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
+            <IconButton 
+              onClick={() => remove(index)}
+              color="error"
+              sx={{ mt: 1 }}
+            >
+              <DeleteIcon />
+            </IconButton>
           </Box>
         ))}
 
@@ -251,7 +242,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
             variant="contained"
             disabled={loading}
           >
-            {t('navigation.previous')}
+            {t('common.previous')}
           </Button>
         )}
         <Button
@@ -260,7 +251,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
           color="primary"
           disabled={loading}
         >
-          {t('navigation.next')}
+          {t('common.next')}
         </Button>
       </Box>
     </form>

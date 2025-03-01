@@ -51,15 +51,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
     formState: { errors }
   } = useForm<EducationFormData>({
     defaultValues: {
-      education: [{
-        school: '',
-        degree: '',
-        field: '',
-        startDate: '',
-        endDate: '',
-        current: false,
-        description: ''
-      }]
+      education: []
     }
   });
 
@@ -157,7 +149,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                 <TextField
                   fullWidth
                   label={t('cv.education.school')}
-                  {...register(`education.${index}.school` as const, { required: true })}
+                  {...register(`education.${index}.school` as const)}
                   error={!!errors.education?.[index]?.school}
                   helperText={errors.education?.[index]?.school && t('common.required')}
                 />
@@ -167,7 +159,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                 <TextField
                   fullWidth
                   label={t('cv.education.degree')}
-                  {...register(`education.${index}.degree` as const, { required: true })}
+                  {...register(`education.${index}.degree` as const)}
                   error={!!errors.education?.[index]?.degree}
                   helperText={errors.education?.[index]?.degree && t('common.required')}
                 />
@@ -177,7 +169,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                 <TextField
                   fullWidth
                   label={t('cv.education.field')}
-                  {...register(`education.${index}.field` as const, { required: true })}
+                  {...register(`education.${index}.field` as const)}
                   error={!!errors.education?.[index]?.field}
                   helperText={errors.education?.[index]?.field && t('common.required')}
                 />
@@ -189,7 +181,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                   type="date"
                   label={t('cv.education.startDate')}
                   InputLabelProps={{ shrink: true }}
-                  {...register(`education.${index}.startDate` as const, { required: true })}
+                  {...register(`education.${index}.startDate` as const)}
                   error={!!errors.education?.[index]?.startDate}
                   helperText={errors.education?.[index]?.startDate && t('common.required')}
                 />
@@ -231,15 +223,13 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
               </Grid>
             </Grid>
 
-            {fields.length > 1 && (
-              <IconButton 
-                onClick={() => remove(index)}
-                color="error"
-                sx={{ mt: 1 }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
+            <IconButton 
+              onClick={() => remove(index)}
+              color="error"
+              sx={{ mt: 1 }}
+            >
+              <DeleteIcon />
+            </IconButton>
           </Box>
         ))}
 

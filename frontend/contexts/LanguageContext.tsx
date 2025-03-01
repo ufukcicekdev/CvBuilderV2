@@ -22,11 +22,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const changeLanguage = (lang: string) => {
     if (lang in SUPPORTED_LANGUAGES) {
-      console.log('Changing language to:', lang); // Debug için
+      console.log('Changing language to:', lang);
       setCurrentLanguage(lang);
       setLanguage(lang);
-      // Sayfayı yenile (opsiyonel)
-      // window.location.reload();
+      localStorage.setItem('selectedLanguage', lang);
     }
   };
 

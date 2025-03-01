@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import Flag from 'react-world-flags';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
@@ -29,6 +30,7 @@ const LANGUAGES = [
 export default function Navbar() {
   const router = useRouter();
   const { t } = useTranslation('common');
+  const { changeLanguage } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
@@ -95,17 +97,20 @@ export default function Navbar() {
 
   const handleLanguageChange = async (locale: string) => {
     try {
-      // localStorage'a kaydet
-      localStorage.setItem('selectedLanguage', locale);
+      // Context'i güncelle
+      changeLanguage(locale);
+      
+      // Mevcut URL'yi al
+      const currentPath = router.asPath;
       
       // Next.js route'unu güncelle
-      await router.push(router.pathname, router.asPath, { locale });
+      await router.push(currentPath, currentPath, { 
+        locale,
+        scroll: false // Sayfanın en üste kaymasını önle
+      });
       
       // Menüyü kapat
       handleLangMenuClose();
-      
-      // Sayfayı yenile (isteğe bağlı)
-      // window.location.reload();
     } catch (error) {
       console.error('Error changing language:', error);
     }

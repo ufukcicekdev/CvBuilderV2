@@ -47,11 +47,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
     formState: { errors }
   } = useForm<SkillsFormData>({
     defaultValues: {
-      skills: [{
-        name: '',
-        level: 3,
-        description: ''
-      }]
+      skills: []
     }
   });
 
@@ -139,7 +135,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
                 <TextField
                   fullWidth
                   label={t('cv.skills.name')}
-                  {...register(`skills.${index}.name` as const, { required: true })}
+                  {...register(`skills.${index}.name` as const)}
                   error={!!errors.skills?.[index]?.name}
                   helperText={errors.skills?.[index]?.name && t('common.required')}
                 />
@@ -172,15 +168,13 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
               </Grid>
             </Grid>
 
-            {fields.length > 1 && (
-              <IconButton 
-                onClick={() => remove(index)}
-                color="error"
-                sx={{ mt: 1 }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
+            <IconButton 
+              onClick={() => remove(index)}
+              color="error"
+              sx={{ mt: 1 }}
+            >
+              <DeleteIcon />
+            </IconButton>
           </Box>
         ))}
 

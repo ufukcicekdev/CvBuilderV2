@@ -2,7 +2,7 @@ from rest_framework import viewsets, status, generics
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import CV, CVTranslation, Certificate
+from .models import CV, CVTranslation
 from .serializers import CVSerializer, CVTranslationSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -19,6 +19,252 @@ from .services import TranslationService
 import json
 from django.utils import timezone
 import openai
+from django.core.files.storage import default_storage
+import uuid
+
+class CVBaseMixin:
+    # Desteklenen diller ve OpenAI için karşılıkları
+    SUPPORTED_LANGUAGES = {
+        'tr': 'Turkish',
+        'en': 'English',
+        'es': 'Spanish',
+        'zh': 'Chinese',
+        'ar': 'Arabic',
+        'hi': 'Hindi'
+    }
+
+    def _get_translated_data(self, instance, lang_code):
+        try:
+            # İstenen dildeki çeviriyi al
+            translation = CVTranslation.objects.get(cv=instance, language_code=lang_code)
+            
+            # Çeviri verilerini ve diğer CV bilgilerini birleştir
+            return {
+                'id': instance.id,
+                'title': instance.title,
+                'status': instance.status,
+                'current_step': instance.current_step,
+                'user': instance.user.id,
+                'created_at': instance.created_at,
+                'updated_at': instance.updated_at,
+                'video': instance.video.url if instance.video else None,
+                'video_description': instance.video_description,
+                'language': lang_code,
+                'personal_info': translation.personal_info,
+                'education': translation.education,
+                'experience': translation.experience,
+                'skills': translation.skills,
+                'languages': translation.languages,
+                'certificates': translation.certificates,
+            }
+        except CVTranslation.DoesNotExist:
+            # Fallback to English or original data
+            return self._get_fallback_data(instance, lang_code)
+
+    def _get_fallback_data(self, instance, lang_code):
+        try:
+            # Try English translation first
+            en_translation = CVTranslation.objects.get(cv=instance, language_code='en')
+            return self._get_translated_data(instance, 'en')
+        except CVTranslation.DoesNotExist:
+            # Use original data if no translation exists
+            return {
+                'id': instance.id,
+                'title': instance.title,
+                'status': instance.status,
+                'current_step': instance.current_step,
+                'user': instance.user.id,
+                'created_at': instance.created_at,
+                'updated_at': instance.updated_at,
+                'video': instance.video.url if instance.video else None,
+                'video_description': instance.video_description,
+                'language': 'en',
+                'personal_info': instance.personal_info,
+                'education': instance.education,
+                'experience': instance.experience,
+                'skills': instance.skills,
+                'languages': instance.languages,
+                'certificates': [],  # Varsayılan boş liste
+            }
+
+    def _get_language_code(self, request):
+        """
+        Get the language code from the request.
+        First tries to get from request data,
+        then from Accept-Language header,
+        if not found defaults to 'en'.
+        """
+        # Try to get language from request data first
+        if request.data and 'language' in request.data:
+            lang_code = request.data['language'].lower()
+            if lang_code in self.SUPPORTED_LANGUAGES:
+                print(f"DEBUG: Using language from request data: {lang_code}")
+                return lang_code
+        
+        # Then try Accept-Language header
+        accept_language = request.headers.get('Accept-Language')
+        if accept_language:
+            languages = [lang.split(';')[0].strip() for lang in accept_language.split(',')]
+            for lang in languages:
+                base_lang = lang.split('-')[0].lower()
+                if base_lang in self.SUPPORTED_LANGUAGES:
+                    print(f"DEBUG: Using language from Accept-Language header: {base_lang}")
+                    return base_lang
+        
+        print("DEBUG: No supported language found, defaulting to 'en'")
+        return 'en'
+
+    def _update_cv_data(self, instance, data, current_lang):
+        """Update CV and translation data with AI correction and translation"""
+        # Update CV fields
+        if 'current_step' in data:
+            print(f"Updating current_step to: {data['current_step']}")
+            instance.current_step = data['current_step']
+            instance.save()
+
+        # Mevcut translation'ı al
+        current_translation = CVTranslation.objects.get_or_create(
+            cv=instance,
+            language_code=current_lang
+        )[0]
+
+        # Değişiklik kontrolü için fields
+        fields_to_check = ['languages', 'personal_info', 'education', 'experience', 'skills', 'certificates']
+        
+        # Değişiklik var mı kontrol et
+        has_changes = False
+        modified_fields = {}
+
+        for field in fields_to_check:
+            if field in data:
+                current_value = getattr(current_translation, field)
+                new_value = data[field]
+                
+                # Eğer yeni değer boş liste ise, AI işlemeyi atla
+                if isinstance(new_value, list) and len(new_value) == 0:
+                    setattr(current_translation, field, new_value)
+                    continue
+                
+                # JSON string'e çevirip karşılaştır (derin karşılaştırma için)
+                current_json = json.dumps(current_value, sort_keys=True)
+                new_json = json.dumps(new_value, sort_keys=True)
+                
+                if current_json != new_json:
+                    has_changes = True
+                    modified_fields[field] = new_value
+                    print(f"Changes detected in {field}")
+
+        # Değişiklik yoksa veya sadece boş listeler varsa
+        if not has_changes:
+            print("No changes detected in the data, skipping AI processing")
+            current_translation.save()
+            return current_translation
+
+        print("Changes detected, processing with AI...")
+        
+        # Initialize OpenAI client
+        client = openai.OpenAI()
+
+        # Her dil için düzeltme ve çeviri yap
+        for lang_code, lang_name in self.SUPPORTED_LANGUAGES.items():
+            print(f"Processing language: {lang_name}")
+            
+            # Get or create translation for current language
+            translation = CVTranslation.objects.get_or_create(
+                cv=instance,
+                language_code=lang_code
+            )[0]
+            print(f"Translation object for {lang_code}: {translation.id}")
+
+            # Sadece değişen alanları işle
+            for field in modified_fields:
+                print(f"Processing modified field: {field} for {lang_name}")
+                field_data = data[field] if lang_code == current_lang else getattr(translation, field)
+
+                # Correct the data in the current language
+                if field == 'certificates':
+                    # Handle certificates separately
+                    corrected_certs = []
+                    for cert in field_data:
+                        # Prepare certificate data for correction
+                        cert_data = {
+                            'name': cert.get('name', ''),
+                            'issuer': cert.get('issuer', ''),
+                            'description': cert.get('description', '')
+                        }
+                        
+                        # Correct certificate data using OpenAI
+                        prompt = f"""Please correct any spelling or grammar mistakes in this certificate information in {lang_name}.
+                        Return ONLY a JSON object with the following structure, no additional text:
+                        {{
+                            "name": "corrected name",
+                            "issuer": "corrected issuer",
+                            "description": "corrected description"
+                        }}
+                        
+                        Certificate to correct:
+                        Name: {cert_data['name']}
+                        Issuer: {cert_data['issuer']}
+                        Description: {cert_data['description']}
+                        """
+
+                        try:
+                            response = client.chat.completions.create(
+                                model="gpt-4",
+                                messages=[
+                                    {"role": "system", "content": f"You are a professional text corrector for {lang_name} language. Always respond with valid JSON."},
+                                    {"role": "user", "content": prompt}
+                                ]
+                            )
+                            
+                            corrected_cert = json.loads(response.choices[0].message.content)
+                            print(f"Corrected certificate data for {lang_name}: {corrected_cert}")
+                            
+                            # Preserve other fields and update certificate data
+                            cert_copy = cert.copy()
+                            cert_copy.update({
+                                'name': corrected_cert.get('name', cert.get('name', '')),
+                                'issuer': corrected_cert.get('issuer', cert.get('issuer', '')),
+                                'description': corrected_cert.get('description', cert.get('description', ''))
+                            })
+                            
+                            corrected_certs.append(cert_copy)
+                        except Exception as e:
+                            print(f"Error correcting certificate for {lang_name}: {str(e)}")
+                            corrected_certs.append(cert)
+                    
+                    field_data = corrected_certs
+                else:
+                    # Correct other fields using OpenAI
+                    try:
+                        prompt = f"""Please correct any spelling or grammar mistakes in this {field} content in {lang_name}.
+                        Return ONLY the corrected content as a JSON object with the exact same structure, no additional text.
+
+                        Content to correct:
+                        {json.dumps(field_data, ensure_ascii=False)}
+                        """
+
+                        response = client.chat.completions.create(
+                            model="gpt-4",
+                            messages=[
+                                {"role": "system", "content": f"You are a professional text corrector for {lang_name} language. Always respond with valid JSON."},
+                                {"role": "user", "content": prompt}
+                            ]
+                        )
+                        
+                        corrected_data = json.loads(response.choices[0].message.content)
+                        print(f"Corrected {field} data for {lang_name}: {corrected_data}")
+                        field_data = corrected_data
+                    except Exception as e:
+                        print(f"Error correcting {field} for {lang_name}: {str(e)}")
+
+                # Update the field with corrected data
+                setattr(translation, field, field_data)
+
+            translation.save()
+            print(f"Translation saved successfully with corrected data for {lang_name}")
+
+        return current_translation
 
 class CVListCreateView(generics.ListCreateAPIView):
     serializer_class = CVSerializer
@@ -30,20 +276,10 @@ class CVListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class CVDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CVSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
-
-    # Desteklenen diller ve OpenAI için karşılıkları
-    SUPPORTED_LANGUAGES = {
-        'tr': 'Turkish',
-        'en': 'English',
-        'es': 'Spanish',
-        'zh': 'Chinese',
-        'ar': 'Arabic',
-        'hi': 'Hindi'
-    }
 
     def get_queryset(self):
         return CV.objects.filter(user=self.request.user)
@@ -193,34 +429,9 @@ class CVDetailView(generics.RetrieveUpdateDestroyAPIView):
         print("="*50)
         
         instance = self.get_object()
+        current_lang = self._get_language_code(request)
         
-        # Get language from request data or default to 'en'
-        current_lang = request.data.get('language', 'en').lower()
-        print(f"Current language: {current_lang}")
-        
-        # Update CV fields
-        if 'current_step' in request.data:
-            print(f"Updating current_step to: {request.data['current_step']}")
-            instance.current_step = request.data['current_step']
-            instance.save()
-
-        # Get or create translation
-        translation = CVTranslation.objects.get_or_create(
-            cv=instance,
-            language_code=current_lang
-        )[0]
-        print(f"Translation object: {translation.id}")
-
-        # Update translation fields if present
-        fields_to_update = ['languages', 'personal_info', 'education', 'experience', 'skills']
-        for field in fields_to_update:
-            if field in request.data:
-                print(f"Updating field: {field}")
-                setattr(translation, field, request.data[field])
-        
-        translation.save()
-        print("Translation saved successfully")
-        
+        self._update_cv_data(instance, request.data, current_lang)
         return Response(self._get_translated_data(instance, current_lang))
 
     def patch(self, request, *args, **kwargs):
@@ -272,171 +483,27 @@ class CVDetailView(generics.RetrieveUpdateDestroyAPIView):
                 except Exception as e:
                     print(f"Error handling translation for {lang_code}: {str(e)}")
 
-    def _get_language_code(self, request):
-        """
-        Get the language code from the request.
-        First tries to get from Accept-Language header,
-        if not found defaults to 'en'.
-        """
-        # Try to get language from request data first
-        if request.data and 'language' in request.data:
-            lang_code = request.data['language'].lower()
-            if lang_code in self.SUPPORTED_LANGUAGES:
-                print(f"DEBUG: Using language from request data: {lang_code}")
-                return lang_code
-        
-        # Then try Accept-Language header
-        accept_language = request.headers.get('Accept-Language')
-        if accept_language:
-            languages = [lang.split(';')[0].strip() for lang in accept_language.split(',')]
-            for lang in languages:
-                base_lang = lang.split('-')[0].lower()
-                if base_lang in self.SUPPORTED_LANGUAGES:
-                    print(f"DEBUG: Using language from Accept-Language header: {base_lang}")
-                    return base_lang
-        
-        print("DEBUG: No supported language found, defaulting to 'en'")
-        return 'en'
-
-class CVViewSet(viewsets.ModelViewSet):
+class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
     queryset = CV.objects.all()
     serializer_class = CVSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
-    # Desteklenen diller ve OpenAI için karşılıkları
-    SUPPORTED_LANGUAGES = {
-        'tr': 'Turkish',
-        'en': 'English',
-        'es': 'Spanish',
-        'zh': 'Chinese',
-        'ar': 'Arabic',
-        'hi': 'Hindi'
-    }
-
     def get_queryset(self):
-        return CV.objects.prefetch_related('certificates', 'translations').filter(user=self.request.user)
+        return CV.objects.prefetch_related('translations').filter(user=self.request.user)
 
-    def _get_translated_data(self, instance, lang_code):
-        try:
-            # İstenen dildeki çeviriyi al
-            translation = CVTranslation.objects.get(cv=instance, language_code=lang_code)
-            
-            # Sertifikaları serialize et
-            certificates_data = []
-            for cert in instance.certificates.all():
-                certificates_data.append({
-                    'id': cert.id,
-                    'name': cert.name,
-                    'issuer': cert.issuer,
-                    'date': cert.date,
-                    'description': cert.description,
-                    'document': cert.document.url if cert.document else None,
-                    'document_type': cert.document_type,
-                })
-            
-            # Çeviri verilerini ve diğer CV bilgilerini birleştir
-            return {
-                'id': instance.id,
-                'title': instance.title,
-                'status': instance.status,
-                'current_step': instance.current_step,
-                'user': instance.user.id,
-                'created_at': instance.created_at,
-                'updated_at': instance.updated_at,
-                'video': instance.video.url if instance.video else None,
-                'video_description': instance.video_description,
-                'language': lang_code,
-                'personal_info': translation.personal_info,
-                'education': translation.education,
-                'experience': translation.experience,
-                'skills': translation.skills,
-                'languages': translation.languages,
-                'certificates': certificates_data,
-            }
-            
-        except CVTranslation.DoesNotExist:
-            try:
-                # İstenen dilde çeviri yoksa İngilizce çeviriyi dene
-                en_translation = CVTranslation.objects.get(cv=instance, language_code='en')
-                
-                # Sertifikaları serialize et
-                certificates_data = []
-                for cert in instance.certificates.all():
-                    certificates_data.append({
-                        'id': cert.id,
-                        'name': cert.name,
-                        'issuer': cert.issuer,
-                        'date': cert.date,
-                        'description': cert.description,
-                        'document': cert.document.url if cert.document else None,
-                        'document_type': cert.document_type,
-                    })
-                
-                return {
-                    'id': instance.id,
-                    'title': instance.title,
-                    'status': instance.status,
-                    'current_step': instance.current_step,
-                    'user': instance.user.id,
-                    'created_at': instance.created_at,
-                    'updated_at': instance.updated_at,
-                    'video': instance.video.url if instance.video else None,
-                    'video_description': instance.video_description,
-                    'language': 'en',  # İngilizce kullanıldığını belirt
-                    'personal_info': en_translation.personal_info,
-                    'education': en_translation.education,
-                    'experience': en_translation.experience,
-                    'skills': en_translation.skills,
-                    'languages': en_translation.languages,
-                    'certificates': certificates_data,
-                }
-            except CVTranslation.DoesNotExist:
-                # İngilizce çeviri de yoksa CV'nin orijinal verilerini kullan
-                
-                # Sertifikaları serialize et
-                certificates_data = []
-                for cert in instance.certificates.all():
-                    certificates_data.append({
-                        'id': cert.id,
-                        'name': cert.name,
-                        'issuer': cert.issuer,
-                        'date': cert.date,
-                        'description': cert.description,
-                        'document': cert.document.url if cert.document else None,
-                        'document_type': cert.document_type,
-                    })
-                
-                return {
-                    'id': instance.id,
-                    'title': instance.title,
-                    'status': instance.status,
-                    'current_step': instance.current_step,
-                    'user': instance.user.id,
-                    'created_at': instance.created_at,
-                    'updated_at': instance.updated_at,
-                    'video': instance.video.url if instance.video else None,
-                    'video_description': instance.video_description,
-                    'language': 'en',  # Varsayılan dil olarak İngilizce
-                    'personal_info': instance.personal_info,
-                    'education': instance.education,
-                    'experience': instance.experience,
-                    'skills': instance.skills,
-                    'languages': instance.languages,
-                    'certificates': certificates_data,
-                }
-
-    def list(self, request, *args, **kwargs):
-        # Get queryset
-        queryset = self.get_queryset()
+    def update(self, request, *args, **kwargs):
+        print("="*50)
+        print("UPDATE METODU ÇAĞRILDI")
+        print("REQUEST METHOD:", request.method)
+        print("REQUEST DATA:", request.data)
+        print("="*50)
         
-        # Use serializer with request context
-        serializer = self.get_serializer(queryset, many=True)
+        instance = self.get_object()
+        current_lang = self._get_language_code(request)
         
-        # Debug için
-        print("List method - Accept-Language:", request.headers.get('Accept-Language'))
-        
-        return Response(serializer.data)
+        self._update_cv_data(instance, request.data, current_lang)
+        return Response(self._get_translated_data(instance, current_lang))
 
     def create(self, request, *args, **kwargs):
         # Gelen veriyi al
@@ -732,7 +799,7 @@ class CVViewSet(viewsets.ModelViewSet):
                     defaults=cv_data
                 )
 
-    @action(detail=True, methods=['patch'])
+    @action(detail=True, methods=['post'])
     def update_step(self, request, pk=None):
         cv = self.get_object()
         step = request.data.get('current_step')
@@ -754,17 +821,21 @@ class CVViewSet(viewsets.ModelViewSet):
             cv = self.get_object()
             template_id = request.data.get('template_id')
             
+            # Get current language
+            current_lang = self._get_language_code(request)
+            translation = cv.translations.filter(language_code=current_lang).first()
+            
             # Template path'i düzelt
-            template_path = f'web/{template_id}.html'  # templates/ prefix'ini kaldırdık
+            template_path = f'web/{template_id}.html'
             
             # Context hazırla
             context = {
-                'personal_info': cv.personal_info,
-                'experience': cv.experience,
-                'education': cv.education,
-                'skills': cv.skills,
-                'languages': cv.languages,
-                'certificates': cv.certificates.all(),
+                'personal_info': translation.personal_info if translation else cv.personal_info,
+                'experience': translation.experience if translation else cv.experience,
+                'education': translation.education if translation else cv.education,
+                'skills': translation.skills if translation else cv.skills,
+                'languages': translation.languages if translation else cv.languages,
+                'certificates': translation.certificates if translation else [],
                 'video_url': cv.video.url if cv.video else None,
                 'video_description': cv.video_description
             }
@@ -802,17 +873,21 @@ class CVViewSet(viewsets.ModelViewSet):
             cv = self.get_object()
             template_id = request.data.get('template_id')
             
+            # Get current language
+            current_lang = self._get_language_code(request)
+            translation = cv.translations.filter(language_code=current_lang).first()
+            
             # Template seç
             template_path = f'templates/pdf/{template_id}.html'
             
             # Context hazırla
             context = {
-                'personal_info': cv.personal_info,
-                'experience': cv.experience,
-                'education': cv.education,
-                'skills': cv.skills,
-                'languages': cv.languages,
-                'certificates': cv.certificates.all()
+                'personal_info': translation.personal_info if translation else cv.personal_info,
+                'experience': translation.experience if translation else cv.experience,
+                'education': translation.education if translation else cv.education,
+                'skills': translation.skills if translation else cv.skills,
+                'languages': translation.languages if translation else cv.languages,
+                'certificates': translation.certificates if translation else []
             }
             
             # HTML oluştur
@@ -857,17 +932,29 @@ class CVViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Create a new certificate record with temporary values
-            certificate = Certificate.objects.create(
-                cv=cv,
-                name='Processing...',
-                issuer='Processing...',
-                date=timezone.now().date(),
-                document=file
-            )
+            # Generate a unique ID for the certificate
+            certificate_id = str(uuid.uuid4())
+
+            # Save the file
+            file_path = f'certificates/{cv.id}/{certificate_id}/{file.name}'
+            storage = default_storage
+            if storage.exists(file_path):
+                storage.delete(file_path)
             
-            # Save to trigger document_type detection
-            certificate.save()
+            file_path = storage.save(file_path, file)
+            file_url = storage.url(file_path)
+
+            # Determine file type
+            file_name = file.name.lower()
+            if file_name.endswith('.pdf'):
+                document_type = 'pdf'
+            elif any(file_name.endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif']):
+                document_type = 'image'
+            else:
+                return Response(
+                    {'error': 'Invalid file type. Only PDF and images are allowed.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             try:
                 # Use OpenAI to extract certificate details
@@ -895,19 +982,40 @@ class CVViewSet(viewsets.ModelViewSet):
                 # Parse the response
                 certificate_info = json.loads(response.choices[0].message.content)
                 
-                # Update certificate with extracted information
-                certificate.name = certificate_info.get('name', 'Untitled Certificate')
-                certificate.issuer = certificate_info.get('issuer', 'Unknown Issuer')
-                certificate.description = certificate_info.get('description', '')
-                certificate.save()
+                # Create certificate data
+                certificate_data = {
+                    'id': certificate_id,
+                    'name': certificate_info.get('name', 'Untitled Certificate'),
+                    'issuer': certificate_info.get('issuer', 'Unknown Issuer'),
+                    'description': certificate_info.get('description', ''),
+                    'date': timezone.now().date().isoformat(),
+                    'document_url': file_url,
+                    'document_type': document_type
+                }
                 
             except Exception as e:
                 print(f"Error extracting certificate details: {str(e)}")
-                # If OpenAI extraction fails, we still keep the certificate with default values
+                # If OpenAI extraction fails, use default values
+                certificate_data = {
+                    'id': certificate_id,
+                    'name': 'Untitled Certificate',
+                    'issuer': 'Unknown Issuer',
+                    'description': '',
+                    'date': timezone.now().date().isoformat(),
+                    'document_url': file_url,
+                    'document_type': document_type
+                }
+
+            # Update all translations with the new certificate
+            current_lang = self._get_language_code(request)
+            for translation in cv.translations.all():
+                certificates = translation.certificates or []
+                certificates.append(certificate_data.copy())
+                translation.certificates = certificates
+                translation.save()
             
             # Return the updated CV data
-            serializer = self.get_serializer(cv)
-            return Response(serializer.data)
+            return Response(self._get_translated_data(cv, current_lang))
             
         except Exception as e:
             return Response(
@@ -994,93 +1102,106 @@ class CVViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    def partial_update(self, request, *args, **kwargs):
-        print("="*50)
-        print("PATCH METODU ÇAĞRILDI")
-        print("REQUEST DATA:", request.data)
-        print("="*50)
+    @action(detail=True, methods=['POST'], url_path='upload-certificate-document')
+    def upload_certificate_document(self, request, pk=None):
+        try:
+            cv = self.get_object()
+            file = request.FILES.get('file')
+            certificate_id = request.data.get('certificate_id')
+            
+            if not file or not certificate_id:
+                return Response(
+                    {'error': 'Both file and certificate_id are required'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        instance = self.get_object()
-        current_lang = request.data.get('language', 'en').lower()
-        print(f"Current language: {current_lang}")
-        
-        # Update CV fields
-        cv_fields = ['current_step', 'title', 'status', 'video_description']
-        for field in cv_fields:
-            if field in request.data:
-                print(f"Updating CV field: {field}")
-                setattr(instance, field, request.data[field])
-        instance.save()
+            # Dosya tipini belirle
+            file_name = file.name.lower()
+            if file_name.endswith('.pdf'):
+                document_type = 'pdf'
+            elif any(file_name.endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif']):
+                document_type = 'image'
+            else:
+                return Response(
+                    {'error': 'Invalid file type. Only PDF and images are allowed.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        # Get or create translation
-        translation = CVTranslation.objects.get_or_create(
-            cv=instance,
-            language_code=current_lang
-        )[0]
+            # Dosyayı kaydet
+            file_path = f'certificates/{cv.id}/{certificate_id}/{file.name}'
+            storage = default_storage
+            if storage.exists(file_path):
+                storage.delete(file_path)
+            
+            file_path = storage.save(file_path, file)
+            file_url = storage.url(file_path)
 
-        # Update translation fields if present
-        modified_fields = {}
-        fields_to_update = ['languages', 'personal_info', 'education', 'experience', 'skills']
-        for field in fields_to_update:
-            if field in request.data:
-                print(f"Updating translation field: {field}")
-                field_data = request.data[field]
-                # Update both CV and translation if it's the main language (English)
-                if current_lang == 'en':
-                    setattr(instance, field, field_data)
-                setattr(translation, field, field_data)
-                modified_fields[field] = field_data
-        
-        if modified_fields:
-            if current_lang == 'en':
-                instance.save()
-            translation.save()
-            print("Translation saved successfully")
+            # Sertifika bilgilerini güncelle
+            current_lang = self._get_language_code(request)
+            translation = cv.translations.filter(language_code=current_lang).first()
+            
+            if translation:
+                certificates = translation.certificates
+                for cert in certificates:
+                    if str(cert.get('id')) == str(certificate_id):
+                        cert['document_url'] = file_url
+                        cert['document_type'] = document_type
+                        break
+                
+                translation.certificates = certificates
+                translation.save()
+            
+            return Response({
+                'document_url': file_url,
+                'document_type': document_type
+            })
+            
+        except Exception as e:
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
-            # Translate to other languages
-            print("Starting translations to other languages")
-            for lang_code, lang_name in self.SUPPORTED_LANGUAGES.items():
-                if lang_code != current_lang:
-                    try:
-                        trans, _ = CVTranslation.objects.get_or_create(
-                            cv=instance,
-                            language_code=lang_code
-                        )
+    @action(detail=True, methods=['POST'], url_path='delete-certificate-document')
+    def delete_certificate_document(self, request, pk=None):
+        try:
+            cv = self.get_object()
+            certificate_id = request.data.get('certificate_id')
+            
+            if not certificate_id:
+                return Response(
+                    {'error': 'certificate_id is required'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Tüm dillerdeki çevirilerde sertifika dosyasını sil
+            for translation in cv.translations.all():
+                certificates = translation.certificates
+                for cert in certificates:
+                    if str(cert.get('id')) == str(certificate_id):
+                        # Dosyayı fiziksel olarak sil
+                        document_url = cert.get('document_url')
+                        if document_url:
+                            file_path = document_url.replace(settings.MEDIA_URL, '')
+                            storage = default_storage
+                            if storage.exists(file_path):
+                                storage.delete(file_path)
                         
-                        # Her alan için OpenAI ile çeviri yap
-                        for field, value in modified_fields.items():
-                            prompt = f"""Please translate the following {field} content to {lang_name}. 
-                            Keep the JSON structure exactly the same, only translate the text content.
-                            
-                            Content to translate:
-                            {json.dumps(value, ensure_ascii=False)}
-                            """
-                            
-                            try:
-                                client = openai.OpenAI()
-                                response = client.chat.completions.create(
-                                    model="gpt-4",
-                                    messages=[
-                                        {"role": "system", "content": "You are a professional translator."},
-                                        {"role": "user", "content": prompt}
-                                    ],
-                                    response_format={"type": "json_object"}
-                                )
-                                
-                                translated_content = json.loads(response.choices[0].message.content)
-                                setattr(trans, field, translated_content)
-                                
-                            except Exception as e:
-                                print(f"Error translating {field} for {lang_code}: {str(e)}")
-                                setattr(trans, field, value)
-                        
-                        trans.save()
-                        print(f"Saved translation for {lang_code}")
-                        
-                    except Exception as e:
-                        print(f"Error handling translation for {lang_code}: {str(e)}")
-        
-        return Response(self._get_translated_data(instance, current_lang))
+                        # Dosya bilgilerini temizle
+                        cert['document_url'] = None
+                        cert['document_type'] = None
+                        break
+                
+                translation.certificates = certificates
+                translation.save()
+            
+            return Response({'status': 'success'})
+            
+        except Exception as e:
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 @api_view(['GET'])
 def debug_auth(request):

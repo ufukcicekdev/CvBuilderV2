@@ -53,10 +53,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
     formState: { errors }
   } = useForm<LanguagesFormData>({
     defaultValues: {
-      languages: [{
-        name: '',
-        level: 3
-      }]
+      languages: []
     }
   });
 
@@ -127,7 +124,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
                 <TextField
                   fullWidth
                   label={t('cv.languages.name')}
-                  {...register(`languages.${index}.name` as const, { required: true })}
+                  {...register(`languages.${index}.name` as const)}
                   error={!!errors.languages?.[index]?.name}
                   helperText={errors.languages?.[index]?.name && t('common.required')}
                 />
@@ -149,15 +146,13 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
               </Grid>
             </Grid>
 
-            {fields.length > 1 && (
-              <IconButton 
-                onClick={() => remove(index)}
-                color="error"
-                sx={{ mt: 1 }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
+            <IconButton 
+              onClick={() => remove(index)}
+              color="error"
+              sx={{ mt: 1 }}
+            >
+              <DeleteIcon />
+            </IconButton>
           </Box>
         ))}
 

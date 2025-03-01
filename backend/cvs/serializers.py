@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CV, CVTranslation, Certificate
+from .models import CV, CVTranslation
 from profiles.serializers import LanguageSerializer
 
 class CVTranslationSerializer(serializers.ModelSerializer):
@@ -9,6 +9,7 @@ class CVTranslationSerializer(serializers.ModelSerializer):
     experience = serializers.JSONField(required=False)
     skills = serializers.JSONField(required=False)
     languages = serializers.JSONField(required=False)
+    certificates = serializers.JSONField(required=False)
     
     class Meta:
         model = CVTranslation
@@ -20,31 +21,10 @@ class CVTranslationSerializer(serializers.ModelSerializer):
             'experience',
             'skills',
             'languages',
+            'certificates',
             'created_at',
             'updated_at'
         ]
-
-class CertificateSerializer(serializers.ModelSerializer):
-    document_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Certificate
-        fields = [
-            'id', 
-            'name', 
-            'issuer', 
-            'date', 
-            'description', 
-            'url',
-            'document',
-            'document_type',
-            'document_url'
-        ]
-
-    def get_document_url(self, obj):
-        if obj.document:
-            return self.context['request'].build_absolute_uri(obj.document.url)
-        return None
 
 class CVSerializer(serializers.ModelSerializer):
     translations = CVTranslationSerializer(many=True, read_only=True)
@@ -53,7 +33,7 @@ class CVSerializer(serializers.ModelSerializer):
     experience = serializers.JSONField(required=False, default=list)
     skills = serializers.JSONField(required=False, default=list)
     languages = serializers.JSONField(required=False, default=list)
-    certificates = CertificateSerializer(many=True, required=False)
+    certificates = serializers.JSONField(required=False, default=list)
     video_url = serializers.SerializerMethodField()
     
     class Meta:
@@ -97,6 +77,7 @@ class CVSerializer(serializers.ModelSerializer):
                 data['experience'] = translation.experience
                 data['skills'] = translation.skills
                 data['languages'] = translation.languages
+                data['certificates'] = translation.certificates
             else:
                 # İngilizce çeviriyi dene
                 en_translation = instance.translations.filter(language_code='en').first()
@@ -107,6 +88,7 @@ class CVSerializer(serializers.ModelSerializer):
                     data['experience'] = en_translation.experience
                     data['skills'] = en_translation.skills
                     data['languages'] = en_translation.languages
+                    data['certificates'] = en_translation.certificates
         except Exception as e:
             print(f"Error in to_representation: {str(e)}")
             # Hata durumunda orijinal veriyi dön
@@ -133,25 +115,12 @@ class CVSerializer(serializers.ModelSerializer):
         validated_data.setdefault('experience', [])
         validated_data.setdefault('skills', [])
         validated_data.setdefault('languages', [])
+        validated_data.setdefault('certificates', [])
         
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        certificates_data = validated_data.pop('certificates', [])
-        
-        # Mevcut sertifikaları sil
-        if 'certificates' in self.initial_data:
-            instance.certificates.all().delete()
-            
-            # Yeni sertifikaları ekle
-            for cert_data in certificates_data:
-                document = cert_data.pop('document', None)
-                certificate = Certificate.objects.create(cv=instance, **cert_data)
-                if document:
-                    certificate.document = document
-                    certificate.save()
-
         # Video işlemi
         if 'video' in validated_data:
             if instance.video:
