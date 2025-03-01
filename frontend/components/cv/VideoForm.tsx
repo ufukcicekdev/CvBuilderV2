@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -12,18 +12,15 @@ import {
 import { Delete as DeleteIcon, CloudUpload as UploadIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
-import axiosInstance from '../../utils/axios';
 import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/router';
+import { cvAPI } from '../../services/api';
 
 interface VideoFormProps {
   cvId: string;
   onPrev?: () => void;
   onStepComplete: (data: any) => void;
-  initialData?: {
-    video?: string;
-    video_url?: string;
-    video_description?: string;
-  };
+  initialData?: any;
 }
 
 const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps) => {
@@ -33,6 +30,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
   const [currentVideo, setCurrentVideo] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -76,10 +74,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
   const handleDeleteVideo = async () => {
     try {
       setLoading(true);
-      await axiosInstance.post(`/api/cvs/${cvId}/upload-video/`, {
-        video: null,
-        video_description: ''
-      });
+      await cvAPI.deleteVideo(Number(cvId));
       setCurrentVideo(null);
       setPreviewUrl(null);
       setSelectedFile(null);
@@ -102,18 +97,11 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
       }
       formData.append('video_description', data.videoDescription || '');
 
-      await axiosInstance.post(`/api/cvs/${cvId}/upload-video/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        onUploadProgress: (progressEvent) => {
-          const progress = (progressEvent.loaded / (progressEvent.total || 0)) * 100;
-          setUploadProgress(Math.round(progress));
-        }
-      });
+      await cvAPI.uploadVideo(Number(cvId), formData);
 
       await onStepComplete({
-        video_description: data.videoDescription
+        video_description: data.videoDescription,
+        language: router.locale
       });
     } catch (error) {
       console.error('Error saving video data:', error);

@@ -10,6 +10,7 @@ import createCache from '@emotion/cache';
 import { prefixer } from 'stylis';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { AuthProvider } from '../contexts/AuthContext';
+import { LanguageProvider } from '../contexts/LanguageContext';
 
 const cacheRtl = createCache({
   key: 'muirtl',
@@ -36,10 +37,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
       <AuthProvider>
-        <Providers>
-          <Component {...pageProps} />
-          <Toaster position={isRTL ? "top-left" : "top-right"} />
-        </Providers>
+        <LanguageProvider>
+          <Providers>
+            <Component {...pageProps} />
+            <Toaster position={isRTL ? "top-left" : "top-right"} />
+          </Providers>
+        </LanguageProvider>
       </AuthProvider>
     </CacheProvider>
   );

@@ -20,7 +20,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
-import axiosInstance from '../../services/axios';
+import { cvAPI } from '../../services/api';
 import { useRouter } from 'next/router';
 import { showToast } from '../../utils/toast';
 
@@ -44,21 +44,23 @@ function Dashboard() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCvId, setSelectedCvId] = useState<number | null>(null);
 
+  // Dil değişikliğini izle (router ve özel event için)
   useEffect(() => {
     fetchCVs();
-  }, []);
+
+    // Dil değişikliklerini dinle
+    const handleLanguageChange = () => {
+      fetchCVs();
+    };
+
+    window.addEventListener('languageChange', handleLanguageChange);
+    return () => window.removeEventListener('languageChange', handleLanguageChange);
+  }, [router.locale]);
 
   const fetchCVs = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('accessToken'); // 'token' yerine 'accessToken' kullanıyoruz
-      console.log('Token:', token); // Token'ı kontrol edelim
-      
-      const response = await axiosInstance.get('/api/cvs/', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await cvAPI.getAll();
       console.log('CV Response:', response.data);
       setCvs(response.data);
     } catch (error) {
@@ -77,12 +79,7 @@ function Dashboard() {
   const handleDeleteConfirm = async () => {
     if (selectedCvId) {
       try {
-        const token = localStorage.getItem('accessToken');
-        await axiosInstance.delete(`/api/cvs/${selectedCvId}/`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        await cvAPI.delete(selectedCvId);
         showToast.success(t('cv.deleteSuccess'));
         fetchCVs(); // Listeyi yenile
       } catch (error) {

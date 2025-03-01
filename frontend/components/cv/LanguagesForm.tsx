@@ -14,7 +14,8 @@ import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { showToast } from '../../utils/toast';
-import axiosInstance from '../../utils/axios';
+import { cvAPI } from '../../services/api';
+import { useRouter } from 'next/router';
 
 interface LanguagesFormProps {
   cvId: string;
@@ -26,7 +27,6 @@ interface LanguagesFormProps {
 interface LanguageItem {
   name: string;
   level: number;
-  certificate?: string;
 }
 
 interface LanguagesFormData {
@@ -42,6 +42,7 @@ const LANGUAGE_LEVELS = [
 const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -54,8 +55,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
     defaultValues: {
       languages: [{
         name: '',
-        level: 3,
-        certificate: ''
+        level: 3
       }]
     }
   });
@@ -68,14 +68,14 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
   useEffect(() => {
     const loadLanguages = async () => {
       try {
-        const response = await axiosInstance.get(`/cvs/${cvId}/`);
+        const response = await cvAPI.getOne(Number(cvId));
         if (response.data.languages && response.data.languages.length > 0) {
-          const formattedLanguages = response.data.languages.map((lang: any) => ({
+          const formattedLanguages = response.data.languages.map(lang => ({
             name: lang.name,
-            level: lang.level,
-            certificate: lang.certificate || ''
+            level: lang.level
           }));
           
+          console.log('Formatted languages for form:', formattedLanguages);
           setValue('languages', formattedLanguages);
         }
       } catch (error) {
@@ -96,12 +96,14 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
       const formattedData = {
         languages: data.languages.map(lang => ({
           name: lang.name,
-          level: lang.level,
-          certificate: lang.certificate || ''
+          level: lang.level
         }))
       };
 
-      await onStepComplete(formattedData);
+      await onStepComplete({
+        ...formattedData,
+        language: router.locale
+      });
       
     } catch (error) {
       console.error('Error saving languages:', error);
@@ -145,14 +147,6 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
                   />
                 </Box>
               </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label={t('cv.languages.certificate')}
-                  {...register(`languages.${index}.certificate` as const)}
-                />
-              </Grid>
             </Grid>
 
             {fields.length > 1 && (
@@ -171,8 +165,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
           startIcon={<AddIcon />}
           onClick={() => append({
             name: '',
-            level: 3,
-            certificate: ''
+            level: 3
           })}
           sx={{ mt: 2 }}
         >
@@ -188,7 +181,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
             variant="contained"
             disabled={loading}
           >
-            {t('navigation.previous')}
+            {t('common.previous')}
           </Button>
         )}
         <Button
@@ -197,7 +190,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
           color="primary"
           disabled={loading}
         >
-          {t('navigation.next')}
+          {t('common.next')}
         </Button>
       </Box>
     </form>

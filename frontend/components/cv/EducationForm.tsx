@@ -13,7 +13,8 @@ import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { showToast } from '../../utils/toast';
-import axiosInstance from '../../utils/axios';
+import { cvAPI } from '../../services/api';
+import { useRouter } from 'next/router';
 
 interface EducationItem {
   school: string;
@@ -39,6 +40,7 @@ interface EducationFormData {
 const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -77,16 +79,16 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
   useEffect(() => {
     const loadEducation = async () => {
       try {
-        const response = await axiosInstance.get(`/cvs/${cvId}`);
-        if (response.data.education && response.data.education.length > 0) {
+        const response = await cvAPI.getOne(Number(cvId));
+        if (response.data.education) {
           // Backend'den gelen veriyi form yapısına dönüştür
           const formattedEducation = response.data.education.map(edu => ({
             school: edu.school,
             degree: edu.degree,
             field: edu.field,
-            startDate: edu.start_date || '',  // Tarih formatını düzelt
-            endDate: edu.end_date || '',      // Tarih formatını düzelt
-            current: edu.is_current || false,
+            startDate: edu.start_date,
+            endDate: edu.end_date || '',
+            current: edu.is_current,
             description: edu.description || ''
           }));
           
@@ -122,7 +124,10 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
       };
 
       // Parent component'e bildir
-      await onStepComplete(formattedData);
+      await onStepComplete({
+        ...formattedData,
+        language: router.locale
+      });
       
     } catch (error) {
       console.error('Error saving education:', error);

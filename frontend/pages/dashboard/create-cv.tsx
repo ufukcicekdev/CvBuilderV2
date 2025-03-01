@@ -13,12 +13,18 @@ function CreateCV() {
   const [activeStep, setActiveStep] = useState(Number(step) || 0);
 
   const handleCVCreated = (newCvId: number) => {
-    router.push(`/dashboard/create-cv?id=${newCvId}&step=0`);
+    router.push({
+      pathname: '/dashboard/create-cv',
+      query: { id: newCvId, step: 0 }
+    }, undefined, { locale: router.locale });
   };
 
   const handleStepChange = (newStep: number) => {
     setActiveStep(newStep);
-    router.push(`/dashboard/create-cv?id=${id}&step=${newStep}`);
+    router.push({
+      pathname: '/dashboard/create-cv',
+      query: { id, step: newStep }
+    }, undefined, { locale: router.locale });
   };
 
   return (

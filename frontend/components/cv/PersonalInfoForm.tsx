@@ -15,7 +15,7 @@ import {
   LinkedIn as LinkedInIcon,
   GitHub as GitHubIcon
 } from '@mui/icons-material';
-import axiosInstance from '../../utils/axios';
+import { cvAPI } from '../../services/api';
 import { useRouter } from 'next/router';
 
 interface PersonalInfo {
@@ -99,8 +99,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
 
     const fetchPersonalInfo = async () => {
       try {
-        // /cvs/ şeklinde olmalı çünkü axiosInstance'da baseURL'de /api var
-        const response = await axiosInstance.get(`/cvs/${cvId}/`);
+        const response = await cvAPI.getOne(Number(cvId));
         if (response.data.personal_info) {
           const personalInfo = response.data.personal_info;
           // Form alanlarını doldur
@@ -138,7 +137,10 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
         };
 
         // Parent component'e bildir
-        await onStepComplete(formattedData);
+        await onStepComplete({
+          ...formattedData,
+          language: router.locale
+        });
         
       } catch (error) {
         console.error('Error saving personal info:', error);

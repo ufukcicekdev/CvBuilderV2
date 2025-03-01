@@ -191,5 +191,119 @@
       "feedback": "Feedback",
       "other": "Other"
     }
+  },
+  "cv": {
+    "create": "Create CV",
+    "createSuccess": "CV created successfully",
+    "createError": "Error creating CV",
+    "steps": {
+      "personalInfo": "Personal Info",
+      "experience": "Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "languages": "Languages",
+      "certificates": "Certificates",
+      "video": "Video",
+      "template": "Template"
+    },
+    "video": {
+      "title": "Video Introduction",
+      "selectVideo": "Select Video",
+      "dragDropHint": "Drag and drop a video file here, or click to select",
+      "maxSize": "Maximum file size: 100MB",
+      "uploading": "Uploading video...",
+      "fileTooLarge": "File is too large. Maximum size is 100MB",
+      "invalidFileType": "Invalid file type. Please select a video file",
+      "deleteError": "Error deleting video",
+      "saveError": "Error saving video"
+    },
+    "personalInfo": {
+      "title": "Personal Information",
+      "fullName": "Full Name",
+      "jobTitle": "Job Title",
+      "summary": "Summary",
+      "phone": "Phone",
+      "location": "Location"
+    },
+    "experience": {
+      "title": "Work Experience",
+      "subtitle": "Add your work history starting with the most recent",
+      "company": "Company Name",
+      "position": "Position",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "current": "I currently work here",
+      "description": "Job Description and Responsibilities",
+      "addMore": "Add Experience"
+    },
+    "languages": {
+      "title": "Languages",
+      "subtitle": "Add languages you know and their levels",
+      "name": "Language",
+      "level": "Level",
+      "certificate": "Certificate",
+      "certificateHelper": "Specify language certificate if any (Optional)",
+      "addMore": "Add Language"
+    },
+    "education": {
+      "title": "Education",
+      "subtitle": "Add your education history starting with the most recent",
+      "school": "School",
+      "degree": "Degree",
+      "field": "Field of Study",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "current": "I am currently studying",
+      "description": "Description (Optional)",
+      "addMore": "Add Education"
+    },
+    "draft": "Draft",
+    "completed": "Completed",
+    "continue": "Continue",
+    "edit": "Edit",
+    "untitled": "Untitled CV",
+    "lastUpdated": "Last Updated",
+    "saveAndExit": "Save & Exit",
+    "saveSuccess": "Your progress has been saved",
+    "saveError": "Error saving your progress",
+    "loadError": "Error loading CV",
+    "errors": {
+      "personalInfoRequired": "Please fill in all personal information",
+      "experienceRequired": "Please add at least one experience",
+      "educationRequired": "Please add at least one education",
+      "skillsRequired": "Please add at least one skill",
+      "languagesRequired": "Please add at least one language",
+      "experienceFieldsRequired": "Please fill in company name, position and start date for experience",
+      "endDateRequired": "End date is required if you are not currently working",
+      "educationFieldsRequired": "Please fill in school, degree, field and start date",
+      "endDateRequired": "End date is required if you are not currently studying"
+    },
+    "currentStep": "Current Step",
+    "deleteConfirmTitle": "Delete CV",
+    "deleteConfirmMessage": "Are you sure you want to delete this CV?",
+    "deleteSuccess": "CV deleted successfully",
+    "deleteError": "Error deleting CV",
+    "noCVs": "You haven't created any CVs yet",
+    "createFirst": "Create Your First CV",
+    "titleLabel": "CV Title",
+    "titlePlaceholder": "Enter a title for your CV",
+    "titleHelper": "This title helps you identify your CV (e.g. 'Software Developer CV')",
+    "startCreating": "Start Creating CV",
+    "errors": {
+      "titleRequired": "Please enter a title for your CV"
+    },
+    "loadSuccess": "CV loaded successfully",
+    "skills": {
+      "title": "Skills",
+      "subtitle": "Add your technical and personal skills",
+      "name": "Skill",
+      "level": "Level",
+      "description": "Description",
+      "descriptionHelper": "Add a short description about this skill (Optional)",
+      "addMore": "Add Skill"
+    },
+    "errors": {
+      "skillNameRequired": "Please enter skill name"
+    }
   }
 } 

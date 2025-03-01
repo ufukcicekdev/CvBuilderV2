@@ -105,6 +105,8 @@
     "save": "Kaydet",
     "cancel": "İptal",
     "edit": "Düzenle",
+    "next": "Devam Et",
+    "previous": "Geri Dön",
     "delete": "Sil",
     "add": "Ekle",
     "search": "Ara",
@@ -292,7 +294,9 @@
       "education": "Eğitim",
       "skills": "Yetenekler",
       "languages": "Yabancı Diller",
-      "certificates": "Sertifikalar"
+      "certificates": "Sertifikalar",
+      "video": "Video",
+      "template": "Şablon"
     },
     "personalInfo": {
       "title": "Kişisel Bilgiler",

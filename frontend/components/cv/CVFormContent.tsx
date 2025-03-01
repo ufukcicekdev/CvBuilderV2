@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   Box, 
   Button,
@@ -19,7 +19,7 @@ import LanguagesForm from './LanguagesForm';
 import CertificatesForm from './CertificatesForm';
 import VideoForm from './VideoForm';
 import TemplatePreviewForm from './TemplatePreviewForm';
-import axiosInstance from '../../utils/axios';
+import { cvAPI, CV } from '../../services/api';
 import { toast } from 'react-hot-toast';
 
 interface CVFormContentProps {
@@ -28,68 +28,68 @@ interface CVFormContentProps {
   onStepChange: (step: number) => void;
 }
 
-interface CVData {
-  personal_info: any;
-  experience: any[];
-  education: any[];
-  skills: any[];
-  languages: any[];
-  certificates: any[];
-  video_url: string;
-  video_description: string;
-  current_step: number;
-}
-
 export default function CVFormContent({ activeStep, cvId, onStepChange }: CVFormContentProps) {
   const { t } = useTranslation('common');
+  const [cvData, setCvData] = useState<CV | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [isStepValid, setIsStepValid] = useState(true);
-  const [cvData, setCvData] = useState<CVData | null>(null);
 
-  const totalSteps = 8;
-
-  const steps = [
+  const steps = useMemo(() => [
     t('cv.steps.personalInfo'),
     t('cv.steps.experience'),
     t('cv.steps.education'),
     t('cv.steps.skills'),
     t('cv.steps.languages'),
     t('cv.steps.certificates'),
-    t('cv.steps.video'),
-    t('cv.steps.template')
-  ];
+    'Video',
+    'Template'
+  ], [t]);
+
+  const fetchCVData = useCallback(async () => {
+    try {
+      const response = await cvAPI.getOne(cvId);
+      setCvData(response.data);
+    } catch (error) {
+      console.error('Error fetching CV data:', error);
+      toast.error(t('cv.loadError'));
+    }
+  }, [cvId, t]);
 
   useEffect(() => {
-    const fetchCVData = async () => {
-      try {
-        const response = await axiosInstance.get(`/api/cvs/${cvId}/`);
-        setCvData(response.data);
-      } catch (error) {
-        console.error('Error fetching CV data:', error);
+    fetchCVData();
+  }, [fetchCVData]);
+
+  // Dil değişikliğini dinle
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'selectedLanguage') {
+        fetchCVData();
       }
     };
 
-    fetchCVData();
-  }, [cvId]);
+    window.addEventListener('storage', handleStorageChange);
 
-  const handleStepComplete = async (data: any) => {
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [fetchCVData]);
+
+  const handleStepComplete = useCallback(async (data: any) => {
     try {
-      // Form verilerini ve current step'i güncelle
-      await axiosInstance.patch(`/cvs/${cvId}/`, {
+      await cvAPI.update(cvId, {
         ...data,
-        current_step: activeStep  // Şu anki adımı gönder, bir sonraki değil
+        current_step: activeStep
       });
 
-      // Başarılı kayıt sonrası bir sonraki adıma geç
       onStepChange(activeStep + 1);
+      toast.success(t('cv.saveSuccess'));
     } catch (error) {
       console.error('Error saving form data:', error);
-      toast.error('Veriler kaydedilirken bir hata oluştu');
+      toast.error(t('cv.saveError'));
     }
-  };
+  }, [activeStep, cvId, onStepChange, t]);
 
-  const renderStepContent = () => {
+  const renderStepContent = useCallback(() => {
     if (!cvData) return null;
 
     switch (activeStep) {
@@ -170,9 +170,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
       default:
         return null;
     }
-  };
+  }, [activeStep, cvData, cvId, handleStepComplete, onStepChange]);
 
-  const renderStepper = () => {
+  const renderStepper = useCallback(() => {
     if (isMobile) {
       return (
         <Box sx={{ width: '100%', mb: 2 }}>
@@ -222,24 +222,14 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
         ))}
       </Stepper>
     );
-  };
+  }, [activeStep, isMobile, steps]);
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper 
-        elevation={0} 
-        sx={{ 
-          p: { xs: 2, sm: 3 },
-          mb: { xs: 2, sm: 3 },
-          backgroundColor: 'background.default',
-          borderBottom: '1px solid',
-          borderColor: 'divider'
-        }}
-      >
-        {renderStepper()}
-      </Paper>
-
-      {renderStepContent()}
+      {renderStepper()}
+      <Box sx={{ mt: 4 }}>
+        {renderStepContent()}
+      </Box>
     </Box>
   );
 } 

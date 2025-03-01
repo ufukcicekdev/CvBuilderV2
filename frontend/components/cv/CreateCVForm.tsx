@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next';
-import axiosInstance from '../../utils/axios';
+import { cvAPI } from '../../services/api';
 import { showToast } from '../../utils/toast';
 
 interface CreateCVFormProps {
@@ -18,7 +18,7 @@ const CreateCVForm = ({ onSuccess }: CreateCVFormProps) => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post('/cvs/', {
+      const response = await cvAPI.create({
         title: title || t('cv.untitled')
       });
 

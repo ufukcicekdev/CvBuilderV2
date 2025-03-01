@@ -13,7 +13,8 @@ import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { showToast } from '../../utils/toast';
-import axiosInstance from '../../utils/axios';
+import { cvAPI } from '../../services/api';
+import { useRouter } from 'next/router';
 
 interface SkillsFormProps {
   cvId: string;
@@ -35,6 +36,7 @@ interface SkillsFormData {
 const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormProps) => {
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -70,7 +72,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
   useEffect(() => {
     const loadSkills = async () => {
       try {
-        const response = await axiosInstance.get(`/cvs/${cvId}/`);
+        const response = await cvAPI.getOne(Number(cvId));
         if (response.data.skills && response.data.skills.length > 0) {
           // Backend'den gelen veriyi form yapısına dönüştür
           const formattedSkills = response.data.skills.map(skill => ({
@@ -107,7 +109,10 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
       };
 
       // Parent component'e bildir
-      await onStepComplete(formattedData);
+      await onStepComplete({
+        ...formattedData,
+        language: router.locale
+      });
       
     } catch (error) {
       console.error('Error saving skills:', error);
@@ -200,7 +205,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
             variant="contained"
             disabled={loading}
           >
-            {t('navigation.previous')}
+            {t('common.previous')}
           </Button>
         )}
         <Button
@@ -209,7 +214,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
           color="primary"
           disabled={loading}
         >
-          {t('navigation.next')}
+          {t('common.next')}
         </Button>
       </Box>
     </form>

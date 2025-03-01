@@ -38,18 +38,42 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Dil ayarını kontrol et ve API için ayarla
+    const initializeLanguage = async () => {
+      const savedLanguage = localStorage.getItem('selectedLanguage');
+      const currentLocale = router.locale || 'en';
+      
+      // Eğer localStorage'da dil yoksa veya farklıysa, güncel dili kaydet
+      if (!savedLanguage || savedLanguage !== currentLocale) {
+        localStorage.setItem('selectedLanguage', currentLocale);
+        
+        // API için Accept-Language header'ını ayarla
+        const { setLanguage } = await import('../services/api');
+        setLanguage(currentLocale);
+      }
+    };
+
     // Sayfa yüklendiğinde ve her değişimde token kontrolü
     const checkAuth = () => {
       const token = localStorage.getItem('accessToken');
       setIsLoggedIn(!!token);
     };
 
+    initializeLanguage();
     checkAuth();
-    // Route değişikliklerinde de kontrol et
-    router.events.on('routeChangeComplete', checkAuth);
+    
+    // Route değişikliklerinde kontrolleri yap
+    router.events.on('routeChangeComplete', () => {
+      initializeLanguage();
+      checkAuth();
+    });
 
     return () => {
-      router.events.off('routeChangeComplete', checkAuth);
+      router.events.off('routeChangeComplete', () => {
+        initializeLanguage();
+        checkAuth();
+      });
     };
   }, [router]);
 
@@ -69,9 +93,22 @@ export default function Navbar() {
     setLangMenuAnchor(null);
   };
 
-  const handleLanguageChange = (locale: string) => {
-    router.push(router.pathname, router.asPath, { locale });
-    handleLangMenuClose();
+  const handleLanguageChange = async (locale: string) => {
+    try {
+      // localStorage'a kaydet
+      localStorage.setItem('selectedLanguage', locale);
+      
+      // Next.js route'unu güncelle
+      await router.push(router.pathname, router.asPath, { locale });
+      
+      // Menüyü kapat
+      handleLangMenuClose();
+      
+      // Sayfayı yenile (isteğe bağlı)
+      // window.location.reload();
+    } catch (error) {
+      console.error('Error changing language:', error);
+    }
   };
 
   const handleLogout = () => {

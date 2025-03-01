@@ -13,9 +13,8 @@ import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { showToast } from '../../utils/toast';
-import axiosInstance from '../../utils/axios';
+import { cvAPI } from '../../services/api';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 
 interface ExperienceFormProps {
   cvId: string;
@@ -78,7 +77,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
   useEffect(() => {
     const loadExperience = async () => {
       try {
-        const response = await axiosInstance.get(`/cvs/${cvId}/`);
+        const response = await cvAPI.getOne(Number(cvId));
         console.log('Loaded CV data:', response.data); // Debug için
         
         if (response.data.experience) {
@@ -123,7 +122,10 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
       };
 
       // Parent component'e bildir
-      await onStepComplete(formattedData);
+      await onStepComplete({
+        ...formattedData,
+        language: router.locale
+      });
       
     } catch (error) {
       console.error('Error saving experience:', error);
