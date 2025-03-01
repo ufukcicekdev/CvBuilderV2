@@ -219,3 +219,6 @@ APPEND_SLASH = True
 
 # URL patterns'da trailing slash kullanımını zorunlu kıl
 TRAILING_SLASH = True 
+
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')

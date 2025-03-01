@@ -96,8 +96,61 @@ class CV(models.Model):
         super().delete(*args, **kwargs)
 
 class CVTranslation(models.Model):
+    LANGUAGE_CHOICES = [
+        ('tr', 'Türkçe'),
+        ('en', 'English'),
+        ('es', 'Español'),
+        ('zh', '中文'),
+        ('ar', 'العربية'),
+        ('hi', 'हिन्दी')
+    ]
+
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='translations')
-    language = models.ForeignKey('profiles.Language', on_delete=models.CASCADE)
-    content = models.JSONField()
+    language_code = models.CharField(
+        max_length=2,
+        choices=LANGUAGE_CHOICES,
+        default='en'
+    )
+    
+    # Çevrilen içerikler - Her alan için varsayılan boş değerler
+    personal_info = models.JSONField(default=dict)
+    education = models.JSONField(default=list)
+    experience = models.JSONField(default=list)
+    skills = models.JSONField(default=list)
+    languages = models.JSONField(default=list)
+    certificates = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True) 
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('cv', 'language_code')
+        indexes = [
+            models.Index(fields=['cv', 'language_code'])
+        ]
+        ordering = ['-updated_at']
+
+    def __str__(self):
+        return f"{self.cv.title} - {self.get_language_code_display()}"
+
+    @property
+    def content(self):
+        """Tüm çevrilmiş içeriği tek bir dict olarak döndürür"""
+        return {
+            'personal_info': self.personal_info,
+            'education': self.education,
+            'experience': self.experience,
+            'skills': self.skills,
+            'languages': self.languages,
+            'certificates': self.certificates,
+
+        }
+
+    def update_content(self, translated_content):
+        """Çevrilmiş içeriği ilgili alanlara dağıtır"""
+        self.personal_info = translated_content.get('personal_info', {})
+        self.education = translated_content.get('education', [])
+        self.experience = translated_content.get('experience', [])
+        self.skills = translated_content.get('skills', [])
+        self.languages = translated_content.get('languages', [])
+        self.certificates = translated_content.get('certificates', [])
+        self.save() 
