@@ -12,15 +12,19 @@ import {
 import { Delete as DeleteIcon, CloudUpload as UploadIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
-import { toast } from 'react-hot-toast';
+import { showToast } from '../../utils/toast';
 import { useRouter } from 'next/router';
 import { cvAPI } from '../../services/api';
+import { CV } from '../../types/cv';
 
 interface VideoFormProps {
   cvId: string;
   onPrev?: () => void;
   onStepComplete: (data: any) => void;
-  initialData?: any;
+  initialData?: CV;
+}
+
+interface VideoFormData {
 }
 
 const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps) => {
@@ -33,33 +37,43 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
   const router = useRouter();
 
   const {
-    register,
     handleSubmit,
-    setValue,
-    watch,
-  } = useForm();
+    formState: { errors }
+  } = useForm<VideoFormData>();
+
+  const loadVideoData = async () => {
+    try {
+      const response = await cvAPI.getOne(Number(cvId));
+      const data = response.data;
+      if (data?.video_info) {
+        setCurrentVideo(data.video_info.url);
+      }
+    } catch (error) {
+      console.error('Error loading video data:', error);
+      showToast.error(t('common.error'));
+    }
+  };
 
   useEffect(() => {
-    if (initialData) {
-      if (initialData.video_url) {
-        setCurrentVideo(initialData.video_url);
-      }
-      setValue('videoDescription', initialData.video_description || '');
+    if (initialData?.video_info) {
+      setCurrentVideo(initialData.video_info.url);
+    } else {
+      loadVideoData();
     }
-  }, [initialData, setValue]);
+  }, [initialData, cvId]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       // Video boyut kontrolü (100MB)
       if (file.size > 100 * 1024 * 1024) {
-        toast.error(t('cv.video.fileTooLarge'));
+        showToast.error(t('common.error'));
         return;
       }
 
       // Video tipi kontrolü
       if (!file.type.startsWith('video/')) {
-        toast.error(t('cv.video.invalidFileType'));
+        showToast.error(t('common.error'));
         return;
       }
 
@@ -78,16 +92,15 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
       setCurrentVideo(null);
       setPreviewUrl(null);
       setSelectedFile(null);
-      setValue('videoDescription', '');
     } catch (error) {
       console.error('Error deleting video:', error);
-      toast.error(t('cv.video.deleteError'));
+      showToast.error(t('common.error'));
     } finally {
       setLoading(false);
     }
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async () => {
     try {
       setLoading(true);
       
@@ -95,17 +108,18 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
       if (selectedFile) {
         formData.append('video', selectedFile);
       }
-      formData.append('video_description', data.videoDescription || '');
 
-      await cvAPI.uploadVideo(Number(cvId), formData);
+      const response = await cvAPI.uploadVideo(Number(cvId), formData);
+      const responseData = response.data;
 
       await onStepComplete({
-        video_description: data.videoDescription,
-        language: router.locale
+        video_info: responseData.video_info,
+        language: router.locale,
+        current_step: 6
       });
     } catch (error) {
       console.error('Error saving video data:', error);
-      toast.error(t('cv.video.saveError'));
+      showToast.error(t('common.error'));
     } finally {
       setLoading(false);
       setUploadProgress(0);
@@ -175,7 +189,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
                     </Button>
                   </label>
                   <Typography variant="body2" color="textSecondary">
-                    {t('cv.video.dragDropHint')}
+                    {t('cv.video.dragDrop')}
                   </Typography>
                   <Typography variant="caption" color="textSecondary" display="block">
                     {t('cv.video.maxSize')}
@@ -191,22 +205,11 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
                     sx={{ height: 8, borderRadius: 4 }}
                   />
                   <Typography variant="body2" sx={{ mt: 1 }}>
-                    {`${uploadProgress}% ${t('cv.video.uploading')}`}
+                    {`${uploadProgress}% ${t('common.uploading')}`}
                   </Typography>
                 </Box>
               )}
             </Paper>
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              label={t('cv.video.description')}
-              {...register('videoDescription')}
-              disabled={loading}
-            />
           </Grid>
         </Grid>
 
@@ -217,7 +220,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
               variant="contained"
               disabled={loading}
             >
-              {t('navigation.previous')}
+              {t('common.previous')}
             </Button>
           )}
           <Button
@@ -226,7 +229,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
             color="primary"
             disabled={loading}
           >
-            {loading ? t('common.uploading') : t('navigation.next')}
+            {loading ? t('common.uploading') : t('common.next')}
           </Button>
         </Box>
       </Box>

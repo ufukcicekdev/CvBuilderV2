@@ -41,7 +41,8 @@ class CVBaseMixin:
             'experience': ['company', 'position', 'description'],
             'skills': ['name', 'description'],
             'languages': ['name', 'level'],
-            'certificates': ['name', 'issuer', 'description']
+            'certificates': ['name', 'issuer', 'description'],
+            'video_info': ['description']
         }
         return text_fields_map.get(field_type, [])
 
@@ -59,8 +60,6 @@ class CVBaseMixin:
                 'user': instance.user.id,
                 'created_at': instance.created_at,
                 'updated_at': instance.updated_at,
-                'video': instance.video.url if instance.video else None,
-                'video_description': instance.video_description,
                 'language': lang_code,
                 'personal_info': translation.personal_info,
                 'education': translation.education,
@@ -68,6 +67,7 @@ class CVBaseMixin:
                 'skills': translation.skills,
                 'languages': translation.languages,
                 'certificates': translation.certificates,
+                'video_info': translation.video_info,
             }
         except CVTranslation.DoesNotExist:
             # Fallback to English or original data
@@ -88,8 +88,7 @@ class CVBaseMixin:
                 'user': instance.user.id,
                 'created_at': instance.created_at,
                 'updated_at': instance.updated_at,
-                'video': instance.video.url if instance.video else None,
-                'video_description': instance.video_description,
+                'video_info': instance.video_info,
                 'language': 'en',
                 'personal_info': instance.personal_info,
                 'education': instance.education,
@@ -140,7 +139,7 @@ class CVBaseMixin:
         )[0]
 
         # Fields to check for changes
-        fields_to_check = ['languages', 'personal_info', 'education', 'experience', 'skills', 'certificates']
+        fields_to_check = ['languages', 'personal_info', 'education', 'experience', 'skills', 'certificates', 'video_info']
         
         # Track changes
         modified_fields = {}
@@ -343,7 +342,7 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
             print(f"Found existing translation for {lang_code}")  # Debug log
             
             # Check if content language matches requested language
-            content_fields = ['personal_info', 'education', 'experience', 'skills', 'languages', 'certificates']
+            content_fields = ['personal_info', 'education', 'experience', 'skills', 'languages', 'certificates', 'video_info']
             needs_retranslation = False
             
             # Simple language detection based on common words
@@ -384,7 +383,7 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
                     'skills': source_translation.skills,
                     'languages': source_translation.languages,
                     'certificates': source_translation.certificates,
-                    
+                    'video_info': source_translation.video_info
                 }
                 
                 # Translate content for all languages
@@ -417,6 +416,7 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
                     'skills': source_translation.skills,
                     'languages': source_translation.languages,
                     'certificates': source_translation.certificates,
+                    'video_info': source_translation.video_info
                 }
             except CVTranslation.DoesNotExist:
                 cv_data = {
@@ -426,6 +426,7 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
                     'skills': instance.skills,
                     'languages': instance.languages,
                     'certificates': instance.certificates,
+                    'video_info': instance.video_info
                 }
             
             # Translate content for all languages
@@ -443,7 +444,8 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
                         experience=content.get('experience', []),
                         skills=content.get('skills', []),
                         languages=content.get('languages', []),
-                        certificates=content.get('certificates', [])
+                        certificates=content.get('certificates', []),
+                        video_info=content.get('video_info', {})
                     )
                     if code == lang_code:  # Current language
                         translation = trans
@@ -458,7 +460,8 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
                             experience=cv_data['experience'],
                             skills=cv_data['skills'],
                             languages=cv_data['languages'],
-                            certificates=cv_data['certificates']
+                            certificates=cv_data['certificates'],
+                            video_info=cv_data['video_info']
                         )
         
         # Return the data in the requested language

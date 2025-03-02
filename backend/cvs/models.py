@@ -74,6 +74,7 @@ class CVTranslation(models.Model):
     skills = models.JSONField(default=list)
     languages = models.JSONField(default=list)
     certificates = models.JSONField(default=list)  # Her sertifika için: {id, name, issuer, date, description, document_url, document_type}
+    video_info = models.JSONField(default=dict)  # Video bilgileri: {url, description, type, uploaded_at}
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -97,6 +98,7 @@ class CVTranslation(models.Model):
             'skills': self.skills,
             'languages': self.languages,
             'certificates': self.certificates,
+            'video_info': self.video_info,
         }
 
     def update_content(self, translated_content):
@@ -107,4 +109,5 @@ class CVTranslation(models.Model):
         self.skills = translated_content.get('skills', [])
         self.languages = translated_content.get('languages', [])
         self.certificates = translated_content.get('certificates', [])
+        self.video_info = translated_content.get('video_info', {})
         self.save() 

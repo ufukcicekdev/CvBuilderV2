@@ -10,6 +10,7 @@ class CVTranslationSerializer(serializers.ModelSerializer):
     skills = serializers.JSONField(required=False)
     languages = serializers.JSONField(required=False)
     certificates = serializers.JSONField(required=False)
+    video_info = serializers.JSONField(required=False)
     
     class Meta:
         model = CVTranslation
@@ -22,6 +23,7 @@ class CVTranslationSerializer(serializers.ModelSerializer):
             'skills',
             'languages',
             'certificates',
+            'video_info',
             'created_at',
             'updated_at'
         ]
@@ -34,8 +36,7 @@ class CVSerializer(serializers.ModelSerializer):
     skills = serializers.JSONField(required=False, default=list)
     languages = serializers.JSONField(required=False, default=list)
     certificates = serializers.JSONField(required=False, default=list)
-    video_url = serializers.SerializerMethodField()
-    
+    video_info = serializers.JSONField(required=False)  
     class Meta:
         model = CV
         fields = [
@@ -43,8 +44,7 @@ class CVSerializer(serializers.ModelSerializer):
             'user', 'personal_info', 'experience',
             'education', 'skills', 'languages',
             'created_at', 'updated_at', 'translations',
-            'certificates', 'video', 'video_description',
-            'video_url'
+            'certificates', 'video_info'
         ]
         read_only_fields = ['user', 'created_at', 'updated_at']
 
@@ -78,6 +78,9 @@ class CVSerializer(serializers.ModelSerializer):
                 data['skills'] = translation.skills
                 data['languages'] = translation.languages
                 data['certificates'] = translation.certificates
+                data['video_info'] = translation.video_info
+              
+              
             else:
                 # İngilizce çeviriyi dene
                 en_translation = instance.translations.filter(language_code='en').first()
@@ -89,10 +92,14 @@ class CVSerializer(serializers.ModelSerializer):
                     data['skills'] = en_translation.skills
                     data['languages'] = en_translation.languages
                     data['certificates'] = en_translation.certificates
+                    data['video_info'] = en_translation.video_info
+                
         except Exception as e:
             print(f"Error in to_representation: {str(e)}")
             # Hata durumunda orijinal veriyi dön
             data['language'] = 'en'
+            data['video_url'] = self.get_video_url(instance)
+            data['video_description'] = instance.video_description
         
         return data
 
@@ -116,6 +123,7 @@ class CVSerializer(serializers.ModelSerializer):
         validated_data.setdefault('skills', [])
         validated_data.setdefault('languages', [])
         validated_data.setdefault('certificates', [])
+        validated_data.setdefault('video_info', {})
         
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)

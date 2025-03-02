@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -13,12 +13,16 @@ import {
   Tabs,
   Tab,
   Paper,
+  CircularProgress,
 } from '@mui/material';
 import { Download as DownloadIcon, Language as WebIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import axiosInstance from '../../utils/axios';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import ModernTemplate from '../../templates/web/ModernTemplate';
+import MinimalTemplate from '../../templates/web/MinimalTemplate';
+import { CV } from '../../types/cv';
 
 interface TemplatePreviewFormProps {
   cvId: string;
@@ -63,11 +67,13 @@ const pdfTemplates = [
 
 const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: TemplatePreviewFormProps) => {
   const router = useRouter();
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(0); // 0: Web, 1: PDF
+  const [activeTab, setActiveTab] = useState(0);
+  const [previewData, setPreviewData] = useState<CV | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -78,13 +84,32 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
     setSelectedTemplate(templateId);
   };
 
-  const handlePreview = () => {
-    setPreviewOpen(true);
+  const handlePreview = async () => {
+    if (!selectedTemplate) {
+      toast.error('Please select a template');
+      return;
+    }
+
+    try {
+      setPreviewLoading(true);
+      const response = await axiosInstance.get(`/api/cvs/${cvId}/`, {
+        headers: {
+          'Accept-Language': i18n.language || 'en'
+        }
+      });
+      setPreviewData(response.data);
+      setPreviewOpen(true);
+    } catch (error) {
+      console.error('Error fetching CV data:', error);
+      toast.error('Failed to load CV data');
+    } finally {
+      setPreviewLoading(false);
+    }
   };
 
   const handleGenerateCV = async () => {
     if (!selectedTemplate) {
-      toast.error(t('cv.template.selectRequired'));
+      toast.error('Please select a template');
       return;
     }
 
@@ -96,6 +121,10 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
       
       const response = await axiosInstance.post(`/api/cvs/${cvId}/${endpoint}/`, {
         template_id: selectedTemplate
+      }, {
+        headers: {
+          'Accept-Language': i18n.language || 'en'
+        }
       });
 
       if (isWebTemplate) {
@@ -117,21 +146,46 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
         output_url: isWebTemplate ? response.data.web_url : response.data.pdf_url
       });
 
-      // Başarılı olduğunda dashboard'a yönlendir
       router.push('/dashboard');
-      toast.success(t('cv.template.generateSuccess'));
+      toast.success('CV generated successfully');
     } catch (error) {
       console.error('Error generating CV:', error);
-      toast.error(t('cv.template.generateError'));
+      toast.error('Failed to generate CV');
     } finally {
       setLoading(false);
     }
   };
 
+  const renderTemplatePreview = () => {
+    if (!selectedTemplate || !previewData) return null;
+
+    // Web template preview
+    if (activeTab === 0) {
+      switch (selectedTemplate) {
+        case 'web-template1':
+          return <ModernTemplate cv={previewData} />;
+        case 'web-template2':
+          return <MinimalTemplate cv={previewData} />;
+        default:
+          return null;
+      }
+    }
+    
+    // PDF template preview - şimdilik sadece image gösteriyoruz
+    return (
+      <img 
+        src={(activeTab === 0 ? webTemplates : pdfTemplates)
+          .find(t => t.id === selectedTemplate)?.image}
+        alt="Template Preview"
+        style={{ width: '100%' }}
+      />
+    );
+  };
+
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        {t('cv.template.selectTitle')}
+        Select Template
       </Typography>
 
       <Paper sx={{ mb: 3 }}>
@@ -143,12 +197,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
         >
           <Tab 
             icon={<WebIcon />} 
-            label={t('cv.template.webVersion')}
+            label="Web Version"
             sx={{ textTransform: 'none' }}
           />
           <Tab 
             icon={<DownloadIcon />} 
-            label={t('cv.template.pdfVersion')}
+            label="PDF Version"
             sx={{ textTransform: 'none' }}
           />
         </Tabs>
@@ -199,7 +253,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
               variant="contained"
               disabled={loading}
             >
-              {t('navigation.previous')}
+              Previous
             </Button>
           )}
         </Box>
@@ -210,7 +264,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
             sx={{ mr: 2 }}
             disabled={!selectedTemplate || loading}
           >
-            {t('cv.template.preview')}
+            Preview
           </Button>
           <Button
             onClick={handleGenerateCV}
@@ -220,30 +274,28 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
             startIcon={activeTab === 0 ? <WebIcon /> : <DownloadIcon />}
           >
             {loading 
-              ? t('cv.template.generating') 
+              ? 'Generating...'
               : activeTab === 0 
-                ? t('cv.template.generateWeb')
-                : t('cv.template.generatePDF')
+                ? 'Generate Web CV'
+                : 'Download PDF'
             }
           </Button>
         </Box>
       </Box>
 
-      {/* Preview Dialog */}
       <Dialog
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
-        maxWidth="md"
+        maxWidth="lg"
         fullWidth
       >
         <DialogContent>
-          {selectedTemplate && (
-            <img 
-              src={(activeTab === 0 ? webTemplates : pdfTemplates)
-                .find(t => t.id === selectedTemplate)?.image}
-              alt="Template Preview"
-              style={{ width: '100%' }}
-            />
+          {previewLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            renderTemplatePreview()
           )}
         </DialogContent>
       </Dialog>

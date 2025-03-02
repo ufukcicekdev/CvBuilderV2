@@ -96,8 +96,12 @@ export interface CV {
   status: string;
   current_step: number;
   language?: string;
-  video_url?: string;
-  video_description?: string;
+  video_info?: {
+    url: string | null;
+    description: string | null;
+    type: string | null;
+    uploaded_at: string | null;
+  };
   created_at: string;
   updated_at: string;
 }
@@ -155,14 +159,17 @@ export const cvAPI = {
 
   // Video yükle
   uploadVideo: (id: number, formData: FormData) => {
-    return api.post<CV>(`/api/cvs/${id}/upload-video/`, formData);
+    return api.post<CV>(`/api/cvs/${id}/upload-video/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   },
 
   // Video sil
   deleteVideo: (id: number) => {
     return api.patch<CV>(`/api/cvs/${id}/`, {
-      video: null,
-      video_description: ''
+      video: null
     });
   }
 };
