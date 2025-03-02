@@ -33,6 +33,18 @@ class CVBaseMixin:
         'hi': 'Hindi'
     }
 
+    def _get_text_fields_for_type(self, field_type):
+        """Her alan tipi için çevrilmesi gereken metin alanlarını döndürür"""
+        text_fields_map = {
+            'personal_info': ['name', 'title', 'summary', 'address', 'city', 'country'],
+            'education': ['school', 'degree', 'field', 'description'],
+            'experience': ['company', 'position', 'description'],
+            'skills': ['name', 'description'],
+            'languages': ['name', 'level'],
+            'certificates': ['name', 'issuer', 'description']
+        }
+        return text_fields_map.get(field_type, [])
+
     def _get_translated_data(self, instance, lang_code):
         try:
             # İstenen dildeki çeviriyi al
@@ -118,151 +130,182 @@ class CVBaseMixin:
         """Update CV and translation data with AI correction and translation"""
         # Update CV fields
         if 'current_step' in data:
-            print(f"Updating current_step to: {data['current_step']}")
             instance.current_step = data['current_step']
             instance.save()
 
-        # Mevcut translation'ı al
+        # Get or create current translation
         current_translation = CVTranslation.objects.get_or_create(
             cv=instance,
             language_code=current_lang
         )[0]
 
-        # Değişiklik kontrolü için fields
+        # Fields to check for changes
         fields_to_check = ['languages', 'personal_info', 'education', 'experience', 'skills', 'certificates']
         
-        # Değişiklik var mı kontrol et
-        has_changes = False
+        # Track changes
         modified_fields = {}
+        has_changes = False
 
+        # Check which fields have changed
         for field in fields_to_check:
             if field in data:
                 current_value = getattr(current_translation, field)
                 new_value = data[field]
                 
-                # Eğer yeni değer boş liste ise, AI işlemeyi atla
-                if isinstance(new_value, list) and len(new_value) == 0:
-                    setattr(current_translation, field, new_value)
-                    continue
-                
-                # JSON string'e çevirip karşılaştır (derin karşılaştırma için)
+                # Compare as JSON strings
                 current_json = json.dumps(current_value, sort_keys=True)
                 new_json = json.dumps(new_value, sort_keys=True)
                 
                 if current_json != new_json:
                     has_changes = True
                     modified_fields[field] = new_value
-                    print(f"Changes detected in {field}")
-
-        # Değişiklik yoksa veya sadece boş listeler varsa
+                    # Update current translation
+                    setattr(current_translation, field, new_value)
+        
         if not has_changes:
-            print("No changes detected in the data, skipping AI processing")
             current_translation.save()
             return current_translation
 
-        print("Changes detected, processing with AI...")
-        
+        # Save current translation first
+        current_translation.save()
+
+        # Prepare all text content for translation in a single batch
+        texts_to_translate = {}
+        for field, new_value in modified_fields.items():
+            text_fields = self._get_text_fields_for_type(field)
+            
+            if isinstance(new_value, list):
+                for idx, item in enumerate(new_value):
+                    for text_field in text_fields:
+                        if text_field in item and item[text_field]:
+                            key = f"{field}.{idx}.{text_field}"
+                            texts_to_translate[key] = item[text_field]
+            else:
+                for text_field in text_fields:
+                    if text_field in new_value and new_value[text_field]:
+                        key = f"{field}.{text_field}"
+                        texts_to_translate[key] = new_value[text_field]
+
         # Initialize OpenAI client
         client = openai.OpenAI()
 
-        # Her dil için düzeltme ve çeviri yap
-        for lang_code, lang_name in self.SUPPORTED_LANGUAGES.items():
-            print(f"Processing language: {lang_name}")
+        # First, correct the text in current language
+        if texts_to_translate:
+            current_lang_name = self.SUPPORTED_LANGUAGES[current_lang]
+            prompt = f"""Please check and correct the following {current_lang_name} texts for grammar and clarity.
+            Return ONLY a JSON object with the same keys and corrected values.
+            Input JSON:
+            {json.dumps(texts_to_translate, indent=2, ensure_ascii=False)}
+            """
             
-            # Get or create translation for current language
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": "You are a professional editor. Always respond with valid JSON only."},
+                        {"role": "user", "content": prompt}
+                    ]
+                )
+                
+                # Extract JSON from response
+                try:
+                    response_text = response.choices[0].message.content.strip()
+                    json_start = response_text.find('{')
+                    json_end = response_text.rfind('}') + 1
+                    if json_start >= 0 and json_end > json_start:
+                        json_str = response_text[json_start:json_end]
+                        corrected_texts = json.loads(json_str)
+                        
+                        # Apply corrections back to the current translation
+                        for key, corrected_text in corrected_texts.items():
+                            field, *parts = key.split('.')
+                            field_value = getattr(current_translation, field)
+                            
+                            if len(parts) == 2:  # List item
+                                idx, text_field = parts
+                                field_value[int(idx)][text_field] = corrected_text
+                            else:  # Direct field
+                                text_field = parts[0]
+                                field_value[text_field] = corrected_text
+                            
+                            setattr(current_translation, field, field_value)
+                            # Update texts_to_translate with corrected version
+                            texts_to_translate[key] = corrected_text
+                        
+                    current_translation.save()
+                    
+                except (json.JSONDecodeError, ValueError) as e:
+                    print(f"JSON parsing error for correction: {str(e)}")
+                    print(f"Response was: {response_text}")
+                    
+            except Exception as e:
+                print(f"Correction error: {str(e)}")
+
+        # Then translate to other languages
+        for lang_code, lang_name in self.SUPPORTED_LANGUAGES.items():
+            if lang_code == current_lang:
+                continue
+
+            # Get or create translation for this language
             translation = CVTranslation.objects.get_or_create(
                 cv=instance,
                 language_code=lang_code
             )[0]
-            print(f"Translation object for {lang_code}: {translation.id}")
 
-            # Sadece değişen alanları işle
+            # Copy structure from current translation
             for field in modified_fields:
-                print(f"Processing modified field: {field} for {lang_name}")
-                field_data = data[field] if lang_code == current_lang else getattr(translation, field)
+                current_value = getattr(current_translation, field)
+                setattr(translation, field, current_value)
 
-                # Correct the data in the current language
-                if field == 'certificates':
-                    # Handle certificates separately
-                    corrected_certs = []
-                    for cert in field_data:
-                        # Prepare certificate data for correction
-                        cert_data = {
-                            'name': cert.get('name', ''),
-                            'issuer': cert.get('issuer', ''),
-                            'description': cert.get('description', '')
-                        }
-                        
-                        # Correct certificate data using OpenAI
-                        prompt = f"""Please correct any spelling or grammar mistakes in this certificate information in {lang_name}.
-                        Return ONLY a JSON object with the following structure, no additional text:
-                        {{
-                            "name": "corrected name",
-                            "issuer": "corrected issuer",
-                            "description": "corrected description"
-                        }}
-                        
-                        Certificate to correct:
-                        Name: {cert_data['name']}
-                        Issuer: {cert_data['issuer']}
-                        Description: {cert_data['description']}
-                        """
-
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4",
-                                messages=[
-                                    {"role": "system", "content": f"You are a professional text corrector for {lang_name} language. Always respond with valid JSON."},
-                                    {"role": "user", "content": prompt}
-                                ]
-                            )
-                            
-                            corrected_cert = json.loads(response.choices[0].message.content)
-                            print(f"Corrected certificate data for {lang_name}: {corrected_cert}")
-                            
-                            # Preserve other fields and update certificate data
-                            cert_copy = cert.copy()
-                            cert_copy.update({
-                                'name': corrected_cert.get('name', cert.get('name', '')),
-                                'issuer': corrected_cert.get('issuer', cert.get('issuer', '')),
-                                'description': corrected_cert.get('description', cert.get('description', ''))
-                            })
-                            
-                            corrected_certs.append(cert_copy)
-                        except Exception as e:
-                            print(f"Error correcting certificate for {lang_name}: {str(e)}")
-                            corrected_certs.append(cert)
+            # If there are texts to translate
+            if texts_to_translate:
+                # Make a single API call for all texts in this language
+                prompt = f"""Please translate the following texts from {self.SUPPORTED_LANGUAGES[current_lang]} to {lang_name}.
+                Return ONLY a JSON object with the same keys and translated values.
+                Input JSON:
+                {json.dumps(texts_to_translate, indent=2, ensure_ascii=False)}
+                """
+                
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-4",
+                        messages=[
+                            {"role": "system", "content": "You are a professional translator. Always respond with valid JSON only."},
+                            {"role": "user", "content": prompt}
+                        ]
+                    )
                     
-                    field_data = corrected_certs
-                else:
-                    # Correct other fields using OpenAI
+                    # Extract JSON from response
                     try:
-                        prompt = f"""Please correct any spelling or grammar mistakes in this {field} content in {lang_name}.
-                        Return ONLY the corrected content as a JSON object with the exact same structure, no additional text.
-
-                        Content to correct:
-                        {json.dumps(field_data, ensure_ascii=False)}
-                        """
-
-                        response = client.chat.completions.create(
-                            model="gpt-4",
-                            messages=[
-                                {"role": "system", "content": f"You are a professional text corrector for {lang_name} language. Always respond with valid JSON."},
-                                {"role": "user", "content": prompt}
-                            ]
-                        )
+                        response_text = response.choices[0].message.content.strip()
+                        json_start = response_text.find('{')
+                        json_end = response_text.rfind('}') + 1
+                        if json_start >= 0 and json_end > json_start:
+                            json_str = response_text[json_start:json_end]
+                            translations = json.loads(json_str)
+                            
+                            # Apply translations back to the fields
+                            for key, translated_text in translations.items():
+                                field, *parts = key.split('.')
+                                field_value = getattr(translation, field)
+                                
+                                if len(parts) == 2:  # List item
+                                    idx, text_field = parts
+                                    field_value[int(idx)][text_field] = translated_text
+                                else:  # Direct field
+                                    text_field = parts[0]
+                                    field_value[text_field] = translated_text
+                                
+                                setattr(translation, field, field_value)
+                            
+                    except (json.JSONDecodeError, ValueError) as e:
+                        print(f"JSON parsing error for {lang_code}: {str(e)}")
+                        print(f"Response was: {response_text}")
                         
-                        corrected_data = json.loads(response.choices[0].message.content)
-                        print(f"Corrected {field} data for {lang_name}: {corrected_data}")
-                        field_data = corrected_data
-                    except Exception as e:
-                        print(f"Error correcting {field} for {lang_name}: {str(e)}")
+                except Exception as e:
+                    print(f"Translation error for {lang_code}: {str(e)}")
 
-                # Update the field with corrected data
-                setattr(translation, field, field_data)
-
-            translation.save()
-            print(f"Translation saved successfully with corrected data for {lang_name}")
+                translation.save()
 
         return current_translation
 
