@@ -3,6 +3,9 @@ from django.conf import settings
 from users.models import User
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+import random
+import string
+from django.db import IntegrityError
 
 User = get_user_model()
 
@@ -14,6 +17,7 @@ class CV(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    translation_key = models.CharField(max_length=30, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     current_step = models.IntegerField(default=0)
     
@@ -23,6 +27,8 @@ class CV(models.Model):
     experience = models.JSONField(default=list)
     skills = models.JSONField(default=list)
     languages = models.JSONField(default=list)
+    certificates = models.JSONField(default=list)  # Her sertifika için: {id, name, issuer, date, description, document_url, document_type}
+    video_info = models.JSONField(default=dict)  # Video bilgileri: {url, description, type, uploaded_at}
     
     # Video alanları
     video = models.FileField(
@@ -49,6 +55,27 @@ class CV(models.Model):
         if self.video:
             self.video.delete()
         super().delete(*args, **kwargs)
+
+    def generate_translation_key(self):
+        """Generate a random 30-character string for URL"""
+        characters = string.ascii_letters + string.digits
+        return ''.join(random.choice(characters) for _ in range(30))
+
+    def save(self, *args, **kwargs):
+        if not self.translation_key:
+            max_attempts = 5
+            attempt = 0
+            while attempt < max_attempts:
+                try:
+                    self.translation_key = self.generate_translation_key()
+                    super().save(*args, **kwargs)
+                    break
+                except IntegrityError:
+                    attempt += 1
+                    if attempt == max_attempts:
+                        raise Exception("Could not generate unique translation key after multiple attempts")
+        else:
+            super().save(*args, **kwargs)
 
 class CVTranslation(models.Model):
     LANGUAGE_CHOICES = [

@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status, generics
-from rest_framework.decorators import action, api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import CV, CVTranslation
 from .serializers import CVSerializer, CVTranslationSerializer
@@ -555,161 +555,20 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
         # Gelen veriyi al
         data = request.data.copy()
         
-        # Eğer title yoksa varsayılan değer ata
-        if not data.get('title'):
-            data['title'] = 'Untitled CV'
-        
-        data['status'] = 'draft'
-        data['current_step'] = 0
-        
+        # certificates ve video_info alanlarını kontrol et
+        if 'certificates' not in data:
+            data['certificates'] = []
+        if 'video_info' not in data:
+            data['video_info'] = {}
+            
         # CV'yi oluştur
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        instance = serializer.save(user=self.request.user)
+        instance = serializer.save(user=request.user)
         
-        # CV verilerini hazırla
-        cv_data = {
-            'personal_info': instance.personal_info,
-            'education': instance.education,
-            'experience': instance.experience,
-            'skills': instance.skills,
-            'languages': instance.languages,
-        }
-
-        # Sertifikaları ayrıca hazırla
-        certificates = []
-        for cert in instance.certificates.all():
-            cert_data = {
-                'id': cert.id,
-                'name': cert.name,
-                'issuer': cert.issuer,
-                'date': cert.date.isoformat() if cert.date else None,
-                'description': cert.description,
-                'document': cert.document.url if cert.document else None,
-                'document_type': cert.document_type,
-            }
-            certificates.append(cert_data)
-        cv_data['certificates'] = certificates
-
-        try:
-            # OpenAI client'ı oluştur
-            client = openai.OpenAI()
-            
-            # Her dil için çevirileri yap
-            all_translations = {}
-            for lang_code in self.SUPPORTED_LANGUAGES.keys():
-                if lang_code == 'en':  # İngilizce için çeviri yapma
-                    continue
-                    
-                translated_content = {}
-                
-                # Sertifikalar dışındaki alanları normal çeviri servisi ile çevir
-                translation_service = TranslationService()
-                for field in ['personal_info', 'education', 'experience', 'skills', 'languages']:
-                    if field in cv_data:
-                        translated_content[field] = translation_service.translate_content(cv_data[field], lang_code)
-                
-                # Sertifikaları OpenAI ile çevir
-                if certificates:
-                    translated_certificates = []
-                    for cert in certificates:
-                        prompt = f"""Please translate the following certificate information to {self.SUPPORTED_LANGUAGES[lang_code]}:
-                        
-                        Certificate Name: {cert.get('name', '')}
-                        Issuer: {cert.get('issuer', '')}
-                        Description: {cert.get('description', '')}
-                        
-                        Return the translation in JSON format:
-                        {{
-                            "name": "translated name",
-                            "issuer": "translated issuer",
-                            "description": "translated description"
-                        }}
-                        """
-                        
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4",
-                                messages=[
-                                    {"role": "system", "content": "You are a professional translator."},
-                                    {"role": "user", "content": prompt}
-                                ],
-                                response_format={"type": "json_object"}
-                            )
-                            
-                            translated_data = json.loads(response.choices[0].message.content)
-                            translated_cert = cert.copy()
-                            translated_cert.update({
-                                'name': translated_data.get('name', cert.get('name', '')),
-                                'issuer': translated_data.get('issuer', cert.get('issuer', '')),
-                                'description': translated_data.get('description', cert.get('description', ''))
-                            })
-                            translated_certificates.append(translated_cert)
-                            
-                        except Exception as e:
-                            print(f"Error translating certificate: {str(e)}")
-                            translated_certificates.append(cert)
-                    
-                    translated_content['certificates'] = translated_certificates
-                
-                all_translations[lang_code] = translated_content
-            
-            # Her dil için çevirileri kaydet
-            for lang_code, translated_content in all_translations.items():
-                try:
-                    # Çeviriyi kaydet
-                    translation = CVTranslation.objects.create(
-                        cv=instance,
-                        language_code=lang_code,
-                        personal_info=translated_content.get('personal_info', {}),
-                        education=translated_content.get('education', []),
-                        experience=translated_content.get('experience', []),
-                        skills=translated_content.get('skills', []),
-                        languages=translated_content.get('languages', [])
-                    )
-                    
-                    # Sertifikaları ayrıca güncelle
-                    if 'certificates' in translated_content:
-                        for cert_data in translated_content['certificates']:
-                            cert_id = cert_data.get('id')
-                            if cert_id:
-                                cert = instance.certificates.filter(id=cert_id).first()
-                                if cert:
-                                    cert.name = cert_data.get('name', cert.name)
-                                    cert.issuer = cert_data.get('issuer', cert.issuer)
-                                    cert.description = cert_data.get('description', cert.description)
-                                    cert.save()
-                    
-                except Exception as e:
-                    print(f"Error saving translation for {lang_code}: {str(e)}")
-                    # Hata durumunda orijinal içerikle kaydet
-                    CVTranslation.objects.create(
-                        cv=instance,
-                        language_code=lang_code,
-                        personal_info=cv_data['personal_info'],
-                        education=cv_data['education'],
-                        experience=cv_data['experience'],
-                        skills=cv_data['skills'],
-                        languages=cv_data['languages']
-                    )
-                    
-        except Exception as e:
-            print(f"Error in create method translations: {str(e)}")
-            # Hata durumunda tüm diller için orijinal içerikle kaydet
-            for lang_code in self.SUPPORTED_LANGUAGES.keys():
-                if lang_code != 'en':  # İngilizce için kaydetme
-                    CVTranslation.objects.create(
-                        cv=instance,
-                        language_code=lang_code,
-                        personal_info=cv_data['personal_info'],
-                        education=cv_data['education'],
-                        experience=cv_data['experience'],
-                        skills=cv_data['skills'],
-                        languages=cv_data['languages']
-                    )
+        # Çevirileri oluştur
+        self.create_translations_for_all_languages(instance)
         
-        # Güncel veriyi dön
-        serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def create_translations_for_all_languages(self, cv_instance):
@@ -865,45 +724,10 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
     def generate_web(self, request, pk=None):
         try:
             cv = self.get_object()
-            template_id = request.data.get('template_id')
-            
-            # Get current language
             current_lang = self._get_language_code(request)
-            translation = cv.translations.filter(language_code=current_lang).first()
             
-            # Template path'i düzelt
-            template_path = f'web/{template_id}.html'
-            
-            # Context hazırla
-            context = {
-                'personal_info': translation.personal_info if translation else cv.personal_info,
-                'experience': translation.experience if translation else cv.experience,
-                'education': translation.education if translation else cv.education,
-                'skills': translation.skills if translation else cv.skills,
-                'languages': translation.languages if translation else cv.languages,
-                'certificates': translation.certificates if translation else [],
-                'video_url': cv.video.url if cv.video else None,
-                'video_description': cv.video_description
-            }
-            
-            try:
-                # HTML oluştur
-                html_content = render_to_string(template_path, context)
-            except TemplateDoesNotExist:
-                return Response(
-                    {'error': f'Template not found: {template_path}'}, 
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            # HTML dosyasını kaydet
-            filename = f'cv_{cv.id}_{template_id}.html'
-            filepath = os.path.join(settings.MEDIA_ROOT, 'cv_web', filename)
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
-            
-            with open(filepath, 'w') as f:
-                f.write(html_content)
-            
-            web_url = f'{settings.MEDIA_URL}cv_web/{filename}'
+            # Dinamik URL oluştur
+            web_url = f'/cv/{cv.id}/{cv.translation_key}/{current_lang}/'
             
             return Response({'web_url': web_url})
             
@@ -1255,4 +1079,48 @@ def debug_auth(request):
         'user': str(request.user),
         'auth': str(request.auth),
         'headers': dict(request.headers)
-    }, status=status.HTTP_200_OK) 
+    }, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_cv_by_translation(request, id, translation_key, lang):
+    try:
+        # Get CV by ID and translation key
+        cv = CV.objects.get(id=id, translation_key=translation_key)
+        
+        # Get translation for the requested language
+        translation = cv.translations.filter(language_code=lang).first()
+        
+        if not translation:
+            # If translation not found, return original CV data
+            return Response({
+                'id': cv.id,
+                'title': cv.title,
+                'personal_info': cv.personal_info,
+                'education': cv.education,
+                'experience': cv.experience,
+                'skills': cv.skills,
+                'languages': cv.languages,
+                'certificates': cv.certificates,
+                'video_info': cv.video_info,
+                'language': 'en'  # Default to English
+            })
+        
+        # Return translated data
+        return Response({
+            'id': cv.id,
+            'title': cv.title,
+            'personal_info': translation.personal_info,
+            'education': translation.education,
+            'experience': translation.experience,
+            'skills': translation.skills,
+            'languages': translation.languages,
+            'certificates': translation.certificates,
+            'video_info': translation.video_info,
+            'language': translation.language_code
+        })
+        
+    except CV.DoesNotExist:
+        return Response({'error': 'CV not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500) 

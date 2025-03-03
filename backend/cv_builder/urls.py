@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, LoginView, TokenRefreshView, LogoutView
 from profiles.views import ProfileViewSet, SkillViewSet, LanguageViewSet
-from cvs.views import CVViewSet
+from cvs.views import CVViewSet, get_cv_by_translation
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,4 +24,6 @@ urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
     path('api/blog/', include('blog.urls')),
     path('api/contact/', include('contact.urls')),
+    # CV translation endpoint
+    path('cvs/<int:id>/<str:translation_key>/<str:lang>/', get_cv_by_translation, name='cv-by-translation'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

@@ -121,10 +121,6 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
       
       const response = await axiosInstance.post(`/api/cvs/${cvId}/${endpoint}/`, {
         template_id: selectedTemplate
-      }, {
-        headers: {
-          'Accept-Language': i18n.language || 'en'
-        }
       });
 
       if (isWebTemplate) {

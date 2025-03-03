@@ -1,4 +1,7 @@
 from django.db import models
+import random
+import string
+from django.db import IntegrityError
 
 class Certificate(models.Model):
     cv = models.ForeignKey('CV', related_name='certificates', on_delete=models.CASCADE)
@@ -49,6 +52,7 @@ class Certificate(models.Model):
 class CV(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    translation_key = models.CharField(max_length=30, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     current_step = models.IntegerField(default=0)
@@ -73,4 +77,25 @@ class CV(models.Model):
     video_description = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ['-created_at'] 
+        ordering = ['-created_at']
+
+    def generate_translation_key(self):
+        """Generate a random 30-character string for URL"""
+        characters = string.ascii_letters + string.digits
+        return ''.join(random.choice(characters) for _ in range(30))
+
+    def save(self, *args, **kwargs):
+        if not self.translation_key:
+            max_attempts = 5
+            attempt = 0
+            while attempt < max_attempts:
+                try:
+                    self.translation_key = self.generate_translation_key()
+                    super().save(*args, **kwargs)
+                    break
+                except IntegrityError:
+                    attempt += 1
+                    if attempt == max_attempts:
+                        raise Exception("Could not generate unique translation key after multiple attempts")
+        else:
+            super().save(*args, **kwargs) 

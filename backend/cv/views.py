@@ -4,10 +4,23 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import CV
 from .serializers import CVSerializer
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 import json
+
+def cv_view(request, cv_id, translation_key, language):
+    """CV görüntüleme view'i"""
+    cv = get_object_or_404(CV, id=cv_id, translation_key=translation_key)
+    
+    # CV verilerini JSON olarak hazırla
+    cv_data = CVSerializer(cv).data
+    
+    # Template'i render et
+    template_name = f'cv/templates/web-template1.html'  # veya cv.translation_key'e göre farklı template
+    html_content = render_to_string(template_name, {'cv': cv_data})
+    
+    return HttpResponse(html_content)
 
 class CVViewSet(viewsets.ModelViewSet):
     queryset = CV.objects.all()
@@ -42,6 +55,7 @@ class CVViewSet(viewsets.ModelViewSet):
     def generate_web(self, request, pk=None):
         cv = self.get_object()
         template_id = request.data.get('template_id')
+        language = request.data.get('language', 'en')  # Default language is English
         
         if not template_id:
             return Response(
@@ -57,15 +71,15 @@ class CVViewSet(viewsets.ModelViewSet):
             template_name = f'cv/templates/{template_id}.html'
             html_content = render_to_string(template_name, {'cv': cv_data})
             
-            # HTML dosyasını kaydet
-            file_name = f'cv_{cv.id}_{template_id}.html'
+            # HTML dosyasını kaydet - translation_key ve language kullanarak
+            file_name = f'cv_{cv.id}_{cv.translation_key}_{language}_{template_id}.html'
             file_path = f'media/cv_templates/{file_name}'
             
             with open(file_path, 'w') as f:
                 f.write(html_content)
             
-            # URL'i döndür
-            web_url = f'/media/cv_templates/{file_name}'
+            # URL'i döndür - translation_key ve language ile
+            web_url = f'/cv/{cv.id}/{cv.translation_key}/{language}/'
             return Response({'web_url': web_url})
             
         except Exception as e:
