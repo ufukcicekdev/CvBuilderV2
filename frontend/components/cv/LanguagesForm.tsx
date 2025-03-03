@@ -84,7 +84,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
     if (cvId) {
       loadLanguages();
     }
-  }, [cvId, setValue]);
+  }, [cvId, setValue, t]);
 
   const onSubmit = async (data: LanguagesFormData) => {
     try {

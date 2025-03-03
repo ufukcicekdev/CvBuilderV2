@@ -25,7 +25,7 @@ module.exports = {
     'hi': ['hi']
   },
   preload: ['tr', 'en', 'es', 'zh', 'ar', 'hi'],
-  ns: ['common'],
+  ns: ['common', 'cv'],
   defaultNS: 'common',
   interpolation: {
     escapeValue: false

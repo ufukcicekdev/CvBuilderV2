@@ -153,8 +153,8 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             onStepComplete={handleStepComplete}
             onPrev={() => onStepChange(activeStep - 1)}
             initialData={{
-              video_url: cvData.video_url,
-              video_description: cvData.video_description
+              video_url: cvData.video_url || null,
+              video_description: cvData.video_description || null
             }}
           />
         );

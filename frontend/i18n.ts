@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n, { InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -43,28 +43,26 @@ const resources = {
   hi: { common: commonHI },
 };
 
+const i18nConfig: InitOptions = {
+  resources,
+  lng: 'tr',
+  fallbackLng: 'tr',
+  supportedLngs: ['tr', 'en', 'zh', 'es', 'hi', 'ar'],
+  debug: process.env.NODE_ENV === 'development',
+  defaultNS: 'common',
+  ns: ['common'],
+  interpolation: {
+    escapeValue: false,
+  },
+  detection: {
+    order: ['localStorage', 'navigator'],
+    caches: ['localStorage'],
+  }
+};
+
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
-  .init({
-    resources,
-    lng: 'tr',
-    fallbackLng: 'tr',
-    supportedLngs: ['tr', 'en', 'zh', 'es', 'hi', 'ar'],
-    debug: process.env.NODE_ENV === 'development',
-    defaultNS: 'common',
-    ns: ['common'],
-    interpolation: {
-      escapeValue: false,
-    },
-    detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-    },
-    react: {
-      useSuspense: false,
-      wait: false
-    }
-  });
+  .init(i18nConfig);
 
 export default i18n; 

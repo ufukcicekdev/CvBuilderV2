@@ -89,7 +89,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
     if (cvId) {
       loadSkills();
     }
-  }, [cvId, setValue]);
+  }, [cvId, setValue, t]);
 
   const onSubmit = async (data: SkillsFormData) => {
     try {

@@ -8,7 +8,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { showToast } from '../../utils/toast';
 import { 
   Language as WebsiteIcon,
@@ -97,7 +97,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
       github: t('cv.personalInfo.github', 'GitHub')
     };
 
-    const fetchPersonalInfo = async () => {
+    const fetchPersonalInfo = useCallback(async () => {
       try {
         const response = await cvAPI.getOne(Number(cvId));
         if (response.data.personal_info) {
@@ -116,7 +116,13 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
         console.error('Error fetching personal info:', error);
         showToast.error('Kişisel bilgiler yüklenirken bir hata oluştu');
       }
-    };
+    }, [cvId, setValue]);
+
+    useEffect(() => {
+      if (cvId) {
+        fetchPersonalInfo();
+      }
+    }, [cvId, fetchPersonalInfo]);
 
     const onSubmit = async (data: PersonalInfoFormData) => {
       try {
@@ -149,12 +155,6 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
         setLoading(false);
       }
     };
-
-    useEffect(() => {
-      if (cvId) {
-        fetchPersonalInfo();
-      }
-    }, [cvId]);
 
     return (
       <form onSubmit={handleFormSubmit(onSubmit)} id="personalInfoForm">
@@ -297,5 +297,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
     );
   }
 );
+
+PersonalInfoForm.displayName = 'PersonalInfoForm';
 
 export default PersonalInfoForm; 

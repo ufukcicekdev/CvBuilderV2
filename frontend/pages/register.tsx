@@ -6,7 +6,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { register } from '../services/api';
+import { authAPI } from '../services/api';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { tr } from 'date-fns/locale';
@@ -85,6 +85,19 @@ const schema = yup.object().shape({
     })
 }).required();
 
+// Form verilerinin tipi
+interface RegisterFormData {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  user_type: 'jobseeker' | 'employer';
+  phone?: string;
+  birth_date?: Date;
+  company_name?: string;
+  company_website?: string;
+}
+
 export default function Register() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -96,18 +109,18 @@ export default function Register() {
     watch,
     formState: { errors },
     setValue,
-  } = useForm({
+  } = useForm<RegisterFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
 
   const userType = watch('user_type');
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsSubmitting(true);
       
-      const formData = {
+      const formData: any = {
         email: data.email,
         username: data.username,
         password: data.password,
@@ -217,9 +230,13 @@ export default function Register() {
                   </Grid>
                   <Grid item xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={tr}>
-                      <DatePicker
+                      <DatePicker<Date>
                         label={t('auth.birthDate')}
-                        onChange={(date) => setValue('birth_date', date)}
+                        onChange={(date: Date | null) => {
+                          if (date) {
+                            setValue('birth_date', date);
+                          }
+                        }}
                         slotProps={{
                           textField: {
                             fullWidth: true,

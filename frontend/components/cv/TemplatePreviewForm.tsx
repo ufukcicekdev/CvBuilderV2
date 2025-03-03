@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import ModernTemplate from '../../templates/web/ModernTemplate';
 import MinimalTemplate from '../../templates/web/MinimalTemplate';
 import { CV } from '../../types/cv';
+import Image from 'next/image';
 
 interface TemplatePreviewFormProps {
   cvId: string;
@@ -169,11 +170,13 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
     
     // PDF template preview - şimdilik sadece image gösteriyoruz
     return (
-      <img 
+      <Image 
         src={(activeTab === 0 ? webTemplates : pdfTemplates)
-          .find(t => t.id === selectedTemplate)?.image}
+          .find(t => t.id === selectedTemplate)?.image || ''}
         alt="Template Preview"
-        style={{ width: '100%' }}
+        width={800}
+        height={600}
+        style={{ width: '100%', height: 'auto' }}
       />
     );
   };

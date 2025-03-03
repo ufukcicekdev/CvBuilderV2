@@ -96,7 +96,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     if (cvId) {
       loadExperience();
     }
-  }, [cvId, setValue]);
+  }, [cvId, setValue, t]);
 
   const onSubmit = async (data: ExperienceFormData) => {
     try {

@@ -1,7 +1,13 @@
 import { AxiosError } from 'axios';
 import { TFunction } from 'next-i18next';
 
-export const handleApiError = (error: AxiosError, t: TFunction) => {
+interface ApiErrorResponse {
+  error_key?: string;
+}
+
+type TranslationFunction = (key: string | number | symbol, options?: any) => string;
+
+export const handleApiError = (error: AxiosError<ApiErrorResponse>, t: TranslationFunction) => {
   if (error.response?.data?.error_key) {
     // Backend'den gelen hata key'ini çevir
     return t(error.response.data.error_key);

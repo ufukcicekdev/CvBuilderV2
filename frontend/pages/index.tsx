@@ -63,7 +63,7 @@ export default function Home() {
     }
   ];
 
-  const steps = t('home.howItWorks.steps', { returnObjects: true });
+  const steps = t('home.howItWorks.steps', { returnObjects: true }) as unknown as Array<{ title: string; description: string }>;
 
   const stats = [
     { key: 'users', value: '10K+' },

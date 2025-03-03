@@ -1,4 +1,11 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+
+// _retry özelliğini ekle
+declare module 'axios' {
+  export interface InternalAxiosRequestConfig {
+    _retry?: boolean;
+  }
+}
 
 // API base URL'ini .env'den al veya varsayılan değeri kullan
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -96,6 +103,8 @@ export interface CV {
   status: string;
   current_step: number;
   language?: string;
+  video_url?: string | null;
+  video_description?: string | null;
   video_info?: {
     url: string | null;
     description: string | null;
@@ -107,6 +116,29 @@ export interface CV {
 }
 
 // API fonksiyonları
+export const authAPI = {
+  register: (data: {
+    email: string;
+    password: string;
+    first_name: string;
+    last_name: string;
+  }) => {
+    return api.post('/api/auth/register/', data);
+  },
+
+  login: (data: { email: string; password: string }) => {
+    return api.post('/api/auth/login/', data);
+  },
+
+  logout: () => {
+    return api.post('/api/auth/logout/');
+  },
+
+  refreshToken: (refresh: string) => {
+    return api.post('/api/auth/token/refresh/', { refresh });
+  }
+};
+
 export const cvAPI = {
   // Tüm CV'leri getir
   getAll: () => {
@@ -155,6 +187,11 @@ export const cvAPI = {
         'Content-Type': 'multipart/form-data',
       },
     });
+  },
+
+  // Sertifika sil
+  deleteCertificate: (id: number, certificateId: number) => {
+    return api.delete(`/api/cvs/${id}/certificates/${certificateId}/`);
   },
 
   // Video yükle

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { CircularProgress, Box } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 
-export function withAuth<T>(WrappedComponent: React.ComponentType<T>) {
+export function withAuth<T extends object>(WrappedComponent: React.ComponentType<T>) {
   return function WithAuthComponent(props: T) {
     const router = useRouter();
     const { isAuthenticated, isLoading } = useAuth();

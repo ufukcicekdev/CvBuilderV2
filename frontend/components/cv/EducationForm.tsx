@@ -96,7 +96,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
     if (cvId) {
       loadEducation();
     }
-  }, [cvId, setValue]);
+  }, [cvId, setValue, t]);
 
   const onSubmit = async (data: EducationFormData) => {
     try {

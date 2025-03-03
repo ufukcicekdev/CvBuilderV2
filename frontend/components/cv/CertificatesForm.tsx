@@ -40,7 +40,8 @@ interface CertificatesFormData {
 }
 
 const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: CertificatesFormProps) => {
-  const { t } = useTranslation('common');
+  const { t: tCommon } = useTranslation('common');
+  const { t: tCv } = useTranslation('cv');
   const [loading, setLoading] = useState(false);
   const [uploadLoading, setUploadLoading] = useState<number | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -72,13 +73,13 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
       // Check file type
       const validTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
       if (!validTypes.includes(file.type)) {
-        showToast.error(t('cv.certificates.uploadError'));
+        showToast.error(tCv('certificates.uploadError'));
         return;
       }
       
       // Check file size (10MB)
       if (file.size > 10 * 1024 * 1024) {
-        showToast.error(t('cv.certificates.uploadError'));
+        showToast.error(tCv('certificates.uploadError'));
         return;
       }
 
@@ -112,10 +113,10 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
           setPreviewUrl(documentUrl);
           setOpenPreview(true);
         }
-        showToast.success(t('cv.certificates.uploadSuccess'));
+        showToast.success(tCv('certificates.uploadSuccess'));
       } catch (error) {
         console.error('Error uploading file:', error);
-        showToast.error(t('cv.certificates.uploadError'));
+        showToast.error(tCv('certificates.uploadError'));
       } finally {
         setUploadLoading(null);
       }
@@ -152,14 +153,14 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
         }
       } catch (error) {
         console.error('Error loading certificates data:', error);
-        showToast.error(t('cv.loadError'));
+        showToast.error(tCommon('loadError'));
       }
     };
 
     if (cvId) {
       loadCertificates();
     }
-  }, [cvId, setValue]);
+  }, [cvId, setValue, tCommon]);
 
   const onSubmit = async (data: { certificates: CertificateData[] }) => {
     try {
@@ -184,7 +185,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
       
     } catch (error) {
       console.error('Error saving certificates:', error);
-      showToast.error(t('common.errors.validationError'));
+      showToast.error(tCommon('errors.validationError'));
     } finally {
       setLoading(false);
     }
@@ -207,14 +208,14 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
           language: router.locale 
         });
         
-        showToast.success(t('common.success'));
+        showToast.success(tCommon('success'));
       } else {
         // Eğer sertifikanın ID'si yoksa sadece formdan kaldır
         remove(index);
       }
     } catch (error) {
       console.error('Error deleting certificate:', error);
-      showToast.error(t('common.errors.unknown'));
+      showToast.error(tCommon('errors.unknown'));
     }
   };
 
@@ -222,7 +223,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
-          {t('cv.certificates.title')}
+          {tCv('certificates.title')}
         </Typography>
 
         <Box sx={{ mt: 3 }}>
@@ -253,30 +254,30 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label={t('cv.certificates.name')}
+                    label={tCv('certificates.name')}
                     {...register(`certificates.${index}.name` as const, { required: true })}
                     error={!!errors.certificates?.[index]?.name}
-                    helperText={errors.certificates?.[index]?.name && t('common.required')}
+                    helperText={errors.certificates?.[index]?.name && tCommon('required')}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label={t('cv.certificates.issuer')}
+                    label={tCv('certificates.issuer')}
                     {...register(`certificates.${index}.issuer` as const, { required: true })}
                     error={!!errors.certificates?.[index]?.issuer}
-                    helperText={errors.certificates?.[index]?.issuer && t('common.required')}
+                    helperText={errors.certificates?.[index]?.issuer && tCommon('required')}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
                     type="date"
-                    label={t('cv.certificates.issueDate')}
+                    label={tCv('certificates.issueDate')}
                     InputLabelProps={{ shrink: true }}
                     {...register(`certificates.${index}.date` as const, { required: true })}
                     error={!!errors.certificates?.[index]?.date}
-                    helperText={errors.certificates?.[index]?.date && t('common.required')}
+                    helperText={errors.certificates?.[index]?.date && tCommon('required')}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -284,7 +285,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
                     fullWidth
                     multiline
                     rows={2}
-                    label={t('cv.certificates.description')}
+                    label={tCv('certificates.description')}
                     {...register(`certificates.${index}.description` as const)}
                   />
                 </Grid>
@@ -307,7 +308,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
                         startIcon={<UploadIcon />}
                         disabled={uploadLoading === index}
                       >
-                        {uploadLoading === index ? t('common.loading') : t('cv.certificates.uploadFile')}
+                        {uploadLoading === index ? tCommon('loading') : tCv('certificates.uploadFile')}
                       </Button>
                     </label>
                     {(watch(`certificates.${index}.document`) || watch(`certificates.${index}.documentUrl`)) && (
@@ -336,7 +337,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
           })}
           sx={{ mt: 2 }}
         >
-          {t('cv.certificates.addMore')}
+          {tCv('certificates.addMore')}
         </Button>
 
         <Dialog
@@ -375,7 +376,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
               onClick={onPrev}
               disabled={loading}
             >
-              {t('common.previous')}
+              {tCommon('previous')}
             </Button>
           )}
           <Button
@@ -384,7 +385,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
             disabled={loading}
             sx={{ ml: 'auto' }}
           >
-            {loading ? t('common.loading') : t('common.next')}
+            {loading ? tCommon('loading') : tCommon('next')}
           </Button>
         </Box>
       </Box>

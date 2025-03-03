@@ -5,6 +5,13 @@ import { getSession } from 'next-auth/react';
 import { JWT } from 'next-auth/jwt';
 
 declare module 'next-auth' {
+  interface User {
+    id: string;
+    email: string;
+    accessToken: string;
+    refreshToken: string;
+  }
+
   interface Session {
     accessToken: string;
     refreshToken: string;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { withAuth } from '../../components/withAuth';
 import Layout from '../../components/Layout';
 import {
@@ -44,6 +44,20 @@ function Dashboard() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCvId, setSelectedCvId] = useState<number | null>(null);
 
+  const fetchCVs = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await cvAPI.getAll();
+      console.log('CV Response:', response.data);
+      setCvs(response.data as CV[]);
+    } catch (error) {
+      console.error('Error fetching CVs:', error);
+      showToast.error(t('common.error'));
+    } finally {
+      setLoading(false);
+    }
+  }, [t]);
+
   // Dil değişikliğini izle (router ve özel event için)
   useEffect(() => {
     fetchCVs();
@@ -55,21 +69,7 @@ function Dashboard() {
 
     window.addEventListener('languageChange', handleLanguageChange);
     return () => window.removeEventListener('languageChange', handleLanguageChange);
-  }, [router.locale]);
-
-  const fetchCVs = async () => {
-    try {
-      setLoading(true);
-      const response = await cvAPI.getAll();
-      console.log('CV Response:', response.data);
-      setCvs(response.data);
-    } catch (error) {
-      console.error('Error fetching CVs:', error);
-      showToast.error(t('cv.errors.loadError'));
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [router.locale, fetchCVs]);
 
   const handleDeleteClick = (cvId: number) => {
     setSelectedCvId(cvId);

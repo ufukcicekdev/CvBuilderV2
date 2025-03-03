@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'cvs',
     'social_django',
     'social_auth',
-    'blog',
     'contact',
 ]
 

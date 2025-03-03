@@ -22,7 +22,6 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/auth/', include('social_auth.urls')),
     path('', include('social_django.urls', namespace='social')),
-    path('api/blog/', include('blog.urls')),
     path('api/contact/', include('contact.urls')),
     # CV translation endpoint
     path('cvs/<int:id>/<str:translation_key>/<str:lang>/', get_cv_by_translation, name='cv-by-translation'),

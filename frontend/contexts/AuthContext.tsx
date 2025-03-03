@@ -9,6 +9,7 @@ interface User {
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isLoading: boolean;
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
@@ -30,10 +32,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(JSON.parse(savedUser));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
+      setIsLoading(true);
       const response = await axios.post('/api/users/login/', {
         email,
         password
@@ -61,6 +65,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Login error:', error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

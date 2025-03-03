@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -21,10 +21,15 @@ interface VideoFormProps {
   cvId: string;
   onPrev?: () => void;
   onStepComplete: (data: any) => void;
-  initialData?: CV;
+  initialData?: {
+    video_url: string | null;
+    video_description: string | null;
+  };
 }
 
 interface VideoFormData {
+  video_url?: string;
+  video_description?: string;
 }
 
 const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps) => {
@@ -41,7 +46,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
     formState: { errors }
   } = useForm<VideoFormData>();
 
-  const loadVideoData = async () => {
+  const loadVideoData = useCallback(async () => {
     try {
       const response = await cvAPI.getOne(Number(cvId));
       const data = response.data;
@@ -52,15 +57,15 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
       console.error('Error loading video data:', error);
       showToast.error(t('common.error'));
     }
-  };
+  }, [cvId, t]);
 
   useEffect(() => {
-    if (initialData?.video_info) {
-      setCurrentVideo(initialData.video_info.url);
+    if (initialData?.video_url) {
+      setCurrentVideo(initialData.video_url);
     } else {
       loadVideoData();
     }
-  }, [initialData, cvId]);
+  }, [initialData, cvId, loadVideoData]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
