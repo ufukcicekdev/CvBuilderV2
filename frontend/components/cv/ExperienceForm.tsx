@@ -71,7 +71,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     const loadExperience = async () => {
       try {
         const response = await cvAPI.getOne(Number(cvId));
-        console.log('Loaded CV data:', response.data); // Debug için
+        // console.log('Loaded CV data:', response.data); // Debug için
         
         if (response.data.experience) {
           // Backend'den gelen veriyi form yapısına dönüştür
@@ -84,7 +84,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
             description: exp.description || ''
           }));
           
-          console.log('Formatted experience for form:', formattedExperience); // Debug için
+          // console.log('Formatted experience for form:', formattedExperience); // Debug için
           setValue('experience', formattedExperience);
         }
       } catch (error) {

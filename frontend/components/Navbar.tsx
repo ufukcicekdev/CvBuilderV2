@@ -154,9 +154,6 @@ export default function Navbar() {
                 <Button color="inherit" component={Link} href="/dashboard">
                   {t('nav.dashboard')}
                 </Button>
-                <Button color="inherit" component={Link} href="/jobs">
-                  {t('nav.jobs')}
-                </Button>
                 <Button color="inherit" component={Link} href="/profile">
                   {t('nav.profile')}
                 </Button>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Grid, Paper, Avatar, Divider, Chip, IconButton, Tooltip, Menu, MenuItem, Button, AppBar, Toolbar, Container, Fade, Backdrop, CircularProgress } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box, Typography, Grid, Paper, Avatar, Divider, Chip, IconButton, Tooltip, Menu, MenuItem, Button, AppBar, Toolbar, Container, Fade, Backdrop, CircularProgress, Modal } from '@mui/material';
 import { CV } from '@/types/cv';
 import {
   Email,
@@ -14,6 +14,9 @@ import {
   Language,
   Star,
   Translate,
+  PictureAsPdf,
+  Image as ImageIcon,
+  Close as CloseIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -41,7 +44,92 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [cv, setCv] = React.useState(initialCv);
+  const [selectedCertificate, setSelectedCertificate] = React.useState<{ documentUrl?: string; document_type?: string } | null>(null);
   const open = Boolean(anchorEl);
+
+  // WebSocket bağlantısı
+  useEffect(() => {
+    if (!id || !translation_key || !lang) return;
+
+    let ws: WebSocket | null = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    const reconnectDelay = 3000; // 3 seconds
+
+    const connectWebSocket = () => {
+      // console.log('Attempting to connect to WebSocket with params:', { id, translation_key, lang });
+      
+      // Close existing connection if any
+      if (ws) {
+        ws.close();
+      }
+
+      // Backend sunucusuna doğrudan bağlan
+      const wsUrl = `ws://localhost:8000/ws/cv/${id}/${translation_key}/${lang}/`;
+      // console.log('WebSocket URL:', wsUrl);
+
+      try {
+        ws = new WebSocket(wsUrl);
+        // console.log('WebSocket instance created');
+
+        ws.onopen = () => {
+          // console.log('WebSocket connection established successfully');
+          reconnectAttempts = 0;
+        };
+
+        ws.onmessage = (event) => {
+          // console.log('Received WebSocket message:', event.data);
+          try {
+            const data = JSON.parse(event.data);
+            setCv(data);
+          } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          console.error('WebSocket readyState:', ws?.readyState);
+          console.error('WebSocket URL:', wsUrl);
+          
+          if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            // console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            setTimeout(connectWebSocket, reconnectDelay);
+          } else {
+            console.error('Max reconnection attempts reached');
+          }
+        };
+
+        ws.onclose = (event) => {
+          console.log('WebSocket connection closed:', {
+            code: event.code,
+            reason: event.reason,
+            wasClean: event.wasClean,
+            url: wsUrl
+          });
+
+          if (!event.wasClean && reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            // console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            setTimeout(connectWebSocket, reconnectDelay);
+          }
+        };
+      } catch (error) {
+        console.error('Error creating WebSocket:', error);
+      }
+    };
+
+    connectWebSocket();
+
+    return () => {
+      // console.log('Cleaning up WebSocket connection');
+      if (ws) {
+        ws.close();
+        ws = null;
+      }
+    };
+  }, [id, translation_key, lang]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -73,6 +161,14 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       setIsLoading(false);
       handleClose();
     }
+  };
+
+  const handleCertificateClick = (cert: { documentUrl?: string; document_type?: string }) => {
+    setSelectedCertificate(cert);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCertificate(null);
   };
 
   const currentLanguage = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
@@ -423,17 +519,38 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                         }
                       }}
                     >
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        {cert.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {cert.issuer}
-                      </Typography>
-                      {cert.date && (
-                        <Typography variant="caption" color="text.secondary">
-                          {cert.date}
-                        </Typography>
-                      )}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <Box>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                            {cert.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {cert.issuer}
+                          </Typography>
+                          {cert.date && (
+                            <Typography variant="caption" color="text.secondary">
+                              {cert.date}
+                            </Typography>
+                          )}
+                        </Box>
+                        {cert.documentUrl && (
+                          <Tooltip title="View Certificate">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleCertificateClick(cert)}
+                              sx={{
+                                color: 'primary.main',
+                                '&:hover': {
+                                  backgroundColor: 'primary.light',
+                                  color: 'white'
+                                }
+                              }}
+                            >
+                              {cert.document_type === 'image' ? <ImageIcon /> : <PictureAsPdf />}
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </Box>
                     </Box>
                   ))}
                 </Paper>
@@ -558,6 +675,78 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
           </Grid>
         </Container>
       </Box>
+
+      {/* Certificate Modal */}
+      <Modal
+        open={Boolean(selectedCertificate)}
+        onClose={handleCloseModal}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          '& .MuiModal-backdrop': {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          },
+        }}
+      >
+        <Fade in={Boolean(selectedCertificate)}>
+          <Box
+            sx={{
+              position: 'relative',
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: 24,
+              p: 4,
+              overflow: 'auto',
+            }}
+          >
+            {selectedCertificate?.document_type === 'image' ? (
+              <img
+                src={selectedCertificate.documentUrl}
+                alt="Certificate"
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '80vh',
+                  objectFit: 'contain',
+                }}
+              />
+            ) : (
+              <iframe
+                src={selectedCertificate?.documentUrl}
+                style={{
+                  width: '100%',
+                  height: '80vh',
+                  border: 'none',
+                }}
+              />
+            )}
+            <IconButton
+              onClick={handleCloseModal}
+              sx={{
+                position: 'absolute',
+                right: 8,
+                top: 8,
+                color: 'white',
+                bgcolor: 'rgba(0, 0, 0, 0.5)',
+                '&:hover': {
+                  bgcolor: 'rgba(0, 0, 0, 0.7)',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Fade>
+      </Modal>
     </Box>
   );
 };

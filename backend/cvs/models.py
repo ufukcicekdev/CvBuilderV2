@@ -51,7 +51,7 @@ class CV(models.Model):
         return f"{self.user.email}'s CV - {self.title}"
 
     def delete(self, *args, **kwargs):
-        # Video dosyasını fiziksel olarak sil
+        # Video dosyasını S3'ten sil
         if self.video:
             self.video.delete()
         super().delete(*args, **kwargs)
@@ -76,6 +76,13 @@ class CV(models.Model):
                         raise Exception("Could not generate unique translation key after multiple attempts")
         else:
             super().save(*args, **kwargs)
+
+    @property
+    def video_url(self):
+        """Video URL'ini döndürür"""
+        if self.video:
+            return self.video.url
+        return None
 
 class CVTranslation(models.Model):
     LANGUAGE_CHOICES = [

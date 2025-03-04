@@ -84,7 +84,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
             description: edu.description || ''
           }));
           
-          console.log('Formatted education for form:', formattedEducation); // Debug için
+          // console.log('Formatted education for form:', formattedEducation); // Debug için
           setValue('education', formattedEducation);
         }
       } catch (error) {

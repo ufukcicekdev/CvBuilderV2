@@ -25,4 +25,8 @@ urlpatterns = [
     path('api/contact/', include('contact.urls')),
     # CV translation endpoint
     path('cvs/<int:id>/<str:translation_key>/<str:lang>/', get_cv_by_translation, name='cv-by-translation'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

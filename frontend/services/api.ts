@@ -56,8 +56,8 @@ api.interceptors.request.use((config) => {
 // Response interceptor ekle
 api.interceptors.response.use(
   (response) => {
-    console.log('Response headers:', response.config.headers);
-    console.log('Response data:', response.data);
+    // console.log('Response headers:', response.config.headers);
+    // console.log('Response data:', response.data);
     return response;
   },
   (error) => {
@@ -70,12 +70,12 @@ api.interceptors.response.use(
 export const setLanguage = (languageCode: string): void => {
   if (typeof window !== 'undefined' && languageCode in SUPPORTED_LANGUAGES) {
     localStorage.setItem('selectedLanguage', languageCode);
-    console.log('Selected language:', languageCode);
+    // console.log('Selected language:', languageCode);
     // Axios instance'ın default headers'ını güncelle
     api.defaults.headers.common['Accept-Language'] = languageCode;
     
-    console.log('Language changed:', languageCode);
-    console.log('Current headers:', api.defaults.headers);
+    // console.log('Language changed:', languageCode);
+    // console.log('Current headers:', api.defaults.headers);
     
     // Özel event tetikle
     window.dispatchEvent(new Event('languageChange'));

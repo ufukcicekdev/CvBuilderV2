@@ -77,7 +77,7 @@ const SkillsForm = ({ cvId, onPrev, onStepComplete, initialData }: SkillsFormPro
             description: skill.description || ''
           }));
           
-          console.log('Formatted skills for form:', formattedSkills); // Debug için
+          // console.log('Formatted skills for form:', formattedSkills); // Debug için
           setValue('skills', formattedSkills);
         }
       } catch (error) {

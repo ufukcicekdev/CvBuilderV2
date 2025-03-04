@@ -89,11 +89,11 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
         formData.append('file', file);
         
         // Debug logs
-        console.log('File being uploaded:', {
-          name: file.name,
-          type: file.type,
-          size: file.size
-        });
+        // console.log('File being uploaded:', {
+        //   name: file.name,
+        //   type: file.type,
+        //   size: file.size
+        // });
         
         // Upload the file
         const response = await cvAPI.uploadCertificate(Number(cvId), formData);
@@ -103,11 +103,9 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
           const latestCertificate = response.data.certificates[response.data.certificates.length - 1];
           const documentUrl = latestCertificate.document_url;
           
-          // Update form values
+          // Update form values for the current index
           setValue(`certificates.${index}.documentUrl`, documentUrl);
-          setValue(`certificates.${index}.name`, latestCertificate.name || '');
-          setValue(`certificates.${index}.issuer`, latestCertificate.issuer || '');
-          setValue(`certificates.${index}.date`, latestCertificate.date || '');
+          setValue(`certificates.${index}.document_type`, latestCertificate.document_type);
           
           // Show preview immediately after upload
           setPreviewUrl(documentUrl);
@@ -238,18 +236,6 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
                 borderRadius: 2,
               }}
             >
-              <IconButton
-                onClick={() => handleDelete(index)}
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                }}
-                color="error"
-              >
-                <DeleteIcon />
-              </IconButton>
-
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -316,6 +302,13 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
                         <VisibilityIcon />
                       </IconButton>
                     )}
+                    <IconButton
+                      onClick={() => handleDelete(index)}
+                      color="error"
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </Box>
                 </Grid>
               </Grid>

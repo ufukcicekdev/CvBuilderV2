@@ -42,15 +42,25 @@ function Profile() {
   const [editedProfile, setEditedProfile] = useState<UserProfile | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const userData = JSON.parse(userStr);
-      setProfile(userData);
-      setEditedProfile(userData);
-    }
-  }, []);
+    const fetchProfile = async () => {
+      try {
+        const response = await axiosInstance.get('/api/users/me/');
+        setProfile(response.data);
+        setEditedProfile(response.data);
+      } catch (error: any) {
+        console.error('Profile fetch error:', error);
+        const errorMessage = handleApiError(error, t);
+        showToast.error(errorMessage || t('profile.fetchError'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [t]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -65,7 +75,7 @@ function Profile() {
     try {
       const response = await axiosInstance.put('/api/users/me/update/', editedProfile);
       setProfile(response.data);
-      localStorage.setItem('user', JSON.stringify(response.data));
+      setEditedProfile(response.data);
       setIsEditing(false);
       showToast.success(t('profile.updateSuccess'));
     } catch (error: any) {
@@ -104,29 +114,45 @@ function Profile() {
       const formData = new FormData();
       formData.append('profile_picture', file);
 
-      const response = await axiosInstance.post('/api/users/profile/upload-picture/', formData, {
+      const response = await axiosInstance.patch('/api/users/me/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      if (response.data.profile_picture_url) {
-        setProfile(prev => prev ? {
-          ...prev,
-          profile_picture: response.data.profile_picture_url
-        } : null);
-        showToast.success(t('profile.pictureUpdateSuccess'));
-      }
-    } catch (error) {
+      setProfile(response.data);
+      setEditedProfile(response.data);
+      showToast.success(t('profile.pictureUpdateSuccess'));
+    } catch (error: any) {
       console.error('Profile picture upload error:', error);
-      showToast.error(t('profile.pictureUpdateError'));
+      const errorMessage = handleApiError(error, t);
+      showToast.error(errorMessage || t('profile.pictureUpdateError'));
     } finally {
       setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
+  if (loading) {
+    return (
+      <Layout>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Typography>Yükleniyor...</Typography>
+        </Container>
+      </Layout>
+    );
+  }
+
   if (!profile) {
-    return null;
+    return (
+      <Layout>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Typography color="error">Profil bulunamadı.</Typography>
+        </Container>
+      </Layout>
+    );
   }
 
   return (
@@ -266,7 +292,7 @@ function Profile() {
                     <Grid item xs={12} md={6}>
                       <TextField
                         fullWidth
-                        label={t('profile.companyPosition')}
+                        label={t('auth.companyPosition')}
                         name="company_position"
                         value={isEditing ? editedProfile?.company_position : profile.company_position}
                         onChange={handleChange}
@@ -276,7 +302,7 @@ function Profile() {
                     <Grid item xs={12} md={6}>
                       <TextField
                         fullWidth
-                        label={t('profile.companySize')}
+                        label={t('auth.companySize')}
                         name="company_size"
                         value={isEditing ? editedProfile?.company_size : profile.company_size}
                         onChange={handleChange}

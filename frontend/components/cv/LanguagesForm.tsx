@@ -72,7 +72,7 @@ const LanguagesForm = ({ cvId, onPrev, onStepComplete, initialData }: LanguagesF
             level: lang.level
           }));
           
-          console.log('Formatted languages for form:', formattedLanguages);
+          // console.log('Formatted languages for form:', formattedLanguages);
           setValue('languages', formattedLanguages);
         }
       } catch (error) {

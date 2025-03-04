@@ -15,6 +15,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'daphne',  # WebSocket desteği için en üstte olmalı
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -24,6 +25,7 @@ INSTALLED_APPS = [
     # Third party apps
     'rest_framework',
     'corsheaders',
+    'channels',
     # Local apps
     'users',
     'profiles',
@@ -31,6 +33,7 @@ INSTALLED_APPS = [
     'social_django',
     'social_auth',
     'contact',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -84,33 +87,14 @@ REST_FRAMEWORK = {
     ],
 }
 
+# CORS ayarları
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Geliştirme için 1 gün
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': True,
-    
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-    
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-    
-    'JTI_CLAIM': 'jti',
-}
-
-CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -133,14 +117,63 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# CORS_ORIGIN_WHITELIST yerine CORS_ALLOWED_ORIGINS kullanıyoruz
-CORS_ORIGIN_ALLOW_ALL = False
+# WebSocket için CORS ayarları
+CORS_ALLOWED_ORIGINS_WEBSOCKET = [
+    "ws://localhost:3000",
+    "ws://127.0.0.1:3000",
+    "wss://localhost:3000",
+    "wss://127.0.0.1:3000",
+    "ws://localhost:8000",
+    "ws://127.0.0.1:8000",
+]
 
-MEDIA_URL = '/media/'
+# Storage ayarları
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "bucket_name": os.getenv('AWS_STORAGE_BUCKET_NAME'),
+            "region_name": os.getenv('AWS_S3_REGION_NAME'),
+            "endpoint_url": os.getenv('AWS_S3_ENDPOINT_URL'),
+            "custom_domain": f"{os.getenv('AWS_STORAGE_BUCKET_NAME')}.{os.getenv('AWS_S3_REGION_NAME')}.cdn.digitaloceanspaces.com",
+            "file_overwrite": False,
+            "default_acl": "public-read",
+            "querystring_auth": False,
+            "location": "media",
+        }
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+        "OPTIONS": {
+            "bucket_name": os.getenv('AWS_STORAGE_BUCKET_NAME'),
+            "region_name": os.getenv('AWS_S3_REGION_NAME'),
+            "endpoint_url": os.getenv('AWS_S3_ENDPOINT_URL'),
+            "custom_domain": f"{os.getenv('AWS_STORAGE_BUCKET_NAME')}.{os.getenv('AWS_S3_REGION_NAME')}.cdn.digitaloceanspaces.com",
+            "file_overwrite": False,
+            "default_acl": "public-read",
+            "querystring_auth": False,
+            "location": "static",
+        }
+    }
+}
+
+# AWS/DigitalOcean Spaces ayarları
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL')
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_REGION_NAME}.cdn.digitaloceanspaces.com"
+
+# Static ve Media dosya ayarları
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Social Auth ayarları
 AUTHENTICATION_BACKENDS = (
@@ -190,9 +223,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
     },
     'root': {
@@ -203,6 +243,16 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
+            'propagate': False,
+        },
+        'users': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'storages': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': False,
         },
     },
@@ -216,3 +266,23 @@ TRAILING_SLASH = True
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# Channels ve ASGI ayarları
+ASGI_APPLICATION = 'cv_builder.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
+
+# WebSocket için authentication ayarları
+CHANNEL_AUTHENTICATION = {
+    'DEFAULT': 'channels.auth.SessionAuthentication',
+}
+
+# WebSocket için güvenlik ayarları
+CHANNEL_SECURITY = {
+    'ALLOWED_HOSTS': ['*'],
+    'ALLOWED_ORIGINS': ['*'],
+}

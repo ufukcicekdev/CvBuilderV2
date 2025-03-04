@@ -56,6 +56,8 @@ export interface CV {
     issuer: string;
     date?: string;
     description?: string;
+    documentUrl?: string;
+    document_type?: string;
   }>;
   created_at: string;
   updated_at: string;

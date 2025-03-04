@@ -72,7 +72,11 @@ class CVSerializer(serializers.ModelSerializer):
             if translation:
                 # Çeviri varsa, ana veriyi çeviri ile değiştir
                 data['language'] = lang_code
-                data['personal_info'] = translation.personal_info
+                personal_info = translation.personal_info
+                # Kullanıcının profil resmini ekle
+                if instance.user.profile_picture:
+                    personal_info['photo'] = request.build_absolute_uri(instance.user.profile_picture.url)
+                data['personal_info'] = personal_info
                 data['education'] = translation.education
                 data['experience'] = translation.experience
                 data['skills'] = translation.skills
@@ -80,13 +84,16 @@ class CVSerializer(serializers.ModelSerializer):
                 data['certificates'] = translation.certificates
                 data['video_info'] = translation.video_info
               
-              
             else:
                 # İngilizce çeviriyi dene
                 en_translation = instance.translations.filter(language_code='en').first()
                 if en_translation:
                     data['language'] = 'en'
-                    data['personal_info'] = en_translation.personal_info
+                    personal_info = en_translation.personal_info
+                    # Kullanıcının profil resmini ekle
+                    if instance.user.profile_picture:
+                        personal_info['photo'] = request.build_absolute_uri(instance.user.profile_picture.url)
+                    data['personal_info'] = personal_info
                     data['education'] = en_translation.education
                     data['experience'] = en_translation.experience
                     data['skills'] = en_translation.skills

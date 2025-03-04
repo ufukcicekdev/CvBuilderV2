@@ -26,10 +26,23 @@ const processQueue = (error: any, token: string | null = null) => {
 // Request interceptor
 axiosInstance.interceptors.request.use(
     async (config) => {
-        const session = await getSession();
-        if (session?.accessToken) {
-            config.headers.Authorization = `Bearer ${session.accessToken}`;
+        // Clear any existing Authorization header
+        delete config.headers.Authorization;
+        
+        // Get token from localStorage first
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
         }
+        
+        // If no token in localStorage, try to get from session
+        if (!token) {
+            const session = await getSession();
+            if (session?.accessToken) {
+                config.headers.Authorization = `Bearer ${session.accessToken}`;
+            }
+        }
+        
         return config;
     },
     (error) => {
@@ -59,6 +72,20 @@ axiosInstance.interceptors.response.use(
             isRefreshing = true;
 
             try {
+                // Try to get new token from localStorage first
+                const refreshToken = localStorage.getItem('refreshToken');
+                if (refreshToken) {
+                    const response = await axios.post('/api/users/token/refresh/', {
+                        refresh: refreshToken
+                    });
+                    const { access } = response.data;
+                    localStorage.setItem('accessToken', access);
+                    originalRequest.headers.Authorization = `Bearer ${access}`;
+                    processQueue(null, access);
+                    return axiosInstance(originalRequest);
+                }
+                
+                // If no refresh token in localStorage, try session
                 const session = await getSession();
                 if (session?.accessToken) {
                     originalRequest.headers.Authorization = `Bearer ${session.accessToken}`;
@@ -67,6 +94,10 @@ axiosInstance.interceptors.response.use(
                 }
             } catch (refreshError) {
                 processQueue(refreshError, null);
+                // Clear all auth data on refresh error
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('user');
                 await signOut({ redirect: true, callbackUrl: '/login' });
                 return Promise.reject(refreshError);
             } finally {

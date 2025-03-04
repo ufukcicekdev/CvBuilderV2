@@ -48,7 +48,7 @@ function Dashboard() {
     try {
       setLoading(true);
       const response = await cvAPI.getAll();
-      console.log('CV Response:', response.data);
+      // console.log('CV Response:', response.data);
       setCvs(response.data as CV[]);
     } catch (error) {
       console.error('Error fetching CVs:', error);

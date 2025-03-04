@@ -40,7 +40,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    profile_picture_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'profile_picture')
-        read_only_fields = ('email',) 
+        fields = ('id', 'email', 'first_name', 'last_name', 'profile_picture', 'profile_picture_url', 
+                 'phone', 'birth_date', 'profession', 'company_name', 'company_website', 
+                 'company_position', 'company_size', 'user_type')
+        read_only_fields = ('email',)
+
+    def get_profile_picture_url(self, obj):
+        if obj.profile_picture:
+            return obj.profile_picture.url
+        return None 

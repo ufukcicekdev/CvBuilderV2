@@ -15,14 +15,14 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     // Sayfa yüklendiğinde localStorage'dan dil tercihini al ve API'yi ayarla
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
-    console.log('Initial language:', savedLanguage); // Debug için
+    // console.log('Initial language:', savedLanguage); // Debug için
     setCurrentLanguage(savedLanguage);
     initializeLanguage(); // API'yi başlangıç diliyle ayarla
   }, []);
 
   const changeLanguage = (lang: string) => {
     if (lang in SUPPORTED_LANGUAGES) {
-      console.log('Changing language to:', lang);
+      // console.log('Changing language to:', lang);
       setCurrentLanguage(lang);
       setLanguage(lang);
       localStorage.setItem('selectedLanguage', lang);
@@ -30,9 +30,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   // Debug için mevcut dili logla
-  useEffect(() => {
-    console.log('Current language in context:', currentLanguage);
-  }, [currentLanguage]);
+  // console.log('Current language in context:', currentLanguage);
 
   return (
     <LanguageContext.Provider

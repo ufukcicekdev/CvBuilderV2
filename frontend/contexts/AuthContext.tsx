@@ -38,6 +38,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
+      
+      // Clear any existing tokens and user data before login
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      delete axios.defaults.headers.common['Authorization'];
+
       const response = await axios.post('/api/users/login/', {
         email,
         password
@@ -54,11 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
       
-      console.log('Login successful:', {
-        user,
-        token: access,
-        headers: axios.defaults.headers.common
-      });
+      // console.log('Login successful:', {
+      //   user,
+      //   token: access,
+      //   headers: axios.defaults.headers.common
+      // });
 
       router.push('/dashboard/create-cv');
 
