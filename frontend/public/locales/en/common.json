@@ -304,6 +304,25 @@
     },
     "errors": {
       "skillNameRequired": "Please enter skill name"
+    },
+    "template": {
+      "language": "Language",
+      "changeLanguage": "Change Language",
+      "downloadPDF": "Download PDF",
+      "viewImage": "View Image",
+      "close": "Close",
+      "loading": "Loading...",
+      "error": "Error loading translation. Please try again."
+    },
+    "sections": {
+      "personalInfo": "Personal Information",
+      "experience": "Work Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "languages": "Languages",
+      "certificates": "Certificates",
+      "projects": "Projects",
+      "interests": "Interests"
     }
   }
 } 

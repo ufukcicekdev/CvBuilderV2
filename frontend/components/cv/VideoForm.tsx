@@ -109,19 +109,32 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
     try {
       setLoading(true);
       
-      const formData = new FormData();
+      // Eğer yeni bir video seçilmişse yükle
       if (selectedFile) {
+        const formData = new FormData();
         formData.append('video', selectedFile);
+        
+        const response = await cvAPI.uploadVideo(Number(cvId), formData);
+        const responseData = response.data;
+
+        await onStepComplete({
+          video_info: responseData.video_info,
+          language: router.locale,
+          current_step: 6
+        });
+      } else {
+        // Video seçilmemişse boş video_info objesi gönder
+        await onStepComplete({
+          video_info: {
+            url: null,
+            description: null,
+            type: null,
+            uploaded_at: null
+          },
+          language: router.locale,
+          current_step: 6
+        });
       }
-
-      const response = await cvAPI.uploadVideo(Number(cvId), formData);
-      const responseData = response.data;
-
-      await onStepComplete({
-        video_info: responseData.video_info,
-        language: router.locale,
-        current_step: 6
-      });
     } catch (error) {
       console.error('Error saving video data:', error);
       showToast.error(t('common.error'));

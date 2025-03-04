@@ -156,7 +156,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       window.history.pushState({}, '', newUrl);
     } catch (error) {
       console.error('Error changing language:', error);
-      alert('Error loading translation. Please try again.');
+      alert(t('cv.template.error'));
     } finally {
       setIsLoading(false);
       handleClose();
@@ -182,6 +182,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
         open={isLoading}
       >
         <CircularProgress color="inherit" />
+        <Typography sx={{ ml: 2 }}>{t('cv.template.loading')}</Typography>
       </Backdrop>
 
       {/* Navbar */}
@@ -202,7 +203,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
               {/* Language Selection */}
-              <Tooltip title="Change Language">
+              <Tooltip title={t('cv.template.changeLanguage')}>
                 <IconButton
                   color="inherit"
                   onClick={handleClick}

@@ -413,7 +413,24 @@
       "generatePDF": "PDF İndir",
       "generating": "Oluşturuluyor...",
       "generateSuccess": "CV başarıyla oluşturuldu",
-      "generateError": "CV oluşturulurken bir hata oluştu"
+      "generateError": "CV oluşturulurken bir hata oluştu",
+      "language": "Dil",
+      "changeLanguage": "Dili Değiştir",
+      "downloadPDF": "PDF İndir",
+      "viewImage": "Görüntüyü Görüntüle",
+      "close": "Kapat",
+      "loading": "Yükleniyor...",
+      "error": "Çeviri yüklenirken hata oluştu. Lütfen tekrar deneyin."
+    },
+    "sections": {
+      "personalInfo": "Kişisel Bilgiler",
+      "experience": "İş Deneyimi",
+      "education": "Eğitim",
+      "skills": "Yetenekler",
+      "languages": "Diller",
+      "certificates": "Sertifikalar",
+      "projects": "Projeler",
+      "interests": "İlgi Alanları"
     }
   }
 } 

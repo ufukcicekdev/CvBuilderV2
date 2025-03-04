@@ -82,7 +82,14 @@ class CVSerializer(serializers.ModelSerializer):
                 data['skills'] = translation.skills
                 data['languages'] = translation.languages
                 data['certificates'] = translation.certificates
-                data['video_info'] = translation.video_info
+                
+                # video_info alanını güncelle
+                video_info = translation.video_info or {}
+                if instance.video:
+                    video_info['url'] = request.build_absolute_uri(instance.video.url)
+                if instance.video_description:
+                    video_info['description'] = instance.video_description
+                data['video_info'] = video_info
               
             else:
                 # İngilizce çeviriyi dene
@@ -99,14 +106,25 @@ class CVSerializer(serializers.ModelSerializer):
                     data['skills'] = en_translation.skills
                     data['languages'] = en_translation.languages
                     data['certificates'] = en_translation.certificates
-                    data['video_info'] = en_translation.video_info
+                    
+                    # video_info alanını güncelle
+                    video_info = en_translation.video_info or {}
+                    if instance.video:
+                        video_info['url'] = request.build_absolute_uri(instance.video.url)
+                    if instance.video_description:
+                        video_info['description'] = instance.video_description
+                    data['video_info'] = video_info
                 
         except Exception as e:
             print(f"Error in to_representation: {str(e)}")
             # Hata durumunda orijinal veriyi dön
             data['language'] = 'en'
-            data['video_url'] = self.get_video_url(instance)
-            data['video_description'] = instance.video_description
+            data['video_info'] = {
+                'url': self.get_video_url(instance),
+                'description': instance.video_description,
+                'type': None,
+                'uploaded_at': None
+            }
         
         return data
 

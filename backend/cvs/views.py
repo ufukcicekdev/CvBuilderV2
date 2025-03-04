@@ -738,14 +738,43 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
         try:
             cv = self.get_object()
             
-            if 'video' in request.FILES:
-                # Eski videoyu sil
-                if cv.video:
-                    cv.video.delete()
-                
-                cv.video = request.FILES['video']
+            if 'video' not in request.FILES:
+                return Response(
+                    {'error': 'No video file provided'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             
+            video_file = request.FILES['video']
+            
+            # Video dosya tipi kontrolü
+            if not video_file.content_type.startswith('video/'):
+                return Response(
+                    {'error': f'Invalid file type: {video_file.content_type}. Only video files are allowed.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Video boyut kontrolü (100MB)
+            if video_file.size > 100 * 1024 * 1024:
+                return Response(
+                    {'error': 'Video file is too large. Maximum size is 100MB.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Eski videoyu sil
+            if cv.video:
+                cv.video.delete()
+            
+            cv.video = video_file
             cv.video_description = request.data.get('video_description', '')
+            
+            # video_info alanını güncelle
+            cv.video_info = {
+                'url': cv.video.url if cv.video else None,
+                'description': cv.video_description,
+                'type': video_file.content_type,
+                'uploaded_at': timezone.now().isoformat()
+            }
+            
             cv.save()
             
             # WebSocket bildirimi gönder
@@ -758,7 +787,7 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
             
         except Exception as e:
             return Response(
-                {'error': str(e)}, 
+                {'error': f'Error uploading video: {str(e)}'}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -1340,20 +1369,53 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-    @action(detail=True, methods=['POST'], url_path='upload-video')
+    @action(detail=True, methods=['post'], url_path='upload-video')
     def upload_video(self, request, pk=None):
         try:
             cv = self.get_object()
             
-            if 'video' in request.FILES:
-                # Eski videoyu sil
-                if cv.video:
-                    cv.video.delete()
-                
-                cv.video = request.FILES['video']
+            if 'video' not in request.FILES:
+                return Response(
+                    {'error': 'No video file provided'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             
+            video_file = request.FILES['video']
+            
+            # Video dosya tipi kontrolü
+            if not video_file.content_type.startswith('video/'):
+                return Response(
+                    {'error': f'Invalid file type: {video_file.content_type}. Only video files are allowed.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Video boyut kontrolü (100MB)
+            if video_file.size > 100 * 1024 * 1024:
+                return Response(
+                    {'error': 'Video file is too large. Maximum size is 100MB.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Eski videoyu sil
+            if cv.video:
+                cv.video.delete()
+            
+            cv.video = video_file
             cv.video_description = request.data.get('video_description', '')
+            
+            # video_info alanını güncelle
+            cv.video_info = {
+                'url': cv.video.url if cv.video else None,
+                'description': cv.video_description,
+                'type': video_file.content_type,
+                'uploaded_at': timezone.now().isoformat()
+            }
+            
             cv.save()
+            
+            # WebSocket bildirimi gönder
+            current_lang = self._get_language_code(request)
+            self._notify_cv_update(cv, current_lang)
             
             # Tüm CV verilerini serialize edip dön
             serializer = self.get_serializer(cv)
@@ -1361,7 +1423,7 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
             
         except Exception as e:
             return Response(
-                {'error': str(e)}, 
+                {'error': f'Error uploading video: {str(e)}'}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -1411,6 +1473,7 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
             )
             
             serializer = CVTranslationSerializer(translation)
+            
             return Response(serializer.data, status=status.HTTP_200_OK)
             
         except Exception as e:
