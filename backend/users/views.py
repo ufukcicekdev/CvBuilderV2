@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from .models import User
 from .serializers import UserSerializer, CustomTokenObtainPairSerializer, UserProfileSerializer
 import logging
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .authentication import TokenAuthentication
 
 logger = logging.getLogger(__name__)
@@ -78,7 +78,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
-@parser_classes([MultiPartParser, FormParser])
+@parser_classes([MultiPartParser, FormParser, JSONParser])
 def get_user_profile(request):
     if request.method == 'GET':
         serializer = UserProfileSerializer(request.user)
@@ -88,59 +88,26 @@ def get_user_profile(request):
             user = request.user
             data = request.data.copy()
             
-            # Eğer profil resmi yükleniyorsa
+            # Profil resmi yükleme işlemi artık ayrı bir endpoint'te
             if 'profile_picture' in request.FILES:
-                logger.info(f"Starting profile picture upload for user: {user.email}")
-                
-                # S3 bağlantı bilgilerini logla
-                from django.conf import settings
-                logger.info(f"S3 Settings - Bucket: {settings.AWS_STORAGE_BUCKET_NAME}")
-                logger.info(f"S3 Settings - Region: {settings.AWS_S3_REGION_NAME}")
-                logger.info(f"S3 Settings - Endpoint: {settings.AWS_S3_ENDPOINT_URL}")
-                
-                # Eski resmi sil
-                if user.profile_picture:
-                    logger.info(f"Deleting old profile picture: {user.profile_picture.name}")
-                    try:
-                        user.profile_picture.delete(save=False)
-                        logger.info("Old profile picture deleted successfully")
-                    except Exception as e:
-                        logger.error(f"Error deleting old profile picture: {str(e)}")
-                
-                # Yeni resmi kaydet
-                file = request.FILES['profile_picture']
-                logger.info(f"New file details - Name: {file.name}, Size: {file.size}, Content Type: {file.content_type}")
-                
-                try:
-                    # Dosyayı kaydet
-                    user.profile_picture = file
-                    user.save()
-                    
-                    # Dosya yükleme sonrası bilgileri logla
-                    logger.info(f"Profile picture saved successfully. URL: {user.profile_picture.url}")
-                    logger.info(f"File path in S3: {user.profile_picture.name}")
-                    
-                    # Dosya içeriğini kontrol et
-                    try:
-                        with user.profile_picture.open('rb') as f:
-                            file_size = len(f.read())
-                            logger.info(f"File size in storage: {file_size} bytes")
-                    except Exception as e:
-                        logger.error(f"Error reading file from storage: {str(e)}")
-                    
-                except Exception as e:
-                    logger.error(f"Error saving new profile picture: {str(e)}")
-                    logger.error(f"Error type: {e.__class__.__name__}")
-                    raise
-                
-                serializer = UserProfileSerializer(user)
-                return Response(serializer.data)
+                return Response(
+                    {'error': 'Profile picture upload should be done via /api/users/upload-profile-picture/ endpoint'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Content-Type'a göre işlem yap
+            content_type = request.content_type if hasattr(request, 'content_type') else ''
+            
+            logger.info(f"Profile update request with Content-Type: {content_type}")
+            logger.info(f"Request data: {data}")
             
             # Diğer alanları güncelle
             serializer = UserProfileSerializer(user, data=data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
+            
+            logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger.error(f"Profile update error: {str(e)}")
@@ -165,16 +132,40 @@ def upload_profile_picture(request):
         # Eski resmi sil
         if user.profile_picture:
             logger.info(f"Deleting old profile picture: {user.profile_picture.name}")
-            user.profile_picture.delete(save=False)
+            try:
+                user.profile_picture.delete(save=False)
+                logger.info("Old profile picture deleted successfully")
+            except Exception as e:
+                logger.error(f"Error deleting old profile picture: {str(e)}")
         
         # Yeni resmi kaydet
         file = request.FILES['profile_picture']
         logger.info(f"New file details - Name: {file.name}, Size: {file.size}, Content Type: {file.content_type}")
         
-        user.profile_picture = file
-        user.save()
+        # Dosya tipi kontrolü
+        if not file.content_type.startswith('image/'):
+            return Response({
+                'error': 'Invalid file type. Only images are allowed.'
+            }, status=status.HTTP_400_BAD_REQUEST)
         
-        logger.info(f"Profile picture uploaded successfully. URL: {user.profile_picture.url}")
+        # Dosya boyutu kontrolü (5MB)
+        if file.size > 5 * 1024 * 1024:
+            return Response({
+                'error': 'File size too large. Maximum size is 5MB.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            # Dosyayı kaydet
+            user.profile_picture = file
+            user.save()
+            
+            # Dosya yükleme sonrası bilgileri logla
+            logger.info(f"Profile picture saved successfully. URL: {user.profile_picture.url}")
+            logger.info(f"File path in storage: {user.profile_picture.name}")
+        except Exception as e:
+            logger.error(f"Error saving profile picture: {str(e)}")
+            logger.error(f"Error type: {e.__class__.__name__}")
+            raise
         
         return Response({
             'message': 'Profile picture uploaded successfully',

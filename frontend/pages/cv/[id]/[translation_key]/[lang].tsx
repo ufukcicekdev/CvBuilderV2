@@ -12,7 +12,7 @@ const CVPage = () => {
   const [cv, setCV] = useState<CV | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [template, setTemplate] = useState<'modern' | 'minimal'>('modern');
+  const [template, setTemplate] = useState<string>('web-template1');
 
   useEffect(() => {
     const fetchCV = async () => {
@@ -22,8 +22,11 @@ const CVPage = () => {
         const response = await axiosInstance.get(`/cvs/${id}/${translation_key}/${lang}/`);
         setCV(response.data);
         
-        // Get template from CV data or use default
-        setTemplate(response.data.template || 'modern');
+        // URL'den şablon parametresini al
+        const templateParam = router.query.template as string;
+        if (templateParam) {
+          setTemplate(templateParam);
+        }
       } catch (err) {
         console.error('Error fetching CV:', err);
         setError('Failed to load CV');
@@ -33,7 +36,7 @@ const CVPage = () => {
     };
 
     fetchCV();
-  }, [id, translation_key, lang]);
+  }, [id, translation_key, lang, router.query.template]);
 
   if (loading) {
     return (
@@ -51,12 +54,15 @@ const CVPage = () => {
     );
   }
 
-  // Render selected template
-  return template === 'modern' ? (
-    <ModernTemplate cv={cv} />
-  ) : (
-    <MinimalTemplate cv={cv} />
-  );
+  // Şablona göre uygun bileşeni göster
+  switch (template) {
+    case 'web-template1':
+      return <ModernTemplate cv={cv} />;
+    case 'web-template2':
+      return <MinimalTemplate cv={cv} />;
+    default:
+      return <ModernTemplate cv={cv} />;
+  }
 };
 
 export default CVPage; 

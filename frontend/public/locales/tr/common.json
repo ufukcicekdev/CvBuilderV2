@@ -70,6 +70,19 @@
     "cancel": "İptal",
     "pictureUpdateSuccess": "Profil resmi başarıyla güncellendi",
     "pictureUpdateError": "Profil resmi güncellenirken bir hata oluştu",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "phone": "Telefon",
+    "birthDate": "Doğum Tarihi",
+    "firstNamePlaceholder": "Adınızı girin",
+    "lastNamePlaceholder": "Soyadınızı girin",
+    "phonePlaceholder": "Telefon numaranızı girin",
+    "birthDatePlaceholder": "Doğum tarihinizi seçin",
+    "professionPlaceholder": "Mesleğinizi girin",
+    "companyNamePlaceholder": "Şirket adını girin",
+    "companyWebsitePlaceholder": "Şirket web sitesini girin",
+    "companyPositionPlaceholder": "Şirketteki pozisyonunuzu girin",
+    "companySizePlaceholder": "Şirket büyüklüğünü girin",
     "errors": {
       "fileTooLarge": "Dosya boyutu çok büyük (maksimum 5MB)",
       "invalidFileType": "Geçersiz dosya tipi. Lütfen bir resim dosyası seçin",
@@ -296,7 +309,8 @@
       "languages": "Yabancı Diller",
       "certificates": "Sertifikalar",
       "video": "Video",
-      "template": "Şablon"
+      "template": "Şablon",
+      "completed": "Tamamlandı"
     },
     "personalInfo": {
       "title": "Kişisel Bilgiler",
@@ -339,7 +353,6 @@
       "addMore": "Eğitim Ekle"
     },
     "draft": "Taslak",
-    "completed": "Tamamlandı",
     "continue": "Devam Et",
     "edit": "Düzenle",
     "untitled": "Başlıksız CV",

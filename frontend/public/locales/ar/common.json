@@ -131,5 +131,43 @@
     },
     "backToHome": "العودة إلى الصفحة الرئيسية",
     "tryAgain": "حاول مرة أخرى"
+  },
+  "profile": {
+    "personalInfo": "المعلومات الشخصية",
+    "experience": "الخبرة",
+    "education": "التعليم",
+    "skills": "المهارات",
+    "languages": "اللغات",
+    "certificates": "الشهادات",
+    "about": "نبذة عني",
+    "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
+    "updateError": "خطأ في تحديث الملف الشخصي",
+    "profession": "المهنة",
+    "companyPosition": "المنصب في الشركة",
+    "companySize": "حجم الشركة",
+    "edit": "تعديل",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "pictureUpdateSuccess": "تم تحديث صورة الملف الشخصي بنجاح",
+    "pictureUpdateError": "خطأ في تحديث صورة الملف الشخصي",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "phone": "الهاتف",
+    "birthDate": "تاريخ الميلاد",
+    "firstNamePlaceholder": "أدخل اسمك الأول",
+    "lastNamePlaceholder": "أدخل اسم عائلتك",
+    "phonePlaceholder": "أدخل رقم هاتفك",
+    "birthDatePlaceholder": "اختر تاريخ ميلادك",
+    "professionPlaceholder": "أدخل مهنتك",
+    "companyNamePlaceholder": "أدخل اسم الشركة",
+    "companyWebsitePlaceholder": "أدخل موقع الشركة الإلكتروني",
+    "companyPositionPlaceholder": "أدخل منصبك في الشركة",
+    "companySizePlaceholder": "أدخل حجم الشركة",
+    "errors": {
+      "fileTooLarge": "حجم الملف كبير جدًا (الحد الأقصى 5 ميجابايت)",
+      "invalidFileType": "نوع ملف غير صالح. يرجى اختيار ملف صورة",
+      "uploadFailed": "فشل تحميل الصورة",
+      "noFile": "يرجى اختيار ملف صورة"
+    }
   }
 } 

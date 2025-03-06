@@ -17,6 +17,7 @@ import {
   PictureAsPdf,
   Image as ImageIcon,
   Close as CloseIcon,
+  Person,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -57,7 +58,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
     const reconnectDelay = 3000; // 3 seconds
 
     const connectWebSocket = () => {
-      // console.log('Attempting to connect to WebSocket with params:', { id, translation_key, lang });
+      console.log('Attempting to connect to WebSocket with params:', { id, translation_key, lang });
       
       // Close existing connection if any
       if (ws) {
@@ -66,19 +67,19 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
 
       // Backend sunucusuna doğrudan bağlan
       const wsUrl = `ws://localhost:8000/ws/cv/${id}/${translation_key}/${lang}/`;
-      // console.log('WebSocket URL:', wsUrl);
+      console.log('WebSocket URL:', wsUrl);
 
       try {
         ws = new WebSocket(wsUrl);
-        // console.log('WebSocket instance created');
+        console.log('WebSocket instance created');
 
         ws.onopen = () => {
-          // console.log('WebSocket connection established successfully');
+          console.log('WebSocket connection established successfully');
           reconnectAttempts = 0;
         };
 
         ws.onmessage = (event) => {
-          // console.log('Received WebSocket message:', event.data);
+          console.log('Received WebSocket message:', event.data);
           try {
             const data = JSON.parse(event.data);
             setCv(data);
@@ -94,7 +95,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
           
           if (reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
-            // console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
             setTimeout(connectWebSocket, reconnectDelay);
           } else {
             console.error('Max reconnection attempts reached');
@@ -111,7 +112,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
 
           if (!event.wasClean && reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
-            // console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
             setTimeout(connectWebSocket, reconnectDelay);
           }
         };
@@ -123,7 +124,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
     connectWebSocket();
 
     return () => {
-      // console.log('Cleaning up WebSocket connection');
+      console.log('Cleaning up WebSocket connection');
       if (ws) {
         ws.close();
         ws = null;
@@ -143,7 +144,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
     try {
       setIsLoading(true);
       
-      // Use router.query values instead of parsing URL
+      // Use router.query values
       const cvId = id;
       const translationKey = translation_key;
 
@@ -151,9 +152,10 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       const response = await axiosInstance.get(`/cvs/${cvId}/${translationKey}/${newLang}/`);
       setCv(response.data);
 
-      // Update URL without reloading the page
+      // Update URL with router.push
       const newUrl = `/cv/${cvId}/${translationKey}/${newLang}/`;
-      window.history.pushState({}, '', newUrl);
+      router.push(newUrl, undefined, { shallow: true });
+      
     } catch (error) {
       console.error('Error changing language:', error);
       alert(t('cv.template.error'));
@@ -560,6 +562,51 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
 
             {/* Right Column */}
             <Grid item xs={12} md={8}>
+              {/* Summary Section */}
+              {cv.personal_info.summary && (
+                <Paper 
+                  elevation={2} 
+                  sx={{ 
+                    p: 3, 
+                    mb: 3, 
+                    borderRadius: 2,
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: 4
+                    }
+                  }}
+                >
+                  <Typography variant="h6" gutterBottom sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1,
+                    color: 'primary.main',
+                    fontWeight: 600,
+                    mb: 3
+                  }}>
+                    <Person /> {t('professional_summary')}
+                  </Typography>
+                  <Box sx={{
+                    backgroundColor: 'rgba(33, 150, 243, 0.05)',
+                    borderRadius: 1,
+                    p: 2,
+                    borderLeft: '4px solid',
+                    borderColor: 'primary.main',
+                  }}>
+                    <Typography variant="body1" sx={{ 
+                      color: 'text.secondary',
+                      lineHeight: 1.6,
+                      fontWeight: 'bold',
+                      fontStyle: 'italic',
+                      fontSize: { xs: '0.9rem', md: '1rem' },
+                    }}>
+                      {cv.personal_info.summary}
+                    </Typography>
+                  </Box>
+                </Paper>
+              )}
+
               {/* Experience Section */}
               <Paper 
                 elevation={2} 

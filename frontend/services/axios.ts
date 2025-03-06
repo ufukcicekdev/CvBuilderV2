@@ -2,7 +2,7 @@ import axios from 'axios';
 import { showToast } from '../utils/toast';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ axiosInstance.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
-          const response = await axios.post('/api/users/token/refresh/', {
+          const response = await axios.post(`${axiosInstance.defaults.baseURL}/api/users/token/refresh/`, {
             refresh: refreshToken
           });
           const { access } = response.data;

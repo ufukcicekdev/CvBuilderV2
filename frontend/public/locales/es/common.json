@@ -118,5 +118,43 @@
       "feedback": "Comentarios",
       "other": "Otro"
     }
+  },
+  "profile": {
+    "personalInfo": "Información Personal",
+    "experience": "Experiencia",
+    "education": "Educación",
+    "skills": "Habilidades",
+    "languages": "Idiomas",
+    "certificates": "Certificados",
+    "about": "Sobre Mí",
+    "updateSuccess": "Perfil actualizado con éxito",
+    "updateError": "Error al actualizar el perfil",
+    "profession": "Profesión",
+    "companyPosition": "Posición en la Empresa",
+    "companySize": "Tamaño de la Empresa",
+    "edit": "Editar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "pictureUpdateSuccess": "Foto de perfil actualizada con éxito",
+    "pictureUpdateError": "Error al actualizar la foto de perfil",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "phone": "Teléfono",
+    "birthDate": "Fecha de Nacimiento",
+    "firstNamePlaceholder": "Ingrese su nombre",
+    "lastNamePlaceholder": "Ingrese su apellido",
+    "phonePlaceholder": "Ingrese su número de teléfono",
+    "birthDatePlaceholder": "Seleccione su fecha de nacimiento",
+    "professionPlaceholder": "Ingrese su profesión",
+    "companyNamePlaceholder": "Ingrese el nombre de la empresa",
+    "companyWebsitePlaceholder": "Ingrese el sitio web de la empresa",
+    "companyPositionPlaceholder": "Ingrese su posición en la empresa",
+    "companySizePlaceholder": "Ingrese el tamaño de la empresa",
+    "errors": {
+      "fileTooLarge": "El tamaño del archivo es demasiado grande (máximo 5MB)",
+      "invalidFileType": "Tipo de archivo no válido. Por favor, seleccione un archivo de imagen",
+      "uploadFailed": "Error al cargar la imagen",
+      "noFile": "Por favor, seleccione un archivo de imagen"
+    }
   }
 } 

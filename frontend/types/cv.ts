@@ -15,6 +15,7 @@ export interface CV {
     location?: string;
     full_name?: string;
     description?: string;
+    summary?: string;
   };
   video_info?: {
     url: string | null;

@@ -135,7 +135,7 @@ export const authAPI = {
   },
 
   refreshToken: (refresh: string) => {
-    return api.post('/api/auth/token/refresh/', { refresh });
+    return api.post('/api/users/token/refresh/', { refresh });
   }
 };
 

@@ -603,8 +603,11 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
             cv = self.get_object()
             current_lang = self._get_language_code(request)
             
-            # Dinamik URL oluştur
-            web_url = f'/cv/{cv.id}/{cv.translation_key}/{current_lang}/'
+            # Şablon ID'sini al
+            template_id = request.data.get('template_id')
+            
+            # Dinamik URL oluştur (şablon ID'sini de ekle)
+            web_url = f'/cv/{cv.id}/{cv.translation_key}/{current_lang}/?template={template_id}'
             
             return Response({'web_url': web_url})
             
@@ -1202,8 +1205,11 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
             cv = self.get_object()
             current_lang = self._get_language_code(request)
             
-            # Dinamik URL oluştur
-            web_url = f'/cv/{cv.id}/{cv.translation_key}/{current_lang}/'
+            # Şablon ID'sini al
+            template_id = request.data.get('template_id')
+            
+            # Dinamik URL oluştur (şablon ID'sini de ekle)
+            web_url = f'/cv/{cv.id}/{cv.translation_key}/{current_lang}/?template={template_id}'
             
             return Response({'web_url': web_url})
             
