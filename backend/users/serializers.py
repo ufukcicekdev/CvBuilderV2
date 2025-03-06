@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import User
+from .models import User, PasswordResetToken
 from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
@@ -56,3 +56,44 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if obj.profile_picture:
             return obj.profile_picture.url
         return None 
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value)
+        except User.DoesNotExist:
+            # Güvenlik nedeniyle kullanıcı bulunamasa bile hata döndürmüyoruz
+            pass
+        return value
+
+class ResetPasswordSerializer(serializers.Serializer):
+    token = serializers.UUIDField()
+    password = serializers.CharField(min_length=8, write_only=True)
+    password_confirm = serializers.CharField(min_length=8, write_only=True)
+
+    def validate(self, data):
+        if data['password'] != data['password_confirm']:
+            raise serializers.ValidationError({"password_confirm": "Şifreler eşleşmiyor."})
+        
+        try:
+            token_obj = PasswordResetToken.objects.get(token=data['token'])
+            if not token_obj.is_valid():
+                raise serializers.ValidationError({"token": "Geçersiz veya süresi dolmuş token."})
+            self.token_obj = token_obj
+        except PasswordResetToken.DoesNotExist:
+            raise serializers.ValidationError({"token": "Geçersiz token."})
+        
+        return data
+    
+    def save(self):
+        user = self.token_obj.user
+        user.set_password(self.validated_data['password'])
+        user.save()
+        
+        # Token'ı kullanılmış olarak işaretle
+        self.token_obj.is_used = True
+        self.token_obj.save()
+        
+        return user 

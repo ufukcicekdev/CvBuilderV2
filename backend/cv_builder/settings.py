@@ -286,3 +286,11 @@ CHANNEL_SECURITY = {
     'ALLOWED_HOSTS': ['*'],
     'ALLOWED_ORIGINS': ['*'],
 }
+
+
+
+
+
+# SMTP2GO Configuration
+SMTP2GO_API_KEY = os.getenv('SMTP2GO_API_KEY')
+SMTP2GO_FROM_EMAIL = os.getenv('SMTP2GO_FROM_EMAIL')

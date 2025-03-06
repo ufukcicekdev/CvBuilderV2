@@ -24,6 +24,7 @@ import Image from 'next/image';
 import Flag from 'react-world-flags';
 import axiosInstance from '@/utils/axios';
 import { useTranslation } from 'next-i18next';
+import axios from 'axios';
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
@@ -48,7 +49,40 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
   const [selectedCertificate, setSelectedCertificate] = React.useState<{ documentUrl?: string; document_type?: string } | null>(null);
   const open = Boolean(anchorEl);
 
-  // WebSocket bağlantısı
+  // Listen for language changes in the URL
+  useEffect(() => {
+    if (lang && typeof lang === 'string') {
+      console.log('Language changed in URL to:', lang);
+      
+      // When URL language changes, update the CV data
+      const fetchCVForLanguage = async () => {
+        if (!id || !translation_key) return;
+        
+        try {
+          setIsLoading(true);
+          console.log('Fetching CV data for language:', lang);
+          
+          const response = await axiosInstance.get(`/cvs/${id}/${translation_key}/${lang}/`);
+          console.log('Fetched data in useEffect:', response.data);
+          
+          // Force a re-render by creating a new object
+          const newCvData = { ...response.data };
+          console.log('Setting new CV data in useEffect:', newCvData);
+          
+          // Set the state with the new data
+          setCv(newCvData);
+        } catch (error) {
+          console.error('Error fetching CV for language:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      fetchCVForLanguage();
+    }
+  }, [lang, id, translation_key]);
+
+  // WebSocket connection for real-time updates
   useEffect(() => {
     if (!id || !translation_key || !lang) return;
 
@@ -68,7 +102,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       // Backend sunucusuna doğrudan bağlan
       const wsUrl = `ws://localhost:8000/ws/cv/${id}/${translation_key}/${lang}/`;
       console.log('WebSocket URL:', wsUrl);
-
+      
       try {
         ws = new WebSocket(wsUrl);
         console.log('WebSocket instance created');
@@ -132,6 +166,20 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
     };
   }, [id, translation_key, lang]);
 
+  // Check for saved language preference on initial load
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('selectedCVLanguage');
+    
+    // If there's a saved language and it's different from the current URL language
+    if (savedLanguage && lang && savedLanguage !== lang) {
+      // Update the URL to use the saved language
+      if (id && translation_key) {
+        const newUrl = `/cv/${id}/${translation_key}/${savedLanguage}/`;
+        window.location.href = newUrl;
+      }
+    }
+  }, []);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -148,13 +196,16 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       const cvId = id;
       const translationKey = translation_key;
 
-      // Fetch CV data in the new language
-      const response = await axiosInstance.get(`/cvs/${cvId}/${translationKey}/${newLang}/`);
-      setCv(response.data);
+      if (!cvId || !translationKey) {
+        console.error('Missing required parameters');
+        return;
+      }
 
-      // Update URL with router.push
-      const newUrl = `/cv/${cvId}/${translationKey}/${newLang}/`;
-      router.push(newUrl, undefined, { shallow: true });
+      // Store the selected language in localStorage
+      localStorage.setItem('selectedCVLanguage', newLang);
+
+      // Change URL to load the CV in the new language
+      window.location.href = `/cv/${cvId}/${translationKey}/${newLang}/`;
       
     } catch (error) {
       console.error('Error changing language:', error);
@@ -315,15 +366,9 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                   mb: 2,
                   fontSize: { xs: '2rem', md: '3rem' }
                 }}>
-                  {fullName}
+                  {cv.personal_info.full_name}
                 </Typography>
-                <Typography variant="h5" gutterBottom sx={{ 
-                  mb: 3, 
-                  opacity: 0.9,
-                  fontSize: { xs: '1.2rem', md: '1.5rem' }
-                }}>
-                  {cv.title}
-                </Typography>
+               
                 {cv.personal_info.description && (
                   <Typography variant="body1" sx={{ 
                     mt: 2, 

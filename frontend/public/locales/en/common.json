@@ -22,6 +22,7 @@
     "employer": "Employer",
     "email": "Email",
     "password": "Password",
+    "login": "Login",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password",
     "rememberMe": "Remember Me",

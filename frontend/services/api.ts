@@ -69,15 +69,18 @@ api.interceptors.response.use(
 // Dil değiştirme fonksiyonu
 export const setLanguage = (languageCode: string): void => {
   if (typeof window !== 'undefined' && languageCode in SUPPORTED_LANGUAGES) {
+    // Eğer zaten aynı dil ayarlanmışsa işlem yapma
+    const currentLanguage = localStorage.getItem('selectedLanguage');
+    if (currentLanguage === languageCode) {
+      return;
+    }
+    
     localStorage.setItem('selectedLanguage', languageCode);
-    // console.log('Selected language:', languageCode);
+    
     // Axios instance'ın default headers'ını güncelle
     api.defaults.headers.common['Accept-Language'] = languageCode;
     
-    // console.log('Language changed:', languageCode);
-    // console.log('Current headers:', api.defaults.headers);
-    
-    // Özel event tetikle
+    // Özel event tetikle - bu event'i dinleyen bileşenler varsa onları bilgilendir
     window.dispatchEvent(new Event('languageChange'));
   }
 };
@@ -119,11 +122,16 @@ export interface CV {
 export const authAPI = {
   register: (data: {
     email: string;
+    username: string;
     password: string;
-    first_name: string;
-    last_name: string;
+    password2: string;
+    user_type: string;
+    phone?: string;
+    birth_date?: Date;
+    company_name?: string;
+    company_website?: string;
   }) => {
-    return api.post('/api/auth/register/', data);
+    return api.post('/api/users/register/', data);
   },
 
   login: (data: { email: string; password: string }) => {
@@ -136,6 +144,29 @@ export const authAPI = {
 
   refreshToken: (refresh: string) => {
     return api.post('/api/users/token/refresh/', { refresh });
+  },
+  
+  googleAuth: (data: { token: string }) => {
+    return api.post('/api/auth/google', data);
+  },
+  
+  linkedinAuth: (data: { code: string }) => {
+    return api.post('/api/auth/linkedin', data);
+  },
+
+  // Şifre sıfırlama için email gönderme
+  forgotPassword: (email: string) => {
+    return api.post('/api/users/forgot-password/', { email });
+  },
+
+  // Şifre sıfırlama token'ını doğrulama
+  validateResetToken: (token: string) => {
+    return api.get(`/api/auth/reset-password/validate/${token}/`);
+  },
+
+  // Şifre sıfırlama
+  resetPassword: (data: { token: string; password: string; password_confirm: string }) => {
+    return api.post('/api/auth/reset-password/', data);
   }
 };
 

@@ -127,7 +127,7 @@ export default function LoginPage() {
 
           <Tabs value={userType} onChange={handleTabChange} sx={{ mt: 3 }}>
             <Tab label={t('auth.jobseeker')} value="jobseeker" />
-            <Tab label={t('auth.employer')} value="employer" />
+            {/* <Tab label={t('auth.employer')} value="employer" /> */}
           </Tabs>
 
           <Box component="form" onSubmit={handleSubmitForm} sx={{ mt: 3 }}>

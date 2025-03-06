@@ -45,6 +45,8 @@ import { useRouter } from 'next/router';
 import Flag from 'react-world-flags';
 import axiosInstance from '../../services/axios';
 import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
+import axios from 'axios';
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
@@ -68,7 +70,40 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
   const [cv, setCv] = useState(initialCv);
   const open = Boolean(anchorEl);
 
-  // WebSocket bağlantısı
+  // Listen for language changes in the URL
+  useEffect(() => {
+    if (lang && typeof lang === 'string') {
+      console.log('Language changed in URL to:', lang);
+      
+      // When URL language changes, update the CV data
+      const fetchCVForLanguage = async () => {
+        if (!id || !translation_key) return;
+        
+        try {
+          setIsLoading(true);
+          console.log('Fetching CV data for language:', lang);
+          
+          const response = await axiosInstance.get(`/cvs/${id}/${translation_key}/${lang}/`);
+          console.log('Fetched data in useEffect:', response.data);
+          
+          // Force a re-render by creating a new object
+          const newCvData = { ...response.data };
+          console.log('Setting new CV data in useEffect:', newCvData);
+          
+          // Set the state with the new data
+          setCv(newCvData);
+        } catch (error) {
+          console.error('Error fetching CV for language:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      fetchCVForLanguage();
+    }
+  }, [lang, id, translation_key]);
+
+  // WebSocket connection for real-time updates
   useEffect(() => {
     if (!id || !translation_key || !lang) return;
 
@@ -142,6 +177,20 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
     };
   }, [id, translation_key, lang]);
 
+  // Check for saved language preference on initial load
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('selectedCVLanguage');
+    
+    // If there's a saved language and it's different from the current URL language
+    if (savedLanguage && lang && savedLanguage !== lang) {
+      // Update the URL to use the saved language
+      if (id && translation_key) {
+        const newUrl = `/cv/${id}/${translation_key}/${savedLanguage}/`;
+        window.location.href = newUrl;
+      }
+    }
+  }, []);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -158,17 +207,19 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
       const cvId = id;
       const translationKey = translation_key;
 
-      // Fetch CV data in the new language
-      const response = await axiosInstance.get(`/cvs/${cvId}/${translationKey}/${newLang}/`);
-      setCv(response.data);
+      if (!cvId || !translationKey) {
+        console.error('Missing required parameters');
+        return;
+      }
 
-      // Update URL with router.push
-      const newUrl = `/cv/${cvId}/${translationKey}/${newLang}/`;
-      router.push(newUrl, undefined, { shallow: true });
+      // Store the selected language in localStorage
+      localStorage.setItem('selectedCVLanguage', newLang);
+
+      // Change URL to load the CV in the new language
+      window.location.href = `/cv/${cvId}/${translationKey}/${newLang}/`;
       
     } catch (error) {
       console.error('Error changing language:', error);
-      alert('Error changing language');
     } finally {
       setIsLoading(false);
       handleClose();
@@ -183,6 +234,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
     );
   }
 
+  const currentLanguage = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
   const fullName = `${cv.personal_info.first_name} ${cv.personal_info.last_name}`;
 
   // Skill seviyelerini 1-5 arası değere dönüştür
@@ -199,53 +251,73 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      {/* AppBar */}
-      <AppBar position="static" color="transparent" elevation={0} sx={{ mb: 2 }}>
-        <Toolbar>
-          <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Change Language">
-            <IconButton
-              onClick={handleClick}
-              size="small"
-              aria-controls={open ? 'language-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-            >
-              <Translate />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            anchorEl={anchorEl}
-            id="language-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
-            {LANGUAGES.map((language) => (
-              <MenuItem key={language.code} onClick={() => handleLanguageChange(language.code)}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box sx={{ width: 24, height: 16, mr: 1, position: 'relative' }}>
-                    <Flag code={language.flag} />
-                  </Box>
-                  {language.name}
-                </Box>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Toolbar>
-      </AppBar>
-
+    <Box sx={{ flexGrow: 1, bgcolor: '#f5f5f5', minHeight: '100vh' }}>
       {/* Loading Backdrop */}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
       >
         <CircularProgress color="inherit" />
+        <Typography sx={{ ml: 2 }}>{t('cv.template.loading', 'Loading...')}</Typography>
       </Backdrop>
 
+      {/* Navbar */}
+      <AppBar position="static" color="primary" elevation={1}>
+        <Container maxWidth="lg">
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Image
+                src="/logo.png"
+                alt="CV Builder Logo"
+                width={40}
+                height={40}
+                style={{ marginRight: '10px' }}
+              />
+              <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+                CV Builder
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {/* Language Selection */}
+              <Tooltip title={t('cv.template.changeLanguage', 'Change Language')}>
+                <IconButton
+                  color="inherit"
+                  onClick={handleClick}
+                  disabled={isLoading}
+                >
+                  <Language />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                TransitionComponent={Fade}
+              >
+                {LANGUAGES.map((language) => (
+                  <MenuItem 
+                    key={language.code} 
+                    onClick={() => handleLanguageChange(language.code)}
+                    selected={language.code === currentLanguage.code}
+                    disabled={isLoading}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      minWidth: '150px'
+                    }}
+                  >
+                    <Flag height="20" code={language.flag} />
+                    {language.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+
+      {/* Main Content */}
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Box sx={{ bgcolor: '#ffffff', minHeight: '100vh', py: 6 }}>
           <Container maxWidth="md">
@@ -282,11 +354,11 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                 </Avatar>
               )}
               <Typography variant="h3" gutterBottom sx={{ fontWeight: 700 }}>
-                {fullName}
+                {cv.personal_info.full_name}
               </Typography>
-              <Typography variant="h5" color="primary" gutterBottom sx={{ fontWeight: 500 }}>
-                {cv.title}
-              </Typography>
+             
+             
+             
               {cv.personal_info.description && (
                 <Typography
                   variant="body1"

@@ -22,6 +22,7 @@
     "employer": "İşveren",
     "email": "E-posta",
     "password": "Şifre",
+    "login": "Giriş Yap",
     "confirmPassword": "Şifre Tekrar",
     "forgotPassword": "Şifremi Unuttum",
     "rememberMe": "Beni Hatırla",

@@ -33,6 +33,7 @@ interface CertificateData {
   description?: string;
   document?: File;
   documentUrl?: string;
+  document_type?: string;
 }
 
 interface CertificatesFormData {
