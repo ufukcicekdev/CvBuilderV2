@@ -77,7 +77,7 @@ function Profile() {
       }
       console.log('Language changed, refreshing form fields');
     }
-  }, [currentLanguage, router.locale, i18n.language]);
+  }, [currentLanguage, router.locale, i18n.language, profile, editedProfile]);
 
   useEffect(() => {
     const fetchProfile = async () => {

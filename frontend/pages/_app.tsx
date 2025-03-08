@@ -4,7 +4,6 @@ import { Providers } from '../providers/Providers';
 import { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import nextI18NextConfig from '../next-i18next.config.js';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import { prefixer } from 'stylis';
@@ -48,4 +47,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default appWithTranslation(MyApp, nextI18NextConfig); 
+export default appWithTranslation(MyApp);
+
+// Add getInitialProps to load translations
+MyApp.getInitialProps = async ({ Component, ctx }: any) => {
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps };
+}; 

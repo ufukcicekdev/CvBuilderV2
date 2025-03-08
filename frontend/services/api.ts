@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 // _retry özelliğini ekle
 declare module 'axios' {
@@ -36,6 +36,21 @@ export const SUPPORTED_LANGUAGES = {
   hi: 'हिन्दी'
 };
 
+// Token yenileme için değişkenler
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+// Bekleyen istekleri token ile güncelle
+const onRefreshed = (token: string) => {
+  refreshSubscribers.forEach(callback => callback(token));
+  refreshSubscribers = [];
+};
+
+// Yeni token bekleyen istekleri kuyruğa ekle
+const addRefreshSubscriber = (callback: (token: string) => void) => {
+  refreshSubscribers.push(callback);
+};
+
 // Request interceptor ekle
 api.interceptors.request.use((config) => {
   // Token ekle
@@ -56,12 +71,70 @@ api.interceptors.request.use((config) => {
 // Response interceptor ekle
 api.interceptors.response.use(
   (response) => {
-    // console.log('Response headers:', response.config.headers);
-    // console.log('Response data:', response.data);
     return response;
   },
-  (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+  async (error: AxiosError) => {
+    const originalRequest = error.config;
+    
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    // Token expired hatası kontrolü (401)
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // Token yenilenirken bekleyen istekler için promise döndür
+        return new Promise((resolve, reject) => {
+          addRefreshSubscriber((token: string) => {
+            // Yeni token ile isteği tekrar dene
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(api(originalRequest));
+          });
+        });
+      }
+
+      // Token yenileme işlemini başlat
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        // Refresh token ile yeni access token al
+        const refreshToken = localStorage.getItem('refreshToken');
+        
+        if (!refreshToken) {
+          throw new Error('No refresh token found');
+        }
+
+        const response = await authAPI.refreshToken(refreshToken);
+        const { access, refresh } = response.data;
+        
+        // Yeni tokenları kaydet
+        localStorage.setItem('accessToken', access);
+        localStorage.setItem('refreshToken', refresh);
+        
+        // Bekleyen istekleri bilgilendir
+        onRefreshed(access);
+        
+        // Orijinal isteği yeni token ile tekrar dene
+        originalRequest.headers.Authorization = `Bearer ${access}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        // Token yenileme başarısız olursa kullanıcıyı çıkış yaptır
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        
+        // Kullanıcıyı login sayfasına yönlendir
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
+        
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    // Diğer hata durumları için
     return Promise.reject(error);
   }
 );
@@ -239,6 +312,25 @@ export const cvAPI = {
     return api.patch<CV>(`/api/cvs/${id}/`, {
       video: null
     });
+  }
+};
+
+// Email doğrulama işlemleri
+export const verifyEmail = async (token: string) => {
+  try {
+    const response = await api.get(`/api/users/verify-email/${token}/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resendVerificationEmail = async (email: string) => {
+  try {
+    const response = await api.post('/api/users/resend-verification-email/', { email });
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };
 

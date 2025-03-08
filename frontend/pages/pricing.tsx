@@ -180,7 +180,7 @@ export default function Pricing() {
             }}
           >
             <Tab label={t('pricing.jobseeker.title')} />
-            <Tab label={t('pricing.employer.title')} />
+            {/* <Tab label={t('pricing.employer.title')} /> */}
           </Tabs>
         </Paper>
 

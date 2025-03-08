@@ -8,6 +8,8 @@ router.register(r'cvs', CVViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    # CV görüntüleme URL'i
+    # CV görüntüleme URL'i - eski format
     path('cv/<int:cv_id>/<str:translation_key>/<str:language>/', cv_view, name='cv_view'),
+    # CV görüntüleme URL'i - yeni format (template_id ile)
+    path('cv/<str:template_id>/<int:cv_id>/<str:translation_key>/<str:language>/', cv_view, name='cv_view_with_template'),
 ] 

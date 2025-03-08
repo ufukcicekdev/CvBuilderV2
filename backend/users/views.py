@@ -11,6 +11,8 @@ from .serializers import UserSerializer, CustomTokenObtainPairSerializer, UserPr
 import logging
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .authentication import TokenAuthentication
+from .utils import send_verification_email
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +32,10 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            
+            # Email doğrulama maili gönder
+            send_verification_email(user)
+            
             auth = TokenAuthentication()
             result = auth.authenticate_credentials(
                 request.data.get('email'),
@@ -44,7 +50,8 @@ class RegisterView(generics.CreateAPIView):
                 'tokens': {
                     'access': result['access'],
                     'refresh': result['refresh']
-                }
+                },
+                'message': 'Kayıt başarılı. Lütfen email adresinizi doğrulayın.'
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -58,16 +65,52 @@ class LoginView(generics.GenericAPIView):
         
         if not email or not password:
             return Response({
-                'error': 'Please provide both email and password'
+                'email': ['field.required'] if not email else [],
+                'password': ['field.required'] if not password else []
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        auth = TokenAuthentication()
-        result = auth.authenticate_credentials(email, password)
+        # Kullanıcıyı bul
+        try:
+            user = User.objects.get(email=email)
+            
+            # Email doğrulaması yapılmış mı kontrol et
+            if not user.is_email_verified and not user.social_provider:  # Sosyal giriş yapan kullanıcılar için doğrulama gerekmez
+                return Response({
+                    'email': ['email.not_verified']
+                }, status=status.HTTP_400_BAD_REQUEST)
+                
+            # Kullanıcı aktif mi kontrol et
+            if not user.is_active:
+                return Response({
+                    'email': ['account.inactive']
+                }, status=status.HTTP_400_BAD_REQUEST)
+                
+        except User.DoesNotExist:
+            # Kullanıcı bulunamadı - kimlik bilgileri hatalı
+            return Response({
+                'email': ['credentials.invalid']
+            }, status=status.HTTP_400_BAD_REQUEST)
         
-        if 'error' in result:
-            return Response({'error': result['error']}, status=result['status'])
+        # Kimlik doğrulama
+        user = authenticate(email=email, password=password)
+        if not user:
+            return Response({
+                'email': ['credentials.invalid']
+            }, status=status.HTTP_400_BAD_REQUEST)
         
-        return Response(result)
+        # Token oluştur
+        refresh = RefreshToken.for_user(user)
+        
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user': {
+                'id': user.id,
+                'email': user.email,
+                'username': user.username,
+                'user_type': user.user_type
+            }
+        })
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
@@ -214,4 +257,71 @@ class LogoutView(generics.GenericAPIView):
         return Response(
             {'message': result.get('message', 'Logged out')}, 
             status=result.get('status', status.HTTP_200_OK)
-        ) 
+        )
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def verify_email(request, token):
+    """
+    Email doğrulama token'ını kontrol eder ve kullanıcının hesabını doğrular
+    """
+    try:
+        # Token ile kullanıcıyı bul
+        user = User.objects.get(email_verification_token=token)
+        
+        # Token'ın geçerlilik süresini kontrol et (24 saat)
+        if user.email_verification_token_created_at:
+            token_age = timezone.now() - user.email_verification_token_created_at
+            if token_age.days > 1:  # 24 saatten fazla ise
+                return Response({
+                    'error': 'Doğrulama bağlantısının süresi dolmuş. Lütfen yeni bir doğrulama maili talep edin.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Kullanıcıyı doğrulanmış olarak işaretle
+        user.is_email_verified = True
+        user.email_verification_token = None
+        user.email_verification_token_created_at = None
+        user.save()
+        
+        return Response({
+            'message': 'Email adresiniz başarıyla doğrulandı. Şimdi giriş yapabilirsiniz.'
+        }, status=status.HTTP_200_OK)
+        
+    except User.DoesNotExist:
+        return Response({
+            'error': 'Geçersiz doğrulama bağlantısı.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def resend_verification_email(request):
+    """
+    Kullanıcıya yeni bir doğrulama maili gönderir
+    """
+    email = request.data.get('email')
+    if not email:
+        return Response({
+            'error': 'Email adresi gereklidir.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        user = User.objects.get(email=email)
+        
+        # Kullanıcı zaten doğrulanmış mı kontrol et
+        if user.is_email_verified:
+            return Response({
+                'message': 'Email adresiniz zaten doğrulanmış.'
+            }, status=status.HTTP_200_OK)
+        
+        # Yeni doğrulama maili gönder
+        send_verification_email(user)
+        
+        return Response({
+            'message': 'Doğrulama maili gönderildi. Lütfen email kutunuzu kontrol edin.'
+        }, status=status.HTTP_200_OK)
+        
+    except User.DoesNotExist:
+        # Güvenlik nedeniyle kullanıcı bulunamasa bile başarılı mesajı döndür
+        return Response({
+            'message': 'Eğer bu email adresi sistemimizde kayıtlıysa, doğrulama maili gönderilecektir.'
+        }, status=status.HTTP_200_OK) 

@@ -28,7 +28,7 @@
     "rememberMe": "Beni Hatırla",
     "loginSuccess": "Giriş başarılı! Hoş geldiniz.",
     "loginError": "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.",
-    "registerSuccess": "Kayıt başarılı! Giriş yapabilirsiniz.",
+    "registerSuccess": "Kayıt başarılı! Lütfen email adresinizi doğrulayın",
     "registerError": "Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.",
     "orLoginWith": "veya şununla giriş yapın",
     "userType": "Kullanıcı Tipi",
@@ -50,8 +50,14 @@
       "invalidPassword": "Geçersiz şifre",
       "invalidCredentials": "Geçersiz kullanıcı bilgileri",
       "emailExists": "Bu e-posta adresi zaten kullanılıyor",
-      "weakPassword": "Şifre çok zayıf"
-    }
+      "weakPassword": "Şifre çok zayıf",
+      "emailNotVerified": "Lütfen email adresinizi doğrulayın",
+      "accountInactive": "Hesabınız aktif değil",
+      "generalError": "Bir hata oluştu, lütfen tekrar deneyin",
+      "emailRequired": "Email adresi gerekli",
+      "passwordRequired": "Şifre gerekli"
+    },
+    "checkEmail": "Email kutunuzu kontrol edin ve doğrulama bağlantısına tıklayın"
   },
   "profile": {
     "personalInfo": "Kişisel Bilgiler",
@@ -119,6 +125,7 @@
     "save": "Kaydet",
     "cancel": "İptal",
     "edit": "Düzenle",
+    "preview": "Ön İzleme",
     "next": "Devam Et",
     "previous": "Geri Dön",
     "delete": "Sil",
@@ -127,12 +134,20 @@
     "filter": "Filtrele",
     "sort": "Sırala",
     "loading": "Yükleniyor...",
+    "uploading": "Yükleniyor...",
     "error": "Hata oluştu",
     "success": "İşlem başarılı",
     "required": "Bu alan zorunludur",
     "invalidEmail": "Geçersiz e-posta adresi",
     "passwordMismatch": "Şifreler eşleşmiyor",
     "submitting": "Gönderiliyor...",
+    "openInNewTab": "Yeni Sekmede Aç",
+    "languages": "Yabancı Diller",
+    "skills": "Yetenekler",
+    "certificates": "Sertifikalar",
+    "workExperience": "İş Deneyimi",
+    "education": "Eğitim",
+    "professionalSummary": "Profesyonel Özet",
     "errors": {
       "badRequest": "Geçersiz istek",
       "unauthorized": "Lütfen giriş yapın",
@@ -148,11 +163,32 @@
     "hero": {
       "title": "Yeni Nesil CV Oluşturma Platformu",
       "subtitle": "Yapay zeka destekli, dinamik ve interaktif CV'ler oluşturun",
-      "cta": "Hemen Başla"
+      "cta": "Hemen Başla",
+      "badge": "Yeni Özellikler",
+      "feature1": "Tamamen ücretsiz başlangıç planı",
+      "feature2": "Modern ve profesyonel şablonlar",
+      "feature3": "Hem web hem PDF formatında CV'ler"
     },
     "features": {
       "title": "Neden CV Builder?",
       "subtitle": "İş arama sürecinizi dönüştüren yenilikçi özellikler",
+      "overline": "ÖZELLİKLER",
+      "feature1": {
+        "title": "Profesyonel Şablonlar",
+        "description": "İşe alım uzmanlarının dikkatini çeken modern ve profesyonel CV şablonları"
+      },
+      "feature2": {
+        "title": "Kolay Düzenleme",
+        "description": "Sürükle-bırak arayüzü ile CV'nizi kolayca özelleştirin ve düzenleyin"
+      },
+      "feature3": {
+        "title": "Kariyer Gelişimi",
+        "description": "Kariyer hedeflerinize ulaşmanıza yardımcı olacak araçlar ve öneriler"
+      },
+      "feature4": {
+        "title": "Hızlı Oluşturma",
+        "description": "Dakikalar içinde profesyonel bir CV oluşturun ve iş başvurularına hemen başlayın"
+      },
       "realtime": {
         "title": "Anında Güncelleme",
         "description": "CV'nizi gerçek zamanlı olarak güncelleyin. Yeni bir sertifika mı aldınız? Hemen ekleyin ve başvurularınızda güncel CV'niz kullanılsın."
@@ -170,8 +206,15 @@
         "description": "CV'nizin performansını takip edin. Hangi işverenler profilinizi inceledi? CV'niz kaç kez görüntülendi? Tüm istatistikler elinizin altında."
       }
     },
+    "templates": {
+      "title": "Profesyonel CV Şablonları",
+      "subtitle": "İşe alım uzmanlarının dikkatini çeken modern ve etkileyici şablonlar",
+      "overline": "ŞABLONLAR",
+      "cta": "Şablonları Keşfet"
+    },
     "howItWorks": {
       "title": "Nasıl Çalışır?",
+      "overline": "KULLANIM KILAVUZU",
       "steps": [
         {
           "title": "Profil Oluştur",
@@ -193,13 +236,22 @@
     },
     "testimonials": {
       "title": "Kullanıcı Deneyimleri",
-      "subtitle": "Başarı hikayeleri"
+      "subtitle": "Başarı hikayeleri ve kullanıcı yorumları",
+      "overline": "YORUMLAR"
+    },
+    "trustedBy": {
+      "title": "Önde Gelen Şirketler Tarafından Tercih Edilmektedir"
     },
     "stats": {
       "users": "Aktif Kullanıcı",
       "companies": "Partner Şirket",
       "cvs": "Oluşturulan CV",
       "hires": "İşe Alım"
+    },
+    "cta": {
+      "title": "Kariyerinizde Bir Adım Öne Geçin",
+      "subtitle": "Profesyonel CV'nizi oluşturun ve hayalinizdeki işi bulun",
+      "button": "Ücretsiz Başlayın"
     }
   },
   "blog": {
@@ -410,6 +462,7 @@
       "expiryDateHelper": "Varsa sertifikanın son geçerlilik tarihi",
       "credentialId": "Sertifika/Belge No",
       "credentialIdHelper": "Varsa sertifika veya belge numarası",
+      "description": "Açıklama",
       "uploadFile": "Sertifika Dosyası Yükle",
       "addMore": "Sertifika Ekle",
       "uploadSuccess": "Sertifika dosyası başarıyla yüklendi",
@@ -420,10 +473,10 @@
     },
     "progress": "İlerleme",
     "template": {
-      "selectTitle": "CV Template Seçin",
-      "selectRequired": "Lütfen bir template seçin",
+      "selectTitle": "CV Şablonu Seçin",
+      "selectRequired": "Lütfen bir şablon seçin",
       "preview": "Önizle",
-      "generateWeb": "Web Sayfası Oluştur",
+      "generateWeb": "Web CV Oluştur",
       "generatePDF": "PDF İndir",
       "generating": "Oluşturuluyor...",
       "generateSuccess": "CV başarıyla oluşturuldu",
@@ -434,17 +487,62 @@
       "viewImage": "Görüntüyü Görüntüle",
       "close": "Kapat",
       "loading": "Yükleniyor...",
-      "error": "Çeviri yüklenirken hata oluştu. Lütfen tekrar deneyin."
+      "error": "Çeviri yüklenirken hata oluştu. Lütfen tekrar deneyin.",
+      "viewCertificate": "Sertifikayı Görüntüle",
+      "location": "Konum",
+      "webVersion": "Web Versiyonu",
+      "pdfVersion": "PDF Versiyonu",
+      "templates": {
+        "modernWeb": {
+          "name": "Modern Web Şablonu",
+          "description": "Modern ve interaktif web tasarımı"
+        },
+        "classicWeb": {
+          "name": "Klasik Web Şablonu",
+          "description": "Klasik ve profesyonel web tasarımı"
+        },
+        "modernPdf": {
+          "name": "Modern PDF Şablonu",
+          "description": "Modern ve profesyonel PDF tasarımı"
+        },
+        "classicPdf": {
+          "name": "Klasik PDF Şablonu",
+          "description": "Klasik ve şık PDF tasarımı"
+        }
+      }
     },
-    "sections": {
-      "personalInfo": "Kişisel Bilgiler",
-      "experience": "İş Deneyimi",
-      "education": "Eğitim",
-      "skills": "Yetenekler",
-      "languages": "Diller",
-      "certificates": "Sertifikalar",
-      "projects": "Projeler",
-      "interests": "İlgi Alanları"
+    "video": {
+      "title": "Video Tanıtım",
+      "dragDrop": "Video dosyanızı buraya sürükleyip bırakın veya taramak için tıklayın",
+      "maxSize": "Maksimum dosya boyutu: 50MB",
+      "selectVideo": "Video Seç",
+      "deleteSuccess": "Video başarıyla silindi",
+      "deleteError": "Video silinirken bir hata oluştu",
+      "confirmDelete": "Videoyu silmek istediğinizden emin misiniz?"
     }
+  },
+  "validation": {
+    "required": "Bu alan zorunludur",
+    "invalidEmail": "Geçerli bir email adresi giriniz",
+    "usernameMinLength": "Kullanıcı adı en az 3 karakter olmalıdır",
+    "passwordMinLength": "Şifre en az 8 karakter olmalıdır",
+    "passwordNumber": "Şifre en az bir rakam içermelidir",
+    "passwordLowercase": "Şifre en az bir küçük harf içermelidir",
+    "passwordUppercase": "Şifre en az bir büyük harf içermelidir",
+    "passwordMatch": "Şifreler eşleşmiyor",
+    "invalidUserType": "Geçerli bir kullanıcı tipi seçiniz"
+  },
+  "errors": {
+    "usernameExists": "Bu kullanıcı adı zaten kullanılıyor",
+    "emailExists": "Bu email adresi zaten kullanılıyor",
+    "invalidUsername": "Geçersiz kullanıcı adı",
+    "invalidEmail": "Geçersiz email adresi",
+    "weakPassword": "Şifre çok zayıf",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "unknown": "Bilinmeyen bir hata oluştu",
+    "formErrors": "Lütfen form hatalarını düzeltin",
+    "registrationFailed": "Kayıt işlemi başarısız oldu. Lütfen tekrar deneyin",
+    "pleaseFixErrors": "Lütfen aşağıdaki hataları düzeltin",
+    "present": "Devam Ediyor"
   }
 } 

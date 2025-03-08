@@ -43,26 +43,63 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const {
     register,
     handleSubmit,
+    setError: setFormError,
     formState: { errors }
   } = useForm<LoginFormData>();
 
   const handleLogin = async (data: LoginFormData) => {
     try {
       setIsSubmitting(true);
-      
-      // AuthContext'teki login fonksiyonunu kullan
       await login(data.email, data.password);
-      
-      showToast.success(t('auth.loginSuccess'));
-      
-    } catch (error: any) {
-      console.error('Login error:', error);
-      const errorMessage = handleApiError(error, t);
-      showToast.error(errorMessage);
+      toast.success(t('auth.loginSuccess'));
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const errorData = error.response.data;
+        
+        if (errorData.email?.[0]) {
+          const errorCode = errorData.email[0];
+          switch (errorCode) {
+            case 'email.not_verified':
+              setFormError('email', { message: t('auth.errors.emailNotVerified') });
+              localStorage.setItem('registrationEmail', data.email);
+              break;
+            case 'account.inactive':
+              setFormError('email', { message: t('auth.errors.accountInactive') });
+              break;
+            case 'credentials.invalid':
+              setFormError('email', { message: t('auth.errors.invalidCredentials') });
+              setFormError('password', { message: t('auth.errors.invalidCredentials') });
+              break;
+            case 'field.required':
+              setFormError('email', { message: t('auth.errors.emailRequired') });
+              break;
+            default:
+              setFormError('email', { message: t('auth.errors.generalError') });
+          }
+        }
+        
+        if (errorData.password?.[0]) {
+          const errorCode = errorData.password[0];
+          switch (errorCode) {
+            case 'field.required':
+              setFormError('password', { message: t('auth.errors.passwordRequired') });
+              break;
+            default:
+              setFormError('password', { message: t('auth.errors.generalError') });
+          }
+        }
+
+        if (!errorData.email && !errorData.password && errorData.error) {
+          toast.error(t('auth.errors.invalidCredentials'));
+        }
+      } else {
+        toast.error(t('auth.errors.generalError'));
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -99,19 +136,19 @@ export default function LoginPage() {
     }
   };
 
-  const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+  const handleResendVerification = async () => {
+    const email = localStorage.getItem('registrationEmail');
+    if (!email) {
+      setError('Email adresi bulunamadı.');
+      return;
+    }
 
     try {
-      await login(email, password);
+      setLoading(true);
+      await axiosInstance.post('/api/users/resend-verification-email/', { email });
+      toast.success('Yeni doğrulama maili gönderildi. Lütfen email kutunuzu kontrol edin.');
     } catch (error: any) {
-      setError(error.message);
+      setError(error.response?.data?.error || 'Doğrulama maili gönderilemedi.');
     } finally {
       setLoading(false);
     }
@@ -130,25 +167,30 @@ export default function LoginPage() {
             {/* <Tab label={t('auth.employer')} value="employer" /> */}
           </Tabs>
 
-          <Box component="form" onSubmit={handleSubmitForm} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSubmit(handleLogin)} sx={{ mt: 3 }}>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
               label={t('auth.email')}
-              name="email"
               autoComplete="email"
               autoFocus
               disabled={loading}
               error={!!errors.email}
               helperText={errors.email?.message}
+              {...register('email', { 
+                required: t('auth.errors.emailRequired'),
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: t('validation.invalidEmail')
+                }
+              })}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
               label={t('auth.password')}
               type="password"
               id="password"
@@ -156,12 +198,29 @@ export default function LoginPage() {
               disabled={loading}
               error={!!errors.password}
               helperText={errors.password?.message}
+              {...register('password', { 
+                required: t('auth.errors.passwordRequired')
+              })}
             />
 
-            {error && (
-              <Typography color="error" sx={{ mt: 2 }}>
-                {error}
-              </Typography>
+            {loginError && (
+              <Box sx={{ mt: 2 }}>
+                <Typography color="error">
+                  {loginError}
+                </Typography>
+                {loginError.includes('email adresinizi doğrulayın') && (
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleResendVerification}
+                    disabled={loading}
+                    sx={{ mt: 1 }}
+                  >
+                    Yeni Doğrulama Maili Gönder
+                  </Button>
+                )}
+              </Box>
             )}
 
             <Button
@@ -200,8 +259,8 @@ export default function LoginPage() {
                 </Typography>
               </Divider>
 
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
                   <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
                     <GoogleLogin
                       onSuccess={handleGoogleSuccess}
@@ -214,28 +273,8 @@ export default function LoginPage() {
                     />
                   </GoogleOAuthProvider>
                 </Grid>
-                <Grid item xs={6}>
-                  <LinkedIn
-                    clientId={process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!}
-                    redirectUri={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/linkedin-callback`}
-                    onSuccess={handleLinkedInSuccess}
-                    onError={(error) => {
-                      console.error(error);
-                      toast.error(t('auth.loginError'));
-                    }}
-                  >
-                    {({ linkedInLogin }) => (
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        startIcon={<LinkedInIcon />}
-                        onClick={linkedInLogin}
-                      >
-                        LinkedIn
-                      </Button>
-                    )}
-                  </LinkedIn>
-                </Grid>
+                
+                
               </Grid>
             </>
           )}

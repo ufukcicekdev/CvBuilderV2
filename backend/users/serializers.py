@@ -3,32 +3,54 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, PasswordResetToken
 from django.contrib.auth.password_validation import validate_password
+from .utils import send_verification_email
 
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    language = serializers.CharField(write_only=True, required=False, default='en')
 
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'password', 'password2', 'first_name', 'last_name', 
-                 'user_type', 'social_id', 'social_provider', 'profile_picture')
+                 'user_type', 'social_id', 'social_provider', 'profile_picture', 'language')
         extra_kwargs = {
             'email': {'required': True},
             'user_type': {'required': True},
             'password': {'write_only': True},
-            'password2': {'write_only': True}
+            'password2': {'write_only': True},
+            'language': {'write_only': True}
         }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError({"password": ["password.mismatch"]})
+
+        # Email ve username benzersizlik kontrolü
+        email = attrs.get('email')
+        username = attrs.get('username')
+
+        if email and User.objects.filter(email=email).exists():
+            raise serializers.ValidationError({"email": ["exists"]})
+
+        if username and User.objects.filter(username=username).exists():
+            raise serializers.ValidationError({"username": ["exists"]})
+
         return attrs
 
     def create(self, validated_data):
+        # language alanını validated_data'dan çıkar
+        language = validated_data.pop('language', 'en')
         validated_data.pop('password2')
+        
+        # Kullanıcıyı oluştur
         user = User.objects.create_user(**validated_data)
+        
+        # Email doğrulama mailini seçilen dilde gönder
+        send_verification_email(user, language)
+        
         return user
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -37,7 +59,31 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['email'] = user.email
         token['user_type'] = user.user_type
-        return token 
+        return token
+
+    def validate(self, attrs):
+        try:
+            user = User.objects.get(email=attrs['email'])
+            if not user.is_active:
+                raise serializers.ValidationError({
+                    "email": ["account.inactive"]
+                })
+            if not user.email_verified:
+                raise serializers.ValidationError({
+                    "email": ["email.not_verified"]
+                })
+        except User.DoesNotExist:
+            raise serializers.ValidationError({
+                "email": ["credentials.invalid"]
+            })
+
+        try:
+            validated_data = super().validate(attrs)
+            return validated_data
+        except serializers.ValidationError:
+            raise serializers.ValidationError({
+                "password": ["credentials.invalid"]
+            })
 
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_picture_url = serializers.SerializerMethodField(read_only=True)

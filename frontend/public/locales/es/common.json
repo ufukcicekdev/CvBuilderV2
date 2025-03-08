@@ -428,22 +428,24 @@
       "generateSuccess": "CV generado con éxito",
       "generateError": "Ocurrió un error al generar el CV",
       "language": "Idioma",
-      "changeLanguage": "Cambiar idioma",
+      "changeLanguage": "Cambiar Idioma",
       "downloadPDF": "Descargar PDF",
       "viewImage": "Ver imagen",
       "close": "Cerrar",
       "loading": "Cargando...",
-      "error": "Ocurrió un error al cargar la traducción. Por favor, inténtalo de nuevo."
+      "error": "Se produjo un error",
+      "viewCertificate": "Ver Certificado",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "location": "Ubicación"
     },
     "sections": {
-      "personalInfo": "Información personal",
-      "experience": "Experiencia laboral",
-      "education": "Educación",
-      "skills": "Habilidades",
       "languages": "Idiomas",
+      "skills": "Habilidades",
       "certificates": "Certificados",
-      "projects": "Proyectos",
-      "interests": "Intereses"
+      "work_experience": "Experiencia Laboral",
+      "education": "Educación",
+      "professional_summary": "Resumen Profesional"
     }
   }
 }

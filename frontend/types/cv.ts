@@ -18,7 +18,7 @@ export interface CV {
     summary?: string;
   };
   video_info?: {
-    url: string | null;
+    video_url: string | null;
     description: string | null;
     type: string | null;
     uploaded_at: string | null;

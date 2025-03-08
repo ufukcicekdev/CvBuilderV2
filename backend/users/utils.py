@@ -2,6 +2,13 @@ import json
 import requests
 from typing import Union, List
 from django.conf import settings
+from django.template.loader import render_to_string
+import uuid
+from django.utils import timezone
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
+import jwt
+from datetime import datetime, timedelta
 
 def send_email_via_smtp2go(
     to_list: Union[List[str], str],
@@ -50,4 +57,63 @@ def send_email_via_smtp2go(
         return response.json()
     except requests.exceptions.RequestException as e:
         # Hata durumunda loglama yapabilir veya exception fırlatabilirsiniz
-        raise Exception(f"Email gönderilemedi: {str(e)}") 
+        raise Exception(f"Email gönderilemedi: {str(e)}")
+
+def send_verification_email(user, language='en'):
+    """
+    Kullanıcıya seçilen dilde doğrulama emaili gönderir
+    
+    Args:
+        user: Doğrulama maili gönderilecek kullanıcı
+        language: Email dilini belirten string (varsayılan: 'en')
+    
+    Returns:
+        bool: Email gönderildi mi?
+    """
+    # Yeni bir doğrulama token'ı oluştur
+    user.email_verification_token = uuid.uuid4()
+    user.email_verification_token_created_at = timezone.now()
+    user.save()
+    
+    # Doğrulama URL'ini oluştur
+    verification_url = f"{settings.FRONTEND_URL}/verify-email/{user.email_verification_token}"
+    
+    # Dile göre email başlıklarını ayarla
+    subject_by_lang = {
+        'tr': 'Email Adresinizi Doğrulayın - CV Builder',
+        'en': 'Verify Your Email - CV Builder',
+        'fr': 'Vérifiez votre email - CV Builder',
+        'de': 'Bestätigen Sie Ihre E-Mail - CV Builder',
+        'es': 'Verifique su correo electrónico - CV Builder',
+        'it': 'Verifica la tua email - CV Builder',
+        'ru': 'Подтвердите ваш email - CV Builder',
+        'ar': 'تأكيد البريد الإلكتروني - CV Builder',
+        'zh': '验证您的电子邮件 - CV Builder',
+        'hi': 'अपना ईमेल सत्यापित करें - CV Builder'
+    }
+    
+    # Template context'i hazırla
+    context = {
+        'user': user,
+        'username': user.username,
+        'verification_url': verification_url,
+        'language': language
+    }
+    
+    # Email şablonunu render et
+    html_content = render_to_string('email/verification_email.html', context)
+    text_content = strip_tags(html_content)  # HTML'i düz metne çevir
+    
+    # Email'i gönder
+    try:
+        send_email_via_smtp2go(
+            to_list=user.email,
+            subject=subject_by_lang.get(language, subject_by_lang['en']),  # Dil yoksa İngilizce kullan
+            html_body=html_content,
+            text_body=text_content
+        )
+        return True
+    except Exception as e:
+        # Hata durumunda False döndür ve logla
+        print(f"Doğrulama emaili gönderilemedi: {str(e)}")
+        return False 

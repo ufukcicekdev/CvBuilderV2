@@ -9,4 +9,6 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('me/', views.get_user_profile, name='user-profile'),
     path('upload-profile-picture/', views.upload_profile_picture, name='upload-profile-picture'),
+    path('verify-email/<uuid:token>/', views.verify_email, name='verify-email'),
+    path('resend-verification-email/', views.resend_verification_email, name='resend-verification-email'),
 ] 

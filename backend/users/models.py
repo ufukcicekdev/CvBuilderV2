@@ -19,6 +19,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_email_verified', True)  # Superuser'lar için email doğrulaması otomatik olarak yapılmış kabul edilir
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractUser):
@@ -44,6 +45,11 @@ class User(AbstractUser):
         ],
         verbose_name='Profil Resmi'
     )
+    
+    # Email doğrulama alanları
+    is_email_verified = models.BooleanField(default=False)
+    email_verification_token = models.UUIDField(default=uuid.uuid4, editable=False, null=True, blank=True)
+    email_verification_token_created_at = models.DateTimeField(null=True, blank=True)
     
     # İş arayan için ek alanlar
     phone = models.CharField(max_length=15, blank=True, null=True)

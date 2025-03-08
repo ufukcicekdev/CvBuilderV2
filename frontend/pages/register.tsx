@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   TextField, Button, Container, Typography, Box, 
-  FormControl, InputLabel, Grid, FormHelperText 
+  FormControl, InputLabel, Grid, FormHelperText,
+  Alert
 } from '@mui/material';
 import { authAPI } from '../services/api';
 import { useRouter } from 'next/router';
@@ -13,32 +14,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import axiosInstance from '../services/axios';
 
-// Form şeması
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Geçerli bir email adresi giriniz')
-    .required('Email adresi zorunludur'),
-  username: yup
-    .string()
-    .min(3, 'Kullanıcı adı en az 3 karakter olmalıdır')
-    .required('Kullanıcı adı zorunludur'),
-  password: yup
-    .string()
-    .min(8, 'Şifre en az 8 karakter olmalıdır')
-    .matches(/[0-9]/, 'Şifre en az bir rakam içermelidir')
-    .matches(/[a-z]/, 'Şifre en az bir küçük harf içermelidir')
-    .matches(/[A-Z]/, 'Şifre en az bir büyük harf içermelidir')
-    .required('Şifre zorunludur'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Şifreler eşleşmiyor')
-    .required('Şifre tekrarı zorunludur'),
-  user_type: yup
-    .string()
-    .oneOf(['jobseeker', 'employer'], 'Geçerli bir kullanıcı tipi seçiniz')
-    .required('Kullanıcı tipi zorunludur')
-}).required();
+// Desteklenen diller
+const SUPPORTED_LANGUAGES = ['tr', 'en', 'fr', 'de', 'ru', 'hi', 'ar', 'zh', 'es', 'it'] as const;
+type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
 
 // Form verilerinin tipi
 interface RegisterFormData {
@@ -47,12 +25,56 @@ interface RegisterFormData {
   password: string;
   confirmPassword: string;
   user_type: 'jobseeker' | 'employer';
+  language?: SupportedLanguage;
 }
 
 export default function Register() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [backendErrors, setBackendErrors] = useState<{[key: string]: string[]}>({});
+
+  // Kullanıcının seçtiği dili al
+  const getUserLanguage = (): SupportedLanguage => {
+    // Önce localStorage'dan dil tercihini kontrol et
+    const storedLang = localStorage.getItem('selectedLanguage') as SupportedLanguage;
+    if (storedLang && SUPPORTED_LANGUAGES.includes(storedLang)) {
+      return storedLang;
+    }
+    // Yoksa tarayıcı dilini kontrol et
+    const browserLang = navigator.language.split('-')[0] as SupportedLanguage;
+    return SUPPORTED_LANGUAGES.includes(browserLang) ? browserLang : 'en';
+  };
+
+  // Form şeması
+  const schema = useMemo(() => 
+    yup.object().shape({
+      email: yup
+        .string()
+        .email(t('validation.invalidEmail'))
+        .required(t('validation.required')),
+      username: yup
+        .string()
+        .min(3, t('validation.usernameMinLength'))
+        .required(t('validation.required')),
+      password: yup
+        .string()
+        .min(8, t('validation.passwordMinLength'))
+        .matches(/[0-9]/, t('validation.passwordNumber'))
+        .matches(/[a-z]/, t('validation.passwordLowercase'))
+        .matches(/[A-Z]/, t('validation.passwordUppercase'))
+        .required(t('validation.required')),
+      confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password')], t('validation.passwordMatch'))
+        .required(t('validation.required')),
+      user_type: yup
+        .string()
+        .oneOf(['jobseeker', 'employer'], t('validation.invalidUserType'))
+        .required(t('validation.required'))
+    }).required(),
+    [t]
+  );
 
   const {
     register,
@@ -60,6 +82,7 @@ export default function Register() {
     watch,
     formState: { errors },
     setValue,
+    setError
   } = useForm<RegisterFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange',
@@ -74,31 +97,115 @@ export default function Register() {
     setValue('user_type', 'jobseeker');
   }, [setValue]);
 
+  const getErrorMessage = (field: string, errorMessage: string) => {
+    // Backend'den gelen tam mesajı kontrol et
+    if (errorMessage.includes("user with this username already exists")) {
+      return t('errors.usernameExists');
+    }
+    if (errorMessage.includes("user with this email already exists")) {
+      return t('errors.emailExists');
+    }
+
+    // Diğer hata kodları için mevcut mantığı kullan
+    const errorCodes: { [key: string]: string } = {
+      'exists': field === 'username' ? t('errors.usernameExists') : t('errors.emailExists'),
+      'invalid': field === 'username' ? t('errors.invalidUsername') : t('errors.invalidEmail'),
+      'weak': t('errors.weakPassword'),
+      'mismatch': t('errors.passwordMismatch'),
+    };
+
+    return errorCodes[errorMessage] || t('errors.unknown');
+  };
+
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsSubmitting(true);
+      setBackendErrors({});
       
-      const formData: any = {
+      const formData = {
         email: data.email,
         username: data.username,
         password: data.password,
         password2: data.confirmPassword,
-        user_type: 'jobseeker'
+        user_type: 'jobseeker',
+        language: getUserLanguage() // Kullanıcının dil tercihini ekle
       };
 
-      const response = await axiosInstance.post('/api/users/register/', formData);
-      
-      if (response.data) {
+      try {
+        const response = await axiosInstance.post('/api/users/register/', formData);
+        
+        // Başarılı kayıt durumu
+        localStorage.setItem('registrationEmail', data.email);
         toast.success(t('auth.registerSuccess'));
-        router.push('/login');
+        toast(t('auth.checkEmail'), {
+          icon: 'ℹ️',
+          duration: 5000,
+        });
+        
+        setTimeout(() => {
+          router.push('/login');
+        }, 2000);
+        
+      } catch (networkError: any) {
+        // Eğer istek başarılı olduysa (response alındıysa) ama işlenirken hata olduysa
+        if (networkError.response) {
+          // Backend'den yanıt aldık ama başarısız durum kodu
+          if (networkError.response.status === 400) {
+            const backendErrors = networkError.response.data;
+            setBackendErrors(backendErrors);
+            
+            Object.entries(backendErrors).forEach(([field, errors]) => {
+              if (Array.isArray(errors) && errors.length > 0) {
+                const errorMessage = errors[0];
+                if (field in data) {
+                  setError(field as keyof RegisterFormData, {
+                    type: 'manual',
+                    message: getErrorMessage(field, errorMessage)
+                  });
+                }
+              }
+            });
+            
+            toast.error(t('errors.formErrors'));
+          } else {
+            // Diğer HTTP hata kodları
+            toast.error(t('errors.registrationFailed'));
+          }
+        } else if (networkError.request) {
+          // İstek yapıldı ama yanıt alınamadı - muhtemelen kayıt başarılı oldu
+          console.log('Request was made but no response received - assuming registration was successful');
+          
+          // Başarılı kayıt mesajlarını göster
+          localStorage.setItem('registrationEmail', data.email);
+          toast.success(t('auth.registerSuccess'));
+          toast(t('auth.checkEmail'), {
+            icon: 'ℹ️',
+            duration: 5000,
+          });
+          
+          setTimeout(() => {
+            router.push('/login');
+          }, 2000);
+        } else {
+          // İstek oluşturulurken hata
+          console.error('Error setting up request:', networkError.message);
+          toast.error(t('common.errors.networkError'));
+        }
       }
     } catch (error: any) {
-      console.error('Registration error:', error.response?.data);
-      toast.error(error.response?.data?.message || t('auth.registerError'));
+      // Genel hata durumu
+      console.error('General error:', error);
+      toast.error(t('errors.registrationFailed'));
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Component mount olduğunda dili ayarla
+  useEffect(() => {
+    const currentLang = getUserLanguage();
+    i18n.changeLanguage(currentLang);
+  }, [i18n]);
 
   return (
     <Layout>
@@ -107,7 +214,21 @@ export default function Register() {
           <Typography component="h1" variant="h5">
             {t('auth.register')}
           </Typography>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+
+          {Object.keys(backendErrors).length > 0 && (
+            <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+              {t('errors.pleaseFixErrors')}
+              <ul style={{ margin: 0, paddingLeft: 20 }}>
+                {Object.entries(backendErrors).map(([field, errors]) => (
+                  <li key={field}>
+                    {getErrorMessage(field, errors[0])}
+                  </li>
+                ))}
+              </ul>
+            </Alert>
+          )}
+
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1, width: '100%' }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

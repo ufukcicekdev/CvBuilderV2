@@ -1,5 +1,5 @@
 """
-ASGI config for config project.
+ASGI config for cv_builder project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -15,18 +15,17 @@ django.setup()
 
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
-import cvs.routing
+from channels.auth import AuthMiddlewareStack
+from cvs.routing import websocket_urlpatterns
 
-# ASGI uygulamasını oluştur
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": URLRouter(
-        cvs.routing.websocket_urlpatterns
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            websocket_urlpatterns
+        )
     ),
-})
-
-
-
+}) 
 
 
 

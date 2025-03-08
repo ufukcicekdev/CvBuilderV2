@@ -1,16 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { withAuth } from '../../components/withAuth';
 import Layout from '../../components/Layout';
 import { Container, Paper } from '@mui/material';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import CreateCVForm from '../../components/cv/CreateCVForm';
 import CVFormContent from '../../components/cv/CVFormContent';
+import { GetServerSideProps } from 'next';
 
 function CreateCV() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { id, step } = router.query;
-  const [activeStep, setActiveStep] = useState(Number(step) || 0);
+  const [activeStep, setActiveStep] = useState(0);
+
+  // URL parametrelerini izle ve değiştiğinde state'i güncelle
+  useEffect(() => {
+    if (router.isReady) {
+      // URL'de step parametresi varsa ve geçerli bir sayı ise, activeStep'i güncelle
+      if (step && !isNaN(Number(step))) {
+        setActiveStep(Number(step));
+      }
+    }
+  }, [router.isReady, step]);
 
   const handleCVCreated = (newCvId: number) => {
     router.push({
@@ -45,5 +58,13 @@ function CreateCV() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale || 'tr', ['common', 'cv'])),
+    },
+  };
+};
 
 export default withAuth(CreateCV);

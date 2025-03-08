@@ -35,28 +35,28 @@ export default function Footer() {
               {t('footer.quickLinks')}
             </Typography>
             <Link href="/" color="text.secondary" display="block">{t('footer.home')}</Link>
-            <Link href="/about" color="text.secondary" display="block">{t('footer.about')}</Link>
+            {/* <Link href="/about" color="text.secondary" display="block">{t('footer.about')}</Link> */}
             <Link href="/contact" color="text.secondary" display="block">{t('footer.contact')}</Link>
-            <Link href="/privacy" color="text.secondary" display="block">{t('footer.privacy')}</Link>
+            {/* <Link href="/privacy" color="text.secondary" display="block">{t('footer.privacy')}</Link> */}
           </Grid>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
               Bizi Takip Edin
             </Typography>
-            <Box>
-              <IconButton aria-label="linkedin" color="primary">
-                <LinkedInIcon />
-              </IconButton>
-              <IconButton aria-label="twitter" color="primary">
-                <TwitterIcon />
-              </IconButton>
-              <IconButton aria-label="facebook" color="primary">
-                <FacebookIcon />
-              </IconButton>
-              <IconButton aria-label="instagram" color="primary">
-                <InstagramIcon />
-              </IconButton>
-            </Box>
+            {/* <Box> */}
+              {/* <IconButton aria-label="linkedin" color="primary"> */}
+                {/* <LinkedInIcon /> */}
+              {/* </IconButton> */}
+              {/* <IconButton aria-label="twitter" color="primary"> */}
+                {/* <TwitterIcon /> */}
+              {/* </IconButton> */}
+              {/* <IconButton aria-label="facebook" color="primary"> */}
+                {/* <FacebookIcon /> */}
+              {/* </IconButton> */}
+              {/* <IconButton aria-label="instagram" color="primary"> */}
+                {/* <InstagramIcon /> */}
+              {/* </IconButton> */}
+            {/* </Box> */}
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
               İletişim: info@cvbuilder.com
             </Typography>

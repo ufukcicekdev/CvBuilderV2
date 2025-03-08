@@ -16,6 +16,9 @@ import { showToast } from '../../utils/toast';
 import { useRouter } from 'next/router';
 import { cvAPI } from '../../services/api';
 import { CV } from '../../types/cv';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import axiosInstance from '../../services/axios';
 
 interface VideoFormProps {
   cvId: string;
@@ -40,10 +43,12 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = useForm<VideoFormData>();
 
   const loadVideoData = useCallback(async () => {
@@ -92,16 +97,29 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
 
   const handleDeleteVideo = async () => {
     try {
-      setLoading(true);
-      await cvAPI.deleteVideo(Number(cvId));
-      setCurrentVideo(null);
+      setIsDeleting(true);
+      
+      // Get the token from localStorage
+      const token = localStorage.getItem('token');
+      
+      // Backend'den videoyu sil
+      await axiosInstance.delete(`/api/cvs/${cvId}/delete-video/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      // State'i güncelle
+      setValue('video_url', '');
       setPreviewUrl(null);
-      setSelectedFile(null);
+      setCurrentVideo(null); // Mevcut videoyu da temizle
+      
+      toast.success(t('cv.video.deleteSuccess'));
     } catch (error) {
-      console.error('Error deleting video:', error);
-      showToast.error(t('common.error'));
+      console.error('Video silme hatası:', error);
+      toast.error(t('cv.video.deleteError'));
     } finally {
-      setLoading(false);
+      setIsDeleting(false);
     }
   };
 
@@ -181,7 +199,7 @@ const VideoForm = ({ cvId, onPrev, onStepComplete, initialData }: VideoFormProps
                         backgroundColor: 'action.hover'
                       }
                     }}
-                    disabled={loading}
+                    disabled={isDeleting}
                   >
                     <DeleteIcon />
                   </IconButton>

@@ -9,15 +9,19 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse
 import json
 
-def cv_view(request, cv_id, translation_key, language):
+def cv_view(request, cv_id, translation_key, language, template_id=None):
     """CV görüntüleme view'i"""
     cv = get_object_or_404(CV, id=cv_id, translation_key=translation_key)
+    
+    # Template ID'yi URL'den al veya query parameter'dan al
+    if not template_id:
+        template_id = request.GET.get('template', 'web-template1')
     
     # CV verilerini JSON olarak hazırla
     cv_data = CVSerializer(cv).data
     
     # Template'i render et
-    template_name = f'cv/templates/web-template1.html'  # veya cv.translation_key'e göre farklı template
+    template_name = f'cv/templates/{template_id}.html'  # Template ID'ye göre template seç
     html_content = render_to_string(template_name, {'cv': cv_data})
     
     return HttpResponse(html_content)
@@ -78,9 +82,13 @@ class CVViewSet(viewsets.ModelViewSet):
             with open(file_path, 'w') as f:
                 f.write(html_content)
             
-            # URL'i döndür - translation_key ve language ile
-            web_url = f'/cv/{cv.id}/{cv.translation_key}/{language}/'
-            return Response({'web_url': web_url})
+            # URL'i döndür - yeni format ile (template_id dahil)
+            web_url = f'/cv/{template_id}/{cv.id}/{cv.translation_key}/{language}/'
+            return Response({
+                'web_url': web_url,
+                'translation_key': cv.translation_key,
+                'lang': language
+            })
             
         except Exception as e:
             return Response(

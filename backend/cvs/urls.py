@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import CVViewSet, get_cv_by_translation
 
 router = DefaultRouter()
-router.register(r'cvs', CVViewSet, basename='cv')
+router.register('cvs', CVViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

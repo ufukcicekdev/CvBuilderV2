@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "CV Builder",
-    "tagline": "Create your professional CV and take a step forward in your career",
+    "tagline": "Create your professional CV and take a step ahead in your career",
     "description": "Simplify your job search process and find your dream job"
   },
   "nav": {
@@ -28,7 +28,7 @@
     "rememberMe": "Remember Me",
     "loginSuccess": "Login successful! Welcome.",
     "loginError": "Login failed. Please check your information.",
-    "registerSuccess": "Registration successful! You can now log in.",
+    "registerSuccess": "Registration successful! Please verify your email address.",
     "registerError": "Registration failed. Please check your information.",
     "orLoginWith": "or login with",
     "userType": "User Type",
@@ -50,8 +50,14 @@
       "invalidPassword": "Invalid password",
       "invalidCredentials": "Invalid credentials",
       "emailExists": "This email address is already in use",
-      "weakPassword": "Password is too weak"
-    }
+      "weakPassword": "Password is too weak",
+      "emailNotVerified": "Please verify your email address",
+      "accountInactive": "Your account is inactive",
+      "generalError": "An error occurred, please try again",
+      "emailRequired": "Email address is required",
+      "passwordRequired": "Password is required"
+    },
+    "checkEmail": "Check your email and click the verification link"
   },
   "profile": {
     "personalInfo": "Personal Information",
@@ -119,6 +125,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
+    "preview": "Preview",
     "next": "Next",
     "previous": "Previous",
     "delete": "Delete",
@@ -127,18 +134,26 @@
     "filter": "Filter",
     "sort": "Sort",
     "loading": "Loading...",
+    "uploading": "Uploading...",
     "error": "An error occurred",
     "success": "Operation successful",
     "required": "This field is required",
     "invalidEmail": "Invalid email address",
     "passwordMismatch": "Passwords do not match",
     "submitting": "Submitting...",
+    "openInNewTab": "Open in New Tab",
+    "languages": "Languages",
+    "skills": "Skills",
+    "certificates": "Certificates",
+    "workExperience": "Work Experience",
+    "education": "Education",
+    "professionalSummary": "Professional Summary",
     "errors": {
       "badRequest": "Invalid request",
       "unauthorized": "Please log in",
       "forbidden": "You do not have permission for this operation",
       "notFound": "Request not found",
-      "serverError": "Server error occurred",
+      "serverError": "A server error occurred",
       "unknown": "An unknown error occurred",
       "networkError": "Network connection error",
       "validationError": "Please check the form information"
@@ -148,14 +163,35 @@
     "hero": {
       "title": "Next-Generation CV Creation Platform",
       "subtitle": "Create AI-powered, dynamic, and interactive CVs",
-      "cta": "Get Started"
+      "cta": "Get Started",
+      "badge": "New Features",
+      "feature1": "Completely free starter plan",
+      "feature2": "Modern and professional templates",
+      "feature3": "Both web and PDF format CVs"
     },
     "features": {
       "title": "Why CV Builder?",
       "subtitle": "Innovative features that transform your job search process",
+      "overline": "FEATURES",
+      "feature1": {
+        "title": "Professional Templates",
+        "description": "Modern and professional CV templates that catch the attention of recruiters"
+      },
+      "feature2": {
+        "title": "Easy Editing",
+        "description": "Customize and edit your CV easily with drag-and-drop interface"
+      },
+      "feature3": {
+        "title": "Career Growth",
+        "description": "Tools and recommendations to help you achieve your career goals"
+      },
+      "feature4": {
+        "title": "Quick Creation",
+        "description": "Create a professional CV in minutes and start applying for jobs immediately"
+      },
       "realtime": {
         "title": "Real-Time Updates",
-        "description": "Update your CV in real-time. Just got a new certificate? Add it immediately and use your updated CV for applications."
+        "description": "Update your CV in real-time. Got a new certificate? Add it immediately and use your updated CV for applications."
       },
       "video": {
         "title": "Video CV Support",
@@ -163,18 +199,25 @@
       },
       "aiAssistant": {
         "title": "AI Assistant",
-        "description": "Get AI-powered suggestions to optimize your CV. Make job-specific CV edits and increase your chances of acceptance."
+        "description": "Get AI-powered suggestions to optimize your CV. Tailor your CV for specific job postings and increase your chances of acceptance."
       },
       "analytics": {
         "title": "CV Analytics",
         "description": "Track your CV's performance. Which employers viewed your profile? How many times was your CV viewed? All statistics at your fingertips."
       }
     },
+    "templates": {
+      "title": "Professional CV Templates",
+      "subtitle": "Modern and impressive templates that catch the attention of recruiters",
+      "overline": "TEMPLATES",
+      "cta": "Explore Templates"
+    },
     "howItWorks": {
       "title": "How It Works",
+      "overline": "USER GUIDE",
       "steps": [
         {
-          "title": "Create a Profile",
+          "title": "Create Profile",
           "description": "Enter your basic information and create your professional profile"
         },
         {
@@ -182,24 +225,33 @@
           "description": "Choose from modern templates and personalize your CV"
         },
         {
-          "title": "Add a Video",
+          "title": "Add Video",
           "description": "Introduce yourself with a short video and stand out"
         },
         {
           "title": "Apply for Jobs",
-          "description": "Apply to job listings with a single click and advance your career"
+          "description": "Apply to job postings with one click and advance your career"
         }
       ]
     },
     "testimonials": {
       "title": "User Experiences",
-      "subtitle": "Success stories"
+      "subtitle": "Success stories and user testimonials",
+      "overline": "TESTIMONIALS"
+    },
+    "trustedBy": {
+      "title": "Trusted by Leading Companies"
     },
     "stats": {
       "users": "Active Users",
       "companies": "Partner Companies",
       "cvs": "CVs Created",
-      "hires": "Hires"
+      "hires": "Hires Made"
+    },
+    "cta": {
+      "title": "Take Your Career to the Next Level",
+      "subtitle": "Create your professional CV and find your dream job",
+      "button": "Start for Free"
     }
   },
   "blog": {
@@ -217,14 +269,14 @@
     "title": "Contact",
     "description": "Get in touch with us. We will get back to you as soon as possible.",
     "name": "Your Name",
-    "email": "Your Email",
+    "email": "Your Email Address",
     "subject": "Subject",
     "message": "Your Message",
     "send": "Send",
-    "successMessage": "Your message has been sent successfully. We will get back to you shortly.",
+    "successMessage": "Your message has been sent successfully. We will get back to you as soon as possible.",
     "errorMessage": "Your message could not be sent. Please try again later.",
     "subjects": {
-      "general": "General Inquiry",
+      "general": "General Question",
       "technical": "Technical Support",
       "billing": "Billing Inquiry",
       "feedback": "Feedback",
@@ -246,7 +298,7 @@
         "Unlimited CV creation",
         "Premium CV templates",
         "CV download (PDF/Word)",
-        "Apply to job listings",
+        "Apply to job postings",
         "Profile highlighting",
         "24/7 support"
       ]
@@ -271,7 +323,7 @@
     "perYear": "/year",
     "selectPlan": "Select Plan",
     "currentPlan": "Current Plan",
-    "saveYearly": "Save 15% with yearly billing"
+    "saveYearly": "Save 15% with yearly payment"
   },
   "toast": {
     "success": "Success!",
@@ -282,7 +334,7 @@
   "errors": {
     "404": {
       "title": "Page Not Found",
-      "description": "The page you are looking for does not exist or may have been moved."
+      "description": "The page you are looking for does not exist or has been moved."
     },
     "500": {
       "title": "Server Error",
@@ -323,7 +375,7 @@
     },
     "experience": {
       "title": "Work Experience",
-      "subtitle": "Add your work history starting with the most recent experience",
+      "subtitle": "Add your work history starting with the most recent",
       "company": "Company Name",
       "position": "Position",
       "startDate": "Start Date",
@@ -338,12 +390,12 @@
       "name": "Language",
       "level": "Proficiency Level",
       "certificate": "Certificate",
-      "certificateHelper": "If available, specify your language certificate (Optional)",
+      "certificateHelper": "If applicable, specify your language certificate (Optional)",
       "addMore": "Add Language"
     },
     "education": {
       "title": "Education",
-      "subtitle": "Add your educational background starting with the most recent education",
+      "subtitle": "Add your educational background starting with the most recent",
       "school": "School",
       "degree": "Degree",
       "field": "Field of Study",
@@ -364,14 +416,14 @@
     "loadError": "An error occurred while loading the CV",
     "errors": {
       "personalInfoRequired": "Please fill in all personal information",
-      "experienceRequired": "You must add at least one experience",
-      "educationRequired": "You must add at least one education",
+      "experienceRequired": "You must enter at least one experience",
+      "educationRequired": "You must enter at least one education",
       "skillsRequired": "You must add at least one skill",
-      "languagesRequired": "You must add at least one language",
+      "languagesRequired": "You must enter at least one language",
       "experienceFieldsRequired": "Please fill in the company name, position, and start date for the experience",
-      "endDateRequired": "If you are not currently working here, an end date is required",
+      "endDateRequired": "If you are not currently working, an end date is required",
       "educationFieldsRequired": "Please fill in the school, degree, field of study, and start date",
-      "endDateRequired": "If you are not currently studying here, an end date is required"
+      "endDateRequired": "If you are not currently studying, an end date is required"
     },
     "currentStep": "Current Step",
     "deleteConfirmTitle": "Delete CV",
@@ -404,26 +456,27 @@
       "title": "Certificates",
       "subtitle": "Add the certificates and documents you have",
       "name": "Certificate Name",
-      "issuer": "Issuing Organization",
+      "issuer": "Issuing Authority",
       "issueDate": "Issue Date",
       "expiryDate": "Expiry Date",
       "expiryDateHelper": "If applicable, the certificate's expiration date",
-      "credentialId": "Certificate/Document Number",
+      "credentialId": "Certificate/Document No.",
       "credentialIdHelper": "If applicable, the certificate or document number",
+      "description": "Description",
       "uploadFile": "Upload Certificate File",
       "addMore": "Add Certificate",
       "uploadSuccess": "Certificate file uploaded successfully",
       "uploadError": "An error occurred while uploading the certificate file"
     },
     "errors": {
-      "certificateFieldsRequired": "Please fill in the certificate name, issuing organization, and issue date"
+      "certificateFieldsRequired": "Please fill in the certificate name, issuing authority, and issue date"
     },
     "progress": "Progress",
     "template": {
       "selectTitle": "Select CV Template",
       "selectRequired": "Please select a template",
       "preview": "Preview",
-      "generateWeb": "Generate Web Page",
+      "generateWeb": "Generate Web CV",
       "generatePDF": "Download PDF",
       "generating": "Generating...",
       "generateSuccess": "CV generated successfully",
@@ -434,17 +487,62 @@
       "viewImage": "View Image",
       "close": "Close",
       "loading": "Loading...",
-      "error": "An error occurred while loading the translation. Please try again."
+      "error": "An error occurred while loading the translation. Please try again.",
+      "viewCertificate": "View Certificate",
+      "location": "Location",
+      "webVersion": "Web Version",
+      "pdfVersion": "PDF Version",
+      "templates": {
+        "modernWeb": {
+          "name": "Modern Web Template",
+          "description": "Modern and interactive web design"
+        },
+        "classicWeb": {
+          "name": "Classic Web Template",
+          "description": "Classic and professional web design"
+        },
+        "modernPdf": {
+          "name": "Modern PDF Template",
+          "description": "Modern and professional PDF design"
+        },
+        "classicPdf": {
+          "name": "Classic PDF Template",
+          "description": "Classic and elegant PDF design"
+        }
+      }
     },
-    "sections": {
-      "personalInfo": "Personal Information",
-      "experience": "Work Experience",
-      "education": "Education",
-      "skills": "Skills",
-      "languages": "Languages",
-      "certificates": "Certificates",
-      "projects": "Projects",
-      "interests": "Interests"
+    "video": {
+      "title": "Video Introduction",
+      "dragDrop": "Drag and drop your video file here or click to browse",
+      "maxSize": "Maximum file size: 50MB",
+      "selectVideo": "Select Video",
+      "deleteSuccess": "Video deleted successfully",
+      "deleteError": "An error occurred while deleting the video",
+      "confirmDelete": "Are you sure you want to delete the video?"
     }
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "usernameMinLength": "Username must be at least 3 characters",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordNumber": "Password must contain at least one number",
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordMatch": "Passwords do not match",
+    "invalidUserType": "Please select a valid user type"
+  },
+  "errors": {
+    "usernameExists": "This username is already taken",
+    "emailExists": "This email address is already in use",
+    "invalidUsername": "Invalid username",
+    "invalidEmail": "Invalid email address",
+    "weakPassword": "Password is too weak",
+    "passwordMismatch": "Passwords do not match",
+    "unknown": "An unknown error occurred",
+    "formErrors": "Please fix the form errors",
+    "registrationFailed": "Registration failed. Please try again",
+    "pleaseFixErrors": "Please fix the following errors",
+    "present": "Present"
   }
 }

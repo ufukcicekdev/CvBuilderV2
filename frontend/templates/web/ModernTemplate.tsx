@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box, Typography, Grid, Paper, Avatar, Divider, Chip, IconButton, Tooltip, Menu, MenuItem, Button, AppBar, Toolbar, Container, Fade, Backdrop, CircularProgress, Modal } from '@mui/material';
 import { CV } from '@/types/cv';
 import {
@@ -18,6 +18,7 @@ import {
   Image as ImageIcon,
   Close as CloseIcon,
   Person,
+  Videocam,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -39,15 +40,95 @@ interface ModernTemplateProps {
   cv: CV;
 }
 
+const translations = {
+  tr: {
+    languages: "Yabancı Diller",
+    skills: "Yetenekler",
+    certificates: "Sertifikalar",
+    professionalSummary: "Profesyonel Özet",
+    workExperience: "İş Deneyimi",
+    education: "Eğitim",
+    present: "Devam Ediyor",
+    changeLanguage: "Dil Değiştir",
+    loading: "Yükleniyor...",
+    error: "Bir hata oluştu",
+    videoIntroduction: "Video Tanıtım"
+  },
+  en: {
+    languages: "Languages",
+    skills: "Skills",
+    certificates: "Certificates",
+    professionalSummary: "Professional Summary",
+    workExperience: "Work Experience",
+    education: "Education",
+    present: "Present",
+    changeLanguage: "Change Language",
+    loading: "Loading...",
+    error: "An error occurred",
+    videoIntroduction: "Video Introduction"
+  },
+  es: {
+    languages: "Idiomas",
+    skills: "Habilidades",
+    certificates: "Certificados",
+    professionalSummary: "Resumen Profesional",
+    workExperience: "Experiencia Laboral",
+    education: "Educación",
+    present: "Presente",
+    changeLanguage: "Cambiar Idioma",
+    loading: "Cargando...",
+    error: "Se produjo un error",
+    videoIntroduction: "Introducción en Video"
+  },
+  zh: {
+    languages: "语言",
+    skills: "技能",
+    certificates: "证书",
+    professionalSummary: "专业总结",
+    workExperience: "工作经验",
+    education: "教育背景",
+    present: "至今",
+    changeLanguage: "更改语言",
+    loading: "加载中...",
+    error: "发生错误",
+    videoIntroduction: "视频介绍"
+  },
+  ar: {
+    languages: "اللغات",
+    skills: "المهارات",
+    certificates: "الشهادات",
+    professionalSummary: "الملخص المهني",
+    workExperience: "الخبرة العملية",
+    education: "التعليم",
+    present: "حتى الآن",
+    changeLanguage: "تغيير اللغة",
+    loading: "جار التحميل...",
+    error: "حدث خطأ",
+    videoIntroduction: "مقدمة فيديو"
+  }
+};
+
 const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
   const router = useRouter();
   const { id, translation_key, lang } = router.query;
-  const { t } = useTranslation('common');
+  const currentLang = (lang as string) || 'en';
+  const t = (key: keyof typeof translations.en) => translations[currentLang as keyof typeof translations]?.[key] || translations.en[key];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [cv, setCv] = React.useState(initialCv);
-  const [selectedCertificate, setSelectedCertificate] = React.useState<{ documentUrl?: string; document_type?: string } | null>(null);
+  const [selectedCertificate, setSelectedCertificate] = React.useState<{ documentUrl?: string; document_type?: string; name?: string; description?: string } | null>(null);
+  const [modalOpen, setModalOpen] = React.useState(false);
   const open = Boolean(anchorEl);
+  
+  // Use ref to store video info
+  const videoInfoRef = useRef<typeof cv.video_info>(initialCv.video_info);
+  
+  // Update ref when video_info changes
+  useEffect(() => {
+    if (cv.video_info?.video_url) {
+      videoInfoRef.current = cv.video_info;
+    }
+  }, [cv.video_info?.video_url]);
 
   // Listen for language changes in the URL
   useEffect(() => {
@@ -67,6 +148,13 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
           
           // Force a re-render by creating a new object
           const newCvData = { ...response.data };
+          
+          // Preserve video_info if it's missing in the new data but exists in the ref
+          if (!newCvData.video_info?.video_url && videoInfoRef.current?.video_url) {
+            console.log('Preserving video_info from ref:', videoInfoRef.current);
+            newCvData.video_info = videoInfoRef.current;
+          }
+          
           console.log('Setting new CV data in useEffect:', newCvData);
           
           // Set the state with the new data
@@ -116,6 +204,13 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
           console.log('Received WebSocket message:', event.data);
           try {
             const data = JSON.parse(event.data);
+            
+            // Preserve video_info if it's missing in the new data but exists in the ref
+            if (!data.video_info?.video_url && videoInfoRef.current?.video_url) {
+              console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
+              data.video_info = videoInfoRef.current;
+            }
+            
             setCv(data);
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);
@@ -166,20 +261,6 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
     };
   }, [id, translation_key, lang]);
 
-  // Check for saved language preference on initial load
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('selectedCVLanguage');
-    
-    // If there's a saved language and it's different from the current URL language
-    if (savedLanguage && lang && savedLanguage !== lang) {
-      // Update the URL to use the saved language
-      if (id && translation_key) {
-        const newUrl = `/cv/${id}/${translation_key}/${savedLanguage}/`;
-        window.location.href = newUrl;
-      }
-    }
-  }, []);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -195,28 +276,22 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       // Use router.query values
       const cvId = id;
       const translationKey = translation_key;
+      const templateId = router.asPath.split('/')[2]; // URL'den template_id'yi al
 
-      if (!cvId || !translationKey) {
+      if (!cvId || !translationKey || !templateId) {
         console.error('Missing required parameters');
         return;
       }
 
-      // Store the selected language in localStorage
-      localStorage.setItem('selectedCVLanguage', newLang);
-
-      // Change URL to load the CV in the new language
-      window.location.href = `/cv/${cvId}/${translationKey}/${newLang}/`;
+      // Change URL to load the CV in the new language with template
+      window.location.href = `/cv/${templateId}/${cvId}/${translationKey}/${newLang}/`;
       
     } catch (error) {
       console.error('Error changing language:', error);
-      alert(t('cv.template.error'));
-    } finally {
-      setIsLoading(false);
-      handleClose();
     }
   };
 
-  const handleCertificateClick = (cert: { documentUrl?: string; document_type?: string }) => {
+  const handleCertificateClick = (cert: { documentUrl?: string; document_type?: string; name?: string; description?: string }) => {
     setSelectedCertificate(cert);
   };
 
@@ -235,7 +310,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
         open={isLoading}
       >
         <CircularProgress color="inherit" />
-        <Typography sx={{ ml: 2 }}>{t('cv.template.loading')}</Typography>
+        <Typography sx={{ ml: 2 }}>{t('loading')}</Typography>
       </Backdrop>
 
       {/* Navbar */}
@@ -243,20 +318,13 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
         <Container maxWidth="lg">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Image
-                src="/logo.png"
-                alt="CV Builder Logo"
-                width={40}
-                height={40}
-                style={{ marginRight: '10px' }}
-              />
               <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
                 CV Builder
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
               {/* Language Selection */}
-              <Tooltip title={t('cv.template.changeLanguage')}>
+              <Tooltip title={t('changeLanguage')}>
                 <IconButton
                   color="inherit"
                   onClick={handleClick}
@@ -518,9 +586,9 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                   {cv.skills.map((skill, index) => (
                     <Chip
                       key={index}
-                      label={skill.name}
+                      label={`${skill.name} (${skill.level})`}
                       color="primary"
-                      variant={skill.level ? "filled" : "outlined"}
+                      variant="filled"
                       sx={{ 
                         borderRadius: '8px',
                         transition: 'transform 0.2s',
@@ -580,6 +648,11 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                               {cert.date}
                             </Typography>
                           )}
+                          {cert.description && (
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                              {cert.description}
+                            </Typography>
+                          )}
                         </Box>
                         {cert.documentUrl && (
                           <Tooltip title="View Certificate">
@@ -630,7 +703,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                     fontWeight: 600,
                     mb: 3
                   }}>
-                    <Person /> {t('professional_summary')}
+                    <Person /> {t('professionalSummary')}
                   </Typography>
                   <Box sx={{
                     backgroundColor: 'rgba(33, 150, 243, 0.05)',
@@ -650,6 +723,55 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                     </Typography>
                   </Box>
                 </Paper>
+              )}
+
+              {/* Video Section */}
+              {cv.video_info && cv.video_info.video_url && cv.video_info.video_url.trim() !== '' && (
+                <>
+                  {console.log('Rendering video section in ModernTemplate, video_url:', cv.video_info.video_url)}
+                  <Paper elevation={3} sx={{ p: 4, mb: 4, borderRadius: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                      <Videocam sx={{ mr: 2, color: 'primary.main' }} />
+                      <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                        {t('videoIntroduction')}
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ mb: 3 }} />
+                    
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                      <video
+                        controls
+                        style={{ 
+                          width: '100%', 
+                          maxWidth: '640px', 
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                        }}
+                        src={cv.video_info.video_url}
+                        onError={(e) => {
+                          console.error('Video loading error:', e);
+                          // Video yüklenemezse elementi gizle
+                          const target = e.target as HTMLVideoElement;
+                          target.style.display = 'none';
+                          // Hata mesajı göster
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const errorMsg = document.createElement('p');
+                            errorMsg.textContent = 'Video yüklenemedi.';
+                            errorMsg.style.color = 'red';
+                            parent.appendChild(errorMsg);
+                          }
+                        }}
+                      />
+                    </Box>
+                    
+                    {cv.video_info.description && (
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                        {cv.video_info.description}
+                      </Typography>
+                    )}
+                  </Paper>
+                </>
               )}
 
               {/* Experience Section */}
@@ -674,7 +796,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                   fontWeight: 600,
                   mb: 3
                 }}>
-                  <Work /> {t('work_experience')}
+                  <Work /> {t('workExperience')}
                 </Typography>
                 {cv.experience.map((exp, index) => (
                   <Box 
@@ -802,6 +924,18 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
               overflow: 'auto',
             }}
           >
+            {selectedCertificate?.name && (
+              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+                {selectedCertificate.name}
+              </Typography>
+            )}
+            
+            {selectedCertificate?.description && (
+              <Typography variant="body1" sx={{ mb: 3 }}>
+                {selectedCertificate.description}
+              </Typography>
+            )}
+            
             {selectedCertificate?.document_type === 'image' ? (
               <img
                 src={selectedCertificate.documentUrl}

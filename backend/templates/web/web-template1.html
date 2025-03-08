@@ -142,7 +142,7 @@
             <h2 class="section-title">Yetenekler</h2>
             {% for skill in skills %}
             <div>
-                <h4>{{skill.name}}</h4>
+                <h4>{{skill.name}} ({{skill.level}}/5)</h4>
                 <div class="skill-bar">
                     <div class="skill-level" style="width: {% widthratio skill.level 5 100 %}%"></div>
                 </div>
@@ -155,7 +155,7 @@
             <h2 class="section-title">Yabancı Diller</h2>
             {% for lang in languages %}
             <div>
-                <h4>{{lang.name}}</h4>
+                <h4>{{lang.name}} ({{lang.level}}/5)</h4>
                 <div class="skill-bar">
                     <div class="skill-level" style="width: {% widthratio lang.level 5 100 %}%"></div>
                 </div>
