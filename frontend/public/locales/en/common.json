@@ -167,7 +167,7 @@
       "badge": "New Features",
       "feature1": "Completely free starter plan",
       "feature2": "Modern and professional templates",
-      "feature3": "Both web and PDF format CVs"
+      "feature3": "CVs in both web and PDF formats"
     },
     "features": {
       "title": "Why CV Builder?",
@@ -179,10 +179,10 @@
       },
       "feature2": {
         "title": "Easy Editing",
-        "description": "Customize and edit your CV easily with drag-and-drop interface"
+        "description": "Easily customize and edit your CV with a drag-and-drop interface"
       },
       "feature3": {
-        "title": "Career Growth",
+        "title": "Career Development",
         "description": "Tools and recommendations to help you achieve your career goals"
       },
       "feature4": {
@@ -213,7 +213,7 @@
       "cta": "Explore Templates"
     },
     "howItWorks": {
-      "title": "How It Works",
+      "title": "How It Works?",
       "overline": "USER GUIDE",
       "steps": [
         {
@@ -229,15 +229,15 @@
           "description": "Introduce yourself with a short video and stand out"
         },
         {
-          "title": "Apply for Jobs",
-          "description": "Apply to job postings with one click and advance your career"
+          "title": "Apply",
+          "description": "Apply to job postings with a single click and advance your career"
         }
       ]
     },
     "testimonials": {
       "title": "User Experiences",
-      "subtitle": "Success stories and user testimonials",
-      "overline": "TESTIMONIALS"
+      "subtitle": "Success stories and user reviews",
+      "overline": "REVIEWS"
     },
     "trustedBy": {
       "title": "Trusted by Leading Companies"
@@ -246,10 +246,10 @@
       "users": "Active Users",
       "companies": "Partner Companies",
       "cvs": "CVs Created",
-      "hires": "Hires Made"
+      "hires": "Hires"
     },
     "cta": {
-      "title": "Take Your Career to the Next Level",
+      "title": "Take a Step Ahead in Your Career",
       "subtitle": "Create your professional CV and find your dream job",
       "button": "Start for Free"
     }

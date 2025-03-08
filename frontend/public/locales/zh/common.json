@@ -10,7 +10,7 @@
     "profile": "我的资料",
     "login": "登录",
     "register": "注册",
-    "logout": "退出",
+    "logout": "注销",
     "search": "搜索",
     "notifications": "通知",
     "settings": "设置",
@@ -22,12 +22,13 @@
     "employer": "雇主",
     "email": "电子邮件",
     "password": "密码",
+    "login": "登录",
     "confirmPassword": "确认密码",
     "forgotPassword": "忘记密码",
     "rememberMe": "记住我",
     "loginSuccess": "登录成功！欢迎。",
     "loginError": "登录失败。请检查您的信息。",
-    "registerSuccess": "注册成功！您现在可以登录。",
+    "registerSuccess": "注册成功！请验证您的电子邮件地址。",
     "registerError": "注册失败。请检查您的信息。",
     "orLoginWith": "或使用以下方式登录",
     "userType": "用户类型",
@@ -43,33 +44,39 @@
       "uppercase": "至少一个大写字母"
     },
     "sessionExpired": "您的会话已过期。请重新登录。",
-    "logoutSuccess": "成功退出。",
+    "logoutSuccess": "成功注销。",
     "errors": {
-      "userNotFound": "未找到使用此电子邮件的用户",
+      "userNotFound": "未找到使用此电子邮件地址的用户",
       "invalidPassword": "无效密码",
-      "invalidCredentials": "无效的用户信息",
-      "emailExists": "此电子邮件已被使用",
-      "weakPassword": "密码太弱"
-    }
+      "invalidCredentials": "无效凭据",
+      "emailExists": "此电子邮件地址已被使用",
+      "weakPassword": "密码太弱",
+      "emailNotVerified": "请验证您的电子邮件地址",
+      "accountInactive": "您的账户未激活",
+      "generalError": "发生错误，请重试",
+      "emailRequired": "电子邮件地址必填",
+      "passwordRequired": "密码必填"
+    },
+    "checkEmail": "检查您的电子邮件并点击验证链接"
   },
   "profile": {
     "personalInfo": "个人信息",
-    "experience": "工作经验",
+    "experience": "经验",
     "education": "教育",
     "skills": "技能",
-    "languages": "外语",
+    "languages": "语言",
     "certificates": "证书",
     "about": "关于我",
     "updateSuccess": "资料更新成功",
-    "updateError": "更新资料时出错",
+    "updateError": "更新资料时发生错误",
     "profession": "职业",
     "companyPosition": "公司职位",
     "companySize": "公司规模",
     "edit": "编辑",
     "save": "保存",
     "cancel": "取消",
-    "pictureUpdateSuccess": "头像更新成功",
-    "pictureUpdateError": "更新头像时出错",
+    "pictureUpdateSuccess": "个人资料图片更新成功",
+    "pictureUpdateError": "更新个人资料图片时发生错误",
     "firstName": "名字",
     "lastName": "姓氏",
     "phone": "电话",
@@ -81,7 +88,7 @@
     "professionPlaceholder": "输入您的职业",
     "companyNamePlaceholder": "输入公司名称",
     "companyWebsitePlaceholder": "输入公司网站",
-    "companyPositionPlaceholder": "输入您的职位",
+    "companyPositionPlaceholder": "输入您在公司的职位",
     "companySizePlaceholder": "输入公司规模",
     "errors": {
       "fileTooLarge": "文件太大（最大5MB）",
@@ -118,6 +125,7 @@
     "save": "保存",
     "cancel": "取消",
     "edit": "编辑",
+    "preview": "预览",
     "next": "下一步",
     "previous": "上一步",
     "delete": "删除",
@@ -126,12 +134,20 @@
     "filter": "筛选",
     "sort": "排序",
     "loading": "加载中...",
+    "uploading": "上传中...",
     "error": "发生错误",
     "success": "操作成功",
     "required": "此字段为必填项",
     "invalidEmail": "无效的电子邮件地址",
     "passwordMismatch": "密码不匹配",
     "submitting": "提交中...",
+    "openInNewTab": "在新标签页中打开",
+    "languages": "语言",
+    "skills": "技能",
+    "certificates": "证书",
+    "workExperience": "工作经验",
+    "education": "教育",
+    "professionalSummary": "职业概述",
     "errors": {
       "badRequest": "无效请求",
       "unauthorized": "请登录",
@@ -145,96 +161,133 @@
   },
   "home": {
     "hero": {
-      "title": "新一代简历生成平台",
-      "subtitle": "创建人工智能驱动的动态互动简历",
-      "cta": "立即开始"
+      "title": "新一代简历创建平台",
+      "subtitle": "创建AI驱动的动态和互动简历",
+      "cta": "立即开始",
+      "badge": "新功能",
+      "feature1": "完全免费的入门计划",
+      "feature2": "现代和专业的模板",
+      "feature3": "简历支持Web和PDF格式"
     },
     "features": {
       "title": "为什么选择简历生成器？",
       "subtitle": "改变求职流程的创新功能",
+      "overline": "功能",
+      "feature1": {
+        "title": "专业模板",
+        "description": "现代和专业的简历模板，吸引招聘人员的注意"
+      },
+      "feature2": {
+        "title": "轻松编辑",
+        "description": "使用拖放界面轻松自定义和编辑您的简历"
+      },
+      "feature3": {
+        "title": "职业发展",
+        "description": "帮助您实现职业目标的工具和建议"
+      },
+      "feature4": {
+        "title": "快速创建",
+        "description": "几分钟内创建专业简历并立即申请工作"
+      },
       "realtime": {
         "title": "实时更新",
-        "description": "实时更新您的简历。刚获得新证书？立即添加并使用最新简历进行申请。"
+        "description": "实时更新您的简历。获得了新证书？立即添加并使用更新的简历进行申请。"
       },
       "video": {
         "title": "视频简历支持",
-        "description": "通过视频介绍自己。更有效地展示您的个性和技能。与雇主建立联系的现代方式。"
+        "description": "通过视频介绍自己。更有效地展示您的个性和技能。与雇主联系的现代方式。"
       },
       "aiAssistant": {
-        "title": "人工智能助手",
-        "description": "获取人工智能建议以优化您的简历。根据职位要求调整简历，提高被录用的机会。"
+        "title": "AI助手",
+        "description": "获取AI驱动的建议以优化您的简历。根据特定职位发布定制您的简历，增加被录用的机会。"
       },
       "analytics": {
         "title": "简历分析",
-        "description": "跟踪您的简历表现。哪些雇主查看了您的资料？您的简历被浏览了多少次？所有统计数据尽在掌握。"
+        "description": "跟踪您的简历表现。哪些雇主查看了您的资料？您的简历被查看了多少次？所有统计数据尽在掌握。"
       }
+    },
+    "templates": {
+      "title": "专业简历模板",
+      "subtitle": "现代且令人印象深刻的模板，吸引招聘人员的注意",
+      "overline": "模板",
+      "cta": "探索模板"
     },
     "howItWorks": {
       "title": "如何运作？",
+      "overline": "用户指南",
       "steps": [
         {
-          "title": "创建个人资料",
-          "description": "输入基本信息并创建您的专业资料"
+          "title": "创建资料",
+          "description": "输入您的基本信息并创建您的专业资料"
         },
         {
-          "title": "自定义简历",
+          "title": "自定义您的简历",
           "description": "从现代模板中选择并个性化您的简历"
         },
         {
           "title": "添加视频",
-          "description": "通过短视频介绍自己，脱颖而出"
+          "description": "通过简短的视频介绍自己并脱颖而出"
         },
         {
-          "title": "申请职位",
-          "description": "一键申请职位，推动您的职业生涯"
+          "title": "申请",
+          "description": "一键申请职位发布并推进您的职业生涯"
         }
       ]
     },
     "testimonials": {
       "title": "用户体验",
-      "subtitle": "成功故事"
+      "subtitle": "成功故事和用户评价",
+      "overline": "评价"
+    },
+    "trustedBy": {
+      "title": "受领先公司信赖"
     },
     "stats": {
       "users": "活跃用户",
       "companies": "合作伙伴公司",
-      "cvs": "生成的简历",
+      "cvs": "创建的简历",
       "hires": "招聘"
+    },
+    "cta": {
+      "title": "迈出职业生涯的第一步",
+      "subtitle": "创建您的专业简历并找到梦想的工作",
+      "button": "免费开始"
     }
   },
   "blog": {
     "title": "博客",
     "description": "关于职业和简历准备的最新文章",
     "searchPlaceholder": "搜索博客文章...",
-    "categories": "分类",
+    "categories": "类别",
     "readMore": "阅读更多",
     "comments": "评论",
     "leaveComment": "发表评论",
-    "noComments": "暂无评论",
+    "noComments": "尚无评论",
     "relatedPosts": "相关文章"
   },
   "contact": {
     "title": "联系我们",
     "description": "与我们联系。我们将尽快回复您。",
     "name": "您的姓名",
-    "email": "您的电子邮件",
+    "email": "您的电子邮件地址",
     "subject": "主题",
     "message": "您的消息",
     "send": "发送",
     "successMessage": "您的消息已成功发送。我们将尽快回复您。",
-    "errorMessage": "消息发送失败。请稍后再试。",
+    "errorMessage": "您的消息未能发送。请稍后再试。",
     "subjects": {
       "general": "一般问题",
       "technical": "技术支持",
-      "billing": "账单问题",
+      "billing": "账单查询",
       "feedback": "反馈",
       "other": "其他"
     }
   },
   "pricing": {
     "title": "定价",
-    "description": "选择适合您的计划",
-    "monthly": "月度",
-    "yearly": "年度",
+    "description": "选择适合您需求的计划",
+    "monthly": "每月",
+    "yearly": "每年",
     "jobseeker": {
       "title": "求职者",
       "price": {
@@ -245,8 +298,8 @@
         "无限简历创建",
         "高级简历模板",
         "简历下载（PDF/Word）",
-        "申请职位",
-        "个人资料突出显示",
+        "申请职位发布",
+        "突出显示个人资料",
         "24/7支持"
       ]
     },
@@ -293,17 +346,17 @@
   "dashboard": {
     "title": "我的简历",
     "createNew": "创建新简历",
-    "fetchError": "加载简历时出错",
+    "fetchError": "加载简历时发生错误",
     "deleteSuccess": "简历删除成功",
-    "deleteError": "删除简历时出错"
+    "deleteError": "删除简历时发生错误"
   },
   "cv": {
     "create": "创建简历",
     "createSuccess": "简历创建成功",
-    "createError": "创建简历时出错",
+    "createError": "创建简历时发生错误",
     "steps": {
       "personalInfo": "个人信息",
-      "experience": "工作经验",
+      "experience": "经验",
       "education": "教育",
       "skills": "技能",
       "languages": "语言",
@@ -316,7 +369,7 @@
       "title": "个人信息",
       "fullName": "全名",
       "jobTitle": "职位",
-      "summary": "摘要",
+      "summary": "概述",
       "phone": "电话",
       "location": "地点"
     },
@@ -328,7 +381,7 @@
       "startDate": "开始日期",
       "endDate": "结束日期",
       "current": "目前在此工作",
-      "description": "工作描述和职责",
+      "description": "职位描述和职责",
       "addMore": "添加经验"
     },
     "languages": {
@@ -337,11 +390,11 @@
       "name": "语言",
       "level": "熟练程度",
       "certificate": "证书",
-      "certificateHelper": "如果有，请注明您的语言证书（可选）",
+      "certificateHelper": "如有，请指定您的语言证书（可选）",
       "addMore": "添加语言"
     },
     "education": {
-      "title": "教育信息",
+      "title": "教育",
       "subtitle": "从最近的教育经历开始添加您的教育背景",
       "school": "学校",
       "degree": "学位",
@@ -359,24 +412,24 @@
     "lastUpdated": "最后更新",
     "saveAndExit": "保存并退出",
     "saveSuccess": "您的进度已保存",
-    "saveError": "保存时出错",
-    "loadError": "加载简历时出错",
+    "saveError": "保存时发生错误",
+    "loadError": "加载简历时发生错误",
     "errors": {
       "personalInfoRequired": "请填写所有个人信息",
-      "experienceRequired": "至少添加一个工作经验",
-      "educationRequired": "至少添加一个教育信息",
-      "skillsRequired": "至少添加一个技能",
-      "languagesRequired": "至少添加一个语言",
+      "experienceRequired": "您必须至少输入一项经验",
+      "educationRequired": "您必须至少输入一项教育",
+      "skillsRequired": "您必须至少添加一项技能",
+      "languagesRequired": "您必须至少输入一种语言",
       "experienceFieldsRequired": "请填写公司名称、职位和开始日期",
-      "endDateRequired": "如果您目前不在此工作，请填写结束日期",
+      "endDateRequired": "如果您目前不在此工作，则需要结束日期",
       "educationFieldsRequired": "请填写学校、学位、专业和开始日期",
-      "endDateRequired": "如果您目前不在此学习，请填写结束日期"
+      "endDateRequired": "如果您目前不在此学习，则需要结束日期"
     },
     "currentStep": "当前步骤",
     "deleteConfirmTitle": "删除简历",
     "deleteConfirmMessage": "您确定要删除此简历吗？",
     "deleteSuccess": "简历删除成功",
-    "deleteError": "删除简历时出错",
+    "deleteError": "删除简历时发生错误",
     "noCVs": "您尚未创建任何简历",
     "createFirst": "创建您的第一份简历",
     "titleLabel": "简历标题",
@@ -393,7 +446,7 @@
       "name": "技能",
       "level": "熟练程度",
       "description": "描述",
-      "descriptionHelper": "添加此技能的简短描述（可选）",
+      "descriptionHelper": "添加此技能的简要描述（可选）",
       "addMore": "添加技能"
     },
     "errors": {
@@ -405,14 +458,15 @@
       "name": "证书名称",
       "issuer": "颁发机构",
       "issueDate": "颁发日期",
-      "expiryDate": "有效期",
-      "expiryDateHelper": "如果有，请填写证书的有效期",
+      "expiryDate": "到期日期",
+      "expiryDateHelper": "如有，请指定证书的到期日期",
       "credentialId": "证书/文件编号",
-      "credentialIdHelper": "如果有，请填写证书或文件编号",
+      "credentialIdHelper": "如有，请指定证书或文件编号",
+      "description": "描述",
       "uploadFile": "上传证书文件",
       "addMore": "添加证书",
       "uploadSuccess": "证书文件上传成功",
-      "uploadError": "上传证书文件时出错"
+      "uploadError": "上传证书文件时发生错误"
     },
     "errors": {
       "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
@@ -422,28 +476,73 @@
       "selectTitle": "选择简历模板",
       "selectRequired": "请选择一个模板",
       "preview": "预览",
-      "generateWeb": "生成网页",
+      "generateWeb": "生成Web简历",
       "generatePDF": "下载PDF",
       "generating": "生成中...",
       "generateSuccess": "简历生成成功",
-      "generateError": "生成简历时出错",
+      "generateError": "生成简历时发生错误",
       "language": "语言",
       "changeLanguage": "更改语言",
       "downloadPDF": "下载PDF",
       "viewImage": "查看图片",
       "close": "关闭",
       "loading": "加载中...",
-      "error": "加载翻译时出错。请重试。"
+      "error": "加载翻译时发生错误。请重试。",
+      "viewCertificate": "查看证书",
+      "location": "地点",
+      "webVersion": "Web版本",
+      "pdfVersion": "PDF版本",
+      "templates": {
+        "modernWeb": {
+          "name": "现代Web模板",
+          "description": "现代和互动的网页设计"
+        },
+        "classicWeb": {
+          "name": "经典Web模板",
+          "description": "经典和专业的网页设计"
+        },
+        "modernPdf": {
+          "name": "现代PDF模板",
+          "description": "现代和专业的PDF设计"
+        },
+        "classicPdf": {
+          "name": "经典PDF模板",
+          "description": "经典和优雅的PDF设计"
+        }
+      }
     },
-    "sections": {
-      "personalInfo": "个人信息",
-      "experience": "工作经验",
-      "education": "教育",
-      "skills": "技能",
-      "languages": "语言",
-      "certificates": "证书",
-      "projects": "项目",
-      "interests": "兴趣"
+    "video": {
+      "title": "视频介绍",
+      "dragDrop": "将您的视频文件拖放到此处或点击浏览",
+      "maxSize": "最大文件大小：50MB",
+      "selectVideo": "选择视频",
+      "deleteSuccess": "视频删除成功",
+      "deleteError": "删除视频时发生错误",
+      "confirmDelete": "您确定要删除此视频吗？"
     }
+  },
+  "validation": {
+    "required": "此字段为必填项",
+    "invalidEmail": "请输入有效的电子邮件地址",
+    "usernameMinLength": "用户名至少3个字符",
+    "passwordMinLength": "密码至少8个字符",
+    "passwordNumber": "密码至少包含一个数字",
+    "passwordLowercase": "密码至少包含一个小写字母",
+    "passwordUppercase": "密码至少包含一个大写字母",
+    "passwordMatch": "密码不匹配",
+    "invalidUserType": "请选择有效的用户类型"
+  },
+  "errors": {
+    "usernameExists": "此用户名已被使用",
+    "emailExists": "此电子邮件地址已被使用",
+    "invalidUsername": "无效的用户名",
+    "invalidEmail": "无效的电子邮件地址",
+    "weakPassword": "密码太弱",
+    "passwordMismatch": "密码不匹配",
+    "unknown": "发生未知错误",
+    "formErrors": "请修复表单错误",
+    "registrationFailed": "注册失败。请重试。",
+    "pleaseFixErrors": "请修复以下错误",
+    "present": "当前"
   }
 }
