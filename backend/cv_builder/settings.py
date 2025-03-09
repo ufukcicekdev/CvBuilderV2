@@ -71,10 +71,23 @@ WSGI_APPLICATION = 'cv_builder.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DEV_DATABASE_ENGINE'),
+        'NAME': os.getenv('DEV_DATABASE_NAME'),
+        'USER': os.getenv('DEV_DATABASE_USER'),
+        'PASSWORD': os.getenv('DEV_DATABASE_PASSWORD'),
+        'HOST': os.getenv('DEV_DATABASE_HOST'),
+        'PORT': os.getenv('DEV_DATABASE_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',  # SSL gereklilik durumu
+        },
     }
 }
+
+
+
+
+
+
 
 AUTH_USER_MODEL = 'users.User'
 
