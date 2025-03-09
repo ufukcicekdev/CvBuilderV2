@@ -3,7 +3,7 @@ import { showToast } from '../utils/toast';
 
 // API URL'yi .env dosyasından alıyoruz
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-console.log('Axios service using API URL:', API_URL); // Debug için
+// console.log('Axios service using API URL:', API_URL); // Debug için
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

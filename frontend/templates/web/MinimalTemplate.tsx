@@ -177,29 +177,22 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
   // Listen for language changes in the URL
   useEffect(() => {
     if (lang && typeof lang === 'string') {
-      console.log('Language changed in URL to:', lang);
-      
       // When URL language changes, update the CV data
       const fetchCVForLanguage = async () => {
         if (!id || !translation_key) return;
         
         try {
           setIsLoading(true);
-          console.log('Fetching CV data for language:', lang);
           
           const response = await axiosInstance.get(`/cvs/${id}/${translation_key}/${lang}/`);
-          console.log('Fetched data in useEffect:', response.data);
           
           // Force a re-render by creating a new object
           const newCvData = { ...response.data };
           
           // Preserve video_info if it's missing in the new data but exists in the ref
           if (!newCvData.video_info?.video_url && videoInfoRef.current?.video_url) {
-            console.log('Preserving video_info from ref:', videoInfoRef.current);
             newCvData.video_info = videoInfoRef.current;
           }
-          
-          console.log('Setting new CV data in useEffect:', newCvData);
           
           // Set the state with the new data
           setCv(newCvData);
@@ -947,7 +940,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                   {/* Video Section */}
                   {cv.video_info && cv.video_info.video_url && cv.video_info.video_url.trim() !== '' && (
                     <>
-                      {console.log('Rendering video section in MinimalTemplate, video_url:', cv.video_info.video_url)}
+                      {/* console.log('Rendering video section in MinimalTemplate, video_url:', cv.video_info.video_url) */}
                       <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                           <Videocam sx={{ mr: 1.5, color: 'text.secondary' }} />
