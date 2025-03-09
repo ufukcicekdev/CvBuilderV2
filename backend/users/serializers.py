@@ -4,6 +4,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, PasswordResetToken
 from django.contrib.auth.password_validation import validate_password
 from .utils import send_verification_email
+from django.contrib.auth.hashers import make_password
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -90,10 +92,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'profile_picture', 'profile_picture_url', 
-                 'phone', 'birth_date', 'profession', 'company_name', 'company_website', 
-                 'company_position', 'company_size', 'user_type')
-        read_only_fields = ('email', 'profile_picture_url')
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'phone', 'birth_date', 
+                 'profession', 'company_name', 'company_website', 'company_position', 
+                 'company_size', 'profile_picture_url', 'user_type']
+        read_only_fields = ['id', 'email', 'username', 'profile_picture_url', 'user_type']
         extra_kwargs = {
             'profile_picture': {'write_only': True}
         }
@@ -143,3 +145,21 @@ class ResetPasswordSerializer(serializers.Serializer):
         self.token_obj.save()
         
         return user 
+
+class PasswordResetSerializer(serializers.Serializer):
+    token = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+    password_confirm = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        # Şifrelerin eşleştiğini kontrol et
+        if data['password'] != data['password_confirm']:
+            raise serializers.ValidationError({"password_confirm": "Şifreler eşleşmiyor"})
+        
+        # Şifre doğrulaması yap
+        try:
+            validate_password(data['password'])
+        except Exception as e:
+            raise serializers.ValidationError({"password": list(e)})
+        
+        return data 

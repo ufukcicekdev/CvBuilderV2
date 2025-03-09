@@ -43,8 +43,8 @@
       "lowercase": "At least one lowercase letter",
       "uppercase": "At least one uppercase letter"
     },
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "logoutSuccess": "Successfully logged out.",
+    "sessionExpired": "Your session has expired. Please login again.",
+    "logoutSuccess": "You have been successfully logged out.",
     "errors": {
       "userNotFound": "No user found with this email address",
       "invalidPassword": "Invalid password",
@@ -54,10 +54,24 @@
       "emailNotVerified": "Please verify your email address",
       "accountInactive": "Your account is inactive",
       "generalError": "An error occurred, please try again",
-      "emailRequired": "Email address is required",
+      "emailRequired": "Email is required",
       "passwordRequired": "Password is required"
     },
-    "checkEmail": "Check your email and click the verification link"
+    "checkEmail": "Please check your email inbox and click on the verification link",
+    "forgotPasswordInstructions": "Enter your registered email address to reset your password.",
+    "forgotPasswordSuccess": "Password reset link has been sent to your email address.",
+    "forgotPasswordError": "An error occurred during the password reset process.",
+    "sendResetLink": "Send Reset Link",
+    "backToLogin": "Back to Login",
+    "resetPassword": "Reset Password",
+    "resetPasswordInstructions": "Please enter your new password.",
+    "resetPasswordSuccess": "Your password has been successfully reset. You can now login.",
+    "resetPasswordError": "An error occurred during the password reset process.",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "resetPasswordButton": "Reset My Password",
+    "invalidResetToken": "Invalid or expired password reset link.",
+    "passwordResetExpired": "Password reset link has expired. Please request a new one."
   },
   "profile": {
     "personalInfo": "Personal Information",

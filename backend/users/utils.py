@@ -9,6 +9,13 @@ from django.core.mail import send_mail
 from django.utils.html import strip_tags
 import jwt
 from datetime import datetime, timedelta
+import logging
+from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
+logger = logging.getLogger(__name__)
 
 def send_email_via_smtp2go(
     to_list: Union[List[str], str],
@@ -116,4 +123,38 @@ def send_verification_email(user, language='en'):
     except Exception as e:
         # Hata durumunda False döndür ve logla
         print(f"Doğrulama emaili gönderilemedi: {str(e)}")
+        return False 
+
+def send_password_reset_email(user, token):
+    """
+    Kullanıcıya şifre sıfırlama e-postası gönderir
+    """
+    try:
+        # Frontend URL'sini oluştur
+        print("*****************")
+        print(settings.FRONTEND_URL)
+        print("*****************")
+        reset_url = f"{settings.FRONTEND_URL}/reset-password?token={token}"
+        
+        # E-posta şablonunu hazırla
+        context = {
+            'user': user,
+            'reset_url': reset_url,
+            'valid_hours': 24  # Token geçerlilik süresi (saat)
+        }
+        html_message = render_to_string('email/password_reset_email.html', context)
+        plain_message = strip_tags(html_message)
+        
+        # SMTP2GO kullanarak e-postayı gönder
+        send_email_via_smtp2go(
+            to_list=user.email,
+            subject='Şifre Sıfırlama Talebi',
+            html_body=html_message,
+            text_body=plain_message
+        )
+        
+        logger.info(f"Password reset email sent to {user.email}")
+        return True
+    except Exception as e:
+        logger.error(f"Error sending password reset email to {user.email}: {str(e)}")
         return False 

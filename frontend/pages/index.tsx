@@ -125,23 +125,23 @@ export default function Home() {
   const features = [
     {
       icon: <DescriptionIcon sx={{ fontSize: 40 }} />,
-      title: t('home.feature1.title'),
-      description: t('home.feature1.description')
+      title: t('home.features.feature1.title'),
+      description: t('home.features.feature1.description')
     },
     {
       icon: <SearchIcon sx={{ fontSize: 40 }} />,
-      title: t('home.feature2.title'),
-      description: t('home.feature2.description')
+      title: t('home.features.feature2.title'),
+      description: t('home.features.feature2.description')
     },
     {
       icon: <TrendingUpIcon sx={{ fontSize: 40 }} />,
-      title: t('home.feature3.title'),
-      description: t('home.feature3.description')
+      title: t('home.features.feature3.title'),
+      description: t('home.features.feature3.description')
     },
     {
       icon: <SpeedIcon sx={{ fontSize: 40 }} />,
-      title: t('home.feature4.title'),
-      description: t('home.feature4.description')
+      title: t('home.features.feature4.title'),
+      description: t('home.features.feature4.description')
     }
   ];
 

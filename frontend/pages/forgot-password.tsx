@@ -13,12 +13,12 @@ import * as yup from 'yup';
 import Link from 'next/link';
 import { authAPI } from '../services/api';
 
-// Form şeması
-const schema = yup.object().shape({
+// Form şemasını oluşturmak için fonksiyon
+const createSchema = (t: any) => yup.object().shape({
   email: yup
     .string()
-    .email('Geçerli bir email adresi giriniz')
-    .required('Email adresi zorunludur'),
+    .email(t('validation.invalidEmail', 'Geçerli bir email adresi giriniz'))
+    .required(t('validation.required', 'Bu alan zorunludur')),
 }).required();
 
 // Form verilerinin tipi
@@ -32,6 +32,9 @@ export default function ForgotPassword() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Form şemasını t fonksiyonu ile oluştur
+  const schema = createSchema(t);
 
   const {
     register,

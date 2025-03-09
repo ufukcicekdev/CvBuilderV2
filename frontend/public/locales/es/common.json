@@ -38,13 +38,13 @@
     "phone": "Teléfono",
     "register": "Registrarse",
     "passwordRequirements": {
-      "minLength": "Mínimo 8 caracteres",
+      "minLength": "Al menos 8 caracteres",
       "number": "Al menos un número",
       "lowercase": "Al menos una letra minúscula",
       "uppercase": "Al menos una letra mayúscula"
     },
     "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
-    "logoutSuccess": "Sesión cerrada exitosamente.",
+    "logoutSuccess": "Has cerrado sesión exitosamente.",
     "errors": {
       "userNotFound": "No se encontró ningún usuario con este correo electrónico",
       "invalidPassword": "Contraseña inválida",
@@ -52,12 +52,26 @@
       "emailExists": "Este correo electrónico ya está en uso",
       "weakPassword": "La contraseña es demasiado débil",
       "emailNotVerified": "Por favor, verifica tu correo electrónico",
-      "accountInactive": "Tu cuenta no está activa",
-      "generalError": "Ocurrió un error, por favor inténtalo de nuevo",
-      "emailRequired": "El correo electrónico es obligatorio",
-      "passwordRequired": "La contraseña es obligatoria"
+      "accountInactive": "Tu cuenta está inactiva",
+      "generalError": "Ocurrió un error, por favor intenta nuevamente",
+      "emailRequired": "El correo electrónico es requerido",
+      "passwordRequired": "La contraseña es requerida"
     },
-    "checkEmail": "Revisa tu correo electrónico y haz clic en el enlace de verificación"
+    "checkEmail": "Por favor, revisa tu bandeja de entrada y haz clic en el enlace de verificación",
+    "forgotPasswordInstructions": "Ingresa tu correo electrónico registrado para restablecer tu contraseña.",
+    "forgotPasswordSuccess": "Se ha enviado un enlace de restablecimiento de contraseña a tu correo electrónico.",
+    "forgotPasswordError": "Ocurrió un error durante el proceso de restablecimiento de contraseña.",
+    "sendResetLink": "Enviar Enlace de Restablecimiento",
+    "backToLogin": "Volver a Iniciar Sesión",
+    "resetPassword": "Restablecer Contraseña",
+    "resetPasswordInstructions": "Por favor, ingresa tu nueva contraseña.",
+    "resetPasswordSuccess": "Tu contraseña ha sido restablecida exitosamente. Ahora puedes iniciar sesión.",
+    "resetPasswordError": "Ocurrió un error durante el proceso de restablecimiento de contraseña.",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "resetPasswordButton": "Restablecer Mi Contraseña",
+    "invalidResetToken": "Enlace de restablecimiento de contraseña inválido o expirado.",
+    "passwordResetExpired": "El enlace de restablecimiento de contraseña ha expirado. Por favor, solicita uno nuevo."
   },
   "profile": {
     "personalInfo": "Información Personal",

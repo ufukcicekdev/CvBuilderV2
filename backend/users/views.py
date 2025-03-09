@@ -6,13 +6,18 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
-from .models import User
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer, UserProfileSerializer
+from .models import User, PasswordResetToken
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer, UserProfileSerializer, PasswordResetSerializer
 import logging
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .authentication import TokenAuthentication
-from .utils import send_verification_email
+from .utils import send_verification_email, send_password_reset_email
 from django.utils import timezone
+import uuid
+from django.shortcuts import get_object_or_404
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.hashers import make_password
 
 logger = logging.getLogger(__name__)
 
@@ -324,4 +329,109 @@ def resend_verification_email(request):
         # Güvenlik nedeniyle kullanıcı bulunamasa bile başarılı mesajı döndür
         return Response({
             'message': 'Eğer bu email adresi sistemimizde kayıtlıysa, doğrulama maili gönderilecektir.'
-        }, status=status.HTTP_200_OK) 
+        }, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def forgot_password(request):
+    """
+    Şifre sıfırlama e-postası gönderir
+    """
+    print("DEBUG: forgot_password fonksiyonu çağrıldı")
+    email = request.data.get('email')
+    print(f"DEBUG: Gelen email: {email}")
+    
+    if not email:
+        print("DEBUG: Email adresi bulunamadı")
+        return Response({'error': 'Email adresi gereklidir'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        print(f"DEBUG: Kullanıcı aranıyor: {email}")
+        user = User.objects.get(email=email)
+        print(f"DEBUG: Kullanıcı bulundu: {user.username}")
+    except User.DoesNotExist:
+        print(f"DEBUG: Kullanıcı bulunamadı: {email}")
+        # Güvenlik nedeniyle kullanıcı bulunamasa bile başarılı yanıt döndür
+        return Response({'message': 'Şifre sıfırlama bağlantısı gönderildi (eğer hesap varsa)'}, status=status.HTTP_200_OK)
+    
+    # Önceki sıfırlama tokenlarını iptal et
+    print(f"DEBUG: Önceki tokenlar siliniyor: {user.email}")
+    PasswordResetToken.objects.filter(user=user).delete()
+    
+    # Yeni token oluştur
+    print("DEBUG: Yeni token oluşturuluyor")
+    reset_token = PasswordResetToken.objects.create(
+        user=user,
+        token=str(uuid.uuid4()),
+        expires_at=timezone.now() + timezone.timedelta(hours=24)
+    )
+    print(f"DEBUG: Token oluşturuldu: {reset_token.token}")
+    
+    # E-posta gönder
+    print(f"DEBUG: E-posta gönderiliyor: {user.email}")
+    result = send_password_reset_email(user, reset_token.token)
+    print(f"DEBUG: E-posta gönderme sonucu: {result}")
+    
+    return Response({'message': 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi'}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def validate_reset_token(request, token):
+    """
+    Şifre sıfırlama token'ını doğrular
+    """
+    try:
+        reset_token = PasswordResetToken.objects.get(token=token)
+        
+        # Token süresi dolmuş mu kontrol et
+        if reset_token.expires_at < timezone.now():
+            reset_token.delete()
+            return Response({'error': 'Token süresi dolmuş'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Token kullanılmış mı kontrol et
+        if reset_token.used:
+            return Response({'error': 'Token zaten kullanılmış'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({'message': 'Token geçerli'}, status=status.HTTP_200_OK)
+    
+    except PasswordResetToken.DoesNotExist:
+        return Response({'error': 'Geçersiz token'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reset_password(request):
+    """
+    Şifre sıfırlama işlemini gerçekleştirir
+    """
+    serializer = PasswordResetSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    token = serializer.validated_data['token']
+    password = serializer.validated_data['password']
+    
+    try:
+        reset_token = PasswordResetToken.objects.get(token=token)
+        
+        # Token süresi dolmuş mu kontrol et
+        if reset_token.expires_at < timezone.now():
+            reset_token.delete()
+            return Response({'error': 'Token süresi dolmuş'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Token kullanılmış mı kontrol et
+        if reset_token.used:
+            return Response({'error': 'Token zaten kullanılmış'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Şifreyi güncelle
+        user = reset_token.user
+        user.password = make_password(password)
+        user.save()
+        
+        # Token'ı kullanıldı olarak işaretle
+        reset_token.used = True
+        reset_token.save()
+        
+        return Response({'message': 'Şifreniz başarıyla sıfırlandı'}, status=status.HTTP_200_OK)
+    
+    except PasswordResetToken.DoesNotExist:
+        return Response({'error': 'Geçersiz token'}, status=status.HTTP_400_BAD_REQUEST) 

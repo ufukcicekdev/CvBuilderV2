@@ -8,11 +8,13 @@ import { authAPI } from '../services/api';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { toast } from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import axiosInstance from '../services/axios';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Desteklenen diller
 const SUPPORTED_LANGUAGES = ['tr', 'en', 'fr', 'de', 'ru', 'hi', 'ar', 'zh', 'es', 'it'] as const;
@@ -29,10 +31,11 @@ interface RegisterFormData {
 }
 
 export default function Register() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation('common');
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [backendErrors, setBackendErrors] = useState<{[key: string]: string[]}>({});
+  const { changeLanguage } = useLanguage();
 
   // Kullanıcının seçtiği dili al
   const getUserLanguage = (): SupportedLanguage => {
@@ -204,8 +207,10 @@ export default function Register() {
   // Component mount olduğunda dili ayarla
   useEffect(() => {
     const currentLang = getUserLanguage();
-    i18n.changeLanguage(currentLang);
-  }, [i18n]);
+    if (changeLanguage) {
+      changeLanguage(currentLang);
+    }
+  }, [changeLanguage]);
 
   return (
     <Layout>
@@ -290,4 +295,12 @@ export default function Register() {
       </Container>
     </Layout>
   );
-} 
+}
+
+export const getStaticProps = async ({ locale = 'tr' }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
+}; 

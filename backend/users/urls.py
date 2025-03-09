@@ -11,4 +11,9 @@ urlpatterns = [
     path('upload-profile-picture/', views.upload_profile_picture, name='upload-profile-picture'),
     path('verify-email/<uuid:token>/', views.verify_email, name='verify-email'),
     path('resend-verification-email/', views.resend_verification_email, name='resend-verification-email'),
+    
+    # Şifre sıfırlama URL'leri
+    path('forgot-password/', views.forgot_password, name='forgot-password'),
+    path('reset-password/validate/<str:token>/', views.validate_reset_token, name='validate-reset-token'),
+    path('reset-password/', views.reset_password, name='reset-password'),
 ] 

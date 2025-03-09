@@ -19,6 +19,7 @@
   },
   "auth": {
     "jobseeker": "İş Arayan",
+    "username": "Kullanıcı Adı",
     "employer": "İşveren",
     "email": "E-posta",
     "password": "Şifre",
@@ -57,7 +58,21 @@
       "emailRequired": "Email adresi gerekli",
       "passwordRequired": "Şifre gerekli"
     },
-    "checkEmail": "Email kutunuzu kontrol edin ve doğrulama bağlantısına tıklayın"
+    "checkEmail": "Email kutunuzu kontrol edin ve doğrulama bağlantısına tıklayın",
+    "forgotPasswordInstructions": "Şifrenizi sıfırlamak için kayıtlı email adresinizi girin.",
+    "forgotPasswordSuccess": "Şifre sıfırlama bağlantısı email adresinize gönderildi.",
+    "forgotPasswordError": "Şifre sıfırlama işlemi sırasında bir hata oluştu.",
+    "sendResetLink": "Sıfırlama Bağlantısı Gönder",
+    "backToLogin": "Giriş Sayfasına Dön",
+    "resetPassword": "Şifremi Sıfırla",
+    "resetPasswordInstructions": "Lütfen yeni şifrenizi girin.",
+    "resetPasswordSuccess": "Şifreniz başarıyla sıfırlandı. Şimdi giriş yapabilirsiniz.",
+    "resetPasswordError": "Şifre sıfırlama işlemi sırasında bir hata oluştu.",
+    "newPassword": "Yeni Şifre",
+    "confirmNewPassword": "Yeni Şifre Tekrar",
+    "resetPasswordButton": "Şifremi Sıfırla",
+    "invalidResetToken": "Geçersiz veya süresi dolmuş şifre sıfırlama bağlantısı.",
+    "passwordResetExpired": "Şifre sıfırlama bağlantısının süresi dolmuş. Lütfen yeni bir bağlantı talep edin."
   },
   "profile": {
     "personalInfo": "Kişisel Bilgiler",

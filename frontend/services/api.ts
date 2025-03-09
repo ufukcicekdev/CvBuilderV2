@@ -234,12 +234,12 @@ export const authAPI = {
 
   // Şifre sıfırlama token'ını doğrulama
   validateResetToken: (token: string) => {
-    return api.get(`/api/auth/reset-password/validate/${token}/`);
+    return api.get(`/api/users/reset-password/validate/${token}/`);
   },
 
   // Şifre sıfırlama
   resetPassword: (data: { token: string; password: string; password_confirm: string }) => {
-    return api.post('/api/auth/reset-password/', data);
+    return api.post('/api/users/reset-password/', data);
   }
 };
 

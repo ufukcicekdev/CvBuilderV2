@@ -13,19 +13,19 @@ import * as yup from 'yup';
 import Link from 'next/link';
 import { authAPI } from '../services/api';
 
-// Form şeması
-const schema = yup.object().shape({
+// Form şemasını oluşturmak için fonksiyon
+const createSchema = (t: any) => yup.object().shape({
   password: yup
     .string()
-    .min(8, 'Şifre en az 8 karakter olmalıdır')
-    .matches(/[0-9]/, 'Şifre en az bir rakam içermelidir')
-    .matches(/[a-z]/, 'Şifre en az bir küçük harf içermelidir')
-    .matches(/[A-Z]/, 'Şifre en az bir büyük harf içermelidir')
-    .required('Şifre zorunludur'),
+    .min(8, ({ min }) => t('validation.passwordMinLength', `Şifre en az ${min} karakter olmalıdır`))
+    .matches(/[0-9]/, t('validation.passwordNumber', 'Şifre en az bir rakam içermelidir'))
+    .matches(/[a-z]/, t('validation.passwordLowercase', 'Şifre en az bir küçük harf içermelidir'))
+    .matches(/[A-Z]/, t('validation.passwordUppercase', 'Şifre en az bir büyük harf içermelidir'))
+    .required(t('validation.required', 'Bu alan zorunludur')),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password')], 'Şifreler eşleşmiyor')
-    .required('Şifre tekrarı zorunludur'),
+    .oneOf([yup.ref('password')], t('validation.passwordMatch', 'Şifreler eşleşmiyor'))
+    .required(t('validation.required', 'Bu alan zorunludur')),
 }).required();
 
 // Form verilerinin tipi
@@ -43,6 +43,9 @@ export default function ResetPassword() {
   const [isValidToken, setIsValidToken] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Form şemasını t fonksiyonu ile oluştur
+  const schema = createSchema(t);
 
   const {
     register,
