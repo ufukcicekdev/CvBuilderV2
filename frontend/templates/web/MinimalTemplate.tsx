@@ -646,7 +646,20 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
           <Container maxWidth="lg">
             <Toolbar sx={{ justifyContent: 'space-between' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+                <Typography 
+                  variant="h6" 
+                  component="a" 
+                  href="/"
+                  sx={{ 
+                    fontWeight: 600,
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      opacity: 0.8
+                    },
+                    cursor: 'pointer'
+                  }}
+                >
                   CV Builder
                 </Typography>
               </Box>
