@@ -38,6 +38,7 @@
     "companyWebsite": "Şirket Web Sitesi",
     "phone": "Telefon",
     "register": "Kayıt Ol",
+    "resendVerificationEmail": "Yeni Doğrulama Maili Gönder",
     "passwordRequirements": {
       "minLength": "En az 8 karakter",
       "number": "En az bir rakam",

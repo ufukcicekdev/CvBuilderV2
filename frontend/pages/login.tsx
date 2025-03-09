@@ -66,6 +66,7 @@ export default function LoginPage() {
           switch (errorCode) {
             case 'email.not_verified':
               setFormError('email', { message: t('auth.errors.emailNotVerified') });
+              setLoginError(t('auth.errors.emailNotVerified'));
               localStorage.setItem('registrationEmail', data.email);
               break;
             case 'account.inactive':
@@ -208,7 +209,7 @@ export default function LoginPage() {
                 <Typography color="error">
                   {loginError}
                 </Typography>
-                {loginError.includes('email adresinizi doğrulayın') && (
+                {(loginError.includes('email adresinizi doğrulayın') || loginError === t('auth.errors.emailNotVerified')) && (
                   <Button
                     fullWidth
                     variant="outlined"
@@ -217,9 +218,24 @@ export default function LoginPage() {
                     disabled={loading}
                     sx={{ mt: 1 }}
                   >
-                    Yeni Doğrulama Maili Gönder
+                    {t('auth.resendVerificationEmail', 'Yeni Doğrulama Maili Gönder')}
                   </Button>
                 )}
+              </Box>
+            )}
+
+            {!loginError && errors.email?.message === t('auth.errors.emailNotVerified') && (
+              <Box sx={{ mt: 2 }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleResendVerification}
+                  disabled={loading}
+                  sx={{ mt: 1 }}
+                >
+                  {t('auth.resendVerificationEmail', 'Yeni Doğrulama Maili Gönder')}
+                </Button>
               </Box>
             )}
 

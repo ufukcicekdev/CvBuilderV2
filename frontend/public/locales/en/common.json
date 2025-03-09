@@ -37,6 +37,7 @@
     "companyWebsite": "Company Website",
     "phone": "Phone",
     "register": "Register",
+    "resendVerificationEmail": "Resend Verification Email",
     "passwordRequirements": {
       "minLength": "At least 8 characters",
       "number": "At least one number",
