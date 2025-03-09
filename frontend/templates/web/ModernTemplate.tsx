@@ -373,71 +373,83 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
             const parsedData = JSON.parse(event.data);
             console.log('Parsed WebSocket message:', parsedData);
             
-            // Mesaj tipine göre işlem yap (action alanını kontrol et)
-            switch (parsedData.action) {
-              case 'ping':
-                console.log('Received JSON ping from server');
-                // Ping mesajına pong ile yanıt ver
-                if (ws && ws.readyState === WebSocket.OPEN) {
-                  ws.send(JSON.stringify({ action: 'pong', timestamp: Date.now() }));
+            // Mesaj tipine göre işlem yap (type veya action alanını kontrol et)
+            if (parsedData.type === 'pong' || parsedData.action === 'pong') {
+              console.log('Received JSON pong from server');
+              return;
+            }
+            
+            if (parsedData.type === 'ping' || parsedData.action === 'ping') {
+              console.log('Received JSON ping from server');
+              // Ping mesajına pong ile yanıt ver
+              if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ action: 'pong', timestamp: Date.now() }));
+              }
+              return;
+            }
+            
+            // Gelen mesaj içeriğini console'a detaylıca yazdır
+            console.log('CV data update received. Checking format...');
+            console.log('Message has "message" field:', parsedData.hasOwnProperty('message'));
+            console.log('Message has "id" field:', parsedData.hasOwnProperty('id') || (parsedData.message && parsedData.message.hasOwnProperty('id')));
+            
+            // Veri format kontrolü
+            let cvData: any = null;
+            
+            // Durum 1: Direkt CV verisi geldi
+            if (parsedData.id && (parsedData.personal_info || parsedData.education || parsedData.experience)) {
+              console.log('Direct CV data format detected');
+              cvData = parsedData;
+            }
+            // Durum 2: Mesaj içinde CV verisi var (message alanı içinde)
+            else if (parsedData.message && typeof parsedData.message === 'object' && 
+                     parsedData.message.id && (parsedData.message.personal_info || parsedData.message.education || parsedData.message.experience)) {
+              console.log('CV data inside message field detected');
+              cvData = parsedData.message;
+            }
+            // Durum 3: Mesaj içinde string olarak JSON data var
+            else if (parsedData.message && typeof parsedData.message === 'string') {
+              try {
+                const innerData = JSON.parse(parsedData.message);
+                if (innerData.id && (innerData.personal_info || innerData.education || innerData.experience)) {
+                  console.log('CV data as string inside message field detected');
+                  cvData = innerData;
                 }
-                return;
+              } catch (err) {
+                console.log('Message contains string but not valid JSON CV data');
+              }
+            }
+            
+            // CV verisi varsa state'i güncelle
+            if (cvData) {
+              console.log('Valid CV data found, updating state:', cvData);
+              
+              // Preserve video_info if it's missing in the new data but exists in the ref
+              if (!cvData.video_info?.video_url && videoInfoRef.current?.video_url) {
+                console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
+                cvData.video_info = videoInfoRef.current;
+              }
+              
+              // State'i güncelle ve UI'ı yeniden render et
+              setCv((prevCv: CV) => {
+                // Sadece varolan değerleri güncelle, eksik alanları korumaya çalış
+                const mergedData = { 
+                  ...prevCv,
+                  ...cvData,
+                  // Önemli nesne alanlarını özel olarak birleştir
+                  personal_info: { ...(prevCv?.personal_info || {}), ...(cvData.personal_info || {}) },
+                  education: cvData.education || prevCv?.education || [],
+                  experience: cvData.experience || prevCv?.experience || [],
+                  skills: cvData.skills || prevCv?.skills || [],
+                  languages: cvData.languages || prevCv?.languages || [],
+                  certificates: cvData.certificates || prevCv?.certificates || []
+                };
                 
-              case 'pong':
-                console.log('Received JSON pong from server');
-                return;
-                
-              case 'update':
-                console.log('Received update message:', parsedData.data);
-                
-                if (parsedData.data) {
-                  // data içindeki veriyi kullan
-                  const data = parsedData.data;
-                  
-                  // Preserve video_info if it's missing in the new data but exists in the ref
-                  if (!data.video_info?.video_url && videoInfoRef.current?.video_url) {
-                    console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
-                    data.video_info = videoInfoRef.current;
-                  }
-                  
-                  // State'i güncelle ve UI'ı yeniden render et
-                  console.log('Updating CV state with new data from WebSocket');
-                  setCv(prevCv => {
-                    console.log('Previous CV state:', prevCv);
-                    console.log('New CV state:', data);
-                    return { ...data };
-                  });
-                } else {
-                  console.error('Received update message without data:', parsedData);
-                }
-                break;
-                
-              default:
-                // Tip belirtilmemiş veya bilinmeyen tip - doğrudan veriyi kullan
-                console.log('Received message with unknown or no action, checking for CV data');
-                
-                // Veri yapısını kontrol et
-                if (parsedData.id && (parsedData.personal_info || parsedData.education || parsedData.experience)) {
-                  console.log('Message appears to be CV data, updating state');
-                  const data = parsedData;
-                  
-                  // Preserve video_info if it's missing in the new data but exists in the ref
-                  if (!data.video_info?.video_url && videoInfoRef.current?.video_url) {
-                    console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
-                    data.video_info = videoInfoRef.current;
-                  }
-                  
-                  // State'i güncelle ve UI'ı yeniden render et
-                  console.log('Updating CV state with new data from WebSocket (direct format)');
-                  setCv(prevCv => {
-                    console.log('Previous CV state:', prevCv);
-                    console.log('New CV state:', data);
-                    return { ...data };
-                  });
-                } else {
-                  console.log('Message does not appear to be CV data, ignoring');
-                }
-                break;
+                console.log('State updated with merged data');
+                return mergedData;
+              });
+            } else {
+              console.log('No valid CV data found in the message, ignoring');
             }
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);
