@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from '@/utils/axios';
+import axiosInstance from '@/utils/axios';
 
 interface User {
   id: number;
@@ -30,7 +30,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (token && savedUser) {
       setIsAuthenticated(true);
       setUser(JSON.parse(savedUser));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
     setIsLoading(false);
   }, []);
@@ -43,9 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
-      delete axios.defaults.headers.common['Authorization'];
 
-      const response = await axios.post('/api/users/login/', {
+      const response = await axiosInstance.post('/api/users/login/', {
         email,
         password
       });
@@ -59,13 +57,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true);
       setUser(user);
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-      
-      // console.log('Login successful:', {
-      //   user,
-      //   token: access,
-      //   headers: axios.defaults.headers.common
-      // });
+      console.log('Login successful:', {
+        user,
+        token: access
+      });
 
       router.push('/dashboard/create-cv');
 
@@ -85,7 +80,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
     setUser(null);
 
-    delete axios.defaults.headers.common['Authorization'];
     router.push('/login');
   };
 

@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { showToast } from '../utils/toast';
 
+// API URL'yi .env dosyasından alıyoruz
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+console.log('Axios service using API URL:', API_URL); // Debug için
+
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  baseURL: API_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',

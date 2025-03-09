@@ -7,8 +7,11 @@ class ApiService {
     private refreshSubscribers: ((token: string) => void)[] = [];
 
     constructor() {
+        // API URL'yi .env dosyasından alıyoruz
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        
         this.api = axios.create({
-            baseURL: 'http://localhost:8000/api',
+            baseURL: `${API_URL}/api`,
             headers: {
                 'Content-Type': 'application/json',
             },

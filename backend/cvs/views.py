@@ -8,7 +8,6 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.viewsets import ModelViewSet
 from django.template.loader import render_to_string
-from weasyprint import HTML
 from django.http import HttpResponse
 import tempfile
 import os
@@ -24,6 +23,10 @@ import uuid
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import boto3
+
+def get_cv_group_name(cv_id, translation_key, lang, template_id='1'):
+    """CV WebSocket grup adını oluşturan yardımcı fonksiyon"""
+    return f'cv_{template_id}_{cv_id}_{translation_key}_{lang}'
 
 class CVBaseMixin:
     # Desteklenen diller ve OpenAI için karşılıkları
@@ -311,51 +314,109 @@ class CVBaseMixin:
 
         return current_translation
 
-    def _notify_cv_update(self, cv, lang):
+    def _notify_cv_update(self, cv, lang, template_id='1'):
         """CV güncellendiğinde WebSocket üzerinden bildirim gönder"""
-        channel_layer = get_channel_layer()
-        group_name = f'cv_{cv.id}_{cv.translation_key}_{lang}'
-        
-        # Güncel CV verilerini al
-        translation = cv.translations.filter(language_code=lang).first()
-        if not translation:
-            translation = cv.translations.filter(language_code='en').first()
-        
-        if translation:
-            data = {
-                'id': cv.id,
-                'title': cv.title,
-                'language': translation.language_code,
-                'personal_info': translation.personal_info,
-                'education': translation.education,
-                'experience': translation.experience,
-                'skills': translation.skills,
-                'languages': translation.languages,
-                'certificates': translation.certificates,
-                'video_info': translation.video_info,
-                'created_at': cv.created_at,
-                'updated_at': cv.updated_at,
-                'translation_key': cv.translation_key
-            }
-
-            # Kullanıcının profil resmini ekle
-            if cv.user.profile_picture:
-                data['personal_info']['photo'] = self.request.build_absolute_uri(cv.user.profile_picture.url)
+        try:
+            print("="*50)
+            print(f"_notify_cv_update çağrıldı: cv_id={cv.id}, lang={lang}, template_id={template_id}")
             
-            # Video bilgilerini ekle
-            if cv.video:
-                data['video_info']['video_url'] = self.request.build_absolute_uri(cv.video.url)
-            if cv.video_description:
-                data['video_info']['description'] = cv.video_description
-
-            # WebSocket üzerinden bildirim gönder
-            async_to_sync(channel_layer.group_send)(
-                group_name,
-                {
-                    'type': 'cv_update',
-                    'message': data
+            # Grup adı oluşturma detayları
+            print(f"Grup adı oluşturma detayları:")
+            print(f"  cv.id: {cv.id}")
+            print(f"  cv.translation_key: {cv.translation_key}")
+            print(f"  lang: {lang}")
+            print(f"  template_id: {template_id}")
+            
+            channel_layer = get_channel_layer()
+            group_name = get_cv_group_name(cv.id, cv.translation_key, lang, template_id)
+            
+            print(f"WebSocket group_name: {group_name}")
+            
+            # Channel layer bilgilerini kontrol et
+            print(f"Channel layer type: {type(channel_layer).__name__}")
+            
+            # Güncel CV verilerini al
+            translation = cv.translations.filter(language_code=lang).first()
+            if not translation:
+                translation = cv.translations.filter(language_code='en').first()
+                print(f"Çeviri bulunamadı, İngilizce çeviri kullanılıyor: {translation is not None}")
+            
+            if translation:
+                data = {
+                    'id': cv.id,
+                    'template_id': template_id,
+                    'title': cv.title,
+                    'language': translation.language_code,
+                    'personal_info': translation.personal_info,
+                    'education': translation.education,
+                    'experience': translation.experience,
+                    'skills': translation.skills,
+                    'languages': translation.languages,
+                    'certificates': translation.certificates,
+                    'video_info': translation.video_info,
+                    'created_at': cv.created_at.isoformat() if cv.created_at else None,
+                    'updated_at': cv.updated_at.isoformat() if cv.updated_at else None,
+                    'translation_key': cv.translation_key,
+                    'action': 'update',  # Mesaj tipini belirt
+                    'timestamp': str(timezone.now().timestamp())  # Zaman damgası ekle (string olarak)
                 }
-            )
+
+                # Kullanıcının profil resmini ekle
+                if cv.user.profile_picture:
+                    data['personal_info']['photo'] = self.request.build_absolute_uri(cv.user.profile_picture.url)
+                
+                # Video bilgilerini ekle
+                if cv.video:
+                    data['video_info']['video_url'] = self.request.build_absolute_uri(cv.video.url)
+                if cv.video_description:
+                    data['video_info']['description'] = cv.video_description
+
+                print(f"WebSocket üzerinden bildirim gönderiliyor: {group_name}")
+                
+                # Gönderilecek mesajın içeriğini detaylı bir şekilde yazdır
+                print("Gönderilecek mesaj içeriği:")
+                print(f"  ID: {data['id']}")
+                print(f"  Template ID: {data['template_id']}")
+                print(f"  Title: {data['title']}")
+                print(f"  Language: {data['language']}")
+                print(f"  Translation Key: {data['translation_key']}")
+                print(f"  Updated At: {data['updated_at']}")
+                print(f"  Action: {data['action']}")
+                print(f"  Timestamp: {data['timestamp']}")
+                
+                # Mesajı JSON formatına dönüştür ve kontrol et
+                try:
+                    json_data = json.dumps(data)
+                    print(f"JSON message length: {len(json_data)} bytes")
+                except Exception as json_error:
+                    print(f"JSON serialization error: {str(json_error)}")
+                    # Hata durumunda basitleştirilmiş veri gönder
+                    data = {
+                        'id': cv.id,
+                        'template_id': template_id,
+                        'title': cv.title,
+                        'language': translation.language_code,
+                        'action': 'update',
+                        'timestamp': str(timezone.now())
+                    }
+                
+                # WebSocket üzerinden bildirim gönder
+                async_to_sync(channel_layer.group_send)(
+                    group_name,
+                    {
+                        'type': 'cv_update',
+                        'message': data
+                    }
+                )
+                
+                print("WebSocket bildirimi başarıyla gönderildi")
+            else:
+                print("Çeviri bulunamadı, WebSocket bildirimi gönderilemiyor")
+                
+        except Exception as e:
+            print(f"WebSocket bildirimi gönderilirken hata oluştu: {str(e)}")
+            import traceback
+            traceback.print_exc()
 
 class CVListCreateView(generics.ListCreateAPIView):
     serializer_class = CVSerializer
@@ -518,7 +579,7 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
         print("="*50)
-        print("UPDATE METODU ÇAĞRILDI")
+        print("UPDATE METODU ÇAĞRILDI 1")
         print("REQUEST METHOD:", request.method)
         print("REQUEST DATA:", request.data)
         print("="*50)
@@ -528,8 +589,12 @@ class CVDetailView(CVBaseMixin, generics.RetrieveUpdateDestroyAPIView):
         
         self._update_cv_data(instance, request.data, current_lang)
         
+        # Template ID'yi request.data'dan al, yoksa varsayılan değer kullan
+        template_id = request.data.get('template_id', 'web-template1')
+        print(f"Template ID: {template_id}")
+        
         # WebSocket bildirimi gönder
-        self._notify_cv_update(instance, current_lang)
+        self._notify_cv_update(instance, current_lang, template_id)
         
         return Response(self._get_translated_data(instance, current_lang))
 
@@ -988,7 +1053,7 @@ def debug_auth(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_cv_by_translation(request, id, translation_key, lang):
+def get_cv_by_translation(request, id, translation_key, lang, template_id='1'):
     try:
         cv = CV.objects.get(id=id, translation_key=translation_key)
         translation = cv.translations.filter(language_code=lang).first()
@@ -1002,6 +1067,7 @@ def get_cv_by_translation(request, id, translation_key, lang):
         # Çeviriyi al
         data = {
             'id': cv.id,
+            'template_id': template_id,
             'title': cv.title,
             'language': translation.language_code,
             'personal_info': translation.personal_info,
@@ -1011,8 +1077,8 @@ def get_cv_by_translation(request, id, translation_key, lang):
             'languages': translation.languages,
             'certificates': translation.certificates,
             'video_info': translation.video_info,
-            'created_at': cv.created_at,
-            'updated_at': cv.updated_at,
+            'created_at': cv.created_at.isoformat() if cv.created_at else None,
+            'updated_at': cv.updated_at.isoformat() if cv.updated_at else None,
             'translation_key': cv.translation_key  # translation_key'i de ekleyelim
         }
 
@@ -1043,7 +1109,7 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         print("="*50)
-        print("UPDATE METODU ÇAĞRILDI")
+        print("UPDATE METODU ÇAĞRILDI 1")
         print("REQUEST METHOD:", request.method)
         print("REQUEST DATA:", request.data)
         print("="*50)
@@ -1052,6 +1118,14 @@ class CVViewSet(CVBaseMixin, viewsets.ModelViewSet):
         current_lang = self._get_language_code(request)
         
         self._update_cv_data(instance, request.data, current_lang)
+        
+        # Template ID'yi request.data'dan al, yoksa varsayılan değer kullan
+        template_id = request.data.get('template_id', 'web-template1')
+        print(f"Template ID: {template_id}")
+        
+        # WebSocket bildirimi gönder
+        self._notify_cv_update(instance, current_lang, template_id)
+        
         return Response(self._get_translated_data(instance, current_lang))
 
     def create(self, request, *args, **kwargs):

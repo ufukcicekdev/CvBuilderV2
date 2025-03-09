@@ -4,6 +4,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { JWT } from 'next-auth/jwt';
 
+// NextAuth uyarılarını gidermek için
+const NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key';
+
 declare module 'next-auth' {
   interface User {
     id: string;
@@ -41,14 +45,17 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login/`, {
+          // API URL'yi doğrudan .env dosyasından alıyoruz
+          console.log('Using API URL:', process.env.NEXT_PUBLIC_API_URL);
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+          const response = await fetch(`${apiUrl}/api/auth/login/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials),
           });
 
           const data = await response.json();
-
+          
           if (response.ok && data) {
             // Backend'den gelen response'u next-auth user formatına dönüştür
             return {
@@ -58,6 +65,7 @@ export const authOptions: NextAuthOptions = {
               refreshToken: data.refresh,
             };
           }
+          console.error('Auth response not ok:', response.status, data);
           return null;
         } catch (error) {
           console.error('Auth error:', error);
@@ -95,7 +103,8 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 24 * 60 * 60, // 24 saat
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: true, // Her zaman debug modunu etkinleştir
+  secret: NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);

@@ -170,14 +170,24 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
     }
   }, [lang, id, translation_key]);
 
+  // CV state'i değiştiğinde log ekleyelim
+  useEffect(() => {
+    console.log('CV state updated:', cv);
+  }, [cv]);
+
   // WebSocket connection for real-time updates
   useEffect(() => {
     if (!id || !translation_key || !lang) return;
 
     let ws: WebSocket | null = null;
     let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
+    const maxReconnectAttempts = 10; // Daha fazla yeniden bağlanma denemesi
     const reconnectDelay = 3000; // 3 seconds
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+    let pingInterval: NodeJS.Timeout | null = null;
+    let connectionTimeout: NodeJS.Timeout | null = null;
+    let lastMessageTime = Date.now(); // Son mesaj zamanı
+    let connectionCheckInterval: NodeJS.Timeout | null = null;
 
     const connectWebSocket = () => {
       console.log('Attempting to connect to WebSocket with params:', { id, translation_key, lang });
@@ -185,35 +195,254 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
       // Close existing connection if any
       if (ws) {
         ws.close();
+        ws = null;
       }
 
+      // Clear any existing timeouts and intervals
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+        reconnectTimeout = null;
+      }
+      
+      if (pingInterval) {
+        clearInterval(pingInterval);
+        pingInterval = null;
+      }
+      
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+        connectionTimeout = null;
+      }
+      
+      if (connectionCheckInterval) {
+        clearInterval(connectionCheckInterval);
+        connectionCheckInterval = null;
+      }
+
+      // Template ID'yi URL'den al
+      const templateId = router.asPath.split('/')[2] || 'web-template1'; // Varsayılan değer
+      
       // Backend sunucusuna doğrudan bağlan
-      const wsUrl = `ws://localhost:8000/ws/cv/${id}/${translation_key}/${lang}/`;
-      console.log('WebSocket URL:', wsUrl);
+      // API URL'yi .env dosyasından alıyoruz
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      // ws:// veya wss:// protokolünü belirle
+      const wsProtocol = apiUrl.startsWith('https') ? 'wss' : 'ws';
+      // URL'den http:// veya https:// kısmını çıkar
+      const apiHost = apiUrl.replace(/^https?:\/\//, '');
+      
+      // WebSocket URL'sini talimatlara göre oluştur:
+      // 1. Template ID
+      // 2. CV ID
+      // 3. Translation Key
+      // 4. Language
+      const wsUrl = `${wsProtocol}://${apiHost}/ws/cv/${templateId}/${id}/${translation_key}/${lang}/`;
+      console.log('WebSocket URL with correct parameters:', wsUrl);
+      
+      // Grup adını backend'in beklediği formatta oluştur
+      const groupName = `cv_${templateId}_${id}_${translation_key}_${lang}`;
+      console.log('WebSocket group name:', groupName);
       
       try {
+        // WebSocket bağlantısını oluştur
         ws = new WebSocket(wsUrl);
-        console.log('WebSocket instance created');
+        console.log('WebSocket instance created, readyState:', ws.readyState);
+        
+        // Bağlantı durumunu kontrol et
+        console.log('WebSocket connection state:', {
+          CONNECTING: ws.readyState === WebSocket.CONNECTING,
+          OPEN: ws.readyState === WebSocket.OPEN,
+          CLOSING: ws.readyState === WebSocket.CLOSING,
+          CLOSED: ws.readyState === WebSocket.CLOSED
+        });
+
+        // Bağlantı zaman aşımı - 15 saniye
+        connectionTimeout = setTimeout(() => {
+          if (ws && ws.readyState !== WebSocket.OPEN) {
+            console.error('WebSocket connection timeout after 15 seconds');
+            ws.close();
+            
+            if (reconnectAttempts < maxReconnectAttempts) {
+              reconnectAttempts++;
+              console.log(`Connection timeout. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+              reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
+            }
+          }
+        }, 15000);
 
         ws.onopen = () => {
-          console.log('WebSocket connection established successfully');
+          console.log('WebSocket connection established successfully, readyState:', ws?.readyState);
+          lastMessageTime = Date.now();
+          
+          if (connectionTimeout) {
+            clearTimeout(connectionTimeout);
+            connectionTimeout = null;
+          }
+          
           reconnectAttempts = 0;
+          
+          // Bağlantıyı canlı tutmak için her 20 saniyede bir ping gönder
+          pingInterval = setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              console.log('Sending ping to keep connection alive');
+              try {
+                ws.send(JSON.stringify({ action: 'ping', timestamp: Date.now() }));
+                lastMessageTime = Date.now();
+              } catch (error) {
+                console.error('Error sending ping:', error);
+              }
+            } else {
+              console.warn('Cannot send ping, WebSocket not open. readyState:', ws?.readyState);
+            }
+          }, 20000);
+          
+          // Bağlantı durumunu düzenli olarak kontrol et
+          connectionCheckInterval = setInterval(() => {
+            const now = Date.now();
+            const timeSinceLastMessage = now - lastMessageTime;
+            
+            console.log('Connection check - Time since last message:', timeSinceLastMessage / 1000, 'seconds');
+            
+            // 60 saniyeden fazla mesaj alınmadıysa bağlantıyı yeniden kur
+            if (timeSinceLastMessage > 60000) {
+              console.warn('No messages received for 60 seconds, reconnecting...');
+              if (ws) {
+                ws.close();
+                ws = null;
+              }
+              connectWebSocket();
+            }
+          }, 30000);
+          
+          // Bağlantı kurulduğunda bir başlangıç mesajı gönder
+          try {
+            console.log('Sending init message to server');
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              // Bağlantı bilgilerini gönder
+              ws.send(JSON.stringify({ 
+                action: 'init', 
+                template_id: templateId,
+                cv_id: id,
+                translation_key: translation_key,
+                lang: lang,
+                group_name: groupName,
+                timestamp: Date.now() 
+              }));
+              
+              // CV verisini talep et
+              console.log('Requesting CV data from server');
+              ws.send(JSON.stringify({ 
+                action: 'get_cv_data', 
+                template_id: templateId,
+                cv_id: id,
+                translation_key: translation_key,
+                lang: lang
+              }));
+            } else {
+              console.error('Cannot send init message, WebSocket not open. readyState:', ws?.readyState);
+            }
+          } catch (error) {
+            console.error('Error sending init message:', error);
+          }
         };
 
         ws.onmessage = (event) => {
           console.log('Received WebSocket message:', event.data);
-          try {
-            const data = JSON.parse(event.data);
-            
-            // Preserve video_info if it's missing in the new data but exists in the ref
-            if (!data.video_info?.video_url && videoInfoRef.current?.video_url) {
-              console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
-              data.video_info = videoInfoRef.current;
+          lastMessageTime = Date.now();
+          
+          // Ham mesajı loglayalım
+          console.log('Raw message type:', typeof event.data);
+          console.log('Raw message length:', event.data.length);
+          
+          // Düz metin ping/pong mesajlarını kontrol et
+          if (typeof event.data === 'string') {
+            if (event.data === 'ping' || event.data === 'pong') {
+              console.log('Received plain text ping/pong from server');
+              // Ping mesajına pong ile yanıt ver
+              if (event.data === 'ping' && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send('pong');
+              }
+              return;
             }
             
-            setCv(data);
+            // Mesaj içeriğini kontrol et
+            console.log('Message content first 100 chars:', event.data.substring(0, 100));
+          }
+          
+          try {
+            // Mesajı JSON olarak parse et
+            const parsedData = JSON.parse(event.data);
+            console.log('Parsed WebSocket message:', parsedData);
+            
+            // Mesaj tipine göre işlem yap (action alanını kontrol et)
+            switch (parsedData.action) {
+              case 'ping':
+                console.log('Received JSON ping from server');
+                // Ping mesajına pong ile yanıt ver
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                  ws.send(JSON.stringify({ action: 'pong', timestamp: Date.now() }));
+                }
+                return;
+                
+              case 'pong':
+                console.log('Received JSON pong from server');
+                return;
+                
+              case 'update':
+                console.log('Received update message:', parsedData.data);
+                
+                if (parsedData.data) {
+                  // data içindeki veriyi kullan
+                  const data = parsedData.data;
+                  
+                  // Preserve video_info if it's missing in the new data but exists in the ref
+                  if (!data.video_info?.video_url && videoInfoRef.current?.video_url) {
+                    console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
+                    data.video_info = videoInfoRef.current;
+                  }
+                  
+                  // State'i güncelle ve UI'ı yeniden render et
+                  console.log('Updating CV state with new data from WebSocket');
+                  setCv(prevCv => {
+                    console.log('Previous CV state:', prevCv);
+                    console.log('New CV state:', data);
+                    return { ...data };
+                  });
+                } else {
+                  console.error('Received update message without data:', parsedData);
+                }
+                break;
+                
+              default:
+                // Tip belirtilmemiş veya bilinmeyen tip - doğrudan veriyi kullan
+                console.log('Received message with unknown or no action, checking for CV data');
+                
+                // Veri yapısını kontrol et
+                if (parsedData.id && (parsedData.personal_info || parsedData.education || parsedData.experience)) {
+                  console.log('Message appears to be CV data, updating state');
+                  const data = parsedData;
+                  
+                  // Preserve video_info if it's missing in the new data but exists in the ref
+                  if (!data.video_info?.video_url && videoInfoRef.current?.video_url) {
+                    console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
+                    data.video_info = videoInfoRef.current;
+                  }
+                  
+                  // State'i güncelle ve UI'ı yeniden render et
+                  console.log('Updating CV state with new data from WebSocket (direct format)');
+                  setCv(prevCv => {
+                    console.log('Previous CV state:', prevCv);
+                    console.log('New CV state:', data);
+                    return { ...data };
+                  });
+                } else {
+                  console.log('Message does not appear to be CV data, ignoring');
+                }
+                break;
+            }
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);
+            // JSON parse hatası olduğunda mesajı loglayalım
+            console.error('Raw message that failed to parse:', event.data);
           }
         };
 
@@ -222,10 +451,15 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
           console.error('WebSocket readyState:', ws?.readyState);
           console.error('WebSocket URL:', wsUrl);
           
+          if (connectionTimeout) {
+            clearTimeout(connectionTimeout);
+            connectionTimeout = null;
+          }
+          
           if (reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
-            console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
-            setTimeout(connectWebSocket, reconnectDelay);
+            console.log(`WebSocket error. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
           } else {
             console.error('Max reconnection attempts reached');
           }
@@ -236,17 +470,39 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
             code: event.code,
             reason: event.reason,
             wasClean: event.wasClean,
-            url: wsUrl
+            url: wsUrl,
+            readyState: ws?.readyState
           });
+
+          if (connectionTimeout) {
+            clearTimeout(connectionTimeout);
+            connectionTimeout = null;
+          }
+          
+          if (pingInterval) {
+            clearInterval(pingInterval);
+            pingInterval = null;
+          }
+          
+          if (connectionCheckInterval) {
+            clearInterval(connectionCheckInterval);
+            connectionCheckInterval = null;
+          }
 
           if (!event.wasClean && reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
-            console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
-            setTimeout(connectWebSocket, reconnectDelay);
+            console.log(`Connection closed. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
           }
         };
       } catch (error) {
         console.error('Error creating WebSocket:', error);
+        
+        if (reconnectAttempts < maxReconnectAttempts) {
+          reconnectAttempts++;
+          console.log(`Error creating WebSocket. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+          reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
+        }
       }
     };
 
