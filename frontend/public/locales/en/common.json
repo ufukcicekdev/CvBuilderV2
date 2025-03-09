@@ -15,7 +15,8 @@
     "notifications": "Notifications",
     "settings": "Settings",
     "help": "Help",
-    "pricing": "Pricing"
+    "pricing": "Pricing",
+    "language": "Language"
   },
   "auth": {
     "jobseeker": "Job Seeker",

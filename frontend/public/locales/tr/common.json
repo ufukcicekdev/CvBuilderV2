@@ -15,7 +15,8 @@
     "notifications": "Bildirimler",
     "settings": "Ayarlar",
     "help": "Yardım",
-    "pricing": "Fiyatlandırma"
+    "pricing": "Fiyatlandırma",
+    "language": "Dil Seçimi"
   },
   "auth": {
     "jobseeker": "İş Arayan",

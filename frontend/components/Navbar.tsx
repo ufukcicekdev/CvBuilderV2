@@ -188,6 +188,14 @@ export default function Navbar() {
           <>
             <IconButton
               color="inherit"
+              onClick={handleLangMenuClick}
+              edge="end"
+              sx={{ mr: 1 }}
+            >
+              <LanguageIcon />
+            </IconButton>
+            <IconButton
+              color="inherit"
               onClick={handleMobileMenuClick}
               edge="end"
             >
