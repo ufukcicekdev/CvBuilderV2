@@ -66,36 +66,42 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { currentLanguage } = useLanguage();
+  const prevLanguageRef = useRef(currentLanguage);
 
   // Dil değişikliğini dinleyen useEffect
   useEffect(() => {
-    // Dil değiştiğinde formu yeniden render etmek için state'i güncelle
-    if (profile) {
-      // Profil state'ini kopyalayarak yeniden set etmek, 
-      // component'in yeniden render olmasını sağlar
-      setProfile({...profile});
-      if (editedProfile) {
-        setEditedProfile({...editedProfile});
+    // Sadece dil değiştiğinde çalışsın
+    if (prevLanguageRef.current !== currentLanguage) {
+      prevLanguageRef.current = currentLanguage;
+      
+      // Dil değiştiğinde sadece bir kez log yazdır
+      console.log('Language changed to:', currentLanguage);
+      
+      // Profil verisi varsa ve düzenleme modunda değilse, formu yeniden yükle
+      if (profile && !isEditing) {
+        // Profil verilerini yeniden çekmek daha güvenli
+        fetchProfile();
       }
-      console.log('Language changed, refreshing form fields');
     }
-  }, [currentLanguage, router.locale, i18n.language, profile, editedProfile]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLanguage, router.locale, i18n.language]); // Sonsuz döngüyü önlemek için bağımlılıkları sınırlıyoruz
+
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get('/api/users/me/');
+      setProfile(response.data);
+      setEditedProfile(response.data);
+    } catch (error: any) {
+      console.error('Profile fetch error:', error);
+      const errorMessage = handleApiError(error, t);
+      showToast.error(errorMessage || t('profile.fetchError'));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axiosInstance.get('/api/users/me/');
-        setProfile(response.data);
-        setEditedProfile(response.data);
-      } catch (error: any) {
-        console.error('Profile fetch error:', error);
-        const errorMessage = handleApiError(error, t);
-        showToast.error(errorMessage || t('profile.fetchError'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
