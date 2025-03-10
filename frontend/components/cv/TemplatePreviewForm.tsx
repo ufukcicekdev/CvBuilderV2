@@ -35,6 +35,7 @@ interface TemplatePreviewFormProps {
   onPrev?: () => void;
   onStepComplete: (data: any) => void;
   initialData?: any;
+  isLoading?: boolean;
 }
 
 // SVG içerikleri
@@ -104,7 +105,7 @@ const svgToDataUrl = (svgContent: string) => {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`;
 };
 
-const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: TemplatePreviewFormProps) => {
+const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoading }: TemplatePreviewFormProps) => {
   const router = useRouter();
   const { t, i18n } = useTranslation('common');
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -415,7 +416,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
             <Button
               onClick={onPrev}
               variant="contained"
-              disabled={loading}
+              disabled={loading || isLoading}
               fullWidth
             >
                {t('common.previous')}
@@ -430,7 +431,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
           <Button
             onClick={handlePreview}
             variant="outlined"
-            disabled={!selectedTemplate || loading}
+            disabled={!selectedTemplate || loading || isLoading}
             fullWidth
           >
             {t('common.preview')}
@@ -439,12 +440,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
             onClick={handleGenerateCV}
             variant="contained"
             color="primary"
-            disabled={!selectedTemplate || loading}
+            disabled={!selectedTemplate || loading || isLoading}
             startIcon={activeTab === 0 ? <WebIcon /> : <DownloadIcon />}
             fullWidth
           >
-            {loading 
-              ? t('cv.template.generating')
+            {loading || isLoading
+              ? <CircularProgress size={24} color="inherit" />
               : activeTab === 0 
                 ? t('cv.template.generateWeb')
                 : t('cv.template.generatePDF')

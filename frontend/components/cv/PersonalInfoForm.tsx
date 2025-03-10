@@ -5,7 +5,8 @@ import {
   Typography,
   Box,
   Button,
-  InputAdornment
+  InputAdornment,
+  CircularProgress
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
@@ -34,6 +35,7 @@ interface PersonalInfoFormProps {
   cvId: string;
   onPrev?: () => void;
   onStepComplete: (data: any) => void;
+  isLoading?: boolean;
 }
 
 interface PersonalInfoFormData {
@@ -52,7 +54,7 @@ export interface PersonalInfoFormRef {
 }
 
 const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
-  ({ cvId, onPrev, onStepComplete }, ref) => {
+  ({ cvId, onPrev, onStepComplete, isLoading }, ref) => {
     const { t } = useTranslation('common');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -274,22 +276,28 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
 
           {/* Form butonları */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-            {onPrev && (
-              <Button
-                onClick={onPrev}
-                variant="contained"
-                disabled={loading}
-              >
-                {t('common.previous')}
-              </Button>
-            )}
+            <Box>
+              {onPrev && (
+                <Button
+                  onClick={onPrev}
+                  variant="contained"
+                  disabled={loading || isLoading}
+                >
+                  {t('common.previous')}
+                </Button>
+              )}
+            </Box>
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              disabled={loading}
+              disabled={loading || isLoading}
             >
-              {t('common.next')}
+              {(loading || isLoading) ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                t('common.next')
+              )}
             </Button>
           </Box>
         </Box>

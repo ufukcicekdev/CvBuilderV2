@@ -7,7 +7,10 @@ import {
   StepLabel,
   Paper,
   useMediaQuery,
-  MobileStepper 
+  MobileStepper,
+  CircularProgress,
+  Backdrop,
+  Typography
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
@@ -31,6 +34,7 @@ interface CVFormContentProps {
 export default function CVFormContent({ activeStep, cvId, onStepChange }: CVFormContentProps) {
   const { t } = useTranslation('common');
   const [cvData, setCvData] = useState<CV | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -76,6 +80,7 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
 
   const handleStepComplete = useCallback(async (data: any) => {
     try {
+      setIsLoading(true);
       await cvAPI.update(cvId, {
         ...data,
         current_step: activeStep
@@ -86,6 +91,8 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
     } catch (error) {
       console.error('Error saving form data:', error);
       toast.error(t('cv.saveError'));
+    } finally {
+      setIsLoading(false);
     }
   }, [activeStep, cvId, onStepChange, t]);
 
@@ -230,6 +237,21 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
       <Box sx={{ mt: 4 }}>
         {renderStepContent()}
       </Box>
+      
+      {/* Loading Backdrop */}
+      <Backdrop
+        sx={{ 
+          color: '#fff', 
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2
+        }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" size={60} />
+        <Typography variant="h6">{t('common.loading')}</Typography>
+      </Backdrop>
     </Box>
   );
 } 

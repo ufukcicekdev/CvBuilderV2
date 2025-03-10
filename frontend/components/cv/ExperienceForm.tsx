@@ -149,113 +149,65 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
                 <TextField
                   fullWidth
                   label={t('cv.experience.company')}
-                  {...register(`experience.${index}.company` as const)}
-                  error={!!errors.experience?.[index]?.company}
-                  helperText={errors.experience?.[index]?.company && t('common.required')}
+                  {...register(`experience.${index}.company`)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label={t('cv.experience.position')}
-                  {...register(`experience.${index}.position` as const)}
-                  error={!!errors.experience?.[index]?.position}
-                  helperText={errors.experience?.[index]?.position && t('common.required')}
+                  {...register(`experience.${index}.position`)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  type="date"
                   label={t('cv.experience.startDate')}
-                  InputLabelProps={{ shrink: true }}
-                  {...register(`experience.${index}.startDate` as const)}
-                  error={!!errors.experience?.[index]?.startDate}
-                  helperText={errors.experience?.[index]?.startDate && t('common.required')}
+                  {...register(`experience.${index}.startDate`)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  type="date"
                   label={t('cv.experience.endDate')}
-                  InputLabelProps={{ shrink: true }}
-                  {...register(`experience.${index}.endDate` as const)}
-                  disabled={watchFieldArray[index]?.current}
-                  error={!watchFieldArray[index]?.current && !!errors.experience?.[index]?.endDate}
-                  helperText={!watchFieldArray[index]?.current && errors.experience?.[index]?.endDate && t('common.required')}
+                  {...register(`experience.${index}.endDate`)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      {...register(`experience.${index}.current` as const)}
-                      onChange={(e) => handleCurrentChange(index, e.target.checked)}
-                    />
-                  }
+                  control={<Checkbox {...register(`experience.${index}.current`)} />}
                   label={t('cv.experience.current')}
+                  onChange={(e, checked) => handleCurrentChange(index, checked)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  multiline
-                  rows={4}
                   label={t('cv.experience.description')}
-                  {...register(`experience.${index}.description` as const)}
+                  {...register(`experience.${index}.description`)}
                 />
               </Grid>
             </Grid>
-
-            <IconButton 
-              onClick={() => remove(index)}
-              color="error"
-              sx={{ mt: 1 }}
-            >
-              <DeleteIcon />
-            </IconButton>
           </Box>
         ))}
-
-        <Button
-          startIcon={<AddIcon />}
-          onClick={() => append({
-            company: '',
-            position: '',
-            startDate: '',
-            endDate: '',
-            current: false,
-            description: ''
-          })}
-          sx={{ mt: 2 }}
-        >
-          {t('common.add')}
-        </Button>
       </Box>
-
-      {/* Form butonları */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-        {onPrev && (
-          <Button
-            onClick={onPrev}
-            variant="contained"
-            disabled={loading}
-          >
-            {t('common.previous')}
-          </Button>
-        )}
+      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
         <Button
-          type="submit"
+          variant="outlined"
+          onClick={onPrev}
+        >
+          {t('cv.experience.prev')}
+        </Button>
+        <Button
           variant="contained"
-          color="primary"
+          type="submit"
           disabled={loading}
         >
-          {t('common.next')}
+          {t('cv.experience.next')}
         </Button>
       </Box>
     </form>
   );
 };
 
-export default ExperienceForm; 
+export default ExperienceForm;
