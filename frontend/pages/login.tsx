@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
   Container,
@@ -29,6 +29,7 @@ import axiosInstance from '../services/axios';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
 import { handleApiError } from '../utils/handleApiError';
+import { resendVerificationEmail } from '@/services/api';
 
 interface LoginFormData {
   email: string;
@@ -55,11 +56,18 @@ export default function LoginPage() {
   const handleLogin = async (data: LoginFormData) => {
     try {
       setIsSubmitting(true);
+      console.log('Attempting login with:', { email: data.email });
       await login(data.email, data.password);
+      console.log('Login successful');
       toast.success(t('auth.loginSuccess'));
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data) {
-        const errorData = error.response.data;
+      console.error('Login error in component:', error);
+      
+      // Hata işleme
+      const errorData = error as any;
+      
+      if (errorData) {
+        console.log('Error data:', errorData);
         
         if (errorData.email?.[0]) {
           const errorCode = errorData.email[0];
@@ -112,44 +120,88 @@ export default function LoginPage() {
 
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
-      const response = await axios.post('/api/auth/google', {
-        token: credentialResponse.credential,
+      console.log('Google login success:', credentialResponse);
+      
+      // Fetch kullanarak doğrudan backend URL'sine istek gönder
+      const response = await fetch('/api/auth/google/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: credentialResponse.credential,
+        }),
       });
       
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userType', 'jobseeker');
-      router.push('/dashboard');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Backend response:', data);
+      
+      // Normal login ile aynı response formatı
+      // { refresh, access, user }
+      
+      // localStorage'a kaydet
+      localStorage.setItem('accessToken', data.access);
+      localStorage.setItem('refreshToken', data.refresh);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
       toast.success(t('auth.loginSuccess'));
+      
+      // Kullanıcı tipine göre yönlendirme yap
+      if (data.user.user_type === 'jobseeker') {
+        router.push('/dashboard/create-cv');
+      } else if (data.user.user_type === 'employer') {
+        router.push('/dashboard/employer');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error) {
-      toast.error(t('auth.loginError'));
+      console.error('Google login error:', error);
+      toast.error(t('auth.errors.googleLoginFailed'));
     }
   };
 
   const handleLinkedInSuccess = async (code: string) => {
     try {
       const response = await axios.post('/api/auth/linkedin', { code });
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userType', 'jobseeker');
-      router.push('/dashboard');
+      
+      // localStorage'a kaydet
+      localStorage.setItem('accessToken', response.data.access);
+      localStorage.setItem('refreshToken', response.data.refresh);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      
       toast.success(t('auth.loginSuccess'));
+      
+      // Kullanıcı tipine göre yönlendirme yap
+      if (response.data.user.user_type === 'jobseeker') {
+        router.push('/dashboard/create-cv');
+      } else if (response.data.user.user_type === 'employer') {
+        router.push('/dashboard/employer');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error) {
-      toast.error(t('auth.loginError'));
+      console.error('LinkedIn login error:', error);
+      toast.error(t('auth.errors.linkedinLoginFailed'));
     }
   };
 
   const handleResendVerification = async () => {
     const email = localStorage.getItem('registrationEmail');
     if (!email) {
-      setError('Email adresi bulunamadı.');
+      setError(t('auth.emailNotFound'));
       return;
     }
 
     try {
       setLoading(true);
-      await axiosInstance.post('/api/users/resend-verification-email/', { email });
-      toast.success('Yeni doğrulama maili gönderildi. Lütfen email kutunuzu kontrol edin.');
+      await resendVerificationEmail(email);
+      toast.success(t('auth.verificationEmailSent'));
     } catch (error: any) {
-      setError(error.response?.data?.error || 'Doğrulama maili gönderilemedi.');
+      setError(error.response?.data?.error || t('auth.verificationEmailFailed'));
     } finally {
       setLoading(false);
     }
@@ -218,7 +270,7 @@ export default function LoginPage() {
                     disabled={loading}
                     sx={{ mt: 1 }}
                   >
-                    {t('auth.resendVerificationEmail', 'Yeni Doğrulama Maili Gönder')}
+                    {t('auth.resendVerificationEmail')}
                   </Button>
                 )}
               </Box>
@@ -234,7 +286,7 @@ export default function LoginPage() {
                   disabled={loading}
                   sx={{ mt: 1 }}
                 >
-                  {t('auth.resendVerificationEmail', 'Yeni Doğrulama Maili Gönder')}
+                  {t('auth.resendVerificationEmail')}
                 </Button>
               </Box>
             )}
@@ -275,23 +327,26 @@ export default function LoginPage() {
                 </Typography>
               </Divider>
 
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 2 }}>
+                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <GoogleLogin
                       onSuccess={handleGoogleSuccess}
-                      onError={() => toast.error(t('auth.loginError'))}
+                      onError={() => {
+                        console.error('Google login error');
+                        toast.error(t('auth.loginError'));
+                      }}
                       useOneTap
-                      theme="outline"
-                      size="large"
-                      width="200"
                       locale={router.locale}
+                      text="signin_with"
+                      shape="rectangular"
+                      logo_alignment="left"
+                      width="280"
+                      theme="outline"
                     />
-                  </GoogleOAuthProvider>
-                </Grid>
-                
-                
-              </Grid>
+                  </Box>
+                </GoogleOAuthProvider>
+              </Box>
             </>
           )}
         </Box>

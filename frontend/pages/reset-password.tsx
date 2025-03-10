@@ -6,7 +6,8 @@ import {
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { toast } from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -17,15 +18,15 @@ import { authAPI } from '../services/api';
 const createSchema = (t: any) => yup.object().shape({
   password: yup
     .string()
-    .min(8, ({ min }) => t('validation.passwordMinLength', `Şifre en az ${min} karakter olmalıdır`))
-    .matches(/[0-9]/, t('validation.passwordNumber', 'Şifre en az bir rakam içermelidir'))
-    .matches(/[a-z]/, t('validation.passwordLowercase', 'Şifre en az bir küçük harf içermelidir'))
-    .matches(/[A-Z]/, t('validation.passwordUppercase', 'Şifre en az bir büyük harf içermelidir'))
-    .required(t('validation.required', 'Bu alan zorunludur')),
+    .min(8, ({ min }) => t('validation.passwordMinLength'))
+    .matches(/[0-9]/, t('validation.passwordNumber'))
+    .matches(/[a-z]/, t('validation.passwordLowercase'))
+    .matches(/[A-Z]/, t('validation.passwordUppercase'))
+    .required(t('validation.required')),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password')], t('validation.passwordMatch', 'Şifreler eşleşmiyor'))
-    .required(t('validation.required', 'Bu alan zorunludur')),
+    .oneOf([yup.ref('password')], t('validation.passwordMatch'))
+    .required(t('validation.required')),
 }).required();
 
 // Form verilerinin tipi
@@ -34,8 +35,16 @@ interface ResetPasswordFormData {
   confirmPassword: string;
 }
 
+export async function getStaticProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
+}
+
 export default function ResetPassword() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const router = useRouter();
   const { token } = router.query;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -67,7 +76,7 @@ export default function ResetPassword() {
         setIsValidToken(true);
       } catch (error: any) {
         console.error('Token validation error:', error);
-        setError(t('auth.invalidToken', 'Geçersiz veya süresi dolmuş token.'));
+        setError(t('auth.invalidResetToken'));
       } finally {
         setIsValidating(false);
       }
@@ -78,7 +87,7 @@ export default function ResetPassword() {
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     if (!token) {
-      setError(t('auth.missingToken', 'Token bulunamadı.'));
+      setError(t('auth.invalidResetToken'));
       return;
     }
 
@@ -95,11 +104,11 @@ export default function ResetPassword() {
       
       // Başarılı
       setSuccess(true);
-      toast.success(t('auth.resetPasswordSuccess', 'Şifreniz başarıyla sıfırlandı.'));
+      toast.success(t('auth.resetPasswordSuccess'));
     } catch (error: any) {
       console.error('Reset password error:', error.response?.data);
-      setError(error.response?.data?.message || t('auth.resetPasswordError', 'Şifre sıfırlama işlemi sırasında bir hata oluştu.'));
-      toast.error(error.response?.data?.message || t('auth.resetPasswordError', 'Şifre sıfırlama işlemi sırasında bir hata oluştu.'));
+      setError(error.response?.data?.message || t('auth.resetPasswordError'));
+      toast.error(error.response?.data?.message || t('auth.resetPasswordError'));
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +120,7 @@ export default function ResetPassword() {
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Paper elevation={3} sx={{ p: 4, width: '100%', borderRadius: 2 }}>
             <Typography component="h1" variant="h5" align="center" gutterBottom>
-              {t('auth.resetPassword', 'Şifre Sıfırlama')}
+              {t('auth.resetPassword')}
             </Typography>
             
             {isValidating ? (
@@ -121,10 +130,10 @@ export default function ResetPassword() {
             ) : success ? (
               <Box sx={{ mt: 2 }}>
                 <Alert severity="success" sx={{ mb: 2 }}>
-                  {t('auth.resetPasswordSuccess', 'Şifreniz başarıyla sıfırlandı.')}
+                  {t('auth.resetPasswordSuccess')}
                 </Alert>
                 <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-                  {t('auth.canLoginNow', 'Artık yeni şifrenizle giriş yapabilirsiniz.')}
+                  {t('auth.canLoginNow')}
                 </Typography>
                 <Button
                   fullWidth
@@ -132,16 +141,16 @@ export default function ResetPassword() {
                   sx={{ mt: 3 }}
                   onClick={() => router.push('/login')}
                 >
-                  {t('auth.goToLogin', 'Giriş Yap')}
+                  {t('auth.login')}
                 </Button>
               </Box>
             ) : !isValidToken ? (
               <Box sx={{ mt: 2 }}>
                 <Alert severity="error" sx={{ mb: 2 }}>
-                  {error || t('auth.invalidToken', 'Geçersiz veya süresi dolmuş token.')}
+                  {error || t('auth.invalidResetToken')}
                 </Alert>
                 <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-                  {t('auth.requestNewLink', 'Lütfen yeni bir şifre sıfırlama bağlantısı talep edin.')}
+                  {t('auth.passwordResetExpired')}
                 </Typography>
                 <Button
                   fullWidth
@@ -149,13 +158,13 @@ export default function ResetPassword() {
                   sx={{ mt: 3 }}
                   onClick={() => router.push('/forgot-password')}
                 >
-                  {t('auth.forgotPassword', 'Şifremi Unuttum')}
+                  {t('auth.forgotPassword')}
                 </Button>
               </Box>
             ) : (
               <>
                 <Typography variant="body2" align="center" sx={{ mb: 3 }}>
-                  {t('auth.resetPasswordInstructions', 'Lütfen yeni şifrenizi girin.')}
+                  {t('auth.resetPasswordInstructions')}
                 </Typography>
                 
                 {error && (
@@ -170,7 +179,7 @@ export default function ResetPassword() {
                       <TextField
                         fullWidth
                         type="password"
-                        label={t('auth.newPassword', 'Yeni Şifre')}
+                        label={t('auth.newPassword')}
                         {...register('password')}
                         error={!!errors.password}
                         helperText={errors.password?.message}
@@ -180,7 +189,7 @@ export default function ResetPassword() {
                       <TextField
                         fullWidth
                         type="password"
-                        label={t('auth.confirmPassword', 'Şifre Tekrarı')}
+                        label={t('auth.confirmNewPassword')}
                         {...register('confirmPassword')}
                         error={!!errors.confirmPassword}
                         helperText={errors.confirmPassword?.message}
@@ -195,7 +204,7 @@ export default function ResetPassword() {
                     sx={{ mt: 3, mb: 2 }}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? t('common.submitting', 'Gönderiliyor...') : t('auth.resetPassword', 'Şifremi Sıfırla')}
+                    {isSubmitting ? t('common.submitting') : t('auth.resetPasswordButton')}
                   </Button>
                 </Box>
               </>

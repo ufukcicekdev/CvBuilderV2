@@ -41,7 +41,7 @@ export default function Footer() {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
-              Bizi Takip Edin
+              {t('footer.followUs')}
             </Typography>
             {/* <Box> */}
               {/* <IconButton aria-label="linkedin" color="primary"> */}
@@ -58,7 +58,7 @@ export default function Footer() {
               {/* </IconButton> */}
             {/* </Box> */}
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-              İletişim: info@cvbuilder.com
+              {t('footer.contact')}: info@cvbuilder.com
             </Typography>
           </Grid>
         </Grid>

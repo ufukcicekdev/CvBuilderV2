@@ -20,6 +20,7 @@
   },
   "auth": {
     "jobseeker": "Job Seeker",
+    "username": "Username",
     "employer": "Employer",
     "email": "Email",
     "password": "Password",
@@ -32,6 +33,7 @@
     "registerSuccess": "Registration successful! Please verify your email address.",
     "registerError": "Registration failed. Please check your information.",
     "orLoginWith": "or login with",
+    "googleLogin": "Sign in with Google",
     "userType": "User Type",
     "birthDate": "Birth Date",
     "companyName": "Company Name",
@@ -39,6 +41,8 @@
     "phone": "Phone",
     "register": "Register",
     "resendVerificationEmail": "Resend Verification Email",
+    "verificationEmailSent": "Verification email has been sent. Please check your inbox.",
+    "verificationEmailFailed": "Failed to send verification email.",
     "passwordRequirements": {
       "minLength": "At least 8 characters",
       "number": "At least one number",
@@ -73,7 +77,14 @@
     "confirmNewPassword": "Confirm New Password",
     "resetPasswordButton": "Reset My Password",
     "invalidResetToken": "Invalid or expired password reset link.",
-    "passwordResetExpired": "Password reset link has expired. Please request a new one."
+    "passwordResetExpired": "Password reset link has expired. Please request a new one.",
+    "emailNotFound": "Email address not found.",
+    "emailVerification": "Email Verification",
+    "verifyingEmail": "Verifying your email...",
+    "emailVerifiedSuccess": "Your email has been successfully verified!",
+    "canLoginNow": "You can now log in.",
+    "verificationLinkExpired": "The verification link may have expired.",
+    "emailSendingFailed": "Failed to send email."
   },
   "profile": {
     "personalInfo": "Personal Information",

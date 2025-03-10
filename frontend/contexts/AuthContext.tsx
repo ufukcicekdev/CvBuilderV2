@@ -43,12 +43,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
 
-      const response = await axiosInstance.post('/api/users/login/', {
-        email,
-        password
+      // Doğrudan backend URL'sine istek gönder
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${API_URL}/api/auth/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // CORS için önemli
+        body: JSON.stringify({
+          email,
+          password
+        })
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Login error response:', errorData);
+        throw errorData;
+      }
 
-      const { access, refresh, user } = response.data;
+      const data = await response.json();
+      console.log('Login response:', data);
+
+      const { access, refresh, user } = data;
 
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
@@ -62,7 +80,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token: access
       });
 
-      router.push('/dashboard/create-cv');
+      // Kullanıcı tipine göre yönlendirme yap
+      if (user.user_type === 'jobseeker') {
+        router.push('/dashboard/create-cv');
+      } else if (user.user_type === 'employer') {
+        router.push('/dashboard/employer');
+      } else {
+        router.push('/dashboard');
+      }
 
     } catch (error) {
       console.error('Login error:', error);

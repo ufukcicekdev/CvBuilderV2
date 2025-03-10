@@ -230,7 +230,13 @@ export const authAPI = {
 
   // Şifre sıfırlama için email gönderme
   forgotPassword: (email: string) => {
-    return api.post('/api/users/forgot-password/', { email });
+    // localStorage'dan dil tercihini al
+    const language = typeof window !== 'undefined' ? localStorage.getItem('selectedLanguage') || 'en' : 'en';
+    
+    return api.post('/api/users/forgot-password/', { 
+      email,
+      language 
+    });
   },
 
   // Şifre sıfırlama token'ını doğrulama
@@ -319,7 +325,11 @@ export const cvAPI = {
 // Email doğrulama işlemleri
 export const verifyEmail = async (token: string) => {
   try {
-    const response = await api.get(`/api/users/verify-email/${token}/`);
+    // localStorage'dan dil tercihini al
+    const language = typeof window !== 'undefined' ? localStorage.getItem('selectedLanguage') || 'en' : 'en';
+    
+    // Dil parametresini URL'e ekle
+    const response = await api.get(`/api/users/verify-email/${token}/?language=${language}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -328,7 +338,13 @@ export const verifyEmail = async (token: string) => {
 
 export const resendVerificationEmail = async (email: string) => {
   try {
-    const response = await api.post('/api/users/resend-verification-email/', { email });
+    // localStorage'dan dil tercihini al
+    const language = typeof window !== 'undefined' ? localStorage.getItem('selectedLanguage') || 'en' : 'en';
+    
+    const response = await api.post('/api/users/resend-verification-email/', { 
+      email,
+      language 
+    });
     return response.data;
   } catch (error) {
     throw error;

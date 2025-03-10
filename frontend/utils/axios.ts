@@ -66,11 +66,13 @@ if (typeof window !== 'undefined') {
             }
             
             // Debug için header'ları loglayalım
-            console.log('Request headers:', config.headers);
+            console.log('Request headers:', JSON.stringify(config.headers));
+            console.log('Request data:', config.data);
             
             return config;
         },
         (error) => {
+            console.error('Request interceptor error:', error);
             return Promise.reject(error);
         }
     );

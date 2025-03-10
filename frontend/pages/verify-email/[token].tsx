@@ -58,7 +58,7 @@ const EmailVerification = () => {
       const email = localStorage.getItem('registrationEmail');
       
       if (!email) {
-        setError('Email adresi bulunamadı. Lütfen tekrar kayıt olun.');
+        setError(t('auth.emailNotFound', 'Email adresi bulunamadı. Lütfen tekrar kayıt olun.'));
         return;
       }
 
@@ -66,7 +66,7 @@ const EmailVerification = () => {
       setError(null);
       setSuccess(true);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Email gönderme işlemi başarısız oldu.');
+      setError(err.response?.data?.error || t('auth.emailSendingFailed', 'Email gönderme işlemi başarısız oldu.'));
     }
   };
 
@@ -82,23 +82,23 @@ const EmailVerification = () => {
         }}
       >
         <Typography component="h1" variant="h4" gutterBottom>
-          Email Doğrulama
+          {t('auth.emailVerification', 'Email Doğrulama')}
         </Typography>
 
         {verifying ? (
           <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <CircularProgress />
             <Typography sx={{ mt: 2 }}>
-              Email adresiniz doğrulanıyor...
+              {t('auth.verifyingEmail', 'Email adresiniz doğrulanıyor...')}
             </Typography>
           </Box>
         ) : success ? (
           <Box sx={{ mt: 4 }}>
             <Alert severity="success" sx={{ mb: 2 }}>
-              Email adresiniz başarıyla doğrulandı!
+              {t('auth.emailVerifiedSuccess', 'Email adresiniz başarıyla doğrulandı!')}
             </Alert>
             <Typography sx={{ mb: 2 }}>
-              Artık giriş yapabilirsiniz.
+              {t('auth.canLoginNow', 'Artık giriş yapabilirsiniz.')}
             </Typography>
             <Button
               component={Link}
@@ -107,7 +107,7 @@ const EmailVerification = () => {
               color="primary"
               fullWidth
             >
-              Giriş Yap
+              {t('auth.login', 'Giriş Yap')}
             </Button>
           </Box>
         ) : (
@@ -116,7 +116,7 @@ const EmailVerification = () => {
               {error}
             </Alert>
             <Typography sx={{ mb: 2 }}>
-              Doğrulama bağlantısının süresi dolmuş olabilir.
+              {t('auth.verificationLinkExpired', 'Doğrulama bağlantısının süresi dolmuş olabilir.')}
             </Typography>
             <Button
               onClick={handleResendEmail}
@@ -125,7 +125,7 @@ const EmailVerification = () => {
               fullWidth
               sx={{ mb: 2 }}
             >
-              Yeni Doğrulama Maili Gönder
+              {t('auth.resendVerificationEmail', 'Yeni Doğrulama Maili Gönder')}
             </Button>
             <Button
               component={Link}
@@ -134,7 +134,7 @@ const EmailVerification = () => {
               color="primary"
               fullWidth
             >
-              Giriş Sayfasına Dön
+              {t('auth.backToLogin', 'Giriş Sayfasına Dön')}
             </Button>
           </Box>
         )}
