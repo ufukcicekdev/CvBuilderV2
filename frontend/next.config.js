@@ -2,7 +2,7 @@ const { i18n } = require('./next-i18next.config');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // i18n, // Geçici olarak devre dışı bırakıldı
+  i18n,
   reactStrictMode: true,
   swcMinify: true,
   compiler: {
@@ -18,13 +18,6 @@ const nextConfig = {
         destination: 'https://web-production-9f41e.up.railway.app/api/:path*',
       },
     ];
-  },
-  
-  // Statik HTML dışa aktarma için
-  output: 'export',
-  // Statik dışa aktarma için görüntüleri optimize etmeyi devre dışı bırak
-  images: {
-    unoptimized: true,
   },
 };
 
