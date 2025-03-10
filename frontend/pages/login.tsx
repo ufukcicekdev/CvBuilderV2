@@ -122,8 +122,8 @@ export default function LoginPage() {
     try {
       console.log('Google login success:', credentialResponse);
       
-      // Fetch kullanarak doğrudan backend URL'sine istek gönder
-      const response = await fetch('/api/auth/google/', {
+      // Doğrudan backend URL'sine istek gönder
+      const response = await fetch('https://web-production-9f41e.up.railway.app/api/auth/google/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,6 +134,8 @@ export default function LoginPage() {
       });
       
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`HTTP error! status: ${response.status}, body: ${errorText}`);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
@@ -166,7 +168,7 @@ export default function LoginPage() {
 
   const handleLinkedInSuccess = async (code: string) => {
     try {
-      const response = await axios.post('/api/auth/linkedin', { code });
+      const response = await axios.post('https://web-production-9f41e.up.railway.app/api/auth/linkedin', { code });
       
       // localStorage'a kaydet
       localStorage.setItem('accessToken', response.data.access);
