@@ -31,6 +31,7 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import SEO from '../components/SEO';
 
 // Hero SVG
 const HeroSvg = () => (
@@ -191,6 +192,12 @@ export default function Home() {
 
   return (
     <Layout>
+      <SEO 
+        title={t('home.seo.title', 'CV Builder - Create Professional Resumes Online')}
+        description={t('home.seo.description', 'Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.')}
+        keywords={t('home.seo.keywords', 'cv builder, resume builder, professional cv, job application, career, resume templates')}
+        ogImage="/images/og-image.svg"
+      />
       {/* Hero Section */}
       <Box
         sx={{

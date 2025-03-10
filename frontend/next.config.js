@@ -19,6 +19,16 @@ const nextConfig = {
       },
     ];
   },
+  
+  // SEO optimizations
+  poweredByHeader: false, // Remove X-Powered-By header
+  compress: true, // Enable gzip compression
+  
+  // Image optimization
+  images: {
+    domains: ['web-production-9f41e.up.railway.app'],
+    formats: ['image/avif', 'image/webp'],
+  },
 };
 
 module.exports = nextConfig; 

@@ -22,6 +22,7 @@ import { showToast } from '../utils/toast';
 import { handleApiError } from '../utils/handleApiError';
 import { useRouter } from 'next/router';
 import { useLanguage } from '../contexts/LanguageContext';
+import SEO from '../components/SEO';
 
 interface UserProfile {
   id?: number;
@@ -301,6 +302,12 @@ function Profile() {
 
   return (
     <Layout>
+      <SEO 
+        title={t('profile.seo.title', 'Your Profile')}
+        description={t('profile.seo.description', 'Manage your CV Builder profile, update your personal information, and customize your account settings.')}
+        keywords={t('profile.seo.keywords', 'profile, account settings, personal information, cv builder account')}
+        ogType="profile"
+      />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={3}>
           {/* Profil Başlığı */}

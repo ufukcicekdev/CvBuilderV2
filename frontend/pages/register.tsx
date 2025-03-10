@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import axiosInstance from '../services/axios';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useLanguage } from '../contexts/LanguageContext';
+import SEO from '../components/SEO';
 
 // Desteklenen diller
 const SUPPORTED_LANGUAGES = ['tr', 'en', 'fr', 'de', 'ru', 'hi', 'ar', 'zh', 'es', 'it'] as const;
@@ -34,8 +35,9 @@ export default function Register() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [backendErrors, setBackendErrors] = useState<{[key: string]: string[]}>({});
-  const { changeLanguage } = useLanguage();
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [registrationError, setRegistrationError] = useState('');
+  const { currentLanguage, changeLanguage } = useLanguage();
 
   // Kullanıcının seçtiği dili al
   const getUserLanguage = (): SupportedLanguage => {
@@ -123,7 +125,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsSubmitting(true);
-      setBackendErrors({});
+      setRegistrationError('');
       
       const formData = {
         email: data.email,
@@ -155,7 +157,7 @@ export default function Register() {
           // Backend'den yanıt aldık ama başarısız durum kodu
           if (networkError.response.status === 400) {
             const backendErrors = networkError.response.data;
-            setBackendErrors(backendErrors);
+            setRegistrationError(backendErrors[Object.keys(backendErrors)[0]][0]);
             
             Object.entries(backendErrors).forEach(([field, errors]) => {
               if (Array.isArray(errors) && errors.length > 0) {
@@ -214,22 +216,21 @@ export default function Register() {
 
   return (
     <Layout>
+      <SEO 
+        title={t('register.seo.title', 'Create Your CV Builder Account')}
+        description={t('register.seo.description', 'Sign up for CV Builder to create professional resumes and CVs. Get started with our easy-to-use resume builder today.')}
+        keywords={t('register.seo.keywords', 'register, sign up, create account, cv builder, resume creator')}
+        ogType="website"
+      />
       <Container maxWidth="sm">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography component="h1" variant="h5">
             {t('auth.register')}
           </Typography>
 
-          {Object.keys(backendErrors).length > 0 && (
+          {registrationError && (
             <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-              {t('errors.pleaseFixErrors')}
-              <ul style={{ margin: 0, paddingLeft: 20 }}>
-                {Object.entries(backendErrors).map(([field, errors]) => (
-                  <li key={field}>
-                    {getErrorMessage(field, errors[0])}
-                  </li>
-                ))}
-              </ul>
+              {registrationError}
             </Alert>
           )}
 

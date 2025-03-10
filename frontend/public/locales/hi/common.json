@@ -1,548 +1,575 @@
 {
   "app": {
-    "name": "सीवी बिल्डर",
-    "tagline": "अपना पेशेवर सीवी बनाएं और अपने करियर में एक कदम आगे बढ़ें",
-    "description": "नौकरी खोज प्रक्रिया को सरल बनाएं और अपने सपनों की नौकरी पाएं"
+    "name": "简历生成器",
+    "tagline": "创建专业简历，迈出职业生涯的第一步",
+    "description": "简化求职流程，找到梦想的工作"
   },
   "nav": {
-    "dashboard": "डैशबोर्ड",
-    "jobs": "नौकरी सूची",
-    "profile": "मेरी प्रोफ़ाइल",
-    "login": "लॉगिन",
-    "register": "रजिस्टर",
-    "logout": "लॉगआउट",
-    "search": "खोजें",
-    "notifications": "सूचनाएं",
-    "settings": "सेटिंग्स",
-    "help": "सहायता",
-    "pricing": "मूल्य निर्धारण"
+    "dashboard": "仪表板",
+    "jobs": "职位",
+    "profile": "我的资料",
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出",
+    "search": "搜索",
+    "notifications": "通知",
+    "settings": "设置",
+    "help": "帮助",
+    "pricing": "定价",
+    "language": "语言选择"
   },
   "auth": {
-    "jobseeker": "नौकरी चाहने वाला",
-    "employer": "नियोक्ता",
-    "email": "ईमेल",
-    "password": "पासवर्ड",
-    "login": "लॉगिन",
-    "confirmPassword": "पासवर्ड की पुष्टि करें",
-    "forgotPassword": "पासवर्ड भूल गए",
-    "rememberMe": "मुझे याद रखें",
-    "loginSuccess": "लॉगिन सफल! स्वागत है।",
-    "loginError": "लॉगिन असफल। कृपया अपनी जानकारी जांचें।",
-    "registerSuccess": "रजिस्ट्रेशन सफल! कृपया अपना ईमेल पता सत्यापित करें।",
-    "registerError": "रजिस्ट्रेशन असफल। कृपया अपनी जानकारी जांचें।",
-    "orLoginWith": "या इसके साथ लॉगिन करें",
-    "userType": "उपयोगकर्ता प्रकार",
-    "birthDate": "जन्म तिथि",
-    "companyName": "कंपनी का नाम",
-    "companyWebsite": "कंपनी की वेबसाइट",
-    "phone": "फोन",
-    "register": "रजिस्टर",
+    "jobseeker": "求职者",
+    "username": "用户名",
+    "employer": "雇主",
+    "email": "电子邮件",
+    "password": "密码",
+    "login": "登录",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码",
+    "rememberMe": "记住我",
+    "loginSuccess": "登录成功！欢迎回来。",
+    "loginError": "登录失败。请检查您的信息。",
+    "registerSuccess": "注册成功！请验证您的电子邮件。",
+    "registerError": "注册失败。请检查您的信息。",
+    "orLoginWith": "或使用以下方式登录",
+    "googleLogin": "使用Google登录",
+    "userType": "用户类型",
+    "birthDate": "出生日期",
+    "companyName": "公司名称",
+    "companyWebsite": "公司网站",
+    "phone": "电话",
+    "register": "注册",
+    "resendVerificationEmail": "重新发送验证邮件",
+    "verificationEmailSent": "已发送新的验证邮件。请检查您的收件箱。",
+    "verificationEmailFailed": "验证邮件发送失败。",
     "passwordRequirements": {
-      "minLength": "कम से कम 8 अक्षर",
-      "number": "कम से कम एक संख्या",
-      "lowercase": "कम से कम एक छोटा अक्षर",
-      "uppercase": "कम से कम एक बड़ा अक्षर"
+      "minLength": "至少8个字符",
+      "number": "至少一个数字",
+      "lowercase": "至少一个小写字母",
+      "uppercase": "至少一个大写字母"
     },
-    "sessionExpired": "आपका सत्र समाप्त हो गया है। कृपया फिर से लॉगिन करें।",
-    "logoutSuccess": "सफलतापूर्वक लॉगआउट हो गया।",
+    "sessionExpired": "您的会话已过期。请重新登录。",
+    "logoutSuccess": "成功退出。",
     "errors": {
-      "userNotFound": "इस ईमेल पते के साथ कोई उपयोगकर्ता नहीं मिला",
-      "invalidPassword": "अमान्य पासवर्ड",
-      "invalidCredentials": "अमान्य प्रमाणिकरण",
-      "emailExists": "यह ईमेल पता पहले से उपयोग में है",
-      "weakPassword": "पासवर्ड बहुत कमजोर है",
-      "emailNotVerified": "कृपया अपना ईमेल पता सत्यापित करें",
-      "accountInactive": "आपका खाता सक्रिय नहीं है",
-      "generalError": "एक त्रुटि हुई, कृपया पुनः प्रयास करें",
-      "emailRequired": "ईमेल पता आवश्यक है",
-      "passwordRequired": "पासवर्ड आवश्यक है"
+      "userNotFound": "未找到使用此电子邮件的用户",
+      "invalidPassword": "无效密码",
+      "invalidCredentials": "无效的用户凭据",
+      "emailExists": "此电子邮件已被使用",
+      "weakPassword": "密码太弱",
+      "emailNotVerified": "请验证您的电子邮件",
+      "accountInactive": "您的账户未激活",
+      "generalError": "发生错误，请重试",
+      "emailRequired": "电子邮件为必填项",
+      "passwordRequired": "密码为必填项"
     },
-    "checkEmail": "अपना ईमेल चेक करें और सत्यापन लिंक पर क्लिक करें"
+    "emailNotFound": "未找到电子邮件。",
+    "emailVerification": "电子邮件验证",
+    "verifyingEmail": "正在验证您的电子邮件...",
+    "emailVerifiedSuccess": "您的电子邮件已验证成功！",
+    "canLoginNow": "您现在可以登录了。",
+    "verificationLinkExpired": "验证链接可能已过期。",
+    "emailSendingFailed": "电子邮件发送失败。",
+    "checkEmail": "请检查您的收件箱并点击验证链接",
+    "forgotPasswordInstructions": "请输入您注册的电子邮件地址以重置密码。",
+    "forgotPasswordSuccess": "密码重置链接已发送到您的电子邮件。",
+    "forgotPasswordError": "重置密码时发生错误。",
+    "sendResetLink": "发送重置链接",
+    "backToLogin": "返回登录页面",
+    "resetPassword": "重置密码",
+    "resetPasswordInstructions": "请输入新密码。",
+    "resetPasswordSuccess": "您的密码已成功重置。您现在可以登录了。",
+    "resetPasswordError": "重置密码时发生错误。",
+    "newPassword": "新密码",
+    "confirmNewPassword": "确认新密码",
+    "resetPasswordButton": "重置密码",
+    "invalidResetToken": "无效或过期的密码重置链接。",
+    "passwordResetExpired": "密码重置链接已过期。请请求一个新链接。"
   },
   "profile": {
-    "personalInfo": "व्यक्तिगत जानकारी",
-    "experience": "अनुभव",
-    "education": "शिक्षा",
-    "skills": "कौशल",
-    "languages": "भाषाएं",
-    "certificates": "प्रमाणपत्र",
-    "about": "मेरे बारे में",
-    "updateSuccess": "प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई",
-    "updateError": "प्रोफ़ाइल अपडेट करते समय एक त्रुटि हुई",
-    "profession": "पेशा",
-    "companyPosition": "कंपनी में पद",
-    "companySize": "कंपनी का आकार",
-    "edit": "संपादित करें",
-    "save": "सहेजें",
-    "cancel": "रद्द करें",
-    "pictureUpdateSuccess": "प्रोफ़ाइल चित्र सफलतापूर्वक अपडेट हो गया",
-    "pictureUpdateError": "प्रोफ़ाइल चित्र अपडेट करते समय एक त्रुटि हुई",
-    "firstName": "पहला नाम",
-    "lastName": "अंतिम नाम",
-    "phone": "फोन",
-    "birthDate": "जन्म तिथि",
-    "firstNamePlaceholder": "अपना पहला नाम दर्ज करें",
-    "lastNamePlaceholder": "अपना अंतिम नाम दर्ज करें",
-    "phonePlaceholder": "अपना फोन नंबर दर्ज करें",
-    "birthDatePlaceholder": "अपनी जन्म तिथि चुनें",
-    "professionPlaceholder": "अपना पेशा दर्ज करें",
-    "companyNamePlaceholder": "कंपनी का नाम दर्ज करें",
-    "companyWebsitePlaceholder": "कंपनी की वेबसाइट दर्ज करें",
-    "companyPositionPlaceholder": "कंपनी में अपना पद दर्ज करें",
-    "companySizePlaceholder": "कंपनी का आकार दर्ज करें",
+    "personalInfo": "个人信息",
+    "experience": "经验",
+    "education": "教育",
+    "skills": "技能",
+    "languages": "外语",
+    "certificates": "证书",
+    "about": "关于我",
+    "updateSuccess": "个人资料更新成功",
+    "updateError": "更新个人资料时发生错误",
+    "profession": "职业",
+    "companyPosition": "公司职位",
+    "companySize": "公司规模",
+    "edit": "编辑",
+    "save": "保存",
+    "cancel": "取消",
+    "pictureUpdateSuccess": "个人资料图片更新成功",
+    "pictureUpdateError": "更新个人资料图片时发生错误",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "phone": "电话",
+    "birthDate": "出生日期",
+    "firstNamePlaceholder": "请输入您的名字",
+    "lastNamePlaceholder": "请输入您的姓氏",
+    "phonePlaceholder": "请输入您的电话号码",
+    "birthDatePlaceholder": "请选择您的出生日期",
+    "professionPlaceholder": "请输入您的职业",
+    "companyNamePlaceholder": "请输入公司名称",
+    "companyWebsitePlaceholder": "请输入公司网站",
+    "companyPositionPlaceholder": "请输入您的职位",
+    "companySizePlaceholder": "请输入公司规模",
     "errors": {
-      "fileTooLarge": "फ़ाइल का आकार बहुत बड़ा है (अधिकतम 5MB)",
-      "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया एक छवि फ़ाइल चुनें",
-      "uploadFailed": "छवि अपलोड असफल",
-      "noFile": "कृपया एक छवि फ़ाइल चुनें"
+      "fileTooLarge": "文件太大（最大5MB）",
+      "invalidFileType": "无效的文件类型。请选择图片文件",
+      "uploadFailed": "图片上传失败",
+      "noFile": "请选择图片文件"
     }
   },
   "jobs": {
-    "title": "नौकरी सूची",
-    "search": "नौकरी खोजें",
-    "location": "स्थान",
-    "category": "श्रेणी",
-    "type": "नौकरी का प्रकार",
-    "salary": "वेतन",
-    "apply": "आवेदन करें",
-    "posted": "पोस्ट की तिथि",
-    "deadline": "आवेदन की अंतिम तिथि"
+    "title": "职位",
+    "search": "搜索职位",
+    "location": "地点",
+    "category": "类别",
+    "type": "工作类型",
+    "salary": "薪水",
+    "apply": "申请",
+    "posted": "发布日期",
+    "deadline": "申请截止日期"
   },
   "footer": {
-    "quickLinks": "त्वरित लिंक",
-    "home": "होम",
-    "about": "हमारे बारे में",
-    "contact": "संपर्क करें",
-    "privacy": "गोपनीयता नीति",
-    "terms": "उपयोग की शर्तें",
-    "followUs": "हमें फॉलो करें",
-    "copyright": "सर्वाधिकार सुरक्षित",
-    "address": "पता",
-    "phone": "फोन",
-    "email": "ईमेल"
+    "quickLinks": "快速链接",
+    "home": "首页",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "followUs": "关注我们",
+    "copyright": "版权所有",
+    "address": "地址",
+    "phone": "电话",
+    "email": "电子邮件"
   },
   "common": {
-    "save": "सहेजें",
-    "cancel": "रद्द करें",
-    "edit": "संपादित करें",
-    "preview": "पूर्वावलोकन",
-    "next": "अगला",
-    "previous": "पिछला",
-    "delete": "हटाएं",
-    "add": "जोड़ें",
-    "search": "खोजें",
-    "filter": "फ़िल्टर",
-    "sort": "क्रमबद्ध करें",
-    "loading": "लोड हो रहा है...",
-    "uploading": "अपलोड हो रहा है...",
-    "error": "एक त्रुटि हुई",
-    "success": "ऑपरेशन सफल",
-    "required": "यह फ़ील्ड आवश्यक है",
-    "invalidEmail": "अमान्य ईमेल पता",
-    "passwordMismatch": "पासवर्ड मेल नहीं खाते",
-    "submitting": "सबमिट हो रहा है...",
-    "openInNewTab": "नए टैब में खोलें",
-    "languages": "भाषाएं",
-    "skills": "कौशल",
-    "certificates": "प्रमाणपत्र",
-    "workExperience": "काम का अनुभव",
-    "education": "शिक्षा",
-    "professionalSummary": "पेशेवर सारांश",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑",
+    "preview": "预览",
+    "next": "继续",
+    "previous": "返回",
+    "delete": "删除",
+    "add": "添加",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "loading": "加载中...",
+    "uploading": "上传中...",
+    "error": "发生错误",
+    "success": "操作成功",
+    "required": "此字段为必填项",
+    "invalidEmail": "无效的电子邮件地址",
+    "passwordMismatch": "密码不匹配",
+    "submitting": "提交中...",
+    "openInNewTab": "在新标签页中打开",
+    "languages": "外语",
+    "skills": "技能",
+    "certificates": "证书",
+    "workExperience": "工作经验",
+    "education": "教育",
+    "professionalSummary": "职业概述",
     "errors": {
-      "badRequest": "अमान्य अनुरोध",
-      "unauthorized": "कृपया लॉगिन करें",
-      "forbidden": "आपके पास इस ऑपरेशन के लिए अनुमति नहीं है",
-      "notFound": "अनुरोध नहीं मिला",
-      "serverError": "सर्वर त्रुटि हुई",
-      "unknown": "एक अज्ञात त्रुटि हुई",
-      "networkError": "नेटवर्क कनेक्शन त्रुटि",
-      "validationError": "कृपया फ़ॉर्म जानकारी जांचें"
+      "badRequest": "无效请求",
+      "unauthorized": "请登录",
+      "forbidden": "您无权执行此操作",
+      "notFound": "未找到请求",
+      "serverError": "服务器错误",
+      "unknown": "发生未知错误",
+      "networkError": "网络连接错误",
+      "validationError": "请检查表单信息"
     }
   },
   "home": {
     "hero": {
-      "title": "नई पीढ़ी का सीवी निर्माण प्लेटफ़ॉर्म",
-      "subtitle": "एआई-संचालित, गतिशील और इंटरैक्टिव सीवी बनाएं",
-      "cta": "अभी शुरू करें",
-      "badge": "नई सुविधाएं",
-      "feature1": "पूरी तरह से मुफ्त शुरुआती योजना",
-      "feature2": "आधुनिक और पेशेवर टेम्पलेट्स",
-      "feature3": "वेब और पीडीएफ प्रारूप में सीवी"
+      "title": "新一代简历创建平台",
+      "subtitle": "使用人工智能创建动态和互动简历",
+      "cta": "立即开始",
+      "badge": "新功能",
+      "feature1": "完全免费的入门计划",
+      "feature2": "现代和专业的模板",
+      "feature3": "支持网页和PDF格式的简历"
     },
     "features": {
-      "title": "सीवी बिल्डर क्यों?",
-      "subtitle": "नौकरी खोज प्रक्रिया को बदलने वाली नवीन सुविधाएं",
-      "overline": "सुविधाएं",
+      "title": "为什么选择简历生成器？",
+      "subtitle": "改变求职流程的创新功能",
+      "overline": "功能",
       "feature1": {
-        "title": "पेशेवर टेम्पलेट्स",
-        "description": "आधुनिक और पेशेवर सीवी टेम्पलेट्स जो भर्तीकर्ताओं का ध्यान खींचते हैं"
+        "title": "专业模板",
+        "description": "吸引招聘人员注意的现代和专业简历模板"
       },
       "feature2": {
-        "title": "आसान संपादन",
-        "description": "ड्रैग-एंड-ड्रॉप इंटरफ़ेस के साथ अपने सीवी को आसानी से अनुकूलित और संपादित करें"
+        "title": "轻松编辑",
+        "description": "使用拖放界面轻松自定义和编辑您的简历"
       },
       "feature3": {
-        "title": "करियर विकास",
-        "description": "आपके करियर लक्ष्यों को प्राप्त करने में मदद करने वाले उपकरण और सुझाव"
+        "title": "职业发展",
+        "description": "帮助您实现职业目标的工具和建议"
       },
       "feature4": {
-        "title": "त्वरित निर्माण",
-        "description": "मिनटों में एक पेशेवर सीवी बनाएं और तुरंत नौकरी के लिए आवेदन करें"
+        "title": "快速创建",
+        "description": "在几分钟内创建专业简历并立即开始申请工作"
       },
       "realtime": {
-        "title": "रीयल-टाइम अपडेट",
-        "description": "अपने सीवी को रीयल-टाइम में अपडेट करें। क्या आपने एक नया प्रमाणपत्र प्राप्त किया है? इसे तुरंत जोड़ें और अपने अपडेटेड सीवी का उपयोग करें।"
+        "title": "实时更新",
+        "description": "实时更新您的简历。获得了新证书？立即添加并使用最新简历进行申请。"
       },
       "video": {
-        "title": "वीडियो सीवी समर्थन",
-        "description": "एक वीडियो के साथ अपना परिचय दें। अपने व्यक्तित्व और कौशल को अधिक प्रभावी ढंग से प्रदर्शित करें। नियोक्ताओं से जुड़ने का आधुनिक तरीका।"
+        "title": "视频简历支持",
+        "description": "通过视频介绍自己。更有效地展示您的个性和技能。与雇主联系的现代方式。"
       },
       "aiAssistant": {
-        "title": "एआई सहायक",
-        "description": "अपने सीवी को अनुकूलित करने के लिए एआई-संचालित सुझाव प्राप्त करें। विशिष्ट नौकरी पोस्टिंग के लिए अपने सीवी को अनुकूलित करें और स्वीकृति की संभावना बढ़ाएं।"
+        "title": "人工智能助手",
+        "description": "获取人工智能建议以优化您的简历。根据职位定制您的简历并提高被录用的机会。"
       },
       "analytics": {
-        "title": "सीवी एनालिटिक्स",
-        "description": "अपने सीवी के प्रदर्शन को ट्रैक करें। किन नियोक्ताओं ने आपकी प्रोफ़ाइल देखी? आपके सीवी को कितनी बार देखा गया? सभी आंकड़े आपकी उंगलियों पर।"
+        "title": "简历分析",
+        "description": "跟踪您的简历表现。哪些雇主查看了您的资料？您的简历被浏览了多少次？所有统计数据尽在掌握。"
       }
     },
     "templates": {
-      "title": "पेशेवर सीवी टेम्पलेट्स",
-      "subtitle": "आधुनिक और प्रभावशाली टेम्पलेट्स जो भर्तीकर्ताओं का ध्यान खींचते हैं",
-      "overline": "टेम्पलेट्स",
-      "cta": "टेम्पलेट्स एक्सप्लोर करें"
+      "title": "专业简历模板",
+      "subtitle": "吸引招聘人员注意的现代和引人注目的模板",
+      "overline": "模板",
+      "cta": "探索模板"
     },
     "howItWorks": {
-      "title": "यह कैसे काम करता है?",
-      "overline": "उपयोगकर्ता गाइड",
+      "title": "如何运作？",
+      "overline": "使用指南",
       "steps": [
         {
-          "title": "प्रोफ़ाइल बनाएं",
-          "description": "अपनी बुनियादी जानकारी दर्ज करें और अपनी पेशेवर प्रोफ़ाइल बनाएं"
+          "title": "创建个人资料",
+          "description": "输入您的基本信息并创建您的专业资料"
         },
         {
-          "title": "अपने सीवी को अनुकूलित करें",
-          "description": "आधुनिक टेम्पलेट्स में से एक चुनें और अपने सीवी को व्यक्तिगत बनाएं"
+          "title": "自定义简历",
+          "description": "从现代模板中选择并个性化您的简历"
         },
         {
-          "title": "वीडियो जोड़ें",
-          "description": "एक छोटे वीडियो के साथ अपना परिचय दें और खुद को अलग बनाएं"
+          "title": "添加视频",
+          "description": "通过简短的视频介绍自己并脱颖而出"
         },
         {
-          "title": "आवेदन करें",
-          "description": "एक क्लिक के साथ नौकरी पोस्टिंग के लिए आवेदन करें और अपने करियर को आगे बढ़ाएं"
+          "title": "申请工作",
+          "description": "一键申请职位并推进您的职业生涯"
         }
       ]
     },
     "testimonials": {
-      "title": "उपयोगकर्ता अनुभव",
-      "subtitle": "सफलता की कहानियां और उपयोगकर्ता समीक्षाएं",
-      "overline": "समीक्षाएं"
+      "title": "用户评价",
+      "subtitle": "成功故事和用户评论",
+      "overline": "评论"
     },
     "trustedBy": {
-      "title": "अग्रणी कंपनियों द्वारा विश्वसनीय"
+      "title": "受领先公司信赖"
     },
     "stats": {
-      "users": "सक्रिय उपयोगकर्ता",
-      "companies": "साझेदार कंपनियां",
-      "cvs": "बनाए गए सीवी",
-      "hires": "भर्तियां"
+      "users": "活跃用户",
+      "companies": "合作伙伴公司",
+      "cvs": "创建的简历",
+      "hires": "招聘"
     },
     "cta": {
-      "title": "अपने करियर में एक कदम आगे बढ़ें",
-      "subtitle": "अपना पेशेवर सीवी बनाएं और अपने सपनों की नौकरी पाएं",
-      "button": "मुफ्त में शुरू करें"
+      "title": "在职业生涯中迈出一步",
+      "subtitle": "创建您的专业简历并找到梦想的工作",
+      "button": "免费开始"
     }
   },
   "blog": {
-    "title": "ब्लॉग",
-    "description": "करियर और सीवी तैयारी पर नवीनतम लेख",
-    "searchPlaceholder": "ब्लॉग पोस्ट में खोजें...",
-    "categories": "श्रेणियां",
-    "readMore": "और पढ़ें",
-    "comments": "टिप्पणियां",
-    "leaveComment": "टिप्पणी छोड़ें",
-    "noComments": "अभी तक कोई टिप्पणी नहीं",
-    "relatedPosts": "संबंधित पोस्ट"
+    "title": "博客",
+    "description": "关于职业和简历撰写的最新文章",
+    "searchPlaceholder": "搜索博客文章...",
+    "categories": "类别",
+    "readMore": "阅读更多",
+    "comments": "评论",
+    "leaveComment": "发表评论",
+    "noComments": "尚无评论",
+    "relatedPosts": "相关文章"
   },
   "contact": {
-    "title": "संपर्क करें",
-    "description": "हमसे संपर्क करें। हम जल्द से जल्द आपको जवाब देंगे।",
-    "name": "आपका नाम",
-    "email": "आपका ईमेल पता",
-    "subject": "विषय",
-    "message": "आपका संदेश",
-    "send": "भेजें",
-    "successMessage": "आपका संदेश सफलतापूर्वक भेजा गया। हम जल्द से जल्द आपको जवाब देंगे।",
-    "errorMessage": "आपका संदेश भेजा नहीं जा सका। कृपया बाद में पुनः प्रयास करें।",
+    "title": "联系我们",
+    "description": "与我们联系。我们将尽快回复您。",
+    "name": "您的姓名",
+    "email": "您的电子邮件",
+    "subject": "主题",
+    "message": "您的消息",
+    "send": "发送",
+    "successMessage": "您的消息已成功发送。我们将尽快回复您。",
+    "errorMessage": "发送消息失败。请稍后再试。",
     "subjects": {
-      "general": "सामान्य प्रश्न",
-      "technical": "तकनीकी सहायता",
-      "billing": "बिलिंग संबंधी प्रश्न",
-      "feedback": "प्रतिक्रिया",
-      "other": "अन्य"
+      "general": "一般问题",
+      "technical": "技术支持",
+      "billing": "付款相关",
+      "feedback": "反馈",
+      "other": "其他"
     }
   },
   "pricing": {
-    "title": "मूल्य निर्धारण",
-    "description": "अपनी आवश्यकताओं के अनुरूप योजना चुनें",
-    "monthly": "मासिक",
-    "yearly": "वार्षिक",
+    "title": "定价",
+    "description": "选择适合您需求的计划",
+    "monthly": "每月",
+    "yearly": "每年",
     "jobseeker": {
-      "title": "नौकरी चाहने वाला",
+      "title": "求职者",
       "price": {
         "monthly": "2",
         "yearly": "20"
       },
       "features": [
-        "असीमित सीवी निर्माण",
-        "प्रीमियम सीवी टेम्पलेट्स",
-        "सीवी डाउनलोड (PDF/Word)",
-        "नौकरी पोस्टिंग के लिए आवेदन",
-        "प्रोफ़ाइल हाइलाइटिंग",
-        "24/7 सहायता"
+        "无限创建简历",
+        "高级简历模板",
+        "下载简历（PDF/Word）",
+        "申请职位",
+        "突出显示个人资料",
+        "24/7支持"
       ]
     },
     "employer": {
-      "title": "नियोक्ता",
+      "title": "雇主",
       "price": {
         "monthly": "20",
         "yearly": "200"
       },
       "features": [
-        "असीमित नौकरी पोस्टिंग",
-        "उम्मीदवार फ़िल्टरिंग",
-        "सीवी डेटाबेस पहुंच",
-        "कंपनी प्रोफ़ाइल",
-        "आंकड़े और रिपोर्ट्स",
-        "प्राथमिकता सहायता"
+        "无限发布职位",
+        "候选人筛选",
+        "访问简历数据库",
+        "公司资料",
+        "统计和报告",
+        "优先支持"
       ]
     },
-    "currency": "USD",
-    "perMonth": "/माह",
-    "perYear": "/वर्ष",
-    "selectPlan": "योजना चुनें",
-    "currentPlan": "वर्तमान योजना",
-    "saveYearly": "वार्षिक भुगतान पर 15% की बचत"
+    "currency": "美元",
+    "perMonth": "/月",
+    "perYear": "/年",
+    "selectPlan": "选择计划",
+    "currentPlan": "当前计划",
+    "saveYearly": "年度付款节省15%"
   },
   "toast": {
-    "success": "सफल!",
-    "error": "त्रुटि!",
-    "warning": "चेतावनी!",
-    "info": "जानकारी"
+    "success": "成功！",
+    "error": "错误！",
+    "warning": "警告！",
+    "info": "信息"
   },
   "errors": {
     "404": {
-      "title": "पृष्ठ नहीं मिला",
-      "description": "आप जिस पृष्ठ की तलाश कर रहे हैं वह मौजूद नहीं है या स्थानांतरित हो गया है।"
+      "title": "页面未找到",
+      "description": "您查找的页面不存在或已被移动。"
     },
     "500": {
-      "title": "सर्वर त्रुटि",
-      "description": "क्षमा करें, कुछ गलत हो गया। कृपया बाद में पुनः प्रयास करें।"
+      "title": "服务器错误",
+      "description": "抱歉，出了点问题。请稍后再试。"
     },
-    "backToHome": "होम पर वापस जाएं",
-    "tryAgain": "पुनः प्रयास करें"
+    "backToHome": "返回首页",
+    "tryAgain": "重试"
   },
   "dashboard": {
-    "title": "मेरे सीवी",
-    "createNew": "नया सीवी बनाएं",
-    "fetchError": "सीवी लोड करते समय एक त्रुटि हुई",
-    "deleteSuccess": "सीवी सफलतापूर्वक हटा दिया गया",
-    "deleteError": "सीवी हटाते समय एक त्रुटि हुई"
+    "title": "我的简历",
+    "createNew": "创建新简历",
+    "fetchError": "加载简历时发生错误",
+    "deleteSuccess": "简历删除成功",
+    "deleteError": "删除简历时发生错误"
   },
   "cv": {
-    "create": "सीवी बनाएं",
-    "createSuccess": "सीवी सफलतापूर्वक बनाया गया",
-    "createError": "सीवी बनाते समय एक त्रुटि हुई",
+    "create": "创建简历",
+    "createSuccess": "简历创建成功",
+    "createError": "创建简历时发生错误",
     "steps": {
-      "personalInfo": "व्यक्तिगत जानकारी",
-      "experience": "अनुभव",
-      "education": "शिक्षा",
-      "skills": "कौशल",
-      "languages": "भाषाएं",
-      "certificates": "प्रमाणपत्र",
-      "video": "वीडियो",
-      "template": "टेम्पलेट",
-      "completed": "पूर्ण"
+      "personalInfo": "个人信息",
+      "experience": "经验",
+      "education": "教育",
+      "skills": "技能",
+      "languages": "外语",
+      "certificates": "证书",
+      "video": "视频",
+      "template": "模板",
+      "completed": "完成"
     },
     "personalInfo": {
-      "title": "व्यक्तिगत जानकारी",
-      "fullName": "पूरा नाम",
-      "jobTitle": "नौकरी का शीर्षक",
-      "summary": "सारांश",
-      "phone": "फोन",
-      "location": "स्थान"
+      "title": "个人信息",
+      "fullName": "全名",
+      "jobTitle": "职位",
+      "summary": "概述",
+      "phone": "电话",
+      "location": "地点"
     },
     "experience": {
-      "title": "काम का अनुभव",
-      "subtitle": "अपना काम का इतिहास जोड़ें, सबसे हाल के अनुभव से शुरू करें",
-      "company": "कंपनी का नाम",
-      "position": "पद",
-      "startDate": "शुरुआत की तिथि",
-      "endDate": "समाप्ति तिथि",
-      "current": "वर्तमान में यहां काम कर रहा हूं",
-      "description": "नौकरी का विवरण और जिम्मेदारियां",
-      "addMore": "अनुभव जोड़ें"
+      "title": "工作经验",
+      "subtitle": "从最近的工作开始添加您的工作经历",
+      "company": "公司名称",
+      "position": "职位",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "current": "目前在此工作",
+      "description": "工作描述和职责",
+      "addMore": "添加经验"
     },
     "languages": {
-      "title": "भाषाएं",
-      "subtitle": "जो भाषाएं आप जानते हैं और उनकी प्रवीणता स्तर जोड़ें",
-      "name": "भाषा",
-      "level": "प्रवीणता स्तर",
-      "certificate": "प्रमाणपत्र",
-      "certificateHelper": "यदि लागू हो, तो अपना भाषा प्रमाणपत्र निर्दिष्ट करें (वैकल्पिक)",
-      "addMore": "भाषा जोड़ें"
+      "title": "外语",
+      "subtitle": "添加您掌握的语言及其水平",
+      "name": "语言",
+      "level": "水平",
+      "certificate": "证书",
+      "certificateHelper": "如果有语言证书，请注明（可选）",
+      "addMore": "添加语言"
     },
     "education": {
-      "title": "शिक्षा",
-      "subtitle": "अपनी शिक्षा का इतिहास जोड़ें, सबसे हाल की शिक्षा से शुरू करें",
-      "school": "स्कूल",
-      "degree": "डिग्री",
-      "field": "अध्ययन का क्षेत्र",
-      "startDate": "शुरुआत की तिथि",
-      "endDate": "समाप्ति तिथि",
-      "current": "वर्तमान में यहां पढ़ रहा हूं",
-      "description": "विवरण (वैकल्पिक)",
-      "addMore": "शिक्षा जोड़ें"
+      "title": "教育信息",
+      "subtitle": "从最近的教育开始添加您的教育背景",
+      "school": "学校",
+      "degree": "学位",
+      "field": "专业",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "current": "目前在此学习",
+      "description": "描述（可选）",
+      "addMore": "添加教育"
     },
-    "draft": "ड्राफ्ट",
-    "continue": "जारी रखें",
-    "edit": "संपादित करें",
-    "untitled": "बिना शीर्षक वाला सीवी",
-    "lastUpdated": "अंतिम अपडेट",
-    "saveAndExit": "सहेजें और बाहर निकलें",
-    "saveSuccess": "आपकी प्रगति सहेजी गई",
-    "saveError": "सहेजते समय एक त्रुटि हुई",
-    "loadError": "सीवी लोड करते समय एक त्रुटि हुई",
+    "draft": "草稿",
+    "continue": "继续",
+    "edit": "编辑",
+    "untitled": "未命名的简历",
+    "lastUpdated": "最后更新",
+    "saveAndExit": "保存并退出",
+    "saveSuccess": "您的进度已保存",
+    "saveError": "保存时发生错误",
+    "loadError": "加载简历时发生错误",
     "errors": {
-      "personalInfoRequired": "कृपया सभी व्यक्तिगत जानकारी भरें",
-      "experienceRequired": "आपको कम से कम एक अनुभव दर्ज करना होगा",
-      "educationRequired": "आपको कम से कम एक शिक्षा दर्ज करना होगा",
-      "skillsRequired": "आपको कम से कम एक कौशल जोड़ना होगा",
-      "languagesRequired": "आपको कम से कम एक भाषा दर्ज करना होगा",
-      "experienceFieldsRequired": "कृपया अनुभव के लिए कंपनी का नाम, पद और शुरुआत की तिथि भरें",
-      "endDateRequired": "यदि आप वर्तमान में काम नहीं कर रहे हैं, तो समाप्ति तिथि आवश्यक है",
-      "educationFieldsRequired": "कृपया स्कूल, डिग्री, अध्ययन का क्षेत्र और शुरुआत की तिथि भरें",
-      "endDateRequired": "यदि आप वर्तमान में पढ़ नहीं रहे हैं, तो समाप्ति तिथि आवश्यक है"
+      "personalInfoRequired": "请填写所有个人信息",
+      "experienceRequired": "至少需要输入一项经验",
+      "educationRequired": "至少需要输入一项教育信息",
+      "skillsRequired": "至少需要添加一项技能",
+      "languagesRequired": "至少需要输入一项语言信息",
+      "experienceFieldsRequired": "请填写公司名称、职位和开始日期",
+      "endDateRequired": "如果未在此工作，请填写结束日期",
+      "educationFieldsRequired": "请填写学校、学位、专业和开始日期",
+      "endDateRequired": "如果未在此学习，请填写结束日期"
     },
-    "currentStep": "वर्तमान चरण",
-    "deleteConfirmTitle": "सीवी हटाएं",
-    "deleteConfirmMessage": "क्या आप वाकई इस सीवी को हटाना चाहते हैं?",
-    "deleteSuccess": "सीवी सफलतापूर्वक हटा दिया गया",
-    "deleteError": "सीवी हटाते समय एक त्रुटि हुई",
-    "noCVs": "आपने अभी तक कोई सीवी नहीं बनाया है",
-    "createFirst": "अपना पहला सीवी बनाएं",
-    "titleLabel": "सीवी का शीर्षक",
-    "titlePlaceholder": "अपने सीवी के लिए एक शीर्षक दर्ज करें",
-    "titleHelper": "यह शीर्षक आपके सीवी को पहचानने में मदद करता है (उदाहरण: 'सॉफ्टवेयर डेवलपर सीवी')",
-    "startCreating": "सीवी बनाना शुरू करें",
+    "currentStep": "当前步骤",
+    "deleteConfirmTitle": "删除简历",
+    "deleteConfirmMessage": "您确定要删除此简历吗？",
+    "deleteSuccess": "简历删除成功",
+    "deleteError": "删除简历时发生错误",
+    "noCVs": "您尚未创建任何简历",
+    "createFirst": "创建您的第一份简历",
+    "titleLabel": "简历标题",
+    "titlePlaceholder": "为您的简历输入标题",
+    "titleHelper": "此标题有助于识别您的简历（例如：'软件开发人员简历'）",
+    "startCreating": "开始创建简历",
     "errors": {
-      "titleRequired": "कृपया सीवी के लिए एक शीर्षक दर्ज करें"
+      "titleRequired": "请为简历输入标题"
     },
-    "loadSuccess": "सीवी सफलतापूर्वक लोड हो गया",
+    "loadSuccess": "简历加载成功",
     "skills": {
-      "title": "कौशल",
-      "subtitle": "अपने तकनीकी और व्यक्तिगत कौशल जोड़ें",
-      "name": "कौशल",
-      "level": "प्रवीणता स्तर",
-      "description": "विवरण",
-      "descriptionHelper": "इस कौशल के बारे में एक संक्षिप्त विवरण जोड़ें (वैकल्पिक)",
-      "addMore": "कौशल जोड़ें"
+      "title": "技能",
+      "subtitle": "添加您具备的技术和个人技能",
+      "name": "技能",
+      "level": "水平",
+      "description": "描述",
+      "descriptionHelper": "添加此技能的简短描述（可选）",
+      "addMore": "添加技能"
     },
     "errors": {
-      "skillNameRequired": "कृपया कौशल का नाम दर्ज करें"
+      "skillNameRequired": "请输入技能名称"
     },
     "certificates": {
-      "title": "प्रमाणपत्र",
-      "subtitle": "जो प्रमाणपत्र और दस्तावेज़ आपके पास हैं, उन्हें जोड़ें",
-      "name": "प्रमाणपत्र का नाम",
-      "issuer": "जारीकर्ता",
-      "issueDate": "जारी करने की तिथि",
-      "expiryDate": "समाप्ति तिथि",
-      "expiryDateHelper": "यदि लागू हो, तो प्रमाणपत्र की समाप्ति तिथि",
-      "credentialId": "प्रमाणपत्र/दस्तावेज़ संख्या",
-      "credentialIdHelper": "यदि लागू हो, तो प्रमाणपत्र या दस्तावेज़ संख्या",
-      "description": "विवरण",
-      "uploadFile": "प्रमाणपत्र फ़ाइल अपलोड करें",
-      "addMore": "प्रमाणपत्र जोड़ें",
-      "uploadSuccess": "प्रमाणपत्र फ़ाइल सफलतापूर्वक अपलोड हो गई",
-      "uploadError": "प्रमाणपत्र फ़ाइल अपलोड करते समय एक त्रुटि हुई"
+      "title": "证书",
+      "subtitle": "添加您拥有的证书和文件",
+      "name": "证书名称",
+      "issuer": "颁发机构",
+      "issueDate": "颁发日期",
+      "expiryDate": "有效期",
+      "expiryDateHelper": "如果有证书的有效期",
+      "credentialId": "证书/文件编号",
+      "credentialIdHelper": "如果有证书或文件编号",
+      "description": "描述",
+      "uploadFile": "上传证书文件",
+      "addMore": "添加证书",
+      "uploadSuccess": "证书文件上传成功",
+      "uploadError": "上传证书文件时发生错误"
     },
     "errors": {
-      "certificateFieldsRequired": "कृपया प्रमाणपत्र का नाम, जारीकर्ता और जारी करने की तिथि भरें"
+      "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
     },
-    "progress": "प्रगति",
+    "progress": "进度",
     "template": {
-      "selectTitle": "सीवी टेम्पलेट चुनें",
-      "selectRequired": "कृपया एक टेम्पलेट चुनें",
-      "preview": "पूर्वावलोकन",
-      "generateWeb": "वेब सीवी बनाएं",
-      "generatePDF": "पीडीएफ डाउनलोड करें",
-      "generating": "बनाया जा रहा है...",
-      "generateSuccess": "सीवी सफलतापूर्वक बनाया गया",
-      "generateError": "सीवी बनाते समय एक त्रुटि हुई",
-      "language": "भाषा",
-      "changeLanguage": "भाषा बदलें",
-      "downloadPDF": "पीडीएफ डाउनलोड करें",
-      "viewImage": "छवि देखें",
-      "close": "बंद करें",
-      "loading": "लोड हो रहा है...",
-      "error": "अनुवाद लोड करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।",
-      "viewCertificate": "प्रमाणपत्र देखें",
-      "location": "स्थान",
-      "webVersion": "वेब संस्करण",
-      "pdfVersion": "पीडीएफ संस्करण",
+      "selectTitle": "选择简历模板",
+      "selectRequired": "请选择一个模板",
+      "preview": "预览",
+      "generateWeb": "生成网页简历",
+      "generatePDF": "下载PDF",
+      "generating": "生成中...",
+      "generateSuccess": "简历生成成功",
+      "generateError": "生成简历时发生错误",
+      "language": "语言",
+      "changeLanguage": "更改语言",
+      "downloadPDF": "下载PDF",
+      "viewImage": "查看图片",
+      "close": "关闭",
+      "loading": "加载中...",
+      "error": "加载翻译时发生错误。请重试。",
+      "viewCertificate": "查看证书",
+      "location": "地点",
+      "webVersion": "网页版",
+      "pdfVersion": "PDF版",
       "templates": {
         "modernWeb": {
-          "name": "आधुनिक वेब टेम्पलेट",
-          "description": "आधुनिक और इंटरैक्टिव वेब डिज़ाइन"
+          "name": "现代网页模板",
+          "description": "现代和互动的网页设计"
         },
         "classicWeb": {
-          "name": "क्लासिक वेब टेम्पलेट",
-          "description": "क्लासिक और पेशेवर वेब डिज़ाइन"
+          "name": "经典网页模板",
+          "description": "经典和专业的网页设计"
         },
         "modernPdf": {
-          "name": "आधुनिक पीडीएफ टेम्पलेट",
-          "description": "आधुनिक और पेशेवर पीडीएफ डिज़ाइन"
+          "name": "现代PDF模板",
+          "description": "现代和专业的PDF设计"
         },
         "classicPdf": {
-          "name": "क्लासिक पीडीएफ टेम्पलेट",
-          "description": "क्लासिक और स्टाइलिश पीडीएफ डिज़ाइन"
+          "name": "经典PDF模板",
+          "description": "经典和优雅的PDF设计"
         }
       }
     },
     "video": {
-      "title": "वीडियो परिचय",
-      "dragDrop": "अपनी वीडियो फ़ाइल को यहां खींचें और छोड़ें या ब्राउज़ करने के लिए क्लिक करें",
-      "maxSize": "अधिकतम फ़ाइल आकार: 50MB",
-      "selectVideo": "वीडियो चुनें",
-      "deleteSuccess": "वीडियो सफलतापूर्वक हटा दिया गया",
-      "deleteError": "वीडियो हटाते समय एक त्रुटि हुई",
-      "confirmDelete": "क्या आप वाकई इस वीडियो को हटाना चाहते हैं?"
+      "title": "视频介绍",
+      "dragDrop": "将视频文件拖放到此处或点击选择",
+      "maxSize": "最大文件大小：50MB",
+      "selectVideo": "选择视频",
+      "deleteSuccess": "视频删除成功",
+      "deleteError": "删除视频时发生错误",
+      "confirmDelete": "您确定要删除此视频吗？"
     }
   },
   "validation": {
-    "required": "यह फ़ील्ड आवश्यक है",
-    "invalidEmail": "कृपया एक मान्य ईमेल पता दर्ज करें",
-    "usernameMinLength": "उपयोगकर्ता नाम कम से कम 3 अक्षर होना चाहिए",
-    "passwordMinLength": "पासवर्ड कम से कम 8 अक्षर होना चाहिए",
-    "passwordNumber": "पासवर्ड में कम से कम एक संख्या होनी चाहिए",
-    "passwordLowercase": "पासवर्ड में कम से कम एक छोटा अक्षर होना चाहिए",
-    "passwordUppercase": "पासवर्ड में कम से कम एक बड़ा अक्षर होना चाहिए",
-    "passwordMatch": "पासवर्ड मेल नहीं खाते",
-    "invalidUserType": "कृपया एक मान्य उपयोगकर्ता प्रकार चुनें"
+    "required": "此字段为必填项",
+    "invalidEmail": "请输入有效的电子邮件地址",
+    "usernameMinLength": "用户名至少需要3个字符",
+    "passwordMinLength": "密码至少需要8个字符",
+    "passwordNumber": "密码至少需要一个数字",
+    "passwordLowercase": "密码至少需要一个小写字母",
+    "passwordUppercase": "密码至少需要一个大写字母",
+    "passwordMatch": "密码不匹配",
+    "invalidUserType": "请选择有效的用户类型"
   },
   "errors": {
-    "usernameExists": "यह उपयोगकर्ता नाम पहले से उपयोग में है",
-    "emailExists": "यह ईमेल पता पहले से उपयोग में है",
-    "invalidUsername": "अमान्य उपयोगकर्ता नाम",
-    "invalidEmail": "अमान्य ईमेल पता",
-    "weakPassword": "पासवर्ड बहुत कमजोर है",
-    "passwordMismatch": "पासवर्ड मेल नहीं खाते",
-    "unknown": "एक अज्ञात त्रुटि हुई",
-    "formErrors": "कृपया फ़ॉर्म त्रुटियों को ठीक करें",
-    "registrationFailed": "रजिस्ट्रेशन असफल। कृपया पुनः प्रयास करें।",
-    "pleaseFixErrors": "कृपया निम्नलिखित त्रुटियों को ठीक करें",
-    "present": "वर्तमान"
+    "usernameExists": "此用户名已被使用",
+    "emailExists": "此电子邮件已被使用",
+    "invalidUsername": "无效的用户名",
+    "invalidEmail": "无效的电子邮件",
+    "weakPassword": "密码太弱",
+    "passwordMismatch": "密码不匹配",
+    "unknown": "发生未知错误",
+    "formErrors": "请修复表单错误",
+    "registrationFailed": "注册失败。请重试。",
+    "pleaseFixErrors": "请修复以下错误",
+    "present": "进行中"
   }
 }

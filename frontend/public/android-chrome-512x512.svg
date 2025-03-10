@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="256" fill="#3F51B5"/>
+  
+  <!-- Document Icon -->
+  <rect x="156" y="126" width="200" height="260" rx="16" fill="white" stroke="#3F51B5" stroke-width="8"/>
+  
+  <!-- Document Lines -->
+  <line x1="186" y1="176" x2="326" y2="176" stroke="#3F51B5" stroke-width="12" stroke-linecap="round"/>
+  <line x1="186" y1="226" x2="326" y2="226" stroke="#3F51B5" stroke-width="12" stroke-linecap="round"/>
+  <line x1="186" y1="276" x2="276" y2="276" stroke="#3F51B5" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- Checkmark -->
+  <path d="M206 326L236 356L296 296" stroke="#4CAF50" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> 

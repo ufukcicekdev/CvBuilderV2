@@ -15,6 +15,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import axiosInstance from '../services/axios';
 import { showToast } from '../utils/toast';
+import SEO from '../components/SEO';
 
 interface ContactForm {
   name: string;
@@ -50,6 +51,11 @@ export default function Contact() {
 
   return (
     <Layout>
+      <SEO 
+        title={t('contact.seo.title', 'Contact Us')}
+        description={t('contact.seo.description', 'Get in touch with the CV Builder team. We\'re here to help with any questions about our resume building services.')}
+        keywords={t('contact.seo.keywords', 'contact, support, help, questions, cv builder')}
+      />
       <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: { xs: 2, md: 4 } }}>
           <Typography variant="h4" component="h1" gutterBottom align="center">

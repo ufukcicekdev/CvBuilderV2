@@ -1,0 +1,42 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#F8F9FA"/>
+  
+  <!-- Gradient Background -->
+  <rect width="1200" height="630" fill="url(#paint0_linear)"/>
+  
+  <!-- Logo -->
+  <g transform="translate(150, 165) scale(0.6)">
+    <!-- Background Circle -->
+    <circle cx="256" cy="256" r="248" fill="#F8F9FA" stroke="#3F51B5" stroke-width="16"/>
+    
+    <!-- Document Icon -->
+    <path d="M160 128C160 119.163 167.163 112 176 112H336C344.837 112 352 119.163 352 128V384C352 392.837 344.837 400 336 400H176C167.163 400 160 392.837 160 384V128Z" fill="white" stroke="#3F51B5" stroke-width="12"/>
+    
+    <!-- Document Lines -->
+    <line x1="192" y1="160" x2="320" y2="160" stroke="#3F51B5" stroke-width="8" stroke-linecap="round"/>
+    <line x1="192" y1="192" x2="320" y2="192" stroke="#3F51B5" stroke-width="8" stroke-linecap="round"/>
+    <line x1="192" y1="224" x2="320" y2="224" stroke="#3F51B5" stroke-width="8" stroke-linecap="round"/>
+    <line x1="192" y1="256" x2="280" y2="256" stroke="#3F51B5" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Checkmark -->
+    <path d="M224 320L248 344L288 304" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#3F51B5" text-anchor="middle">CV Builder</text>
+  <text x="600" y="360" font-family="Arial, sans-serif" font-size="36" fill="#333333" text-anchor="middle">Create Professional Resumes Online</text>
+  
+  <!-- Decorative Elements -->
+  <rect x="150" y="420" width="900" height="4" rx="2" fill="#3F51B5" opacity="0.5"/>
+  <rect x="250" y="450" width="700" height="4" rx="2" fill="#4CAF50" opacity="0.5"/>
+  <rect x="350" y="480" width="500" height="4" rx="2" fill="#3F51B5" opacity="0.5"/>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F9FA"/>
+      <stop offset="1" stop-color="#E8EAF6"/>
+    </linearGradient>
+  </defs>
+</svg> 

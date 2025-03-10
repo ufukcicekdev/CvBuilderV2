@@ -30,6 +30,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
 import { handleApiError } from '../utils/handleApiError';
 import { resendVerificationEmail } from '@/services/api';
+import SEO from '../components/SEO';
 
 interface LoginFormData {
   email: string;
@@ -41,10 +42,15 @@ export default function LoginPage() {
   const { t } = useTranslation('common');
   const [userType, setUserType] = useState('jobseeker');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [activeTab, setActiveTab] = useState('login');
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [isResendingVerification, setIsResendingVerification] = useState(false);
+  const linkedInRef = useRef<any>(null);
 
   const {
     register,
@@ -211,6 +217,12 @@ export default function LoginPage() {
 
   return (
     <Layout>
+      <SEO 
+        title={t('login.seo.title', 'Login to Your Account')}
+        description={t('login.seo.description', 'Log in to your CV Builder account to create, edit, and manage your professional resumes and CVs.')}
+        keywords={t('login.seo.keywords', 'login, sign in, cv builder account, resume access')}
+        ogType="website"
+      />
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography component="h1" variant="h5">
