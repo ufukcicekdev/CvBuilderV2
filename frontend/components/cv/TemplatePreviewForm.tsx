@@ -403,24 +403,35 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
         ))}
       </Grid>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', sm: 'row' }, 
+        justifyContent: 'space-between', 
+        mt: 3,
+        gap: 2
+      }}>
         <Box>
           {onPrev && (
             <Button
               onClick={onPrev}
               variant="contained"
               disabled={loading}
+              fullWidth
             >
                {t('common.previous')}
             </Button>
           )}
         </Box>
-        <Box>
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: 2
+        }}>
           <Button
             onClick={handlePreview}
             variant="outlined"
-            sx={{ mr: 2 }}
             disabled={!selectedTemplate || loading}
+            fullWidth
           >
             {t('common.preview')}
           </Button>
@@ -430,6 +441,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData }: Temp
             color="primary"
             disabled={!selectedTemplate || loading}
             startIcon={activeTab === 0 ? <WebIcon /> : <DownloadIcon />}
+            fullWidth
           >
             {loading 
               ? t('cv.template.generating')

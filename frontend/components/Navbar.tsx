@@ -211,9 +211,9 @@ export default function Navbar() {
                   <MenuItem component={Link} href="/dashboard" onClick={handleMobileMenuClose}>
                     {t('nav.dashboard')}
                   </MenuItem>
-                  <MenuItem component={Link} href="/jobs" onClick={handleMobileMenuClose}>
-                    {t('nav.jobs')}
-                  </MenuItem>
+                  {/* <MenuItem component={Link} href="/jobs" onClick={handleMobileMenuClose}> */}
+                    {/* {t('nav.jobs')} */}
+                  {/* </MenuItem> */}
                   <MenuItem component={Link} href="/profile" onClick={handleMobileMenuClose}>
                     {t('nav.profile')}
                   </MenuItem>
