@@ -13,6 +13,7 @@ import {
   TextField,
   IconButton,
   Badge,
+  CircularProgress,
 } from '@mui/material';
 import { Edit as EditIcon, Save as SaveIcon, Cancel as CancelIcon, PhotoCamera } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
@@ -284,7 +285,21 @@ function Profile() {
     return (
       <Layout>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Typography>Yükleniyor...</Typography>
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '50vh',
+            flexDirection: 'column',
+            gap: 2
+          }}>
+            <Typography variant="h6" sx={{ textAlign: 'center' }}>
+              {t('profile.loading')}
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          </Box>
         </Container>
       </Layout>
     );
@@ -294,7 +309,25 @@ function Profile() {
     return (
       <Layout>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Typography color="error">Profil bulunamadı.</Typography>
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '50vh',
+            flexDirection: 'column',
+            p: 2
+          }}>
+            <Typography variant="h6" color="error" sx={{ textAlign: 'center', mb: 2 }}>
+              {t('profile.notFound')}
+            </Typography>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={() => router.push('/')}
+            >
+              {t('common.backToHome')}
+            </Button>
+          </Box>
         </Container>
       </Layout>
     );
@@ -312,95 +345,123 @@ function Profile() {
         <Grid container spacing={3}>
           {/* Profil Başlığı */}
           <Grid item xs={12}>
-            <Paper sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                  <IconButton
-                    onClick={handleProfilePictureClick}
-                    disabled={uploading}
-                    sx={{
-                      bgcolor: 'background.paper',
-                      '&:hover': { bgcolor: 'background.paper' },
-                      width: 32,
-                      height: 32,
-                    }}
-                  >
-                    <PhotoCamera fontSize="small" />
-                  </IconButton>
-                }
-              >
-                <Avatar
-                  src={profile?.profile_picture_url || ''}
-                  sx={{ 
-                    width: 100, 
-                    height: 100,
-                    cursor: 'pointer',
-                    opacity: uploading ? 0.5 : 1,
-                  }}
-                  onClick={handleProfilePictureClick}
-                />
-              </Badge>
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="h4">{profile.username}</Typography>
-                <Typography color="textSecondary">{profile.email}</Typography>
-                <Typography variant="subtitle1">
-                  {profile.user_type === 'jobseeker' ? t('auth.jobseeker') : t('auth.employer')}
-                </Typography>
-              </Box>
-              {!isEditing ? (
-                <Button
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                  startIcon={<EditIcon />}
-                  sx={{ mt: 2 }}
+            <Paper sx={{ p: { xs: 2, sm: 3 } }}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: { xs: 'column', sm: 'row' }, 
+                alignItems: { xs: 'center', sm: 'flex-start' },
+                gap: 2 
+              }}>
+                <Badge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  badgeContent={
+                    <IconButton
+                      onClick={handleProfilePictureClick}
+                      disabled={uploading}
+                      sx={{
+                        bgcolor: 'background.paper',
+                        '&:hover': { bgcolor: 'background.paper' },
+                        width: 32,
+                        height: 32,
+                      }}
+                    >
+                      <PhotoCamera fontSize="small" />
+                    </IconButton>
+                  }
                 >
-                  {t('profile.edit')}
-                </Button>
-              ) : (
-                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-                  <Button
-                    onClick={handleSave}
-                    variant="contained"
-                    color="primary"
-                    startIcon={<SaveIcon />}
-                  >
-                    {t('profile.save')}
-                  </Button>
-                  <Button
-                    onClick={handleCancel}
-                    variant="outlined"
-                    color="error"
-                    startIcon={<CancelIcon />}
-                  >
-                    {t('profile.cancel')}
-                  </Button>
+                  <Avatar
+                    src={profile?.profile_picture_url || ''}
+                    sx={{ 
+                      width: { xs: 80, sm: 100 }, 
+                      height: { xs: 80, sm: 100 },
+                      cursor: 'pointer',
+                      opacity: uploading ? 0.5 : 1,
+                    }}
+                    onClick={handleProfilePictureClick}
+                  />
+                </Badge>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleFileChange}
+                />
+                <Box sx={{ 
+                  flexGrow: 1,
+                  textAlign: { xs: 'center', sm: 'left' },
+                  mb: { xs: 2, sm: 0 }
+                }}>
+                  <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}>
+                    {profile.username}
+                  </Typography>
+                  <Typography color="textSecondary">{profile.email}</Typography>
+                  <Typography variant="subtitle1">
+                    {profile.user_type === 'jobseeker' ? t('auth.jobseeker') : t('auth.employer')}
+                  </Typography>
                 </Box>
-              )}
+                <Box sx={{ 
+                  display: 'flex', 
+                  justifyContent: { xs: 'center', sm: 'flex-end' },
+                  width: { xs: '100%', sm: 'auto' }
+                }}>
+                  {!isEditing ? (
+                    <Button
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="primary"
+                      startIcon={<EditIcon />}
+                      sx={{ mt: { xs: 0, sm: 2 } }}
+                      fullWidth={false}
+                    >
+                      {t('profile.edit')}
+                    </Button>
+                  ) : (
+                    <Box sx={{ 
+                      display: 'flex', 
+                      gap: 2, 
+                      mt: { xs: 0, sm: 2 },
+                      flexDirection: { xs: 'column', sm: 'row' },
+                      width: { xs: '100%', sm: 'auto' }
+                    }}>
+                      <Button
+                        onClick={handleSave}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<SaveIcon />}
+                        fullWidth={false}
+                      >
+                        {t('profile.save')}
+                      </Button>
+                      <Button
+                        onClick={handleCancel}
+                        variant="outlined"
+                        color="error"
+                        startIcon={<CancelIcon />}
+                        fullWidth={false}
+                      >
+                        {t('profile.cancel')}
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
             </Paper>
           </Grid>
 
           {/* Profil Detayları */}
           <Grid item xs={12}>
-            <Paper sx={{ p: 3 }}>
+            <Paper sx={{ p: { xs: 2, sm: 3 } }}>
               <Typography variant="h6" gutterBottom>
                 {t('profile.personalInfo')}
               </Typography>
               <Divider sx={{ my: 2 }} />
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 {profile.user_type === 'jobseeker' ? (
                   // İş Arayan Profili
                   <>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.firstName')}
@@ -412,9 +473,12 @@ function Profile() {
                         error={!!errors.first_name}
                         helperText={errors.first_name}
                         required
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.lastName')}
@@ -426,9 +490,12 @@ function Profile() {
                         error={!!errors.last_name}
                         helperText={errors.last_name}
                         required
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.phone')}
@@ -440,9 +507,12 @@ function Profile() {
                         error={!!errors.phone}
                         helperText={errors.phone}
                         required
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.birthDate')}
@@ -455,6 +525,9 @@ function Profile() {
                         placeholder={t('profile.birthDatePlaceholder')}
                         error={!!errors.birth_date}
                         helperText={errors.birth_date}
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -469,13 +542,16 @@ function Profile() {
                         error={!!errors.profession}
                         helperText={errors.profession}
                         required={profile?.user_type === 'jobseeker'}
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
                   </>
                 ) : (
                   // İşveren Profili
                   <>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.firstName')}
@@ -487,9 +563,12 @@ function Profile() {
                         error={!!errors.first_name}
                         helperText={errors.first_name}
                         required
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.lastName')}
@@ -501,9 +580,12 @@ function Profile() {
                         error={!!errors.last_name}
                         helperText={errors.last_name}
                         required
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('auth.companyName')}
@@ -515,9 +597,12 @@ function Profile() {
                         error={!!errors.company_name}
                         helperText={errors.company_name}
                         required={profile?.user_type === 'employer'}
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('auth.companyWebsite')}
@@ -528,9 +613,12 @@ function Profile() {
                         placeholder={t('profile.companyWebsitePlaceholder')}
                         error={!!errors.company_website}
                         helperText={errors.company_website}
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.companyPosition')}
@@ -541,9 +629,12 @@ function Profile() {
                         placeholder={t('profile.companyPositionPlaceholder')}
                         error={!!errors.company_position}
                         helperText={errors.company_position}
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label={t('profile.companySize')}
@@ -554,6 +645,9 @@ function Profile() {
                         placeholder={t('profile.companySizePlaceholder')}
                         error={!!errors.company_size}
                         helperText={errors.company_size}
+                        size="medium"
+                        margin="normal"
+                        sx={{ mt: { xs: 1, sm: 2 } }}
                       />
                     </Grid>
                   </>
