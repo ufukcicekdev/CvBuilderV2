@@ -61,7 +61,12 @@
       "accountInactive": "Hesabınız aktif değil",
       "generalError": "Bir hata oluştu, lütfen tekrar deneyin",
       "emailRequired": "Email adresi gerekli",
-      "passwordRequired": "Şifre gerekli"
+      "passwordRequired": "Şifre gerekli",
+      "googleLoginFailed": "Google ile giriş yapılırken bir hata oluştu",
+      "networkError": "Ağ bağlantısı hatası. Lütfen internet bağlantınızı kontrol edin",
+      "fedcmDisabled": "Tarayıcı kimlik doğrulama özelliği devre dışı. Tarayıcı ayarlarınızı kontrol edin",
+      "googleScriptError": "Google giriş servisi yüklenemedi. Lütfen daha sonra tekrar deneyin",
+      "loginCancelled": "Giriş işlemi iptal edildi"
     },
     "emailNotFound": "Email adresi bulunamadı.",
     "emailVerification": "Email Doğrulama",

@@ -128,6 +128,12 @@ export default function LoginPage() {
     try {
       console.log('Google login success:', credentialResponse);
       
+      if (!credentialResponse.credential) {
+        console.error('Google login failed: No credential received');
+        toast.error(t('auth.errors.googleLoginFailed'));
+        return;
+      }
+      
       // Doğrudan backend URL'sine istek gönder
       const response = await fetch('https://web-production-9f41e.up.railway.app/api/auth/google/', {
         method: 'POST',
@@ -137,6 +143,7 @@ export default function LoginPage() {
         body: JSON.stringify({
           token: credentialResponse.credential,
         }),
+        credentials: 'include', // CORS için önemli
       });
       
       if (!response.ok) {
@@ -168,7 +175,20 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error('Google login error:', error);
-      toast.error(t('auth.errors.googleLoginFailed'));
+      
+      // Hata tipine göre özel mesajlar
+      if (error instanceof Error) {
+        if (error.message.includes('NetworkError') || error.message.includes('network')) {
+          toast.error(t('auth.errors.networkError'));
+        } else if (error.message.includes('FedCM')) {
+          toast.error(t('auth.errors.fedcmDisabled'));
+          console.info('FedCM hatası: Tarayıcı ayarlarınızda üçüncü taraf çerezlere ve kimlik doğrulama API\'lerine izin verdiğinizden emin olun.');
+        } else {
+          toast.error(t('auth.errors.googleLoginFailed'));
+        }
+      } else {
+        toast.error(t('auth.errors.googleLoginFailed'));
+      }
     }
   };
 
@@ -342,21 +362,31 @@ export default function LoginPage() {
               </Divider>
 
               <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 2 }}>
-                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+                <GoogleOAuthProvider 
+                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+                  // @ts-ignore - GoogleOAuthProvider tipinde onScriptLoadError özelliği var
+                  onScriptLoadError={(err: Error) => {
+                    console.error('Google script load error:', err);
+                    toast.error(t('auth.errors.googleScriptError'));
+                  }}
+                >
                   <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <GoogleLogin
                       onSuccess={handleGoogleSuccess}
-                      onError={() => {
-                        console.error('Google login error');
-                        toast.error(t('auth.loginError'));
+                      // @ts-ignore - GoogleLogin tipinde onError özelliği var
+                      onError={(error: Error) => {
+                        console.error('Google login error:', error);
+                        toast.error(t('auth.errors.googleLoginFailed'));
                       }}
-                      useOneTap
+                      useOneTap={false} // One Tap'i devre dışı bırak, FedCM hatalarını azaltır
                       locale={router.locale}
                       text="signin_with"
                       shape="rectangular"
                       logo_alignment="left"
                       width="280"
                       theme="outline"
+                      type="standard" // Standart buton kullan
+                      context="signin" // Giriş bağlamını belirt
                     />
                   </Box>
                 </GoogleOAuthProvider>
