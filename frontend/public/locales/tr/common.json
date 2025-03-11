@@ -196,7 +196,8 @@
       "unknown": "Bilinmeyen bir hata oluştu",
       "networkError": "Ağ bağlantısı hatası",
       "validationError": "Form bilgilerini kontrol edin"
-    }
+    },
+    "uploadSuccess": "Dosya başarıyla yüklendi"
   },
   "home": {
     "hero": {
@@ -407,11 +408,18 @@
     },
     "personalInfo": {
       "title": "Kişisel Bilgiler",
+      "subtitle": "CV'nize eklenecek temel kişisel bilgilerinizi doldurun",
       "fullName": "Ad Soyad",
       "jobTitle": "Ünvan",
       "summary": "Özet",
       "phone": "Telefon",
-      "location": "Konum"
+      "location": "Konum",
+      "fullNamePlaceholder": "Adınızı ve soyadınızı girin",
+      "jobTitlePlaceholder": "Ünvanınızı girin (örn: Yazılım Geliştirici)",
+      "summaryPlaceholder": "Profesyonel geçmişinizi ve kariyer hedeflerinizi kısaca açıklayın",
+      "phonePlaceholder": "Telefon numaranızı girin",
+      "locationPlaceholder": "Şehir/Ülke bilgisini girin",
+      "socialLinks": "Sosyal Medya Bağlantıları"
     },
     "experience": {
       "title": "İş Deneyimi",
@@ -422,7 +430,12 @@
       "endDate": "Bitiş Tarihi",
       "current": "Halen çalışıyorum",
       "description": "İş Tanımı ve Sorumluluklar",
-      "addMore": "Deneyim Ekle"
+      "addMore": "Deneyim Ekle",
+      "experienceItem": "Deneyim",
+      "companyPlaceholder": "Çalıştığınız şirketin adını girin",
+      "positionPlaceholder": "Pozisyonunuzu girin",
+      "descriptionPlaceholder": "Görevlerinizi ve sorumluluklarınızı kısaca açıklayın",
+      "noExperience": "Henüz iş deneyimi eklenmedi"
     },
     "languages": {
       "title": "Yabancı Diller",
@@ -431,7 +444,19 @@
       "level": "Seviye",
       "certificate": "Sertifika",
       "certificateHelper": "Varsa dil sertifikanızı belirtin (Opsiyonel)",
-      "addMore": "Dil Ekle"
+      "addMore": "Dil Ekle",
+      "languageItem": "Dil",
+      "namePlaceholder": "Dil adını girin",
+      "levelPlaceholder": "Yetenek seviyenizi seçin",
+      "certificatePlaceholder": "Sertifika bilgisini girin (örn: TOEFL, IELTS)",
+      "certificateHelper": "Dil sertifikanız varsa belirtin (İsteğe bağlı)",
+      "noLanguages": "Henüz dil bilgisi eklenmedi",
+      "a1": "Temel - Başlangıç",
+      "a2": "Temel - Orta Öncesi",
+      "b1": "Orta - Eşik",
+      "b2": "Orta - Üst",
+      "c1": "İleri - Etkin",
+      "c2": "İleri - Ustalık"
     },
     "education": {
       "title": "Eğitim Bilgileri",
@@ -442,8 +467,14 @@
       "startDate": "Başlangıç Tarihi",
       "endDate": "Bitiş Tarihi",
       "current": "Halen devam ediyorum",
-      "description": "Açıklama (Opsiyonel)",
-      "addMore": "Eğitim Ekle"
+      "description": "Açıklama",
+      "addMore": "Eğitim Ekle",
+      "educationItem": "Eğitim",
+      "schoolPlaceholder": "Okulunuzun adını girin",
+      "degreePlaceholder": "Aldığınız dereceyi girin (örn: Lisans, Yüksek Lisans)",
+      "fieldPlaceholder": "Bölümünüzü girin",
+      "descriptionPlaceholder": "Eğitiminiz hakkında ek bilgiler (Opsiyonel)",
+      "noEducation": "Henüz eğitim bilgisi eklenmedi"
     },
     "draft": "Taslak",
     "continue": "Devam Et",
@@ -458,8 +489,8 @@
       "personalInfoRequired": "Lütfen tüm kişisel bilgileri doldurun",
       "experienceRequired": "En az bir deneyim girmelisiniz",
       "educationRequired": "En az bir eğitim bilgisi girmelisiniz",
-      "skillsRequired": "En az bir yetenek eklemelisiniz",
-      "languagesRequired": "En az bir dil bilgisi girmelisiniz",
+      "skillsRequired": "Lütfen en az bir yetenek ekleyin",
+      "languagesRequired": "Lütfen en az bir dil ekleyin",
       "experienceFieldsRequired": "Lütfen deneyim için şirket adı, pozisyon ve başlangıç tarihini doldurun",
       "endDateRequired": "Halen çalışmıyorsanız bitiş tarihi girmelisiniz",
       "educationFieldsRequired": "Lütfen okul, derece, bölüm ve başlangıç tarihini doldurun",
@@ -486,8 +517,17 @@
       "name": "Yetenek",
       "level": "Seviye",
       "description": "Açıklama",
-      "descriptionHelper": "Bu yetenek hakkında kısa bir açıklama ekleyin (Opsiyonel)",
-      "addMore": "Yetenek Ekle"
+      "descriptionHelper": "Bu yetenek hakkında kısa bir açıklama ekleyin (İsteğe bağlı)",
+      "addMore": "Yetenek Ekle",
+      "skillItem": "Yetenek",
+      "namePlaceholder": "Yetenek adını girin",
+      "levelPlaceholder": "Yetenek seviyenizi seçin",
+      "descriptionPlaceholder": "Bu yetenek hakkında kısa bir açıklama girin",
+      "noSkills": "Henüz yetenek eklenmedi",
+      "beginner": "Başlangıç",
+      "intermediate": "Orta",
+      "advanced": "İleri",
+      "expert": "Uzman"
     },
     "errors": {
       "skillNameRequired": "Lütfen yetenek adını girin"
@@ -501,10 +541,16 @@
       "expiryDate": "Geçerlilik Tarihi",
       "expiryDateHelper": "Varsa sertifikanın son geçerlilik tarihi",
       "credentialId": "Sertifika/Belge No",
-      "credentialIdHelper": "Varsa sertifika veya belge numarası",
+      "credentialIdHelper": "Sertifika referans veya kimlik numarası (İsteğe bağlı)",
       "description": "Açıklama",
       "uploadFile": "Sertifika Dosyası Yükle",
       "addMore": "Sertifika Ekle",
+      "certificateItem": "Sertifika",
+      "namePlaceholder": "Sertifika adını girin",
+      "issuerPlaceholder": "Sertifikayı veren kurumu girin",
+      "credentialIdPlaceholder": "Sertifika/belge numarasını girin (varsa)",
+      "descriptionPlaceholder": "Sertifika hakkında kısa bir açıklama girin",
+      "noCertificates": "Henüz sertifika eklenmedi",
       "uploadSuccess": "Sertifika dosyası başarıyla yüklendi",
       "uploadError": "Sertifika dosyası yüklenirken bir hata oluştu"
     },
@@ -553,12 +599,15 @@
     },
     "video": {
       "title": "Video Tanıtım",
+      "subtitle": "Kendinizi kısa bir video ile tanıtın (opsiyonel)",
       "dragDrop": "Video dosyanızı buraya sürükleyip bırakın veya taramak için tıklayın",
       "maxSize": "Maksimum dosya boyutu: 50MB",
       "selectVideo": "Video Seç",
       "deleteSuccess": "Video başarıyla silindi",
       "deleteError": "Video silinirken bir hata oluştu",
-      "confirmDelete": "Videoyu silmek istediğinizden emin misiniz?"
+      "confirmDelete": "Videoyu silmek istediğinizden emin misiniz?",
+      "noVideo": "Henüz video eklenmedi",
+      "uploadInstructions": "Kendinizi ve yeteneklerinizi anlatan 1-2 dakikalık bir video yükleyin"
     }
   },
   "validation": {

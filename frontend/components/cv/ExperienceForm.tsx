@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Box,
   TextField,
@@ -7,9 +7,12 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
-  Grid
+  Grid,
+  Paper,
+  Divider,
+  Tooltip
 } from '@mui/material';
-import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Add as AddIcon, Business as BusinessIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { showToast } from '../../utils/toast';
@@ -40,13 +43,15 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  const initialLoadDone = useRef(false);
+  
   const {
     control,
     register,
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors }
   } = useForm<ExperienceFormData>({
     defaultValues: {
@@ -60,6 +65,8 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
   });
 
   const watchFieldArray = watch("experience");
+  const watchCurrentFields = watchFieldArray?.map(item => item?.current) || [];
+  
   const controlledFields = fields.map((field, index) => {
     return {
       ...field,
@@ -67,13 +74,17 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     };
   });
 
+  // İlk veri yüklemesi sadece bir kez gerçekleşsin
   useEffect(() => {
+    // Eğer daha önce veri yüklendiyse, tekrar yüklemiyoruz
+    if (initialLoadDone.current) return;
+    
     const loadExperience = async () => {
       try {
+        console.log('İlk veri yükleniyor...');
         const response = await cvAPI.getOne(Number(cvId));
-        // console.log('Loaded CV data:', response.data); // Debug için
         
-        if (response.data.experience) {
+        if (response.data.experience && response.data.experience.length > 0) {
           // Backend'den gelen veriyi form yapısına dönüştür
           const formattedExperience = response.data.experience.map(exp => ({
             company: exp.company,
@@ -84,9 +95,12 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
             description: exp.description || ''
           }));
           
-          // console.log('Formatted experience for form:', formattedExperience); // Debug için
-          setValue('experience', formattedExperience);
+          // Form alanlarını sıfırla ve mevcut verileri doldur
+          reset({ experience: formattedExperience });
         }
+        
+        // İlk yükleme tamamlandı olarak işaretliyoruz
+        initialLoadDone.current = true;
       } catch (error) {
         console.error('Error loading experience data:', error);
         showToast.error(t('cv.loadError'));
@@ -96,7 +110,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     if (cvId) {
       loadExperience();
     }
-  }, [cvId, setValue, t]);
+  }, [cvId, reset, t]); // router.locale bağımlılığını çıkardık
 
   const onSubmit = async (data: ExperienceFormData) => {
     try {
@@ -137,73 +151,189 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id="experienceForm">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          {t('cv.experience.title')}
+      <Paper elevation={0} sx={{ p: 3, mb: 4, border: '1px solid #e0e0e0', borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <BusinessIcon sx={{ mr: 1, color: 'primary.main' }} />
+          <Typography variant="h5" color="primary.main">
+            {t('cv.experience.title')}
+          </Typography>
+        </Box>
+        
+        <Typography variant="body2" sx={{ mb: 4, color: 'text.secondary' }}>
+          {t('cv.experience.subtitle')}
         </Typography>
         
+        {fields.length === 0 && (
+          <Box sx={{ textAlign: 'center', py: 4, bgcolor: '#f9f9f9', borderRadius: 1, mb: 2 }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+              {t('cv.experience.noExperience')}
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => append({
+                company: '',
+                position: '',
+                startDate: '',
+                endDate: '',
+                current: false,
+                description: ''
+              })}
+            >
+              {t('cv.experience.addMore')}
+            </Button>
+          </Box>
+        )}
+        
         {fields.map((field, index) => (
-          <Box key={field.id} sx={{ mb: 4, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-            <Grid container spacing={2}>
+          <Paper 
+            key={field.id} 
+            elevation={1} 
+            sx={{ 
+              mb: 3, 
+              p: 3, 
+              borderRadius: 2, 
+              position: 'relative',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                boxShadow: 3
+              }
+            }}
+          >
+            <Tooltip title={t('common.delete')} placement="top">
+              <IconButton 
+                onClick={() => remove(index)}
+                color="error"
+                sx={{ position: 'absolute', top: 10, right: 10 }}
+                size="small"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            
+            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2 }}>
+              {t('cv.experience.experienceItem')} #{index + 1}
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            
+            <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label={t('cv.experience.company')}
-                  {...register(`experience.${index}.company`)}
+                  {...register(`experience.${index}.company` as const, { required: true })}
+                  error={!!errors.experience?.[index]?.company}
+                  helperText={errors.experience?.[index]?.company && t('common.required')}
+                  placeholder={t('cv.experience.companyPlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label={t('cv.experience.position')}
-                  {...register(`experience.${index}.position`)}
+                  {...register(`experience.${index}.position` as const, { required: true })}
+                  error={!!errors.experience?.[index]?.position}
+                  helperText={errors.experience?.[index]?.position && t('common.required')}
+                  placeholder={t('cv.experience.positionPlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  type="date"
                   label={t('cv.experience.startDate')}
-                  {...register(`experience.${index}.startDate`)}
+                  InputLabelProps={{ shrink: true }}
+                  {...register(`experience.${index}.startDate` as const, { required: true })}
+                  error={!!errors.experience?.[index]?.startDate}
+                  helperText={errors.experience?.[index]?.startDate && t('common.required')}
+                  variant="outlined"
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register(`experience.${index}.current` as const)}
+                        checked={watchCurrentFields[index] || false}
+                        onChange={(e) => handleCurrentChange(index, e.target.checked)}
+                      />
+                    }
+                    label={t('cv.experience.current')}
+                    sx={{ mb: 1 }}
+                  />
+                  
+                  {!watchCurrentFields[index] && (
+                    <TextField
+                      fullWidth
+                      type="date"
+                      label={t('cv.experience.endDate')}
+                      InputLabelProps={{ shrink: true }}
+                      {...register(`experience.${index}.endDate` as const, { 
+                        required: !watchCurrentFields[index] 
+                      })}
+                      error={!watchCurrentFields[index] && !!errors.experience?.[index]?.endDate}
+                      helperText={!watchCurrentFields[index] && errors.experience?.[index]?.endDate && t('common.required')}
+                      variant="outlined"
+                    />
+                  )}
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label={t('cv.experience.endDate')}
-                  {...register(`experience.${index}.endDate`)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox {...register(`experience.${index}.current`)} />}
-                  label={t('cv.experience.current')}
-                  onChange={(e, checked) => handleCurrentChange(index, checked)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
+                  multiline
+                  rows={4}
                   label={t('cv.experience.description')}
-                  {...register(`experience.${index}.description`)}
+                  {...register(`experience.${index}.description` as const)}
+                  placeholder={t('cv.experience.descriptionPlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
             </Grid>
-          </Box>
+          </Paper>
         ))}
-      </Box>
+
+        {fields.length > 0 && (
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={() => append({
+              company: '',
+              position: '',
+              startDate: '',
+              endDate: '',
+              current: false,
+              description: ''
+            })}
+            sx={{ mt: 2 }}
+          >
+            {t('cv.experience.addMore')}
+          </Button>
+        )}
+      </Paper>
+      
       <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
         <Button
           variant="outlined"
           onClick={onPrev}
+          size="large"
         >
-          {t('cv.experience.prev')}
+          {t('common.previous')}
         </Button>
         <Button
           variant="contained"
           type="submit"
           disabled={loading}
+          size="large"
         >
-          {t('cv.experience.next')}
+          {loading ? t('common.submitting') : t('common.next')}
         </Button>
       </Box>
     </form>

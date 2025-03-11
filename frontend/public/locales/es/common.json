@@ -196,7 +196,8 @@
       "unknown": "Ocurrió un error desconocido",
       "networkError": "Error de conexión",
       "validationError": "Por favor, revisa la información del formulario"
-    }
+    },
+    "uploadSuccess": "Archivo subido con éxito"
   },
   "home": {
     "hero": {
@@ -411,7 +412,9 @@
       "jobTitle": "Título",
       "summary": "Resumen",
       "phone": "Teléfono",
-      "location": "Ubicación"
+      "location": "Ubicación",
+      "summaryPlaceholder": "Describe brevemente tu trayectoria profesional y objetivos de carrera",
+      "socialLinks": "Enlaces de Redes Sociales"
     },
     "experience": {
       "title": "Experiencia Laboral",
@@ -422,7 +425,9 @@
       "endDate": "Fecha de Finalización",
       "current": "Actualmente trabajando aquí",
       "description": "Descripción y Responsabilidades",
-      "addMore": "Agregar Más Experiencia"
+      "addMore": "Agregar Más Experiencia",
+      "noExperience": "Aún no se ha añadido experiencia laboral",
+      "experienceItem": "Experiencia"
     },
     "languages": {
       "title": "Idiomas",
@@ -431,7 +436,18 @@
       "level": "Nivel",
       "certificate": "Certificado",
       "certificateHelper": "Si tienes un certificado de idioma, especifícalo (Opcional)",
-      "addMore": "Agregar Más Idiomas"
+      "addMore": "Agregar Más Idiomas",
+      "namePlaceholder": "Introduce el nombre del idioma",
+      "certificatePlaceholder": "Introduce información del certificado (ej: TOEFL, IELTS)",
+      "certificateHelper": "Especifica tu certificado de idioma si tienes uno (Opcional)",
+      "noLanguages": "Aún no se han añadido idiomas",
+      "languageItem": "Idioma",
+      "a1": "Básico - Principiante",
+      "a2": "Básico - Elemental",
+      "b1": "Intermedio - Umbral",
+      "b2": "Intermedio - Avanzado",
+      "c1": "Avanzado - Dominio",
+      "c2": "Avanzado - Maestría"
     },
     "education": {
       "title": "Educación",
@@ -458,8 +474,8 @@
       "personalInfoRequired": "Por favor, completa toda la información personal",
       "experienceRequired": "Debes agregar al menos una experiencia",
       "educationRequired": "Debes agregar al menos una educación",
-      "skillsRequired": "Debes agregar al menos una habilidad",
-      "languagesRequired": "Debes agregar al menos un idioma",
+      "skillsRequired": "Por favor, añade al menos una habilidad",
+      "languagesRequired": "Por favor, añade al menos un idioma",
       "experienceFieldsRequired": "Por favor, completa el nombre de la empresa, posición y fecha de inicio",
       "endDateRequired": "Si no estás trabajando actualmente, debes agregar una fecha de finalización",
       "educationFieldsRequired": "Por favor, completa la escuela, título, campo de estudio y fecha de inicio",
@@ -486,8 +502,16 @@
       "name": "Habilidad",
       "level": "Nivel",
       "description": "Descripción",
-      "descriptionHelper": "Agrega una breve descripción de esta habilidad (Opcional)",
-      "addMore": "Agregar Más Habilidades"
+      "descriptionHelper": "Añade una breve descripción sobre esta habilidad (Opcional)",
+      "addMore": "Agregar Más Habilidades",
+      "namePlaceholder": "Introduce el nombre de la habilidad",
+      "levelPlaceholder": "Selecciona tu nivel de competencia",
+      "descriptionPlaceholder": "Describe brevemente tu experiencia con esta habilidad",
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado",
+      "expert": "Experto",
+      "skillItem": "Habilidad"
     },
     "errors": {
       "skillNameRequired": "Por favor, ingresa el nombre de la habilidad"
@@ -506,7 +530,13 @@
       "uploadFile": "Subir Archivo de Certificado",
       "addMore": "Agregar Más Certificados",
       "uploadSuccess": "Archivo de certificado subido con éxito",
-      "uploadError": "Error al subir el archivo de certificado"
+      "uploadError": "Error al subir el archivo de certificado",
+      "namePlaceholder": "Introduce el nombre del certificado",
+      "issuerPlaceholder": "Introduce la organización emisora",
+      "credentialIdPlaceholder": "Introduce el ID del certificado si está disponible",
+      "credentialIdHelper": "Número de referencia o ID del certificado (Opcional)",
+      "descriptionPlaceholder": "Introduce una breve descripción del certificado",
+      "noCertificates": "Aún no se han añadido certificados"
     },
     "errors": {
       "certificateFieldsRequired": "Por favor, completa el nombre del certificado, institución emisora y fecha de emisión"

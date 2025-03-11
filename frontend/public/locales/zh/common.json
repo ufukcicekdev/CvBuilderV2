@@ -196,7 +196,8 @@
       "unknown": "发生未知错误",
       "networkError": "网络连接错误",
       "validationError": "请检查表单信息"
-    }
+    },
+    "uploadSuccess": "文件上传成功"
   },
   "home": {
     "hero": {
@@ -411,7 +412,9 @@
       "jobTitle": "职位",
       "summary": "概述",
       "phone": "电话",
-      "location": "地点"
+      "location": "地点",
+      "summaryPlaceholder": "简要描述您的专业背景和职业目标",
+      "socialLinks": "社交媒体链接"
     },
     "experience": {
       "title": "工作经验",
@@ -422,7 +425,9 @@
       "endDate": "结束日期",
       "current": "目前在此工作",
       "description": "工作描述和职责",
-      "addMore": "添加更多经历"
+      "addMore": "添加更多经历",
+      "noExperience": "尚未添加工作经验",
+      "experienceItem": "工作经验项"
     },
     "languages": {
       "title": "语言",
@@ -431,7 +436,18 @@
       "level": "水平",
       "certificate": "证书",
       "certificateHelper": "如果有语言证书，请注明（可选）",
-      "addMore": "添加更多语言"
+      "addMore": "添加更多语言",
+      "namePlaceholder": "输入语言名称",
+      "certificatePlaceholder": "输入证书信息（例如：托福、雅思）",
+      "certificateHelper": "如有语言证书，请说明（可选）",
+      "noLanguages": "尚未添加语言",
+      "languageItem": "语言项目",
+      "a1": "初级 - 入门",
+      "a2": "初级 - 基础",
+      "b1": "中级 - 中阶",
+      "b2": "中级 - 进阶",
+      "c1": "高级 - 熟练",
+      "c2": "高级 - 精通"
     },
     "education": {
       "title": "教育",
@@ -487,7 +503,16 @@
       "level": "水平",
       "description": "描述",
       "descriptionHelper": "添加此技能的简短描述（可选）",
-      "addMore": "添加更多技能"
+      "addMore": "添加更多技能",
+      "namePlaceholder": "输入技能名称",
+      "levelPlaceholder": "选择熟练程度",
+      "descriptionPlaceholder": "简要描述您在此技能方面的经验",
+      "descriptionHelper": "添加关于此技能的简短描述（可选）",
+      "beginner": "初学者",
+      "intermediate": "中级",
+      "advanced": "高级",
+      "expert": "专家",
+      "skillItem": "技能项"
     },
     "errors": {
       "skillNameRequired": "请输入技能名称"
@@ -506,7 +531,13 @@
       "uploadFile": "上传证书文件",
       "addMore": "添加更多证书",
       "uploadSuccess": "证书文件上传成功",
-      "uploadError": "上传证书文件时出错"
+      "uploadError": "上传证书文件时出错",
+      "namePlaceholder": "输入证书名称",
+      "issuerPlaceholder": "输入颁发机构",
+      "credentialIdPlaceholder": "如有证书ID，请输入",
+      "credentialIdHelper": "证书参考号或ID号（可选）",
+      "descriptionPlaceholder": "输入证书简要描述",
+      "noCertificates": "尚未添加证书"
     },
     "errors": {
       "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
@@ -559,6 +590,10 @@
       "deleteSuccess": "视频删除成功",
       "deleteError": "删除视频时出错",
       "confirmDelete": "您确定要删除此视频吗？"
+    },
+    "errors": {
+      "skillsRequired": "请至少添加一项技能",
+      "languagesRequired": "请至少添加一种语言"
     }
   },
   "validation": {

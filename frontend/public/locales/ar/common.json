@@ -196,7 +196,8 @@
       "unknown": "حدث خطأ غير معروف",
       "networkError": "خطأ في الاتصال بالشبكة",
       "validationError": "يرجى التحقق من معلومات النموذج"
-    }
+    },
+    "uploadSuccess": "تم رفع الملف بنجاح"
   },
   "home": {
     "hero": {
@@ -411,7 +412,9 @@
       "jobTitle": "المسمى الوظيفي",
       "summary": "ملخص",
       "phone": "الهاتف",
-      "location": "الموقع"
+      "location": "الموقع",
+      "summaryPlaceholder": "صف بإيجاز خلفيتك المهنية وأهدافك الوظيفية",
+      "socialLinks": "روابط وسائل التواصل الاجتماعي"
     },
     "experience": {
       "title": "الخبرة العملية",
@@ -422,7 +425,9 @@
       "endDate": "تاريخ الانتهاء",
       "current": "ما زلت أعمل هنا",
       "description": "الوصف والمسؤوليات",
-      "addMore": "إضافة المزيد من الخبرات"
+      "addMore": "إضافة المزيد من الخبرات",
+      "noExperience": "لم تتم إضافة خبرة عمل بعد",
+      "experienceItem": "خبرة"
     },
     "languages": {
       "title": "اللغات",
@@ -431,7 +436,18 @@
       "level": "المستوى",
       "certificate": "الشهادة",
       "certificateHelper": "إذا كان لديك شهادة لغة، حددها (اختياري)",
-      "addMore": "إضافة المزيد من اللغات"
+      "addMore": "إضافة المزيد من اللغات",
+      "namePlaceholder": "أدخل اسم اللغة",
+      "certificatePlaceholder": "أدخل معلومات الشهادة (مثل: توفل، آيلتس)",
+      "certificateHelper": "حدد شهادة اللغة إذا كان لديك واحدة (اختياري)",
+      "noLanguages": "لم تتم إضافة لغات بعد",
+      "languageItem": "اللغة",
+      "a1": "مبتدئ - أساسي",
+      "a2": "مبتدئ - متوسط",
+      "b1": "متوسط - عتبة",
+      "b2": "متوسط - متقدم",
+      "c1": "متقدم - كفء",
+      "c2": "متقدم - إتقان"
     },
     "education": {
       "title": "التعليم",
@@ -458,8 +474,8 @@
       "personalInfoRequired": "يرجى ملء جميع المعلومات الشخصية",
       "experienceRequired": "يجب إضافة خبرة واحدة على الأقل",
       "educationRequired": "يجب إضافة تعليم واحد على الأقل",
-      "skillsRequired": "يجب إضافة مهارة واحدة على الأقل",
-      "languagesRequired": "يجب إضافة لغة واحدة على الأقل",
+      "skillsRequired": "الرجاء إضافة مهارة واحدة على الأقل",
+      "languagesRequired": "الرجاء إضافة لغة واحدة على الأقل",
       "experienceFieldsRequired": "يرجى ملء اسم الشركة والمنصب وتاريخ البدء",
       "endDateRequired": "إذا لم تكن تعمل حاليًا، يجب إضافة تاريخ الانتهاء",
       "educationFieldsRequired": "يرجى ملء المدرسة والدرجة والمجال وتاريخ البدء",
@@ -487,7 +503,15 @@
       "level": "المستوى",
       "description": "الوصف",
       "descriptionHelper": "أضف وصفًا مختصرًا لهذه المهارة (اختياري)",
-      "addMore": "إضافة المزيد من المهارات"
+      "addMore": "إضافة المزيد من المهارات",
+      "namePlaceholder": "أدخل اسم المهارة",
+      "levelPlaceholder": "حدد مستوى إتقانك",
+      "descriptionPlaceholder": "صف بإيجاز خبرتك في هذه المهارة",
+      "beginner": "مبتدئ",
+      "intermediate": "متوسط",
+      "advanced": "متقدم",
+      "expert": "خبير",
+      "skillItem": "مهارة"
     },
     "errors": {
       "skillNameRequired": "يرجى إدخال اسم المهارة"
@@ -501,12 +525,18 @@
       "expiryDate": "تاريخ الانتهاء",
       "expiryDateHelper": "إذا كان هناك تاريخ انتهاء، أضفه",
       "credentialId": "رقم الشهادة",
-      "credentialIdHelper": "إذا كان هناك رقم شهادة أو مستند، أضفه",
+      "credentialIdHelper": "رقم مرجعي أو معرف للشهادة (اختياري)",
       "description": "الوصف",
       "uploadFile": "تحميل ملف الشهادة",
       "addMore": "إضافة المزيد من الشهادات",
       "uploadSuccess": "تم تحميل ملف الشهادة بنجاح",
-      "uploadError": "حدث خطأ أثناء تحميل ملف الشهادة"
+      "uploadError": "حدث خطأ أثناء تحميل ملف الشهادة",
+      "namePlaceholder": "أدخل اسم الشهادة",
+      "issuerPlaceholder": "أدخل اسم المؤسسة المصدرة",
+      "credentialIdPlaceholder": "أدخل رقم الشهادة إذا كان متاحًا",
+      "credentialIdHelper": "رقم مرجعي أو معرف للشهادة (اختياري)",
+      "descriptionPlaceholder": "أدخل وصفًا موجزًا للشهادة",
+      "noCertificates": "لم تتم إضافة شهادات بعد"
     },
     "errors": {
       "certificateFieldsRequired": "يرجى ملء اسم الشهادة والجهة المانحة وتاريخ الإصدار"

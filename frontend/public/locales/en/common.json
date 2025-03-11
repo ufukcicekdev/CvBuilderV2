@@ -196,7 +196,8 @@
       "unknown": "An unknown error occurred",
       "networkError": "Network connection error",
       "validationError": "Please check the form information"
-    }
+    },
+    "uploadSuccess": "File uploaded successfully"
   },
   "home": {
     "hero": {
@@ -411,7 +412,9 @@
       "jobTitle": "Job Title",
       "summary": "Summary",
       "phone": "Phone",
-      "location": "Location"
+      "location": "Location",
+      "summaryPlaceholder": "Briefly describe your professional background and career goals",
+      "socialLinks": "Social Media Links"
     },
     "experience": {
       "title": "Work Experience",
@@ -422,7 +425,9 @@
       "endDate": "End Date",
       "current": "Currently working here",
       "description": "Job Description and Responsibilities",
-      "addMore": "Add Experience"
+      "addMore": "Add Experience",
+      "noExperience": "No work experience added yet",
+      "experienceItem": "Experience"
     },
     "languages": {
       "title": "Languages",
@@ -431,7 +436,18 @@
       "level": "Proficiency Level",
       "certificate": "Certificate",
       "certificateHelper": "If applicable, specify your language certificate (Optional)",
-      "addMore": "Add Language"
+      "addMore": "Add Language",
+      "namePlaceholder": "Enter language name",
+      "certificatePlaceholder": "Enter certificate information (e.g., TOEFL, IELTS)",
+      "certificateHelper": "Specify your language certificate if you have one (Optional)",
+      "noLanguages": "No languages added yet",
+      "languageItem": "Language",
+      "a1": "Basic - Beginner",
+      "a2": "Basic - Elementary",
+      "b1": "Intermediate - Threshold",
+      "b2": "Intermediate - Vantage",
+      "c1": "Advanced - Proficient",
+      "c2": "Advanced - Mastery"
     },
     "education": {
       "title": "Education",
@@ -487,7 +503,16 @@
       "level": "Proficiency Level",
       "description": "Description",
       "descriptionHelper": "Add a brief description of this skill (Optional)",
-      "addMore": "Add Skill"
+      "addMore": "Add Skill",
+      "namePlaceholder": "Enter skill name",
+      "levelPlaceholder": "Select your proficiency level",
+      "descriptionPlaceholder": "Briefly describe your experience with this skill",
+      "descriptionHelper": "Add a short description about this skill (Optional)",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "expert": "Expert",
+      "skillItem": "Skill"
     },
     "errors": {
       "skillNameRequired": "Please enter the skill name"
@@ -506,7 +531,13 @@
       "uploadFile": "Upload Certificate File",
       "addMore": "Add Certificate",
       "uploadSuccess": "Certificate file uploaded successfully",
-      "uploadError": "An error occurred while uploading the certificate file"
+      "uploadError": "An error occurred while uploading the certificate file",
+      "namePlaceholder": "Enter certificate name",
+      "issuerPlaceholder": "Enter issuing organization",
+      "credentialIdPlaceholder": "Enter certificate/credential ID if available",
+      "credentialIdHelper": "Reference or ID number of the certificate (Optional)",
+      "descriptionPlaceholder": "Enter a brief description of the certificate",
+      "noCertificates": "No certificates added yet"
     },
     "errors": {
       "certificateFieldsRequired": "Please fill in the certificate name, issuing authority, and issue date"
@@ -559,6 +590,10 @@
       "deleteSuccess": "Video deleted successfully",
       "deleteError": "An error occurred while deleting the video",
       "confirmDelete": "Are you sure you want to delete the video?"
+    },
+    "errors": {
+      "skillsRequired": "Please add at least one skill",
+      "languagesRequired": "Please add at least one language"
     }
   },
   "validation": {

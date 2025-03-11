@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Box,
   TextField,
@@ -7,9 +7,12 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
-  Grid
+  Grid,
+  Paper,
+  Divider,
+  Tooltip
 } from '@mui/material';
-import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Add as AddIcon, School as SchoolIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { showToast } from '../../utils/toast';
@@ -41,6 +44,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
   const { t } = useTranslation('common');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const initialLoadDone = useRef(false);
 
   const {
     control,
@@ -48,6 +52,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors }
   } = useForm<EducationFormData>({
     defaultValues: {
@@ -61,6 +66,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
   });
 
   const watchFieldArray = watch("education");
+  const watchCurrentFields = watchFieldArray?.map(item => item?.current) || [];
   const controlledFields = fields.map((field, index) => {
     return {
       ...field,
@@ -69,10 +75,13 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
   });
 
   useEffect(() => {
+    // Eğer daha önce veri yüklendiyse, tekrar yüklemiyoruz
+    if (initialLoadDone.current) return;
+    
     const loadEducation = async () => {
       try {
         const response = await cvAPI.getOne(Number(cvId));
-        if (response.data.education) {
+        if (response.data.education && response.data.education.length > 0) {
           // Backend'den gelen veriyi form yapısına dönüştür
           const formattedEducation = response.data.education.map(edu => ({
             school: edu.school,
@@ -84,9 +93,10 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
             description: edu.description || ''
           }));
           
-          // console.log('Formatted education for form:', formattedEducation); // Debug için
-          setValue('education', formattedEducation);
+          reset({ education: formattedEducation });
         }
+        // İlk yükleme tamamlandı olarak işaretliyoruz
+        initialLoadDone.current = true;
       } catch (error) {
         console.error('Error loading education data:', error);
         showToast.error(t('cv.loadError'));
@@ -96,7 +106,7 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
     if (cvId) {
       loadEducation();
     }
-  }, [cvId, setValue, t]);
+  }, [cvId, setValue, reset, t]); // router.locale bağımlılığını çıkardık
 
   const onSubmit = async (data: EducationFormData) => {
     try {
@@ -137,21 +147,82 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id="educationForm">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          {t('cv.education.title')}
+      <Paper elevation={0} sx={{ p: 3, mb: 4, border: '1px solid #e0e0e0', borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <SchoolIcon sx={{ mr: 1, color: 'primary.main' }} />
+          <Typography variant="h5" color="primary.main">
+            {t('cv.education.title')}
+          </Typography>
+        </Box>
+        
+        <Typography variant="body2" sx={{ mb: 4, color: 'text.secondary' }}>
+          {t('cv.education.subtitle')}
         </Typography>
         
+        {fields.length === 0 && (
+          <Box sx={{ textAlign: 'center', py: 4, bgcolor: '#f9f9f9', borderRadius: 1, mb: 2 }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+              {t('cv.education.noEducation')}
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => append({
+                school: '',
+                degree: '',
+                field: '',
+                startDate: '',
+                endDate: '',
+                current: false,
+                description: ''
+              })}
+            >
+              {t('cv.education.addMore')}
+            </Button>
+          </Box>
+        )}
+        
         {fields.map((field, index) => (
-          <Box key={field.id} sx={{ mb: 4, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-            <Grid container spacing={2}>
+          <Paper 
+            key={field.id} 
+            elevation={1} 
+            sx={{ 
+              mb: 3, 
+              p: 3, 
+              borderRadius: 2, 
+              position: 'relative',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                boxShadow: 3
+              }
+            }}
+          >
+            <Tooltip title={t('common.delete')} placement="top">
+              <IconButton 
+                onClick={() => remove(index)}
+                color="error"
+                sx={{ position: 'absolute', top: 10, right: 10 }}
+                size="small"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            
+            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2 }}>
+              {t('cv.education.educationItem')} #{index + 1}
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label={t('cv.education.school')}
-                  {...register(`education.${index}.school` as const)}
+                  {...register(`education.${index}.school` as const, { required: true })}
                   error={!!errors.education?.[index]?.school}
                   helperText={errors.education?.[index]?.school && t('common.required')}
+                  placeholder={t('cv.education.schoolPlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
 
@@ -159,9 +230,11 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                 <TextField
                   fullWidth
                   label={t('cv.education.degree')}
-                  {...register(`education.${index}.degree` as const)}
+                  {...register(`education.${index}.degree` as const, { required: true })}
                   error={!!errors.education?.[index]?.degree}
                   helperText={errors.education?.[index]?.degree && t('common.required')}
+                  placeholder={t('cv.education.degreePlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
 
@@ -169,9 +242,11 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                 <TextField
                   fullWidth
                   label={t('cv.education.field')}
-                  {...register(`education.${index}.field` as const)}
+                  {...register(`education.${index}.field` as const, { required: true })}
                   error={!!errors.education?.[index]?.field}
                   helperText={errors.education?.[index]?.field && t('common.required')}
+                  placeholder={t('cv.education.fieldPlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
 
@@ -181,35 +256,42 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                   type="date"
                   label={t('cv.education.startDate')}
                   InputLabelProps={{ shrink: true }}
-                  {...register(`education.${index}.startDate` as const)}
+                  {...register(`education.${index}.startDate` as const, { required: true })}
                   error={!!errors.education?.[index]?.startDate}
                   helperText={errors.education?.[index]?.startDate && t('common.required')}
+                  variant="outlined"
                 />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  type="date"
-                  label={t('cv.education.endDate')}
-                  InputLabelProps={{ shrink: true }}
-                  {...register(`education.${index}.endDate` as const)}
-                  disabled={watchFieldArray[index]?.current}
-                  error={!watchFieldArray[index]?.current && !!errors.education?.[index]?.endDate}
-                  helperText={!watchFieldArray[index]?.current && errors.education?.[index]?.endDate && t('common.required')}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      {...register(`education.${index}.current` as const)}
-                      onChange={(e) => handleCurrentChange(index, e.target.checked)}
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register(`education.${index}.current` as const)}
+                        checked={watchCurrentFields[index] || false}
+                        onChange={(e) => handleCurrentChange(index, e.target.checked)}
+                      />
+                    }
+                    label={t('cv.education.current')}
+                    sx={{ mb: 1 }}
+                  />
+                  
+                  {!watchCurrentFields[index] && (
+                    <TextField
+                      fullWidth
+                      type="date"
+                      label={t('cv.education.endDate')}
+                      InputLabelProps={{ shrink: true }}
+                      {...register(`education.${index}.endDate` as const, { 
+                        required: !watchCurrentFields[index] 
+                      })}
+                      error={!watchCurrentFields[index] && !!errors.education?.[index]?.endDate}
+                      helperText={!watchCurrentFields[index] && errors.education?.[index]?.endDate && t('common.required')}
+                      variant="outlined"
                     />
-                  }
-                  label={t('cv.education.current')}
-                />
+                  )}
+                </Box>
               </Grid>
 
               <Grid item xs={12}>
@@ -219,54 +301,49 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                   rows={4}
                   label={t('cv.education.description')}
                   {...register(`education.${index}.description` as const)}
+                  placeholder={t('cv.education.descriptionPlaceholder')}
+                  variant="outlined"
                 />
               </Grid>
             </Grid>
-
-            <IconButton 
-              onClick={() => remove(index)}
-              color="error"
-              sx={{ mt: 1 }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Box>
+          </Paper>
         ))}
 
-        <Button
-          startIcon={<AddIcon />}
-          onClick={() => append({
-            school: '',
-            degree: '',
-            field: '',
-            startDate: '',
-            endDate: '',
-            current: false,
-            description: ''
-          })}
-          sx={{ mt: 2 }}
-        >
-          {t('common.add')}
-        </Button>
-      </Box>
-
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-        {onPrev && (
+        {fields.length > 0 && (
           <Button
-            onClick={onPrev}
-            variant="contained"
-            disabled={loading}
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={() => append({
+              school: '',
+              degree: '',
+              field: '',
+              startDate: '',
+              endDate: '',
+              current: false,
+              description: ''
+            })}
+            sx={{ mt: 2 }}
           >
-            {t('common.previous')}
+            {t('cv.education.addMore')}
           </Button>
         )}
+      </Paper>
+      
+      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
         <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={loading}
+          variant="outlined"
+          onClick={onPrev}
+          size="large"
         >
-          {t('common.next')}
+          {t('common.previous')}
+        </Button>
+        <Button
+          variant="contained"
+          type="submit"
+          disabled={loading}
+          size="large"
+        >
+          {loading ? t('common.submitting') : t('common.next')}
         </Button>
       </Box>
     </form>

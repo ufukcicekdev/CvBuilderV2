@@ -184,7 +184,8 @@
       "unknown": "发生未知错误",
       "networkError": "网络连接错误",
       "validationError": "请检查表单信息"
-    }
+    },
+    "uploadSuccess": "फ़ाइल सफलतापूर्वक अपलोड की गई"
   },
   "home": {
     "hero": {
@@ -418,7 +419,11 @@
       "level": "水平",
       "certificate": "证书",
       "certificateHelper": "如果有语言证书，请注明（可选）",
-      "addMore": "添加语言"
+      "addMore": "添加语言",
+      "namePlaceholder": "语言的名称",
+      "certificatePlaceholder": "输入语言证书信息（例如：TOFEL, IELTS)",
+      "certificateHelper": "如果有语言证书，请注明（可选）",
+      "noLanguages": "尚未添加任何语言"
     },
     "education": {
       "title": "教育信息",
@@ -474,7 +479,11 @@
       "level": "水平",
       "description": "描述",
       "descriptionHelper": "添加此技能的简短描述（可选）",
-      "addMore": "添加技能"
+      "addMore": "添加技能",
+      "namePlaceholder": "技能名称",
+      "levelPlaceholder": "选择您的专业水平",
+      "descriptionPlaceholder": "在简要描述中描述此技能",
+      "descriptionHelper": "添加此技能的简短描述（可选）"
     },
     "errors": {
       "skillNameRequired": "请输入技能名称"
@@ -488,12 +497,18 @@
       "expiryDate": "有效期",
       "expiryDateHelper": "如果有证书的有效期",
       "credentialId": "证书/文件编号",
-      "credentialIdHelper": "如果有证书或文件编号",
+      "credentialIdHelper": "证书参考或编号（可选）",
       "description": "描述",
       "uploadFile": "上传证书文件",
       "addMore": "添加证书",
       "uploadSuccess": "证书文件上传成功",
-      "uploadError": "上传证书文件时发生错误"
+      "uploadError": "上传证书文件时发生错误",
+      "namePlaceholder": "证书名称",
+      "issuerPlaceholder": "输入颁发机构名称",
+      "credentialIdPlaceholder": "如果可用，输入证书编号",
+      "credentialIdHelper": "证书参考或编号（可选）",
+      "descriptionPlaceholder": "输入证书的简要描述",
+      "noCertificates": "尚未添加任何证书"
     },
     "errors": {
       "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
@@ -570,6 +585,8 @@
     "formErrors": "请修复表单错误",
     "registrationFailed": "注册失败。请重试。",
     "pleaseFixErrors": "请修复以下错误",
-    "present": "进行中"
+    "present": "进行中",
+    "skillsRequired": "请添加至少一项技能",
+    "languagesRequired": "请添加至少一种语言"
   }
 }
