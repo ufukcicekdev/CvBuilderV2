@@ -29,6 +29,25 @@ const nextConfig = {
     domains: ['web-production-9f41e.up.railway.app'],
     formats: ['image/avif', 'image/webp'],
   },
+  
+  // HTTP Headers
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig; 

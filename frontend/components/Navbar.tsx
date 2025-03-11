@@ -17,6 +17,7 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import Flag from 'react-world-flags';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
@@ -29,7 +30,7 @@ const LANGUAGES = [
 
 export default function Navbar() {
   const router = useRouter();
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const { changeLanguage } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -37,6 +38,7 @@ export default function Navbar() {
   const [langMenuAnchor, setLangMenuAnchor] = useState<null | HTMLElement>(null);
   const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -117,9 +119,7 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    setIsLoggedIn(false);
+    logout();
     router.push('/login');
   };
 

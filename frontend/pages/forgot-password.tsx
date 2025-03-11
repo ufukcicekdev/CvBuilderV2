@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Link from 'next/link';
+import NextLink from 'next/link';
 import { authAPI } from '../services/api';
 
 // Form şemasını oluşturmak için fonksiyon
@@ -136,11 +137,14 @@ export default function ForgotPassword() {
                   </Button>
                   
                   <Box sx={{ mt: 2, textAlign: 'center' }}>
-                    <Link href="/login" passHref>
-                      <Typography component="a" variant="body2" sx={{ cursor: 'pointer', textDecoration: 'none' }}>
-                        {t('auth.backToLogin')}
-                      </Typography>
-                    </Link>
+                    <Typography 
+                      component={NextLink} 
+                      href="/login" 
+                      variant="body2" 
+                      sx={{ cursor: 'pointer', textDecoration: 'none' }}
+                    >
+                      {t('auth.backToLogin')}
+                    </Typography>
                   </Box>
                 </Box>
               </>

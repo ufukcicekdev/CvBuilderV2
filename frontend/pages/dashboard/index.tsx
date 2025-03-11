@@ -20,6 +20,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
+import NextLink from 'next/link';
 import { cvAPI } from '../../services/api';
 import { useRouter } from 'next/router';
 import { showToast } from '../../utils/toast';
@@ -112,15 +113,14 @@ function Dashboard() {
               <Typography variant="h4" component="h1">
                 {t('nav.dashboard')}
               </Typography>
-              <Link href="/dashboard/create-cv" passHref>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  component="a"
-                >
-                  {t('cv.create')}
-                </Button>
-              </Link>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                component={NextLink}
+                href="/dashboard/create-cv"
+              >
+                {t('dashboard.createNew')}
+              </Button>
             </Box>
           </Grid>
 

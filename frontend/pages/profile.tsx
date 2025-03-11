@@ -247,6 +247,15 @@ function Profile() {
 
     try {
       setUploading(true);
+      
+      // Token kontrolü
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        showToast.error(t('auth.sessionExpired'));
+        router.push('/login');
+        return;
+      }
+      
       const formData = new FormData();
       formData.append('profile_picture', file);
 
@@ -254,7 +263,9 @@ function Profile() {
       const response = await axiosInstance.post('/api/users/upload-profile-picture/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         },
+        timeout: 30000, // Dosya yükleme için daha uzun timeout
       });
 
       // Başarılı yanıt durumunda profil bilgilerini güncelle
@@ -277,8 +288,46 @@ function Profile() {
       }
     } catch (error: any) {
       console.error('Profile picture upload error:', error);
-      const errorMessage = handleApiError(error, t);
-      showToast.error(errorMessage || t('profile.pictureUpdateError'));
+      
+      // Hata tipine göre özel mesajlar
+      if (error.response) {
+        if (error.response.status === 401) {
+          showToast.error(t('auth.sessionExpired'));
+          // Token yenileme denemesi
+          try {
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (refreshToken) {
+              const refreshResponse = await axiosInstance.post('/api/users/token/refresh/', {
+                refresh: refreshToken
+              });
+              
+              if (refreshResponse.data && refreshResponse.data.access) {
+                localStorage.setItem('accessToken', refreshResponse.data.access);
+                showToast.info(t('auth.tokenRefreshed'));
+                // Kullanıcıya tekrar denemesini söyle
+                showToast.info(t('profile.tryAgain'));
+              }
+            }
+          } catch (refreshError) {
+            // Refresh token hatası, kullanıcıyı login sayfasına yönlendir
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('user');
+            router.push('/login');
+          }
+        } else if (error.response.status === 413) {
+          showToast.error(t('profile.errors.fileTooLarge'));
+        } else {
+          const errorMessage = handleApiError(error, t);
+          showToast.error(errorMessage || t('profile.pictureUpdateError'));
+        }
+      } else if (error.request) {
+        // İstek yapıldı ama yanıt alınamadı
+        showToast.error(t('common.errors.networkError'));
+      } else {
+        // İstek oluşturulurken bir şeyler yanlış gitti
+        showToast.error(t('profile.pictureUpdateError'));
+      }
     } finally {
       setUploading(false);
       if (fileInputRef.current) {

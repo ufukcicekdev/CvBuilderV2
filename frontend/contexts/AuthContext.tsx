@@ -5,6 +5,8 @@ import axiosInstance from '@/utils/axios';
 interface User {
   id: number;
   email: string;
+  user_type?: 'jobseeker' | 'employer';
+  [key: string]: any; // Diğer olası alanlar için
 }
 
 interface AuthContextType {
@@ -12,6 +14,7 @@ interface AuthContextType {
   isLoading: boolean;
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  loginWithTokens: (accessToken: string, refreshToken: string, userData: any) => Promise<void>;
   logout: () => void;
 }
 
@@ -96,6 +99,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loginWithTokens = async (accessToken: string, refreshToken: string, userData: any) => {
+    try {
+      setIsLoading(true);
+      
+      // Clear any existing tokens and user data before login
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+
+      // Yeni token ve user bilgilerini kaydet
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      setIsAuthenticated(true);
+      setUser(userData);
+
+      console.log('Login with tokens successful:', {
+        user: userData,
+        token: accessToken
+      });
+
+      return userData;
+    } catch (error) {
+      console.error('Login with tokens error:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
@@ -108,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, loginWithTokens, logout }}>
       {children}
     </AuthContext.Provider>
   );

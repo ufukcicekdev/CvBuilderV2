@@ -24,7 +24,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { LinkedIn } from 'react-linkedin-login-oauth2';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import axiosInstance from '../services/axios';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
@@ -42,7 +42,7 @@ export default function LoginPage() {
   const { t } = useTranslation('common');
   const [userType, setUserType] = useState('jobseeker');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { login, isAuthenticated } = useAuth();
+  const { login, loginWithTokens, isAuthenticated } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -135,6 +135,7 @@ export default function LoginPage() {
       }
       
       // Doğrudan backend URL'sine istek gönder
+      console.log('Sending request to backend with Google credential');
       const response = await fetch('https://web-production-9f41e.up.railway.app/api/auth/google/', {
         method: 'POST',
         headers: {
@@ -149,43 +150,54 @@ export default function LoginPage() {
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+        toast.error(`${t('auth.errors.googleLoginFailed')}: ${response.status}`);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
       console.log('Backend response:', data);
       
-      // Normal login ile aynı response formatı
-      // { refresh, access, user }
-      
-      // localStorage'a kaydet
-      localStorage.setItem('accessToken', data.access);
-      localStorage.setItem('refreshToken', data.refresh);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      toast.success(t('auth.loginSuccess'));
-      
-      // Kullanıcı tipine göre yönlendirme yap
-      if (data.user.user_type === 'jobseeker') {
-        router.push('/dashboard/create-cv');
-      } else if (data.user.user_type === 'employer') {
-        router.push('/dashboard/employer');
-      } else {
-        router.push('/dashboard');
+      if (!data.access || !data.refresh || !data.user) {
+        console.error('Invalid response format from backend:', data);
+        toast.error(t('auth.errors.invalidResponse'));
+        return;
       }
-    } catch (error) {
+      
+      // AuthContext üzerinden login işlemini gerçekleştir
+      try {
+        console.log('Logging in with tokens and user data:', { 
+          access: data.access.substring(0, 10) + '...', 
+          user: data.user 
+        });
+        
+        await loginWithTokens(data.access, data.refresh, data.user);
+        
+        toast.success(t('auth.loginSuccess'));
+        
+        // Yönlendirme işlemini setTimeout ile geciktir
+        console.log('Redirecting based on user type:', data.user.user_type);
+        setTimeout(() => {
+          const redirectUrl = data.user.user_type === 'jobseeker' 
+            ? '/dashboard/create-cv' 
+            : data.user.user_type === 'employer' 
+              ? '/dashboard/employer' 
+              : '/dashboard';
+          
+          console.log('Redirecting to:', redirectUrl);
+          window.location.href = redirectUrl;
+        }, 500);
+      } catch (redirectError) {
+        console.error('Login with tokens error:', redirectError);
+        // Yönlendirme hatası durumunda alternatif yöntem dene
+        toast.error(t('auth.errors.redirectFailed'));
+        window.location.href = '/dashboard';
+      }
+    } catch (error: unknown) {
       console.error('Google login error:', error);
       
       // Hata tipine göre özel mesajlar
       if (error instanceof Error) {
-        if (error.message.includes('NetworkError') || error.message.includes('network')) {
-          toast.error(t('auth.errors.networkError'));
-        } else if (error.message.includes('FedCM')) {
-          toast.error(t('auth.errors.fedcmDisabled'));
-          console.info('FedCM hatası: Tarayıcı ayarlarınızda üçüncü taraf çerezlere ve kimlik doğrulama API\'lerine izin verdiğinizden emin olun.');
-        } else {
-          toast.error(t('auth.errors.googleLoginFailed'));
-        }
+        toast.error(`${t('auth.errors.googleLoginFailed')}: ${error.message}`);
       } else {
         toast.error(t('auth.errors.googleLoginFailed'));
       }
@@ -337,18 +349,25 @@ export default function LoginPage() {
 
             <Grid container spacing={2}>
               <Grid item xs>
-                <Link href="/forgot-password" passHref>
-                  <MuiLink variant="body2">
-                    {t('auth.forgotPassword')}
-                  </MuiLink>
-                </Link>
+                <MuiLink 
+                  component={NextLink} 
+                  href="/forgot-password" 
+                  variant="body2"
+                >
+                  {t('auth.forgotPassword')}
+                </MuiLink>
               </Grid>
               <Grid item>
-                <Link href="/register" passHref>
-                  <MuiLink variant="body2">
+                <Typography variant="body2">
+                  {t('auth.dontHaveAccount')}{' '}
+                  <MuiLink 
+                    component={NextLink} 
+                    href="/register" 
+                    variant="body2"
+                  >
                     {t('auth.register')}
                   </MuiLink>
-                </Link>
+                </Typography>
               </Grid>
             </Grid>
           </Box>
@@ -369,26 +388,24 @@ export default function LoginPage() {
                     console.error('Google script load error:', err);
                     toast.error(t('auth.errors.googleScriptError'));
                   }}
+                  // @ts-ignore - GoogleOAuthProvider tipinde onScriptLoadSuccess özelliği var
+                  onScriptLoadSuccess={() => {
+                    console.log('Google script loaded successfully');
+                  }}
                 >
-                  <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <GoogleLogin
-                      onSuccess={handleGoogleSuccess}
-                      // @ts-ignore - GoogleLogin tipinde onError özelliği var
-                      onError={(error: Error) => {
-                        console.error('Google login error:', error);
-                        toast.error(t('auth.errors.googleLoginFailed'));
-                      }}
-                      useOneTap={false} // One Tap'i devre dışı bırak, FedCM hatalarını azaltır
-                      locale={router.locale}
-                      text="signin_with"
-                      shape="rectangular"
-                      logo_alignment="left"
-                      width="280"
-                      theme="outline"
-                      type="standard" // Standart buton kullan
-                      context="signin" // Giriş bağlamını belirt
-                    />
-                  </Box>
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => {
+                      console.error('Google login failed');
+                      toast.error(t('auth.errors.googleLoginFailed'));
+                    }}
+                    useOneTap
+                    theme="filled_blue"
+                    text="signin_with"
+                    shape="rectangular"
+                    locale="tr"
+                    context="signin"
+                  />
                 </GoogleOAuthProvider>
               </Box>
             </>

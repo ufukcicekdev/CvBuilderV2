@@ -28,7 +28,7 @@
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password",
     "rememberMe": "Remember Me",
-    "loginSuccess": "Login successful! Welcome.",
+    "loginSuccess": "Login successful!",
     "loginError": "Login failed. Please check your information.",
     "registerSuccess": "Registration successful! Please verify your email address.",
     "registerError": "Registration failed. Please check your information.",
@@ -40,6 +40,8 @@
     "companyWebsite": "Company Website",
     "phone": "Phone",
     "register": "Register",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
     "resendVerificationEmail": "Resend Verification Email",
     "verificationEmailSent": "Verification email has been sent. Please check your inbox.",
     "verificationEmailFailed": "Failed to send verification email.",
@@ -50,11 +52,12 @@
       "uppercase": "At least one uppercase letter"
     },
     "sessionExpired": "Your session has expired. Please login again.",
+    "tokenRefreshed": "Your session has been refreshed.",
     "logoutSuccess": "You have been successfully logged out.",
     "errors": {
       "userNotFound": "No user found with this email address",
       "invalidPassword": "Invalid password",
-      "invalidCredentials": "Invalid credentials",
+      "invalidCredentials": "Invalid email or password",
       "emailExists": "This email address is already in use",
       "weakPassword": "Password is too weak",
       "emailNotVerified": "Please verify your email address",
@@ -62,11 +65,13 @@
       "generalError": "An error occurred, please try again",
       "emailRequired": "Email is required",
       "passwordRequired": "Password is required",
-      "googleLoginFailed": "An error occurred while signing in with Google",
-      "networkError": "Network connection error. Please check your internet connection",
-      "fedcmDisabled": "Browser authentication feature is disabled. Please check your browser settings",
+      "googleLoginFailed": "Google login failed",
+      "networkError": "Network error. Please check your connection.",
+      "fedcmDisabled": "Browser authentication API is disabled",
       "googleScriptError": "Google sign-in service could not be loaded. Please try again later",
-      "loginCancelled": "Login process was cancelled"
+      "loginCancelled": "Login process was cancelled",
+      "invalidResponse": "Invalid response from server",
+      "redirectFailed": "Redirect failed. Trying alternative method."
     },
     "checkEmail": "Please check your email inbox and click on the verification link",
     "forgotPasswordInstructions": "Enter your registered email address to reset your password.",
@@ -122,6 +127,7 @@
     "companyWebsitePlaceholder": "Enter company website",
     "companyPositionPlaceholder": "Enter your position in the company",
     "companySizePlaceholder": "Enter company size",
+    "tryAgain": "Please try again.",
     "errors": {
       "fileTooLarge": "File size is too large (maximum 5MB)",
       "invalidFileType": "Invalid file type. Please select an image file",
@@ -199,7 +205,8 @@
       "badge": "New Features",
       "feature1": "Completely free starter plan",
       "feature2": "Modern and professional templates",
-      "feature3": "CVs in both web and PDF formats"
+      "feature3": "CVs in both web and PDF formats",
+      "toDashboard": "Go to Dashboard"
     },
     "features": {
       "title": "Why CV Builder?",

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   TextField, Button, Container, Typography, Box, 
   FormControl, InputLabel, Grid, FormHelperText,
-  Alert
+  Alert, Link as MuiLink
 } from '@mui/material';
 import { authAPI } from '../services/api';
 import { useRouter } from 'next/router';
@@ -16,6 +16,7 @@ import axiosInstance from '../services/axios';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useLanguage } from '../contexts/LanguageContext';
 import SEO from '../components/SEO';
+import NextLink from 'next/link';
 
 // Desteklenen diller
 const SUPPORTED_LANGUAGES = ['tr', 'en', 'fr', 'de', 'ru', 'hi', 'ar', 'zh', 'es', 'it'] as const;
@@ -291,6 +292,17 @@ export default function Register() {
             >
               {isSubmitting ? t('common.submitting') : t('auth.register')}
             </Button>
+            
+            <Grid container justifyContent="center" sx={{ mt: 2 }}>
+              <Grid item>
+                <Typography variant="body2">
+                  {t('auth.alreadyHaveAccount')}{' '}
+                  <MuiLink component={NextLink} href="/login" variant="body2">
+                    {t('auth.login')}
+                  </MuiLink>
+                </Typography>
+              </Grid>
+            </Grid>
           </Box>
         </Box>
       </Container>

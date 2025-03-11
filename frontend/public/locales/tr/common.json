@@ -28,7 +28,7 @@
     "confirmPassword": "Şifre Tekrar",
     "forgotPassword": "Şifremi Unuttum",
     "rememberMe": "Beni Hatırla",
-    "loginSuccess": "Giriş başarılı! Hoş geldiniz.",
+    "loginSuccess": "Giriş başarılı!",
     "loginError": "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.",
     "registerSuccess": "Kayıt başarılı! Lütfen email adresinizi doğrulayın",
     "registerError": "Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.",
@@ -40,6 +40,8 @@
     "companyWebsite": "Şirket Web Sitesi",
     "phone": "Telefon",
     "register": "Kayıt Ol",
+    "alreadyHaveAccount": "Zaten hesabınız var mı?",
+    "dontHaveAccount": "Hesabınız yok mu?",
     "resendVerificationEmail": "Yeni Doğrulama Maili Gönder",
     "verificationEmailSent": "Yeni doğrulama maili gönderildi. Lütfen email kutunuzu kontrol edin.",
     "verificationEmailFailed": "Doğrulama maili gönderilemedi.",
@@ -50,11 +52,12 @@
       "uppercase": "En az bir büyük harf"
     },
     "sessionExpired": "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.",
+    "tokenRefreshed": "Oturumunuz yenilendi.",
     "logoutSuccess": "Başarıyla çıkış yapıldı.",
     "errors": {
       "userNotFound": "Bu e-posta adresiyle kayıtlı kullanıcı bulunamadı",
       "invalidPassword": "Geçersiz şifre",
-      "invalidCredentials": "Geçersiz kullanıcı bilgileri",
+      "invalidCredentials": "Geçersiz e-posta veya şifre",
       "emailExists": "Bu e-posta adresi zaten kullanılıyor",
       "weakPassword": "Şifre çok zayıf",
       "emailNotVerified": "Lütfen email adresinizi doğrulayın",
@@ -62,11 +65,13 @@
       "generalError": "Bir hata oluştu, lütfen tekrar deneyin",
       "emailRequired": "Email adresi gerekli",
       "passwordRequired": "Şifre gerekli",
-      "googleLoginFailed": "Google ile giriş yapılırken bir hata oluştu",
-      "networkError": "Ağ bağlantısı hatası. Lütfen internet bağlantınızı kontrol edin",
-      "fedcmDisabled": "Tarayıcı kimlik doğrulama özelliği devre dışı. Tarayıcı ayarlarınızı kontrol edin",
+      "googleLoginFailed": "Google ile giriş başarısız oldu",
+      "networkError": "Ağ hatası. Lütfen bağlantınızı kontrol edin.",
+      "fedcmDisabled": "Tarayıcı kimlik doğrulama API'si devre dışı",
       "googleScriptError": "Google giriş servisi yüklenemedi. Lütfen daha sonra tekrar deneyin",
-      "loginCancelled": "Giriş işlemi iptal edildi"
+      "loginCancelled": "Giriş işlemi iptal edildi",
+      "invalidResponse": "Sunucudan geçersiz yanıt alındı",
+      "redirectFailed": "Yönlendirme başarısız oldu. Alternatif yöntem deneniyor."
     },
     "emailNotFound": "Email adresi bulunamadı.",
     "emailVerification": "Email Doğrulama",
@@ -122,6 +127,7 @@
     "companyWebsitePlaceholder": "Şirket web sitesini girin",
     "companyPositionPlaceholder": "Şirketteki pozisyonunuzu girin",
     "companySizePlaceholder": "Şirket büyüklüğünü girin",
+    "tryAgain": "Lütfen tekrar deneyin.",
     "errors": {
       "fileTooLarge": "Dosya boyutu çok büyük (maksimum 5MB)",
       "invalidFileType": "Geçersiz dosya tipi. Lütfen bir resim dosyası seçin",
@@ -199,7 +205,8 @@
       "badge": "Yeni Özellikler",
       "feature1": "Tamamen ücretsiz başlangıç planı",
       "feature2": "Modern ve profesyonel şablonlar",
-      "feature3": "Hem web hem PDF formatında CV'ler"
+      "feature3": "Hem web hem PDF formatında CV'ler",
+      "toDashboard": "Panele Git"
     },
     "features": {
       "title": "Neden CV Builder?",

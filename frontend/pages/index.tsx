@@ -30,8 +30,9 @@ import Layout from '../components/Layout';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import SEO from '../components/SEO';
+import { useAuth } from '../contexts/AuthContext';
 
 // Hero SVG
 const HeroSvg = () => (
@@ -114,14 +115,11 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isAuthenticated = typeof window !== 'undefined' && localStorage.getItem('token');
+  const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
     setMounted(true);
-    if (isAuthenticated) {
-      router.push('/dashboard');
-    }
-  }, [isAuthenticated, router]);
+  }, []);
 
   const features = [
     {
@@ -240,36 +238,57 @@ export default function Home() {
                   {t('home.hero.subtitle')}
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                  <Button
-                    component={Link}
-                    href="/register"
-                    variant="contained"
-                    size="large"
-                    sx={{ 
-                      px: 4, 
-                      py: 1.5, 
-                      borderRadius: '8px',
-                      fontWeight: 'bold',
-                      boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
-                    }}
-                    endIcon={<ArrowForwardIcon />}
-                  >
-                    {t('home.hero.cta')}
-                  </Button>
-                  <Button
-                    component={Link}
-                    href="/login"
-                    variant="outlined"
-                    size="large"
-                    sx={{ 
-                      px: 4, 
-                      py: 1.5, 
-                      borderRadius: '8px',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    {t('nav.login')}
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button
+                      component={NextLink}
+                      href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
+                      variant="contained"
+                      size="large"
+                      sx={{ 
+                        px: 4, 
+                        py: 1.5, 
+                        borderRadius: '8px',
+                        fontWeight: 'bold',
+                        boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
+                      }}
+                      endIcon={<ArrowForwardIcon />}
+                    >
+                      {t('home.hero.toDashboard')}
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        component={NextLink}
+                        href="/register"
+                        variant="contained"
+                        size="large"
+                        sx={{ 
+                          px: 4, 
+                          py: 1.5, 
+                          borderRadius: '8px',
+                          fontWeight: 'bold',
+                          boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
+                        }}
+                        endIcon={<ArrowForwardIcon />}
+                      >
+                        {t('home.hero.cta')}
+                      </Button>
+                      <Button
+                        component={NextLink}
+                        href="/login"
+                        variant="outlined"
+                        size="large"
+                        sx={{ 
+                          px: 4, 
+                          py: 1.5, 
+                          borderRadius: '8px',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        {t('auth.dontHaveAccount')}
+                      </Button>
+                    </>
+                  )}
                 </Box>
                 <Box sx={{ mt: 4, display: 'flex', alignItems: 'center', gap: 1 }}>
                   <CheckCircleIcon color="success" fontSize="small" />
@@ -434,15 +453,27 @@ export default function Home() {
           </Grid>
 
           <Box sx={{ textAlign: 'center', mt: 6 }}>
-            <Button
-              component={Link}
-              href="/register"
-              variant="contained"
-              size="large"
-              sx={{ borderRadius: '8px', px: 4, py: 1.5 }}
-            >
-              {t('home.templates.cta')}
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                component={NextLink}
+                href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
+                variant="contained"
+                size="large"
+                sx={{ borderRadius: '8px', px: 4, py: 1.5 }}
+              >
+                {t('home.hero.toDashboard')}
+              </Button>
+            ) : (
+              <Button
+                component={NextLink}
+                href="/register"
+                variant="contained"
+                size="large"
+                sx={{ borderRadius: '8px', px: 4, py: 1.5 }}
+              >
+                {t('home.templates.cta')}
+              </Button>
+            )}
           </Box>
         </Container>
       </Box>
@@ -659,25 +690,47 @@ export default function Home() {
                 {t('home.cta.subtitle')}
               </Typography>
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  component={Link}
-                  href="/register"
-                  variant="contained"
-                  size="large"
-                  sx={{
-                    px: 6,
-                    py: 1.5,
-                    bgcolor: 'white',
-                    color: 'primary.main',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      bgcolor: 'grey.100',
-                    },
-                    borderRadius: '8px',
-                  }}
-                >
-                  {t('home.cta.button')}
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    component={NextLink}
+                    href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      px: 6,
+                      py: 1.5,
+                      bgcolor: 'white',
+                      color: 'primary.main',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        bgcolor: 'grey.100',
+                      },
+                      borderRadius: '8px',
+                    }}
+                  >
+                    {t('home.hero.toDashboard')}
+                  </Button>
+                ) : (
+                  <Button
+                    component={NextLink}
+                    href="/register"
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      px: 6,
+                      py: 1.5,
+                      bgcolor: 'white',
+                      color: 'primary.main',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        bgcolor: 'grey.100',
+                      },
+                      borderRadius: '8px',
+                    }}
+                  >
+                    {t('home.cta.button')}
+                  </Button>
+                )}
               </Box>
             </CardContent>
             
