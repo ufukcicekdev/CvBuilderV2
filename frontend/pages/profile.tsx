@@ -349,7 +349,7 @@ function Profile() {
             gap: 2
           }}>
             <Typography variant="h6" sx={{ textAlign: 'center' }}>
-              {t('profile.loading')}
+              {t('common.loading')}
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <CircularProgress />

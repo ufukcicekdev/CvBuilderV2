@@ -2,11 +2,11 @@
   "app": {
     "name": "CV Builder",
     "tagline": "Crea tu CV profesional y da un paso adelante en tu carrera",
-    "description": "Simplifica tu búsqueda de empleo y encuentra el trabajo de tus sueños"
+    "description": "Facilita tu proceso de búsqueda de empleo y encuentra el trabajo de tus sueños"
   },
   "nav": {
     "dashboard": "Panel",
-    "jobs": "Ofertas de Trabajo",
+    "jobs": "Ofertas de Empleo",
     "profile": "Mi Perfil",
     "login": "Iniciar Sesión",
     "register": "Registrarse",
@@ -16,7 +16,7 @@
     "settings": "Configuración",
     "help": "Ayuda",
     "pricing": "Precios",
-    "language": "Idioma"
+    "language": "Selección de Idioma"
   },
   "auth": {
     "jobseeker": "Buscador de Empleo",
@@ -28,63 +28,73 @@
     "confirmPassword": "Confirmar Contraseña",
     "forgotPassword": "Olvidé mi Contraseña",
     "rememberMe": "Recuérdame",
-    "loginSuccess": "¡Inicio de sesión exitoso! Bienvenido.",
-    "loginError": "Inicio de sesión fallido. Por favor, verifica tu información.",
-    "registerSuccess": "¡Registro exitoso! Por favor, verifica tu correo electrónico.",
-    "registerError": "Registro fallido. Por favor, verifica tu información.",
+    "loginSuccess": "¡Inicio de sesión exitoso!",
+    "loginError": "Inicio de sesión fallido. Por favor, verifica tus datos.",
+    "registerSuccess": "¡Registro exitoso! Por favor, verifica tu correo electrónico",
+    "registerError": "Registro fallido. Por favor, verifica tus datos.",
     "orLoginWith": "o inicia sesión con",
-    "googleLogin": "Iniciar sesión con Google",
+    "googleLogin": "Inicia sesión con Google",
     "userType": "Tipo de Usuario",
     "birthDate": "Fecha de Nacimiento",
     "companyName": "Nombre de la Empresa",
     "companyWebsite": "Sitio Web de la Empresa",
     "phone": "Teléfono",
     "register": "Registrarse",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
     "resendVerificationEmail": "Reenviar Correo de Verificación",
-    "verificationEmailSent": "Se ha enviado un correo de verificación. Por favor, revisa tu bandeja de entrada.",
+    "verificationEmailSent": "Se ha enviado un nuevo correo de verificación. Por favor, revisa tu bandeja de entrada.",
     "verificationEmailFailed": "No se pudo enviar el correo de verificación.",
     "passwordRequirements": {
-      "minLength": "Al menos 8 caracteres",
+      "minLength": "Mínimo 8 caracteres",
       "number": "Al menos un número",
-      "lowercase": "Al menos una letra minúscula",
-      "uppercase": "Al menos una letra mayúscula"
+      "lowercase": "Al menos una minúscula",
+      "uppercase": "Al menos una mayúscula"
     },
     "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
-    "logoutSuccess": "Has cerrado sesión exitosamente.",
+    "tokenRefreshed": "Tu sesión ha sido renovada.",
+    "logoutSuccess": "Has cerrado sesión correctamente.",
     "errors": {
-      "userNotFound": "No se encontró ningún usuario con este correo electrónico",
+      "userNotFound": "No se encontró ningún usuario registrado con este correo electrónico",
       "invalidPassword": "Contraseña inválida",
-      "invalidCredentials": "Credenciales inválidas",
+      "invalidCredentials": "Correo electrónico o contraseña inválidos",
       "emailExists": "Este correo electrónico ya está en uso",
-      "weakPassword": "La contraseña es demasiado débil",
+      "weakPassword": "La contraseña es muy débil",
       "emailNotVerified": "Por favor, verifica tu correo electrónico",
-      "accountInactive": "Tu cuenta está inactiva",
+      "accountInactive": "Tu cuenta no está activa",
       "generalError": "Ocurrió un error, por favor intenta nuevamente",
-      "emailRequired": "El correo electrónico es requerido",
-      "passwordRequired": "La contraseña es requerida"
+      "emailRequired": "Se requiere un correo electrónico",
+      "passwordRequired": "Se requiere una contraseña",
+      "googleLoginFailed": "Inicio de sesión con Google fallido",
+      "networkError": "Error de red. Por favor, verifica tu conexión.",
+      "fedcmDisabled": "La API de autenticación del navegador está deshabilitada",
+      "googleScriptError": "No se pudo cargar el servicio de inicio de sesión de Google. Por favor, inténtalo de nuevo más tarde.",
+      "loginCancelled": "El inicio de sesión fue cancelado",
+      "invalidResponse": "Se recibió una respuesta inválida del servidor",
+      "redirectFailed": "La redirección falló. Se está intentando un método alternativo."
     },
-    "emailNotFound": "Dirección de correo electrónico no encontrada.",
+    "emailNotFound": "Correo electrónico no encontrado.",
     "emailVerification": "Verificación de Correo Electrónico",
-    "verifyingEmail": "Verificando tu correo electrónico...",
-    "emailVerifiedSuccess": "¡Tu correo electrónico ha sido verificado exitosamente!",
+    "verifyingEmail": "Estamos verificando tu correo electrónico...",
+    "emailVerifiedSuccess": "¡Tu correo electrónico ha sido verificado con éxito!",
     "canLoginNow": "Ahora puedes iniciar sesión.",
     "verificationLinkExpired": "El enlace de verificación puede haber expirado.",
-    "emailSendingFailed": "Error al enviar el correo electrónico.",
-    "checkEmail": "Por favor, revisa tu bandeja de entrada y haz clic en el enlace de verificación",
+    "emailSendingFailed": "No se pudo enviar el correo electrónico.",
+    "checkEmail": "Revisa tu bandeja de entrada y haz clic en el enlace de verificación",
     "forgotPasswordInstructions": "Ingresa tu correo electrónico registrado para restablecer tu contraseña.",
-    "forgotPasswordSuccess": "Se ha enviado un enlace de restablecimiento de contraseña a tu correo electrónico.",
-    "forgotPasswordError": "Ocurrió un error durante el proceso de restablecimiento de contraseña.",
+    "forgotPasswordSuccess": "Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.",
+    "forgotPasswordError": "Ocurrió un error al intentar restablecer tu contraseña.",
     "sendResetLink": "Enviar Enlace de Restablecimiento",
     "backToLogin": "Volver a Iniciar Sesión",
     "resetPassword": "Restablecer Contraseña",
     "resetPasswordInstructions": "Por favor, ingresa tu nueva contraseña.",
-    "resetPasswordSuccess": "Tu contraseña ha sido restablecida exitosamente. Ahora puedes iniciar sesión.",
-    "resetPasswordError": "Ocurrió un error durante el proceso de restablecimiento de contraseña.",
+    "resetPasswordSuccess": "Tu contraseña ha sido restablecida con éxito. Ahora puedes iniciar sesión.",
+    "resetPasswordError": "Ocurrió un error al intentar restablecer tu contraseña.",
     "newPassword": "Nueva Contraseña",
     "confirmNewPassword": "Confirmar Nueva Contraseña",
-    "resetPasswordButton": "Restablecer Mi Contraseña",
+    "resetPasswordButton": "Restablecer Contraseña",
     "invalidResetToken": "Enlace de restablecimiento de contraseña inválido o expirado.",
-    "passwordResetExpired": "El enlace de restablecimiento de contraseña ha expirado. Por favor, solicita uno nuevo."
+    "passwordResetExpired": "El enlace de restablecimiento de contraseña ha expirado. Por favor, solicita un nuevo enlace."
   },
   "profile": {
     "personalInfo": "Información Personal",
@@ -94,7 +104,7 @@
     "languages": "Idiomas",
     "certificates": "Certificados",
     "about": "Sobre Mí",
-    "updateSuccess": "Perfil actualizado exitosamente",
+    "updateSuccess": "Perfil actualizado con éxito",
     "updateError": "Ocurrió un error al actualizar el perfil",
     "profession": "Profesión",
     "companyPosition": "Posición en la Empresa",
@@ -102,7 +112,7 @@
     "edit": "Editar",
     "save": "Guardar",
     "cancel": "Cancelar",
-    "pictureUpdateSuccess": "Foto de perfil actualizada exitosamente",
+    "pictureUpdateSuccess": "Foto de perfil actualizada con éxito",
     "pictureUpdateError": "Ocurrió un error al actualizar la foto de perfil",
     "firstName": "Nombre",
     "lastName": "Apellido",
@@ -117,23 +127,25 @@
     "companyWebsitePlaceholder": "Ingresa el sitio web de la empresa",
     "companyPositionPlaceholder": "Ingresa tu posición en la empresa",
     "companySizePlaceholder": "Ingresa el tamaño de la empresa",
+    "loading": "Cargando perfil...",
+    "tryAgain": "Por favor, inténtalo de nuevo.",
     "errors": {
       "fileTooLarge": "El archivo es demasiado grande (máximo 5MB)",
       "invalidFileType": "Tipo de archivo inválido. Por favor, selecciona una imagen",
-      "uploadFailed": "Error al subir la imagen",
+      "uploadFailed": "Error al cargar la imagen",
       "noFile": "Por favor, selecciona un archivo de imagen"
     }
   },
   "jobs": {
-    "title": "Ofertas de Trabajo",
-    "search": "Buscar Trabajos",
+    "title": "Ofertas de Empleo",
+    "search": "Buscar Empleo",
     "location": "Ubicación",
     "category": "Categoría",
     "type": "Tipo de Trabajo",
     "salary": "Salario",
     "apply": "Aplicar",
     "posted": "Fecha de Publicación",
-    "deadline": "Fecha Límite de Aplicación"
+    "deadline": "Fecha Límite"
   },
   "footer": {
     "quickLinks": "Enlaces Rápidos",
@@ -153,8 +165,8 @@
     "cancel": "Cancelar",
     "edit": "Editar",
     "preview": "Vista Previa",
-    "next": "Siguiente",
-    "previous": "Anterior",
+    "next": "Continuar",
+    "previous": "Atrás",
     "delete": "Eliminar",
     "add": "Agregar",
     "search": "Buscar",
@@ -178,23 +190,24 @@
     "errors": {
       "badRequest": "Solicitud inválida",
       "unauthorized": "Por favor, inicia sesión",
-      "forbidden": "No tienes permiso para esta operación",
+      "forbidden": "No tienes permiso para realizar esta acción",
       "notFound": "Solicitud no encontrada",
-      "serverError": "Ocurrió un error en el servidor",
+      "serverError": "Error del servidor",
       "unknown": "Ocurrió un error desconocido",
-      "networkError": "Error de conexión de red",
+      "networkError": "Error de conexión",
       "validationError": "Por favor, revisa la información del formulario"
     }
   },
   "home": {
     "hero": {
       "title": "Plataforma de Creación de CV de Nueva Generación",
-      "subtitle": "Crea CV dinámicos e interactivos con inteligencia artificial",
+      "subtitle": "Crea CVs dinámicos e interactivos con inteligencia artificial",
       "cta": "Comienza Ahora",
-      "badge": "Nuevas Características",
-      "feature1": "Plan inicial completamente gratuito",
+      "badge": "Nuevas Funciones",
+      "feature1": "Plan de inicio completamente gratuito",
       "feature2": "Plantillas modernas y profesionales",
-      "feature3": "CV en formatos web y PDF"
+      "feature3": "CVs en formato web y PDF",
+      "toDashboard": "Ir al Panel"
     },
     "features": {
       "title": "¿Por qué CV Builder?",
@@ -202,7 +215,7 @@
       "overline": "CARACTERÍSTICAS",
       "feature1": {
         "title": "Plantillas Profesionales",
-        "description": "Plantillas de CV modernas y profesionales que llaman la atención de los reclutadores"
+        "description": "Plantillas de CV modernas y profesionales que captan la atención de los reclutadores"
       },
       "feature2": {
         "title": "Edición Fácil",
@@ -218,26 +231,26 @@
       },
       "realtime": {
         "title": "Actualización en Tiempo Real",
-        "description": "Actualiza tu CV en tiempo real. ¿Obtuviste un nuevo certificado? Agrégalo inmediatamente y usa tu CV actualizado para las aplicaciones."
+        "description": "Actualiza tu CV en tiempo real. ¿Obtuviste un nuevo certificado? Agrégalo y usa tu CV actualizado en tus aplicaciones."
       },
       "video": {
         "title": "Soporte para Video CV",
-        "description": "Preséntate con un video. Muestra tu personalidad y habilidades de manera más efectiva. La forma moderna de conectarte con empleadores."
+        "description": "Preséntate con un video. Muestra tu personalidad y habilidades de manera más efectiva. La forma más moderna de conectarte con empleadores."
       },
       "aiAssistant": {
         "title": "Asistente de IA",
-        "description": "Recibe sugerencias de IA para optimizar tu CV. Personaliza tu CV para ofertas de trabajo específicas y aumenta tus posibilidades de aceptación."
+        "description": "Recibe sugerencias de IA para optimizar tu CV. Personaliza tu CV según la oferta de trabajo y aumenta tus posibilidades de ser seleccionado."
       },
       "analytics": {
         "title": "Análisis de CV",
-        "description": "Sigue el rendimiento de tu CV. ¿Qué empleadores vieron tu perfil? ¿Cuántas veces se vio tu CV? Todas las estadísticas a tu alcance."
+        "description": "Sigue el rendimiento de tu CV. ¿Qué empleadores han visto tu perfil? ¿Cuántas veces se ha visto tu CV? Todas las estadísticas a tu alcance."
       }
     },
     "templates": {
-      "title": "Plantillas Profesionales de CV",
-      "subtitle": "Plantillas modernas e impresionantes que llaman la atención de los reclutadores",
+      "title": "Plantillas de CV Profesionales",
+      "subtitle": "Plantillas modernas e impactantes que captan la atención de los reclutadores",
       "overline": "PLANTILLAS",
-      "cta": "Explorar Plantillas"
+      "cta": "Explora Plantillas"
     },
     "howItWorks": {
       "title": "¿Cómo Funciona?",
@@ -249,11 +262,11 @@
         },
         {
           "title": "Personaliza tu CV",
-          "description": "Elige entre plantillas modernas y personaliza tu CV"
+          "description": "Elige una de las plantillas modernas y personaliza tu CV"
         },
         {
           "title": "Agrega un Video",
-          "description": "Preséntate con un video corto y destaca"
+          "description": "Preséntate con un video breve y destaca"
         },
         {
           "title": "Postúlate",
@@ -263,11 +276,11 @@
     },
     "testimonials": {
       "title": "Experiencias de Usuarios",
-      "subtitle": "Historias de éxito y reseñas de usuarios",
-      "overline": "RESEÑAS"
+      "subtitle": "Historias de éxito y comentarios de usuarios",
+      "overline": "COMENTARIOS"
     },
     "trustedBy": {
-      "title": "Confianza de Empresas Líderes"
+      "title": "Confianza de las Principales Empresas"
     },
     "stats": {
       "users": "Usuarios Activos",
@@ -284,13 +297,13 @@
   "blog": {
     "title": "Blog",
     "description": "Los artículos más recientes sobre carrera y preparación de CV",
-    "searchPlaceholder": "Buscar en publicaciones del blog...",
+    "searchPlaceholder": "Buscar en artículos del blog...",
     "categories": "Categorías",
     "readMore": "Leer Más",
     "comments": "Comentarios",
     "leaveComment": "Dejar un Comentario",
     "noComments": "Aún no hay comentarios",
-    "relatedPosts": "Publicaciones Relacionadas"
+    "relatedPosts": "Artículos Relacionados"
   },
   "contact": {
     "title": "Contacto",
@@ -300,19 +313,19 @@
     "subject": "Asunto",
     "message": "Tu Mensaje",
     "send": "Enviar",
-    "successMessage": "Tu mensaje ha sido enviado exitosamente. Te responderemos lo antes posible.",
-    "errorMessage": "Tu mensaje no pudo ser enviado. Por favor, inténtalo de nuevo más tarde.",
+    "successMessage": "Tu mensaje ha sido enviado con éxito. Te responderemos lo antes posible.",
+    "errorMessage": "No se pudo enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
     "subjects": {
       "general": "Pregunta General",
       "technical": "Soporte Técnico",
-      "billing": "Consulta de Facturación",
-      "feedback": "Retroalimentación",
+      "billing": "Problemas de Pago",
+      "feedback": "Comentarios",
       "other": "Otro"
     }
   },
   "pricing": {
     "title": "Precios",
-    "description": "Elige el plan que se adapte a tus necesidades",
+    "description": "Elige el plan que mejor se adapte a tus necesidades",
     "monthly": "Mensual",
     "yearly": "Anual",
     "jobseeker": {
@@ -322,10 +335,10 @@
         "yearly": "20"
       },
       "features": [
-        "Creación ilimitada de CV",
+        "Creación ilimitada de CVs",
         "Plantillas de CV premium",
         "Descarga de CV (PDF/Word)",
-        "Postulación a ofertas de trabajo",
+        "Postulación a ofertas de empleo",
         "Destacar perfil",
         "Soporte 24/7"
       ]
@@ -339,7 +352,7 @@
       "features": [
         "Publicación ilimitada de ofertas",
         "Filtrado de candidatos",
-        "Acceso a base de datos de CV",
+        "Acceso a base de datos de CVs",
         "Perfil de empresa",
         "Estadísticas y reportes",
         "Soporte prioritario"
@@ -350,7 +363,7 @@
     "perYear": "/año",
     "selectPlan": "Seleccionar Plan",
     "currentPlan": "Plan Actual",
-    "saveYearly": "Ahorra 15% con pago anual"
+    "saveYearly": "Ahorra un 15% con pago anual"
   },
   "toast": {
     "success": "¡Éxito!",
@@ -373,14 +386,14 @@
   "dashboard": {
     "title": "Mis CVs",
     "createNew": "Crear Nuevo CV",
-    "fetchError": "Ocurrió un error al cargar los CVs",
-    "deleteSuccess": "CV eliminado exitosamente",
-    "deleteError": "Ocurrió un error al eliminar el CV"
+    "fetchError": "Error al cargar los CVs",
+    "deleteSuccess": "CV eliminado con éxito",
+    "deleteError": "Error al eliminar el CV"
   },
   "cv": {
     "create": "Crear CV",
-    "createSuccess": "CV creado exitosamente",
-    "createError": "Ocurrió un error al crear el CV",
+    "createSuccess": "CV creado con éxito",
+    "createError": "Error al crear el CV",
     "steps": {
       "personalInfo": "Información Personal",
       "experience": "Experiencia",
@@ -395,34 +408,34 @@
     "personalInfo": {
       "title": "Información Personal",
       "fullName": "Nombre Completo",
-      "jobTitle": "Título del Puesto",
+      "jobTitle": "Título",
       "summary": "Resumen",
       "phone": "Teléfono",
       "location": "Ubicación"
     },
     "experience": {
       "title": "Experiencia Laboral",
-      "subtitle": "Agrega tu historial laboral comenzando por el más reciente",
+      "subtitle": "Agrega tu historial laboral comenzando por la experiencia más reciente",
       "company": "Nombre de la Empresa",
       "position": "Posición",
       "startDate": "Fecha de Inicio",
       "endDate": "Fecha de Finalización",
       "current": "Actualmente trabajando aquí",
-      "description": "Descripción del Puesto y Responsabilidades",
-      "addMore": "Agregar Experiencia"
+      "description": "Descripción y Responsabilidades",
+      "addMore": "Agregar Más Experiencia"
     },
     "languages": {
       "title": "Idiomas",
-      "subtitle": "Agrega los idiomas que conoces y sus niveles de competencia",
+      "subtitle": "Agrega los idiomas que conoces y tu nivel",
       "name": "Idioma",
-      "level": "Nivel de Competencia",
+      "level": "Nivel",
       "certificate": "Certificado",
-      "certificateHelper": "Si aplica, especifica tu certificado de idioma (Opcional)",
-      "addMore": "Agregar Idioma"
+      "certificateHelper": "Si tienes un certificado de idioma, especifícalo (Opcional)",
+      "addMore": "Agregar Más Idiomas"
     },
     "education": {
       "title": "Educación",
-      "subtitle": "Agrega tu historial educativo comenzando por el más reciente",
+      "subtitle": "Agrega tu historial educativo comenzando por la educación más reciente",
       "school": "Escuela",
       "degree": "Título",
       "field": "Campo de Estudio",
@@ -430,7 +443,7 @@
       "endDate": "Fecha de Finalización",
       "current": "Actualmente estudiando aquí",
       "description": "Descripción (Opcional)",
-      "addMore": "Agregar Educación"
+      "addMore": "Agregar Más Educación"
     },
     "draft": "Borrador",
     "continue": "Continuar",
@@ -439,82 +452,82 @@
     "lastUpdated": "Última Actualización",
     "saveAndExit": "Guardar y Salir",
     "saveSuccess": "Tu progreso ha sido guardado",
-    "saveError": "Ocurrió un error al guardar",
-    "loadError": "Ocurrió un error al cargar el CV",
+    "saveError": "Error al guardar",
+    "loadError": "Error al cargar el CV",
     "errors": {
       "personalInfoRequired": "Por favor, completa toda la información personal",
-      "experienceRequired": "Debes ingresar al menos una experiencia",
-      "educationRequired": "Debes ingresar al menos una educación",
+      "experienceRequired": "Debes agregar al menos una experiencia",
+      "educationRequired": "Debes agregar al menos una educación",
       "skillsRequired": "Debes agregar al menos una habilidad",
-      "languagesRequired": "Debes ingresar al menos un idioma",
-      "experienceFieldsRequired": "Por favor, completa el nombre de la empresa, posición y fecha de inicio para la experiencia",
-      "endDateRequired": "Si no estás trabajando actualmente, se requiere una fecha de finalización",
+      "languagesRequired": "Debes agregar al menos un idioma",
+      "experienceFieldsRequired": "Por favor, completa el nombre de la empresa, posición y fecha de inicio",
+      "endDateRequired": "Si no estás trabajando actualmente, debes agregar una fecha de finalización",
       "educationFieldsRequired": "Por favor, completa la escuela, título, campo de estudio y fecha de inicio",
-      "endDateRequired": "Si no estás estudiando actualmente, se requiere una fecha de finalización"
+      "endDateRequired": "Si no estás estudiando actualmente, debes agregar una fecha de finalización"
     },
     "currentStep": "Paso Actual",
     "deleteConfirmTitle": "Eliminar CV",
     "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este CV?",
-    "deleteSuccess": "CV eliminado exitosamente",
-    "deleteError": "Ocurrió un error al eliminar el CV",
+    "deleteSuccess": "CV eliminado con éxito",
+    "deleteError": "Error al eliminar el CV",
     "noCVs": "Aún no has creado ningún CV",
     "createFirst": "Crea tu Primer CV",
     "titleLabel": "Título del CV",
     "titlePlaceholder": "Ingresa un título para tu CV",
-    "titleHelper": "Este título te ayuda a identificar tu CV (por ejemplo, 'CV de Desarrollador de Software')",
-    "startCreating": "Comienza a Crear CV",
+    "titleHelper": "Este título te ayudará a identificar tu CV (ej: 'CV de Desarrollador de Software')",
+    "startCreating": "Comienza a Crear tu CV",
     "errors": {
-      "titleRequired": "Por favor, ingresa un título para el CV"
+      "titleRequired": "Por favor, ingresa un título para tu CV"
     },
-    "loadSuccess": "CV cargado exitosamente",
+    "loadSuccess": "CV cargado con éxito",
     "skills": {
       "title": "Habilidades",
       "subtitle": "Agrega tus habilidades técnicas y personales",
       "name": "Habilidad",
-      "level": "Nivel de Competencia",
+      "level": "Nivel",
       "description": "Descripción",
       "descriptionHelper": "Agrega una breve descripción de esta habilidad (Opcional)",
-      "addMore": "Agregar Habilidad"
+      "addMore": "Agregar Más Habilidades"
     },
     "errors": {
       "skillNameRequired": "Por favor, ingresa el nombre de la habilidad"
     },
     "certificates": {
       "title": "Certificados",
-      "subtitle": "Agrega los certificados y documentos que tienes",
+      "subtitle": "Agrega los certificados y documentos que posees",
       "name": "Nombre del Certificado",
-      "issuer": "Autoridad Emisora",
+      "issuer": "Institución Emisora",
       "issueDate": "Fecha de Emisión",
-      "expiryDate": "Fecha de Vencimiento",
-      "expiryDateHelper": "Si aplica, la fecha de vencimiento del certificado",
-      "credentialId": "Número de Certificado/Documento",
-      "credentialIdHelper": "Si aplica, el número del certificado o documento",
+      "expiryDate": "Fecha de Expiración",
+      "expiryDateHelper": "Si aplica, la fecha de expiración del certificado",
+      "credentialId": "Número de Certificado",
+      "credentialIdHelper": "Si aplica, el número de certificado o documento",
       "description": "Descripción",
       "uploadFile": "Subir Archivo de Certificado",
-      "addMore": "Agregar Certificado",
-      "uploadSuccess": "Archivo de certificado subido exitosamente",
-      "uploadError": "Ocurrió un error al subir el archivo de certificado"
+      "addMore": "Agregar Más Certificados",
+      "uploadSuccess": "Archivo de certificado subido con éxito",
+      "uploadError": "Error al subir el archivo de certificado"
     },
     "errors": {
-      "certificateFieldsRequired": "Por favor, completa el nombre del certificado, autoridad emisora y fecha de emisión"
+      "certificateFieldsRequired": "Por favor, completa el nombre del certificado, institución emisora y fecha de emisión"
     },
     "progress": "Progreso",
     "template": {
-      "selectTitle": "Seleccionar Plantilla de CV",
+      "selectTitle": "Selecciona una Plantilla de CV",
       "selectRequired": "Por favor, selecciona una plantilla",
       "preview": "Vista Previa",
       "generateWeb": "Generar CV Web",
       "generatePDF": "Descargar PDF",
       "generating": "Generando...",
-      "generateSuccess": "CV generado exitosamente",
-      "generateError": "Ocurrió un error al generar el CV",
+      "generateSuccess": "CV generado con éxito",
+      "generateError": "Error al generar el CV",
       "language": "Idioma",
       "changeLanguage": "Cambiar Idioma",
       "downloadPDF": "Descargar PDF",
       "viewImage": "Ver Imagen",
       "close": "Cerrar",
       "loading": "Cargando...",
-      "error": "Ocurrió un error al cargar la traducción. Por favor, inténtalo de nuevo.",
+      "error": "Error al cargar la traducción. Por favor, inténtalo de nuevo.",
       "viewCertificate": "Ver Certificado",
       "location": "Ubicación",
       "webVersion": "Versión Web",
@@ -540,12 +553,12 @@
     },
     "video": {
       "title": "Presentación en Video",
-      "dragDrop": "Arrastra y suelta tu archivo de video aquí o haz clic para buscar",
-      "maxSize": "Tamaño máximo del archivo: 50MB",
+      "dragDrop": "Arrastra y suelta tu archivo de video aquí o haz clic para seleccionarlo",
+      "maxSize": "Tamaño máximo de archivo: 50MB",
       "selectVideo": "Seleccionar Video",
-      "deleteSuccess": "Video eliminado exitosamente",
-      "deleteError": "Ocurrió un error al eliminar el video",
-      "confirmDelete": "¿Estás seguro de que deseas eliminar el video?"
+      "deleteSuccess": "Video eliminado con éxito",
+      "deleteError": "Error al eliminar el video",
+      "confirmDelete": "¿Estás seguro de que deseas eliminar este video?"
     }
   },
   "validation": {
@@ -554,8 +567,8 @@
     "usernameMinLength": "El nombre de usuario debe tener al menos 3 caracteres",
     "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
     "passwordNumber": "La contraseña debe contener al menos un número",
-    "passwordLowercase": "La contraseña debe contener al menos una letra minúscula",
-    "passwordUppercase": "La contraseña debe contener al menos una letra mayúscula",
+    "passwordLowercase": "La contraseña debe contener al menos una minúscula",
+    "passwordUppercase": "La contraseña debe contener al menos una mayúscula",
     "passwordMatch": "Las contraseñas no coinciden",
     "invalidUserType": "Por favor, selecciona un tipo de usuario válido"
   },
@@ -564,12 +577,12 @@
     "emailExists": "Este correo electrónico ya está en uso",
     "invalidUsername": "Nombre de usuario inválido",
     "invalidEmail": "Correo electrónico inválido",
-    "weakPassword": "La contraseña es demasiado débil",
+    "weakPassword": "La contraseña es muy débil",
     "passwordMismatch": "Las contraseñas no coinciden",
     "unknown": "Ocurrió un error desconocido",
     "formErrors": "Por favor, corrige los errores del formulario",
-    "registrationFailed": "El registro falló. Por favor, inténtalo de nuevo",
+    "registrationFailed": "El registro falló. Por favor, inténtalo de nuevo.",
     "pleaseFixErrors": "Por favor, corrige los siguientes errores",
-    "present": "Presente"
+    "present": "En Curso"
   }
 }

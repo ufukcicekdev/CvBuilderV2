@@ -383,29 +383,44 @@ export default function LoginPage() {
               <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 2 }}>
                 <GoogleOAuthProvider 
                   clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
-                  // @ts-ignore - GoogleOAuthProvider tipinde onScriptLoadError özelliği var
-                  onScriptLoadError={(err: Error) => {
-                    console.error('Google script load error:', err);
-                    toast.error(t('auth.errors.googleScriptError'));
-                  }}
-                  // @ts-ignore - GoogleOAuthProvider tipinde onScriptLoadSuccess özelliği var
-                  onScriptLoadSuccess={() => {
-                    console.log('Google script loaded successfully');
-                  }}
                 >
-                  <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={() => {
-                      console.error('Google login failed');
-                      toast.error(t('auth.errors.googleLoginFailed'));
-                    }}
-                    useOneTap
-                    theme="filled_blue"
-                    text="signin_with"
-                    shape="rectangular"
-                    locale="tr"
-                    context="signin"
-                  />
+                  <Box sx={{ width: '100%', position: 'relative' }}>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      startIcon={<GoogleIcon sx={{ color: '#4285F4' }} />}
+                      sx={{
+                        backgroundColor: '#ffffff',
+                        borderColor: '#dadce0',
+                        color: '#3c4043',
+                        textTransform: 'none',
+                        height: '40px',
+                        fontWeight: 500,
+                        '&:hover': {
+                          backgroundColor: '#f8f9fa',
+                          borderColor: '#dadce0',
+                          boxShadow: '0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15)'
+                        }
+                      }}
+                    >
+                      {t('auth.googleLogin')}
+                    </Button>
+                    <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0 }}>
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => {
+                          console.error('Google login failed');
+                          toast.error(t('auth.errors.googleLoginFailed'));
+                        }}
+                        useOneTap
+                        type="standard"
+                        theme="outline"
+                        size="large"
+                        width="100%"
+                        locale={router.locale || 'tr'}
+                      />
+                    </Box>
+                  </Box>
                 </GoogleOAuthProvider>
               </Box>
             </>

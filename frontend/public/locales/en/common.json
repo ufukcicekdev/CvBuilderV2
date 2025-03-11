@@ -127,6 +127,7 @@
     "companyWebsitePlaceholder": "Enter company website",
     "companyPositionPlaceholder": "Enter your position in the company",
     "companySizePlaceholder": "Enter company size",
+    "loading": "Loading profile...",
     "tryAgain": "Please try again.",
     "errors": {
       "fileTooLarge": "File size is too large (maximum 5MB)",

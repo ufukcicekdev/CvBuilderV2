@@ -127,6 +127,7 @@
     "companyWebsitePlaceholder": "Şirket web sitesini girin",
     "companyPositionPlaceholder": "Şirketteki pozisyonunuzu girin",
     "companySizePlaceholder": "Şirket büyüklüğünü girin",
+    "loading": "Profil yükleniyor...",
     "tryAgain": "Lütfen tekrar deneyin.",
     "errors": {
       "fileTooLarge": "Dosya boyutu çok büyük (maksimum 5MB)",
