@@ -16,7 +16,7 @@ const defaultSEO = {
   title: 'CV Builder - Create Professional Resumes Online',
   description: 'Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.',
   keywords: 'cv builder, resume builder, professional cv, job application, career, resume templates',
-  ogImage: '/images/og-image.svg',
+  ogImage: '/og-image.svg',
   ogType: 'website',
   twitterCard: 'summary_large_image',
 };

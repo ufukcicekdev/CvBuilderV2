@@ -24,7 +24,7 @@ export default function Custom500() {
           }}
         >
           <Image
-            src="/images/500.svg"
+            src="/500.svg"
             alt="500"
             width={300}
             height={300}

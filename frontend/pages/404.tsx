@@ -24,7 +24,7 @@ export default function Custom404() {
           }}
         >
           <Image
-            src="/images/404.svg"
+            src="/404.svg"
             alt="404"
             width={300}
             height={300}
