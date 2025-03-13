@@ -124,6 +124,7 @@ function Dashboard() {
             </Box>
           </Grid>
 
+          {/* CVs List */}
           {loading ? (
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>

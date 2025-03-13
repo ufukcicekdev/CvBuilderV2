@@ -14,6 +14,8 @@ import {
   IconButton,
   Badge,
   CircularProgress,
+  Tab,
+  Tabs,
 } from '@mui/material';
 import { Edit as EditIcon, Save as SaveIcon, Cancel as CancelIcon, PhotoCamera } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
@@ -24,6 +26,8 @@ import { handleApiError } from '../utils/handleApiError';
 import { useRouter } from 'next/router';
 import { useLanguage } from '../contexts/LanguageContext';
 import SEO from '../components/SEO';
+import SubscriptionInfo from '../components/SubscriptionInfo';
+import SubscriptionPaymentHistory from '../components/SubscriptionPaymentHistory';
 
 interface UserProfile {
   id?: number;
@@ -67,6 +71,7 @@ function Profile() {
   const router = useRouter();
   const { currentLanguage } = useLanguage();
   const prevLanguageRef = useRef(currentLanguage);
+  const [activeTab, setActiveTab] = useState(0);
 
   // Dil değişikliğini dinleyen useEffect
   useEffect(() => {
@@ -336,6 +341,10 @@ function Profile() {
     }
   };
 
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -505,210 +514,238 @@ function Profile() {
             </Paper>
           </Grid>
 
-          {/* Profil Detayları */}
+          {/* Tabs */}
           <Grid item xs={12}>
-            <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-              <Typography variant="h6" gutterBottom>
-                {t('profile.personalInfo')}
-              </Typography>
-              <Divider sx={{ my: 2 }} />
-              <Grid container spacing={2}>
-                {profile.user_type === 'jobseeker' ? (
-                  // İş Arayan Profili
-                  <>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.firstName')}
-                        name="first_name"
-                        value={isEditing ? (editedProfile?.first_name || '') : (profile?.first_name || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.firstNamePlaceholder')}
-                        error={!!errors.first_name}
-                        helperText={errors.first_name}
-                        required
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.lastName')}
-                        name="last_name"
-                        value={isEditing ? (editedProfile?.last_name || '') : (profile?.last_name || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.lastNamePlaceholder')}
-                        error={!!errors.last_name}
-                        helperText={errors.last_name}
-                        required
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.phone')}
-                        name="phone"
-                        value={isEditing ? (editedProfile?.phone || '') : (profile?.phone || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.phonePlaceholder')}
-                        error={!!errors.phone}
-                        helperText={errors.phone}
-                        required
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.birthDate')}
-                        name="birth_date"
-                        type="date"
-                        value={isEditing ? (editedProfile?.birth_date || '') : (profile?.birth_date || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        InputLabelProps={{ shrink: true }}
-                        placeholder={t('profile.birthDatePlaceholder')}
-                        error={!!errors.birth_date}
-                        helperText={errors.birth_date}
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.profession')}
-                        name="profession"
-                        value={isEditing ? (editedProfile?.profession || '') : (profile?.profession || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.professionPlaceholder')}
-                        error={!!errors.profession}
-                        helperText={errors.profession}
-                        required={profile?.user_type === 'jobseeker'}
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                  </>
-                ) : (
-                  // İşveren Profili
-                  <>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.firstName')}
-                        name="first_name"
-                        value={isEditing ? (editedProfile?.first_name || '') : (profile?.first_name || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.firstNamePlaceholder')}
-                        error={!!errors.first_name}
-                        helperText={errors.first_name}
-                        required
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.lastName')}
-                        name="last_name"
-                        value={isEditing ? (editedProfile?.last_name || '') : (profile?.last_name || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.lastNamePlaceholder')}
-                        error={!!errors.last_name}
-                        helperText={errors.last_name}
-                        required
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('auth.companyName')}
-                        name="company_name"
-                        value={isEditing ? (editedProfile?.company_name || '') : (profile?.company_name || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.companyNamePlaceholder')}
-                        error={!!errors.company_name}
-                        helperText={errors.company_name}
-                        required={profile?.user_type === 'employer'}
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('auth.companyWebsite')}
-                        name="company_website"
-                        value={isEditing ? (editedProfile?.company_website || '') : (profile?.company_website || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.companyWebsitePlaceholder')}
-                        error={!!errors.company_website}
-                        helperText={errors.company_website}
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.companyPosition')}
-                        name="company_position"
-                        value={isEditing ? (editedProfile?.company_position || '') : (profile?.company_position || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.companyPositionPlaceholder')}
-                        error={!!errors.company_position}
-                        helperText={errors.company_position}
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('profile.companySize')}
-                        name="company_size"
-                        value={isEditing ? (editedProfile?.company_size || '') : (profile?.company_size || '')}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={t('profile.companySizePlaceholder')}
-                        error={!!errors.company_size}
-                        helperText={errors.company_size}
-                        size="medium"
-                        margin="normal"
-                        sx={{ mt: { xs: 1, sm: 2 } }}
-                      />
-                    </Grid>
-                  </>
-                )}
-              </Grid>
+            <Paper sx={{ p: 0 }}>
+              <Tabs
+                value={activeTab}
+                onChange={handleTabChange}
+                variant="fullWidth"
+                indicatorColor="primary"
+                textColor="primary"
+                aria-label="profile tabs"
+              >
+                <Tab label={t('profile.personalInfo')} />
+                <Tab label={t('subscription.membership', 'Membership')} />
+                <Tab label={t('subscription.paymentHistory', 'Payment History')} />
+              </Tabs>
             </Paper>
+          </Grid>
+
+          {/* Tab Content */}
+          <Grid item xs={12}>
+            {activeTab === 0 && (
+              <Paper sx={{ p: { xs: 2, sm: 3 } }}>
+                <Typography variant="h6" gutterBottom>
+                  {t('profile.personalInfo')}
+                </Typography>
+                <Divider sx={{ my: 2 }} />
+                <Grid container spacing={2}>
+                  {profile.user_type === 'jobseeker' ? (
+                    // İş Arayan Profili
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.firstName')}
+                          name="first_name"
+                          value={isEditing ? (editedProfile?.first_name || '') : (profile?.first_name || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.firstNamePlaceholder')}
+                          error={!!errors.first_name}
+                          helperText={errors.first_name}
+                          required
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.lastName')}
+                          name="last_name"
+                          value={isEditing ? (editedProfile?.last_name || '') : (profile?.last_name || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.lastNamePlaceholder')}
+                          error={!!errors.last_name}
+                          helperText={errors.last_name}
+                          required
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.phone')}
+                          name="phone"
+                          value={isEditing ? (editedProfile?.phone || '') : (profile?.phone || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.phonePlaceholder')}
+                          error={!!errors.phone}
+                          helperText={errors.phone}
+                          required
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.birthDate')}
+                          name="birth_date"
+                          type="date"
+                          value={isEditing ? (editedProfile?.birth_date || '') : (profile?.birth_date || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          InputLabelProps={{ shrink: true }}
+                          placeholder={t('profile.birthDatePlaceholder')}
+                          error={!!errors.birth_date}
+                          helperText={errors.birth_date}
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.profession')}
+                          name="profession"
+                          value={isEditing ? (editedProfile?.profession || '') : (profile?.profession || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.professionPlaceholder')}
+                          error={!!errors.profession}
+                          helperText={errors.profession}
+                          required={profile?.user_type === 'jobseeker'}
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                    </>
+                  ) : (
+                    // İşveren Profili
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.firstName')}
+                          name="first_name"
+                          value={isEditing ? (editedProfile?.first_name || '') : (profile?.first_name || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.firstNamePlaceholder')}
+                          error={!!errors.first_name}
+                          helperText={errors.first_name}
+                          required
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.lastName')}
+                          name="last_name"
+                          value={isEditing ? (editedProfile?.last_name || '') : (profile?.last_name || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.lastNamePlaceholder')}
+                          error={!!errors.last_name}
+                          helperText={errors.last_name}
+                          required
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('auth.companyName')}
+                          name="company_name"
+                          value={isEditing ? (editedProfile?.company_name || '') : (profile?.company_name || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.companyNamePlaceholder')}
+                          error={!!errors.company_name}
+                          helperText={errors.company_name}
+                          required={profile?.user_type === 'employer'}
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('auth.companyWebsite')}
+                          name="company_website"
+                          value={isEditing ? (editedProfile?.company_website || '') : (profile?.company_website || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.companyWebsitePlaceholder')}
+                          error={!!errors.company_website}
+                          helperText={errors.company_website}
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.companyPosition')}
+                          name="company_position"
+                          value={isEditing ? (editedProfile?.company_position || '') : (profile?.company_position || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.companyPositionPlaceholder')}
+                          error={!!errors.company_position}
+                          helperText={errors.company_position}
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.companySize')}
+                          name="company_size"
+                          value={isEditing ? (editedProfile?.company_size || '') : (profile?.company_size || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.companySizePlaceholder')}
+                          error={!!errors.company_size}
+                          helperText={errors.company_size}
+                          size="medium"
+                          margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                </Grid>
+              </Paper>
+            )}
+
+            {activeTab === 1 && (
+              <SubscriptionInfo onSubscriptionChange={() => {}} />
+            )}
+
+            {activeTab === 2 && (
+              <SubscriptionPaymentHistory />
+            )}
           </Grid>
         </Grid>
       </Container>

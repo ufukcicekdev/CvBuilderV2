@@ -364,7 +364,11 @@
     "perYear": "/año",
     "selectPlan": "Seleccionar Plan",
     "currentPlan": "Plan Actual",
-    "saveYearly": "Ahorra un 15% con pago anual"
+    "saveYearly": "Ahorra un 15% con pago anual",
+    "premium": {
+      "title": "Plan Premium",
+      "description": "Todas las funciones que necesitas para crear un CV profesional"
+    }
   },
   "toast": {
     "success": "¡Éxito!",
@@ -614,5 +618,31 @@
     "registrationFailed": "El registro falló. Por favor, inténtalo de nuevo.",
     "pleaseFixErrors": "Por favor, corrige los siguientes errores",
     "present": "En Curso"
+  },
+  "subscription": {
+    "status": "Estado",
+    "status.active": "Activo",
+    "status.canceled": "Cancelado",
+    "status.expired": "Expirado",
+    "status.trial": "Prueba",
+    "status.pending": "Pendiente",
+    "paymentStatus": {
+      "success": "Exitoso",
+      "failed": "Fallido",
+      "pending": "Pendiente"
+    },
+    "membership": "Membresía",
+    "paymentHistory": "Historial de pagos",
+    "noPayments": "No se encontraron registros de pago",
+    "paymentDate": "Fecha",
+    "amount": "Monto",
+    "paymentId": "ID de pago",
+    "errorFetchingPayments": "Error al obtener el historial de pagos",
+    "currentSubscription": "Suscripción actual",
+    "period": "Período de facturación",
+    "validUntil": "Válido hasta",
+    "switchToMonthly": "Cambiar a facturación mensual",
+    "switchToYearly": "Cambiar a facturación anual",
+    "cancelSubscription": "Cancelar suscripción"
   }
 }

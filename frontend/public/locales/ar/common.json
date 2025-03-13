@@ -364,7 +364,11 @@
     "perYear": "/سنة",
     "selectPlan": "اختر الخطة",
     "currentPlan": "الخطة الحالية",
-    "saveYearly": "وفر 15% مع الدفع السنوي"
+    "saveYearly": "وفر 15% مع الدفع السنوي",
+    "premium": {
+      "title": "الخطة المتميزة",
+      "description": "جميع الميزات التي تحتاجها لإنشاء سيرة ذاتية احترافية"
+    }
   },
   "toast": {
     "success": "نجاح!",
@@ -614,5 +618,31 @@
     "registrationFailed": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
     "pleaseFixErrors": "يرجى تصحيح الأخطاء التالية",
     "present": "قيد التقدم"
+  },
+  "subscription": {
+    "status": "الحالة",
+    "status.active": "نشط",
+    "status.canceled": "ملغى",
+    "status.expired": "منتهي الصلاحية",
+    "status.trial": "تجريبي",
+    "status.pending": "قيد الانتظار",
+    "paymentStatus": {
+      "success": "ناجح",
+      "failed": "فاشل",
+      "pending": "قيد الانتظار"
+    },
+    "membership": "العضوية",
+    "paymentHistory": "سجل المدفوعات",
+    "noPayments": "لم يتم العثور على سجلات دفع",
+    "paymentDate": "التاريخ",
+    "amount": "المبلغ",
+    "paymentId": "رقم الدفع",
+    "errorFetchingPayments": "خطأ في جلب سجل المدفوعات",
+    "currentSubscription": "الاشتراك الحالي",
+    "period": "فترة الفوترة",
+    "validUntil": "صالح حتى",
+    "switchToMonthly": "التحويل إلى الدفع الشهري",
+    "switchToYearly": "التحويل إلى الدفع السنوي",
+    "cancelSubscription": "إلغاء الاشتراك"
   }
 }

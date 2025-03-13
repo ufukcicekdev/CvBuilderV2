@@ -364,7 +364,11 @@
     "perYear": "/年",
     "selectPlan": "选择计划",
     "currentPlan": "当前计划",
-    "saveYearly": "年度付款节省15%"
+    "saveYearly": "年度付款节省15%",
+    "premium": {
+      "title": "高级计划",
+      "description": "创建专业简历所需的所有功能"
+    }
   },
   "toast": {
     "success": "成功！",
@@ -619,5 +623,31 @@
     "registrationFailed": "注册失败。请重试。",
     "pleaseFixErrors": "请纠正以下错误",
     "present": "进行中"
+  },
+  "subscription": {
+    "status": "स्थिति",
+    "status.active": "सक्रिय",
+    "status.canceled": "रद्द किया गया",
+    "status.expired": "समाप्त हो गया",
+    "status.trial": "परीक्षण",
+    "status.pending": "लंबित",
+    "paymentStatus": {
+      "success": "सफल",
+      "failed": "विफल",
+      "pending": "लंबित"
+    },
+    "membership": "सदस्यता",
+    "paymentHistory": "भुगतान इतिहास",
+    "noPayments": "कोई भुगतान रिकॉर्ड नहीं मिला",
+    "paymentDate": "तिथि",
+    "amount": "राशि",
+    "paymentId": "भुगतान आईडी",
+    "errorFetchingPayments": "भुगतान इतिहास प्राप्त करने में त्रुटि",
+    "currentSubscription": "वर्तमान सदस्यता",
+    "period": "बिलिंग अवधि",
+    "validUntil": "तक मान्य",
+    "switchToMonthly": "मासिक बिलिंग में बदलें",
+    "switchToYearly": "वार्षिक बिलिंग में बदलें",
+    "cancelSubscription": "सदस्यता रद्द करें"
   }
 }

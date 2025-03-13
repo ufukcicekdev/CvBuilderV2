@@ -329,42 +329,63 @@
     "description": "İhtiyaçlarınıza uygun planı seçin",
     "monthly": "Aylık",
     "yearly": "Yıllık",
-    "jobseeker": {
-      "title": "İş Arayan",
-      "price": {
-        "monthly": "2",
-        "yearly": "20"
-      },
-      "features": [
-        "Sınırsız CV oluşturma",
-        "Premium CV şablonları",
-        "CV indirme (PDF/Word)",
-        "İş ilanlarına başvuru",
-        "Profil öne çıkarma",
-        "7/24 destek"
-      ]
+    "free": {
+      "title": "Ücretsiz",
+      "description": "Başlangıç için temel özellikler"
     },
-    "employer": {
-      "title": "İşveren",
-      "price": {
-        "monthly": "20",
-        "yearly": "200"
-      },
-      "features": [
-        "Sınırsız iş ilanı",
-        "Aday filtreleme",
-        "CV veritabanı erişimi",
-        "Şirket profili",
-        "İstatistikler ve raporlar",
-        "Öncelikli destek"
-      ]
+    "premium": {
+      "title": "Premium Plan",
+      "description": "Profesyonel CV oluşturma için ihtiyacınız olan tüm özellikler"
     },
     "currency": "USD",
     "perMonth": "/ay",
     "perYear": "/yıl",
     "selectPlan": "Planı Seç",
     "currentPlan": "Mevcut Plan",
-    "saveYearly": "Yıllık ödemede %15 indirim"
+    "changePlan": "Planı Değiştir",
+    "saveYearly": "Yıllık ödemede %15 indirim",
+    "features": {
+      "feature.basicCvTemplates": "Temel CV şablonları",
+      "feature.limitedCvCount": "3 CV'ye kadar",
+      "feature.pdfDownload": "PDF olarak indir",
+      "feature.basicSupport": "Temel destek",
+      "feature.videoCV": "Video CV desteği",
+      "feature.aiAssistant": "AI Asistanı",
+      "feature.premiumTemplates": "Premium şablonlar",
+      "feature.prioritySupport": "Öncelikli destek",
+      "feature.unlimitedCvs": "Sınırsız CV"
+    },
+    "subscribe": "Abone Ol",
+    "upgradeNow": "Şimdi Yükselt",
+    "manageSubscription": "Aboneliği Yönet",
+    "cancelSubscription": "Aboneliği İptal Et",
+    "confirmCancel": "Aboneliğinizi iptal etmek istediğinizden emin misiniz?",
+    "paymentProcessing": "Ödeme işleniyor...",
+    "paymentSuccess": "Ödeme başarılı!",
+    "paymentError": "Ödeme başarısız oldu. Lütfen tekrar deneyin.",
+    "subscriptionSuccess": "Abonelik başarıyla oluşturuldu!",
+    "subscriptionError": "Abonelik oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
+    "errorFetchingPlans": "Abonelik planlarını yüklerken hata oluştu.",
+    "noSubscription": "Aktif Abonelik Yok",
+    "subscribePrompt": "Premium özelliklere erişmek için abone olun.",
+    "currentSubscription": "Mevcut Abonelik",
+    "period": "Fatura Dönemi",
+    "validUntil": "Geçerlilik Tarihi",
+    "confirmCancellation": "İptal İşlemini Onayla",
+    "cancelSuccess": "Aboneliğiniz başarıyla iptal edildi.",
+    "cancelError": "Abonelik iptal edilirken hata oluştu. Lütfen tekrar deneyin.",
+    "periodUpdateSuccess": "Fatura dönemi başarıyla güncellendi.",
+    "periodUpdateError": "Fatura dönemi güncellenirken hata oluştu.",
+    "switchToMonthly": "Aylık Ödemeye Geç",
+    "switchToYearly": "Yıllık Ödemeye Geç",
+    "resubscribe": "Yeniden Abone Ol",
+    "checkout": "Ödeme",
+    "checkoutDescription": "Siparişinizi gözden geçirin ve aboneliğinizi etkinleştirmek için ödemeyi tamamlayın.",
+    "orderSummary": "Sipariş Özeti",
+    "total": "Toplam",
+    "paymentDetails": "Ödeme Bilgileri",
+    "demoNotice": "Bu bir demo ödeme sayfasıdır. Gerçek bir uygulamada, burada ödeme bilgilerinizi girersiniz. Şimdilik, başarılı bir ödeme simülasyonu için aşağıdaki düğmeye tıklayabilirsiniz.",
+    "completePayment": "Ödemeyi Tamamla"
   },
   "toast": {
     "success": "Başarılı!",
@@ -633,5 +654,31 @@
     "registrationFailed": "Kayıt işlemi başarısız oldu. Lütfen tekrar deneyin",
     "pleaseFixErrors": "Lütfen aşağıdaki hataları düzeltin",
     "present": "Devam Ediyor"
+  },
+  "subscription": {
+    "status": "Durum",
+    "status.active": "Aktif",
+    "status.canceled": "İptal Edildi",
+    "status.expired": "Süresi Doldu",
+    "status.trial": "Deneme",
+    "status.pending": "Beklemede",
+    "paymentStatus": {
+      "success": "Başarılı",
+      "failed": "Başarısız",
+      "pending": "Beklemede"
+    },
+    "membership": "Üyelik",
+    "paymentHistory": "Ödeme Geçmişi",
+    "noPayments": "Ödeme kaydı bulunamadı",
+    "paymentDate": "Tarih",
+    "amount": "Tutar",
+    "paymentId": "Ödeme Kodu",
+    "errorFetchingPayments": "Ödeme geçmişi alınırken hata oluştu",
+    "currentSubscription": "Mevcut Abonelik",
+    "period": "Fatura Dönemi",
+    "validUntil": "Geçerlilik Tarihi",
+    "switchToMonthly": "Aylık Ödemeye Geç",
+    "switchToYearly": "Yıllık Ödemeye Geç",
+    "cancelSubscription": "Aboneliği İptal Et"
   }
-} 
+}

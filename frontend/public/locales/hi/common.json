@@ -351,7 +351,11 @@
     "perYear": "/年",
     "selectPlan": "选择计划",
     "currentPlan": "当前计划",
-    "saveYearly": "年度付款节省15%"
+    "saveYearly": "年度付款节省15%",
+    "premium": {
+      "title": "प्रीमियम प्लान",
+      "description": "पेशेवर सीवी बनाने के लिए आवश्यक सभी सुविधाएं"
+    }
   },
   "toast": {
     "success": "成功！",
@@ -588,5 +592,31 @@
     "present": "进行中",
     "skillsRequired": "请添加至少一项技能",
     "languagesRequired": "请添加至少一种语言"
+  },
+  "subscription": {
+    "status": "订阅状态",
+    "status.active": "活跃",
+    "status.canceled": "已取消",
+    "status.expired": "已过期",
+    "status.trial": "试用",
+    "status.pending": "待处理",
+    "paymentStatus": {
+      "success": "成功",
+      "failed": "失败",
+      "pending": "待处理"
+    },
+    "membership": "会员资格",
+    "paymentHistory": "付款历史",
+    "noPayments": "未找到付款记录",
+    "paymentDate": "日期",
+    "amount": "金额",
+    "paymentId": "付款ID",
+    "errorFetchingPayments": "获取付款历史时出错",
+    "currentSubscription": "当前订阅",
+    "period": "计费周期",
+    "validUntil": "有效期至",
+    "switchToMonthly": "切换至月付",
+    "switchToYearly": "切换至年付",
+    "cancelSubscription": "取消订阅"
   }
 }

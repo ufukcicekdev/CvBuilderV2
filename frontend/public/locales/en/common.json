@@ -197,7 +197,8 @@
       "networkError": "Network connection error",
       "validationError": "Please check the form information"
     },
-    "uploadSuccess": "File uploaded successfully"
+    "uploadSuccess": "File uploaded successfully",
+    "confirm": "Confirm"
   },
   "home": {
     "hero": {
@@ -329,42 +330,63 @@
     "description": "Choose the plan that suits your needs",
     "monthly": "Monthly",
     "yearly": "Yearly",
-    "jobseeker": {
-      "title": "Job Seeker",
-      "price": {
-        "monthly": "2",
-        "yearly": "20"
-      },
-      "features": [
-        "Unlimited CV creation",
-        "Premium CV templates",
-        "CV download (PDF/Word)",
-        "Apply to job postings",
-        "Profile highlighting",
-        "24/7 support"
-      ]
+    "free": {
+      "title": "Free",
+      "description": "Basic features for getting started"
     },
-    "employer": {
-      "title": "Employer",
-      "price": {
-        "monthly": "20",
-        "yearly": "200"
-      },
-      "features": [
-        "Unlimited job postings",
-        "Candidate filtering",
-        "CV database access",
-        "Company profile",
-        "Statistics and reports",
-        "Priority support"
-      ]
+    "premium": {
+      "title": "Premium Plan",
+      "description": "All the features you need for professional CV creation"
     },
     "currency": "USD",
     "perMonth": "/month",
     "perYear": "/year",
     "selectPlan": "Select Plan",
     "currentPlan": "Current Plan",
-    "saveYearly": "Save 15% with yearly payment"
+    "changePlan": "Change Plan",
+    "saveYearly": "Save 15% with yearly payment",
+    "features": {
+      "feature.basicCvTemplates": "Basic CV templates",
+      "feature.limitedCvCount": "Up to 3 CVs",
+      "feature.pdfDownload": "Download as PDF",
+      "feature.basicSupport": "Basic support",
+      "feature.videoCV": "Video CV support",
+      "feature.aiAssistant": "AI Assistant",
+      "feature.premiumTemplates": "Premium templates",
+      "feature.prioritySupport": "Priority support",
+      "feature.unlimitedCvs": "Unlimited CVs"
+    },
+    "subscribe": "Subscribe",
+    "upgradeNow": "Upgrade Now",
+    "manageSubscription": "Manage Subscription",
+    "cancelSubscription": "Cancel Subscription",
+    "confirmCancel": "Are you sure you want to cancel your subscription?",
+    "paymentProcessing": "Processing payment...",
+    "paymentSuccess": "Payment successful!",
+    "paymentError": "Payment failed. Please try again.",
+    "subscriptionSuccess": "Subscription created successfully!",
+    "subscriptionError": "Error creating subscription. Please try again.",
+    "errorFetchingPlans": "Error loading subscription plans.",
+    "noSubscription": "No Active Subscription",
+    "subscribePrompt": "Subscribe to access premium features.",
+    "currentSubscription": "Current Subscription",
+    "period": "Billing Period",
+    "validUntil": "Valid Until",
+    "confirmCancellation": "Confirm Cancellation",
+    "cancelSuccess": "Your subscription has been cancelled successfully.",
+    "cancelError": "Error cancelling subscription. Please try again.",
+    "periodUpdateSuccess": "Billing period updated successfully.",
+    "periodUpdateError": "Failed to update billing period.",
+    "switchToMonthly": "Switch to Monthly Billing",
+    "switchToYearly": "Switch to Yearly Billing",
+    "resubscribe": "Resubscribe",
+    "checkout": "Checkout",
+    "checkoutDescription": "Please review your order and complete the payment to activate your subscription.",
+    "orderSummary": "Order Summary",
+    "total": "Total",
+    "paymentDetails": "Payment Details",
+    "demoNotice": "This is a demo checkout page. In a real implementation, you would enter your payment information here. For now, you can just click the button below to simulate a successful payment.",
+    "completePayment": "Complete Payment"
   },
   "toast": {
     "success": "Success!",
@@ -619,5 +641,31 @@
     "registrationFailed": "Registration failed. Please try again",
     "pleaseFixErrors": "Please fix the following errors",
     "present": "Present"
+  },
+  "subscription": {
+    "status": "Status",
+    "status.active": "Active",
+    "status.canceled": "Cancelled",
+    "status.expired": "Expired",
+    "status.trial": "Trial",
+    "status.pending": "Pending",
+    "paymentStatus": {
+      "success": "Successful",
+      "failed": "Failed",
+      "pending": "Pending"
+    },
+    "membership": "Membership",
+    "paymentHistory": "Payment History",
+    "noPayments": "No payment records found",
+    "paymentDate": "Date",
+    "amount": "Amount",
+    "paymentId": "Payment ID",
+    "errorFetchingPayments": "Error fetching payment history",
+    "currentSubscription": "Current Subscription",
+    "period": "Billing Period",
+    "validUntil": "Valid Until",
+    "switchToMonthly": "Switch to Monthly Billing",
+    "switchToYearly": "Switch to Yearly Billing",
+    "cancelSubscription": "Cancel Subscription"
   }
 }
