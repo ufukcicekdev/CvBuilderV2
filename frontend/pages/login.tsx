@@ -29,7 +29,7 @@ import axiosInstance from '../services/axios';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
 import { handleApiError } from '../utils/handleApiError';
-import { resendVerificationEmail } from '@/services/api';
+import { resendVerificationEmail, authAPI } from '@/services/api';
 import SEO from '../components/SEO';
 
 interface LoginFormData {
@@ -134,27 +134,12 @@ export default function LoginPage() {
         return;
       }
       
-      // Doğrudan backend URL'sine istek gönder
-      console.log('Sending request to backend with Google credential');
-      const response = await fetch('https://web-production-9f41e.up.railway.app/api/auth/google/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: credentialResponse.credential,
-        }),
-        credentials: 'include', // CORS için önemli
+      // Use authAPI instead of direct fetch
+      const response = await authAPI.googleAuth({
+        token: credentialResponse.credential
       });
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-        toast.error(`${t('auth.errors.googleLoginFailed')}: ${response.status}`);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
+      const data = response.data;
       console.log('Backend response:', data);
       
       if (!data.access || !data.refresh || !data.user) {
@@ -184,20 +169,25 @@ export default function LoginPage() {
               : '/dashboard';
           
           console.log('Redirecting to:', redirectUrl);
-          window.location.href = redirectUrl;
+          router.push(redirectUrl);
         }, 500);
-      } catch (redirectError) {
-        console.error('Login with tokens error:', redirectError);
-        // Yönlendirme hatası durumunda alternatif yöntem dene
-        toast.error(t('auth.errors.redirectFailed'));
-        window.location.href = '/dashboard';
+      } catch (error) {
+        console.error('Login with tokens error:', error);
+        if (error instanceof Error) {
+          toast.error(`${t('auth.errors.googleLoginFailed')}: ${error.message}`);
+        } else {
+          toast.error(t('auth.errors.googleLoginFailed'));
+        }
       }
     } catch (error: unknown) {
       console.error('Google login error:', error);
       
-      // Hata tipine göre özel mesajlar
       if (error instanceof Error) {
-        toast.error(`${t('auth.errors.googleLoginFailed')}: ${error.message}`);
+        if (error.message.includes('Failed to fetch')) {
+          toast.error(t('auth.errors.networkError'));
+        } else {
+          toast.error(`${t('auth.errors.googleLoginFailed')}: ${error.message}`);
+        }
       } else {
         toast.error(t('auth.errors.googleLoginFailed'));
       }

@@ -221,7 +221,7 @@ export const authAPI = {
   },
   
   googleAuth: (data: { token: string }) => {
-    return api.post('/api/auth/google', data);
+    return api.post('/api/auth/google/', data);
   },
   
   linkedinAuth: (data: { code: string }) => {
