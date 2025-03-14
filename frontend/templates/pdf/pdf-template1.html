@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-{% load cv_filters %}
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>CV</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -60,16 +60,6 @@
             page-break-after: always;
         }
         
-        .debug-info {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px 0;
-            font-family: monospace;
-            font-size: 12px;
-            white-space: pre-wrap;
-        }
-        
         /* Add right-to-left support for Arabic */
         {% if lang == 'ar' %}
         body {
@@ -80,19 +70,6 @@
     </style>
 </head>
 <body>
-    <!-- Debug Info -->
-    <div class="debug-info">
-        <h3>Debug Information</h3>
-        <p>Language: {{ lang }}</p>
-        <p>Personal Info Available: {{ personal_info|default:"None" }}</p>
-        <p>Experience Count: {{ experience|length }}</p>
-        <p>Education Count: {{ education|length }}</p>
-        <p>Skills Count: {{ skills|length }}</p>
-        <p>Languages Count: {{ languages|length }}</p>
-        <p>Certificates Count: {{ certificates|length }}</p>
-        <p>Translations Available: {{ translations|default:"None" }}</p>
-    </div>
-
     <div class="header">
         <h1>{% if personal_info.first_name %}{{ personal_info.first_name }}{% endif %} {% if personal_info.last_name %}{{ personal_info.last_name }}{% endif %}</h1>
         <div class="contact-info">

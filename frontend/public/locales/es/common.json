@@ -567,13 +567,25 @@
       "webVersion": "Versión Web",
       "pdfVersion": "Versión PDF",
       "templates": {
-        "modernWeb": {
+        "web-template1": {
           "name": "Plantilla Web Moderna",
           "description": "Diseño web moderno e interactivo"
         },
-        "classicWeb": {
+        "web-template2": {
           "name": "Plantilla Web Clásica",
           "description": "Diseño web clásico y profesional"
+        },
+        "web-template3": {
+          "name": "Plantilla Colorida",
+          "description": "Diseño vibrante y moderno con acentos coloridos"
+        },
+        "web-template4": {
+          "name": "Plantilla Profesional",
+          "description": "Diseño limpio y profesional para perfiles corporativos"
+        },
+        "web-template5": {
+          "name": "Plantilla Creativa",
+          "description": "Diseño único y creativo para perfiles artísticos"
         },
         "modernPdf": {
           "name": "Plantilla PDF Moderna",

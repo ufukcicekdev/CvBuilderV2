@@ -4,6 +4,9 @@ import axiosInstance from '@/utils/axios';
 import { CV } from '@/types/cv';
 import ModernTemplate from '@/templates/web/ModernTemplate';
 import MinimalTemplate from '@/templates/web/MinimalTemplate';
+import ColorfulTemplate from '@/templates/web/ColorfulTemplate';
+import ProfessionalTemplate from '@/templates/web/ProfessionalTemplate';
+import CreativeTemplate from '@/templates/web/CreativeTemplate';
 import { Box, CircularProgress } from '@mui/material';
 
 const CVPage = () => {
@@ -54,6 +57,12 @@ const CVPage = () => {
       return <ModernTemplate cv={cv} />;
     case 'web-template2':
       return <MinimalTemplate cv={cv} />;
+    case 'web-template3':
+      return <ColorfulTemplate cv={cv} />;
+    case 'web-template4':
+      return <ProfessionalTemplate cv={cv} />;
+    case 'web-template5':
+      return <CreativeTemplate cv={cv} />;
     default:
       return <ModernTemplate cv={cv} />;
   }

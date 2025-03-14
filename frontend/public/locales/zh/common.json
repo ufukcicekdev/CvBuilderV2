@@ -568,13 +568,25 @@
       "webVersion": "网页版",
       "pdfVersion": "PDF版",
       "templates": {
-        "modernWeb": {
+        "web-template1": {
           "name": "现代网页模板",
           "description": "现代和交互式网页设计"
         },
-        "classicWeb": {
+        "web-template2": {
           "name": "经典网页模板",
           "description": "经典和专业的网页设计"
+        },
+        "web-template3": {
+          "name": "多彩模板",
+          "description": "充满活力的现代模板，带有多彩的元素"
+        },
+        "web-template4": {
+          "name": "专业模板",
+          "description": "适合企业形象的简洁专业模板"
+        },
+        "web-template5": {
+          "name": "创意模板",
+          "description": "适合艺术类简历的独特创意设计"
         },
         "modernPdf": {
           "name": "现代PDF模板",

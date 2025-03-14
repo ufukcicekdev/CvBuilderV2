@@ -1,42 +1,65 @@
 <!DOCTYPE html>
-{% load cv_filters %}
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>CV</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.5;
+            color: #222;
             margin: 0;
-            padding: 20px;
+            padding: 25px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #2196f3;
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
 
         .section {
-            margin: 20px 0;
+            margin: 25px 0;
         }
 
         .section-title {
-            color: #2196f3;
-            border-bottom: 1px solid #eee;
+            color: #333;
+            border-bottom: 1px solid #999;
             padding-bottom: 5px;
             margin-bottom: 15px;
+            font-variant: small-caps;
+            letter-spacing: 1px;
         }
 
         .experience-item, .education-item {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .experience-item h3, .education-item h3 {
+            margin-bottom: 5px;
+        }
+
+        .skill-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .skill-name {
+            font-weight: bold;
         }
 
         .skill-level {
             width: 100px;
-            height: 10px;
+            height: 8px;
             background: #eee;
             display: inline-block;
             margin-left: 10px;
@@ -44,11 +67,11 @@
 
         .skill-fill {
             height: 100%;
-            background: #2196f3;
+            background: #555;
         }
 
         .certificate-item {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .contact-info {
@@ -58,16 +81,6 @@
 
         .page-break {
             page-break-after: always;
-        }
-        
-        .debug-info {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px 0;
-            font-family: monospace;
-            font-size: 12px;
-            white-space: pre-wrap;
         }
         
         /* Add right-to-left support for Arabic */
@@ -80,19 +93,6 @@
     </style>
 </head>
 <body>
-    <!-- Debug Info -->
-    <div class="debug-info">
-        <h3>Debug Information</h3>
-        <p>Language: {{ lang }}</p>
-        <p>Personal Info Available: {{ personal_info|default:"None" }}</p>
-        <p>Experience Count: {{ experience|length }}</p>
-        <p>Education Count: {{ education|length }}</p>
-        <p>Skills Count: {{ skills|length }}</p>
-        <p>Languages Count: {{ languages|length }}</p>
-        <p>Certificates Count: {{ certificates|length }}</p>
-        <p>Translations Available: {{ translations|default:"None" }}</p>
-    </div>
-
     <div class="header">
         <h1>{% if personal_info.first_name %}{{ personal_info.first_name }}{% endif %} {% if personal_info.last_name %}{{ personal_info.last_name }}{% endif %}</h1>
         <div class="contact-info">
@@ -115,7 +115,7 @@
         <div class="experience-item">
             {% if exp.position %}<h3>{{ exp.position }}</h3>{% endif %}
             <div>{% if exp.company %}{{ exp.company }}{% endif %}{% if exp.location %} • {{ exp.location }}{% endif %}</div>
-            <div>{% if exp.start_date %}{{ exp.start_date }}{% endif %} - {% if exp.is_current %}{{ translations.present }}{% elif exp.end_date %}{{ exp.end_date }}{% endif %}</div>
+            <div><i>{% if exp.start_date %}{{ exp.start_date }}{% endif %} - {% if exp.is_current %}{{ translations.present }}{% elif exp.end_date %}{{ exp.end_date }}{% endif %}</i></div>
             {% if exp.description %}<p>{{ exp.description }}</p>{% endif %}
         </div>
         {% endfor %}
@@ -129,7 +129,7 @@
         <div class="education-item">
             {% if edu.degree %}<h3>{{ edu.degree }}</h3>{% endif %}
             <div>{% if edu.school %}{{ edu.school }}{% endif %}{% if edu.location %} • {{ edu.location }}{% endif %}</div>
-            <div>{% if edu.start_date %}{{ edu.start_date }}{% endif %} - {% if edu.is_current %}{{ translations.present }}{% elif edu.end_date %}{{ edu.end_date }}{% endif %}</div>
+            <div><i>{% if edu.start_date %}{{ edu.start_date }}{% endif %} - {% if edu.is_current %}{{ translations.present }}{% elif edu.end_date %}{{ edu.end_date }}{% endif %}</i></div>
             {% if edu.description %}<p>{{ edu.description }}</p>{% endif %}
         </div>
         {% endfor %}
@@ -140,15 +140,24 @@
     <div class="section">
         <h2 class="section-title">{{ translations.skills }}</h2>
         {% for skill in skills %}
-        <div>
-            <span>{% if skill.name %}{{ skill.name }}{% endif %} {% if skill.level %}({{ skill.level }}/5 {{ translations.skill_level }}){% endif %}</span>
-            <div class="skill-level">
-                <div class="skill-fill" style="width: {{ skill.level|default:'3'|floatformat:'0'|add:'0'|multiply:20 }}%"></div>
-            </div>
-            {% if skill.description %}
-            <p>{{ skill.description }}</p>
-            {% endif %}
+        <div class="skill-row">
+            <span class="skill-name">{% if skill.name %}{{ skill.name }}{% endif %}</span>
+            <span>
+                {% if skill.level %}
+                <span class="skill-rating">
+                    {% with ''|center:skill.level as range %}
+                    {% for _ in range %}★{% endfor %}
+                    {% endwith %}
+                    {% with ''|center:5|slice:skill.level as range2 %}
+                    {% for _ in range2 %}☆{% endfor %}
+                    {% endwith %}
+                </span>
+                {% endif %}
+            </span>
         </div>
+        {% if skill.description %}
+        <p>{{ skill.description }}</p>
+        {% endif %}
         {% endfor %}
     </div>
     {% endif %}
@@ -157,11 +166,20 @@
     <div class="section">
         <h2 class="section-title">{{ translations.languages }}</h2>
         {% for lang_item in languages %}
-        <div>
-            <span>{% if lang_item.name %}{{ lang_item.name }}{% endif %} {% if lang_item.level %}({{ lang_item.level }}/5 {{ translations.skill_level }}){% endif %}</span>
-            <div class="skill-level">
-                <div class="skill-fill" style="width: {{ lang_item.level|default:'3'|floatformat:'0'|add:'0'|multiply:20 }}%"></div>
-            </div>
+        <div class="skill-row">
+            <span class="skill-name">{% if lang_item.name %}{{ lang_item.name }}{% endif %}</span>
+            <span>
+                {% if lang_item.level %}
+                <span class="skill-rating">
+                    {% with ''|center:lang_item.level as range %}
+                    {% for _ in range %}★{% endfor %}
+                    {% endwith %}
+                    {% with ''|center:5|slice:lang_item.level as range2 %}
+                    {% for _ in range2 %}☆{% endfor %}
+                    {% endwith %}
+                </span>
+                {% endif %}
+            </span>
         </div>
         {% endfor %}
     </div>
@@ -173,7 +191,7 @@
         {% for cert in certificates %}
         <div class="certificate-item">
             {% if cert.name %}<h4>{{ cert.name }}</h4>{% endif %}
-            <div>{% if cert.issuer %}{{ cert.issuer }}{% endif %}{% if cert.date %} - {{ cert.date }}{% endif %}</div>
+            <div>{% if cert.issuer %}{{ cert.issuer }}{% endif %}{% if cert.date %} - <i>{{ cert.date }}</i>{% endif %}</div>
             {% if cert.description %}
             <p>{{ cert.description }}</p>
             {% endif %}

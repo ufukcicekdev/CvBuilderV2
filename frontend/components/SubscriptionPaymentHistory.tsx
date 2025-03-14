@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -30,11 +30,7 @@ const SubscriptionPaymentHistory: React.FC<SubscriptionPaymentHistoryProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchPaymentHistory();
-  }, []);
-
-  const fetchPaymentHistory = async () => {
+  const fetchPaymentHistory = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -46,7 +42,11 @@ const SubscriptionPaymentHistory: React.FC<SubscriptionPaymentHistoryProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    fetchPaymentHistory();
+  }, [fetchPaymentHistory]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

@@ -567,13 +567,25 @@
       "webVersion": "نسخة الويب",
       "pdfVersion": "نسخة PDF",
       "templates": {
-        "modernWeb": {
+        "web-template1": {
           "name": "قالب ويب حديث",
           "description": "تصميم ويب حديث وتفاعلي"
         },
-        "classicWeb": {
+        "web-template2": {
           "name": "قالب ويب كلاسيكي",
           "description": "تصميم ويب كلاسيكي واحترافي"
+        },
+        "web-template3": {
+          "name": "قالب ملون",
+          "description": "تصميم نابض بالحياة وحديث مع لمسات ملونة"
+        },
+        "web-template4": {
+          "name": "قالب احترافي",
+          "description": "تصميم نظيف واحترافي للملفات الشخصية المهنية"
+        },
+        "web-template5": {
+          "name": "قالب إبداعي",
+          "description": "تصميم فريد وإبداعي للملفات الشخصية الفنية"
         },
         "modernPdf": {
           "name": "قالب PDF حديث",

@@ -580,33 +580,38 @@
     },
     "progress": "İlerleme",
     "template": {
-      "selectTitle": "CV Şablonu Seçin",
+      "selectTitle": "Şablon Seçin",
+      "selectTemplate": "Bir şablon seçin",
+      "selectLanguage": "PDF Dili Seçin",
       "selectRequired": "Lütfen bir şablon seçin",
-      "preview": "Önizle",
-      "generateWeb": "Web CV Oluştur",
-      "generatePDF": "PDF İndir",
-      "generating": "Oluşturuluyor...",
-      "generateSuccess": "CV başarıyla oluşturuldu",
-      "generateError": "CV oluşturulurken bir hata oluştu",
-      "language": "Dil",
-      "changeLanguage": "Dili Değiştir",
-      "downloadPDF": "PDF İndir",
-      "viewImage": "Görüntüyü Görüntüle",
-      "close": "Kapat",
-      "loading": "Yükleniyor...",
-      "error": "Çeviri yüklenirken hata oluştu. Lütfen tekrar deneyin.",
-      "viewCertificate": "Sertifikayı Görüntüle",
-      "location": "Konum",
+      "generateButton": "Oluştur",
       "webVersion": "Web Versiyonu",
       "pdfVersion": "PDF Versiyonu",
+      "generatePDF": "PDF İndir",
+      "generateWeb": "Web CV Oluştur",
+      "downloadPDF": "PDF İndir",
+      "copyURL": "URL'yi Kopyala",
+      "urlCopied": "URL panoya kopyalandı!",
       "templates": {
-        "modernWeb": {
+        "web-template1": {
           "name": "Modern Web Şablonu",
           "description": "Modern ve interaktif web tasarımı"
         },
-        "classicWeb": {
+        "web-template2": {
           "name": "Klasik Web Şablonu",
           "description": "Klasik ve profesyonel web tasarımı"
+        },
+        "web-template3": {
+          "name": "Renkli Şablon",
+          "description": "Canlı ve modern renkli tasarım"
+        },
+        "web-template4": {
+          "name": "Profesyonel Şablon",
+          "description": "Kurumsal profiller için temiz ve profesyonel bir tasarım"
+        },
+        "web-template5": {
+          "name": "Yaratıcı Şablon",
+          "description": "Sanatsal profiller için benzersiz ve yaratıcı bir tasarım"
         },
         "modernPdf": {
           "name": "Modern PDF Şablonu",

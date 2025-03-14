@@ -46,6 +46,7 @@ interface CertificateData {
   description?: string;
   document?: File;
   documentUrl?: string;
+  document_url?: string;
   document_type?: string;
   credentialId?: string;
 }
@@ -71,7 +72,8 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
     reset,
     formState: { errors },
     setValue,
-    watch
+    watch,
+    getValues
   } = useForm<CertificatesFormData>({
     defaultValues: {
       certificates: []
@@ -106,19 +108,32 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
         
         // Upload the file
         const response = await cvAPI.uploadCertificate(Number(cvId), formData);
+        console.log('Backend cevabı:', response.data);
         
         // Store the document URL and update form data
         if (response.data.certificates?.length > 0) {
           const latestCertificate = response.data.certificates[response.data.certificates.length - 1];
-          const documentUrl = latestCertificate.document_url;
+          // Her iki olası URL değişkenini de kontrol et
+          const documentUrl = latestCertificate.documentUrl || latestCertificate.document_url || '';
+          
+          if (!documentUrl) {
+            console.error('Belge URL bulunamadı:', latestCertificate);
+            showToast.error(t('cv.certificates.uploadError'));
+            return;
+          }
+          
+          console.log('Yüklenen belge bilgileri:', latestCertificate);
           
           // Update form values for the current index
           setValue(`certificates.${index}.documentUrl`, documentUrl);
+          setValue(`certificates.${index}.document_url`, documentUrl);
           setValue(`certificates.${index}.document_type`, latestCertificate.document_type);
           
           // Show preview immediately after upload
           setPreviewUrl(documentUrl);
           setOpenPreview(true);
+          
+          console.log('Dosya yüklendi, URL:', documentUrl);
         }
         showToast.success(t('cv.certificates.uploadSuccess'));
       } catch (error) {
@@ -132,9 +147,48 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
 
   const handlePreview = (index: number) => {
     const certificate = watch(`certificates.${index}`);
+    console.log('Preview için sertifika verisi:', certificate);
+    
+    // Typescript'in objeden değer almak için any kullanıyoruz
+    const anyObj = certificate as any;
+    let url = '';
+    
     if (certificate.documentUrl) {
-      setPreviewUrl(certificate.documentUrl);
+      url = certificate.documentUrl;
+    } else if (anyObj.document_url) {
+      // Farklı format olabilir
+      url = anyObj.document_url;
+    }
+    
+    // Veriyi backend'den orijinal formatta da kontrol edelim
+    if (!url && fields[index]) {
+      const rawCertificate = fields[index] as any;
+      if (rawCertificate.documentUrl) {
+        url = rawCertificate.documentUrl;
+      } else if (rawCertificate.document_url) {
+        url = rawCertificate.document_url;
+      }
+    }
+    
+    // Veritabanından form state'ine yüklenen veriyi de kontrol edelim
+    if (!url) {
+      // getValues tüm formu veya belirli bir alanı alabilir
+      const allFormValues = getValues();
+      const allCertificates = allFormValues.certificates || [];
+      if (allCertificates[index]) {
+        const cert = allCertificates[index];
+        if (cert.documentUrl) url = cert.documentUrl;
+        if (cert.document_url) url = cert.document_url;
+      }
+    }
+    
+    if (url) {
+      console.log('Açılacak URL:', url);
+      setPreviewUrl(url);
       setOpenPreview(true);
+    } else {
+      console.log('Döküman URL bulunamadı');
+      showToast.error(t('common.errors.unknown'));
     }
   };
 
@@ -147,18 +201,27 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
       try {
         const response = await cvAPI.getOne(Number(cvId));
         if (response.data.certificates && response.data.certificates.length > 0) {
-          const formattedCertificates = response.data.certificates.map(cert => ({
-            id: cert.id,
-            name: cert.name,
-            issuer: cert.issuer,
-            date: cert.date,
-            description: cert.description || '',
-            documentUrl: cert.document_url || '',
-            document_type: cert.document_type || '',
-            credentialId: cert.credentialId || ''
-          }));
+          console.log('Backend\'den gelen sertifikalar:', response.data.certificates);
+          
+          const formattedCertificates = response.data.certificates.map(cert => {
+            // URL'i almak için her iki property'yi de kontrol et
+            const docUrl = cert.documentUrl || cert.document_url || '';
+            
+            return {
+              id: cert.id,
+              name: cert.name,
+              issuer: cert.issuer,
+              date: cert.date,
+              description: cert.description || '',
+              documentUrl: docUrl,
+              document_url: docUrl,
+              document_type: cert.document_type || '',
+              credentialId: cert.credentialId || ''
+            };
+          });
           
           reset({ certificates: formattedCertificates });
+          console.log('Formatlanmış sertifikalar:', formattedCertificates);
         }
         // İlk yükleme tamamlandı olarak işaretliyoruz
         initialLoadDone.current = true;
@@ -374,22 +437,28 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
                         />
                       </Button>
                       
-                      {watch(`certificates.${index}.documentUrl`) && (
-                        <Tooltip title={t('cv.template.viewCertificate')}>
+                      <Tooltip title={t('cv.template.viewCertificate')}>
+                        <span>
                           <IconButton 
                             color="primary" 
                             onClick={() => handlePreview(index)}
+                            sx={{ 
+                              ml: 1, 
+                              border: '1px solid #1976d2',
+                              '&:hover': {
+                                backgroundColor: 'rgba(25, 118, 210, 0.04)',
+                              }
+                            }}
                           >
-                            <VisibilityIcon />
+                            <VisibilityIcon 
+                              sx={{ 
+                                color: watch(`certificates.${index}.documentUrl`) ? '#1976d2' : '#bdbdbd'
+                              }} 
+                            />
                           </IconButton>
-                        </Tooltip>
-                      )}
+                        </span>
+                      </Tooltip>
                       
-                      {watch(`certificates.${index}.documentUrl`) && (
-                        <Typography variant="body2" color="text.secondary">
-                          {t('common.uploadSuccess')}
-                        </Typography>
-                      )}
                     </Box>
                   </Grid>
                 </Grid>

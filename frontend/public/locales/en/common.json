@@ -566,41 +566,48 @@
     },
     "progress": "Progress",
     "template": {
-      "selectTitle": "Select CV Template",
+      "selectTitle": "Select Template",
+      "selectTemplate": "Select a template",
+      "selectLanguage": "Select PDF Language",
       "selectRequired": "Please select a template",
-      "preview": "Preview",
-      "generateWeb": "Generate Web CV",
-      "generatePDF": "Download PDF",
-      "generating": "Generating...",
-      "generateSuccess": "CV generated successfully",
-      "generateError": "An error occurred while generating the CV",
-      "language": "Language",
-      "changeLanguage": "Change Language",
-      "downloadPDF": "Download PDF",
-      "viewImage": "View Image",
-      "close": "Close",
-      "loading": "Loading...",
-      "error": "An error occurred while loading the translation. Please try again.",
-      "viewCertificate": "View Certificate",
-      "location": "Location",
+      "generateButton": "Generate",
       "webVersion": "Web Version",
       "pdfVersion": "PDF Version",
+      "generatePDF": "Generate PDF",
+      "generateWeb": "Generate Web CV",
+      "downloadPDF": "Download PDF",
+      "copyURL": "Copy URL",
+      "urlCopied": "URL copied to clipboard!",
+      "close": "Close",
+      "preview": "Preview",
       "templates": {
-        "modernWeb": {
-          "name": "Modern Web Template",
-          "description": "Modern and interactive web design"
+        "web-template1": {
+          "name": "Modern Template",
+          "description": "A modern and interactive web design"
         },
-        "classicWeb": {
-          "name": "Classic Web Template",
-          "description": "Classic and professional web design"
+        "web-template2": {
+          "name": "Minimal Template",
+          "description": "A clean and elegant web design"
+        },
+        "web-template3": {
+          "name": "Colorful Template",
+          "description": "A vibrant and modern template with colorful accents"
+        },
+        "web-template4": {
+          "name": "Professional Template",
+          "description": "A clean and professional template for corporate profiles"
+        },
+        "web-template5": {
+          "name": "Creative Template",
+          "description": "A unique and creative template for artistic profiles"
         },
         "modernPdf": {
-          "name": "Modern PDF Template",
-          "description": "Modern and professional PDF design"
+          "name": "Modern PDF",
+          "description": "A modern design for PDF format"
         },
         "classicPdf": {
-          "name": "Classic PDF Template",
-          "description": "Classic and elegant PDF design"
+          "name": "Classic PDF",
+          "description": "A traditional design for PDF format"
         }
       }
     },
@@ -616,6 +623,28 @@
     "errors": {
       "skillsRequired": "Please add at least one skill",
       "languagesRequired": "Please add at least one language"
+    },
+    "templates": {
+      "modern": {
+        "name": "Modern Template",
+        "description": "A modern and interactive web design"
+      },
+      "minimal": {
+        "name": "Minimal Template",
+        "description": "A clean and elegant web design"
+      },
+      "colorful": {
+        "name": "Colorful Template",
+        "description": "A vibrant and modern template with colorful accents"
+      },
+      "professional": {
+        "name": "Professional Template",
+        "description": "A clean and professional template for corporate profiles"
+      },
+      "creative": {
+        "name": "Creative Template",
+        "description": "A unique and creative template for artistic profiles"
+      }
     }
   },
   "validation": {

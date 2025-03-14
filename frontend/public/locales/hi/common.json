@@ -539,13 +539,25 @@
       "webVersion": "网页版",
       "pdfVersion": "PDF版",
       "templates": {
-        "modernWeb": {
-          "name": "现代网页模板",
-          "description": "现代和互动的网页设计"
+        "web-template1": {
+          "name": "आधुनिक वेब टेम्पलेट",
+          "description": "आधुनिक और इंटरैक्टिव वेब डिज़ाइन"
         },
-        "classicWeb": {
-          "name": "经典网页模板",
-          "description": "经典和专业的网页设计"
+        "web-template2": {
+          "name": "क्लासिक वेब टेम्पलेट",
+          "description": "क्लासिक और पेशेवर वेब डिज़ाइन"
+        },
+        "web-template3": {
+          "name": "रंगीन टेम्पलेट",
+          "description": "रंगीन तत्वों के साथ जीवंत और आधुनिक टेम्पलेट"
+        },
+        "web-template4": {
+          "name": "पेशेवर टेम्पलेट",
+          "description": "कॉर्पोरेट प्रोफाइल के लिए साफ और पेशेवर टेम्पलेट"
+        },
+        "web-template5": {
+          "name": "रचनात्मक टेम्पलेट",
+          "description": "कलात्मक प्रोफाइल के लिए अद्वितीय और रचनात्मक डिज़ाइन"
         },
         "modernPdf": {
           "name": "现代PDF模板",
