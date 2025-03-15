@@ -580,48 +580,70 @@
     },
     "progress": "İlerleme",
     "template": {
-      "selectTitle": "Şablon Seçin",
-      "selectTemplate": "Bir şablon seçin",
-      "selectLanguage": "PDF Dili Seçin",
-      "selectRequired": "Lütfen bir şablon seçin",
-      "generateButton": "Oluştur",
+      "selectTitle": "CV Şablonu Seçin",
       "webVersion": "Web Versiyonu",
       "pdfVersion": "PDF Versiyonu",
-      "generatePDF": "PDF İndir",
+      "preview": "Önizleme",
       "generateWeb": "Web CV Oluştur",
-      "downloadPDF": "PDF İndir",
-      "copyURL": "URL'yi Kopyala",
-      "urlCopied": "URL panoya kopyalandı!",
+      "generatePDF": "PDF CV Oluştur",
+      "pdfButton": "PDF CV Oluştur",
       "templates": {
-        "web-template1": {
+        "modernWeb": {
           "name": "Modern Web Şablonu",
-          "description": "Modern ve interaktif web tasarımı"
+          "description": "Modern düzenle temiz ve profesyonel tasarım"
         },
-        "web-template2": {
-          "name": "Klasik Web Şablonu",
-          "description": "Klasik ve profesyonel web tasarımı"
+        "minimalWeb": {
+          "name": "Minimal Web Şablonu",
+          "description": "İçeriğe odaklanan sade ve zarif tasarım"
         },
-        "web-template3": {
-          "name": "Renkli Şablon",
-          "description": "Canlı ve modern renkli tasarım"
+        "colorfulWeb": {
+          "name": "Renkli Web Şablonu",
+          "description": "Renkli vurgularla canlı ve dikkat çekici tasarım"
         },
-        "web-template4": {
-          "name": "Profesyonel Şablon",
-          "description": "Kurumsal profiller için temiz ve profesyonel bir tasarım"
+        "professionalWeb": {
+          "name": "Profesyonel Web Şablonu",
+          "description": "Yapılandırılmış düzenle kurumsal stil"
         },
-        "web-template5": {
-          "name": "Yaratıcı Şablon",
-          "description": "Sanatsal profiller için benzersiz ve yaratıcı bir tasarım"
+        "creativeWeb": {
+          "name": "Yaratıcı Web Şablonu",
+          "description": "Yaratıcı profesyoneller için özgün tasarım"
         },
         "modernPdf": {
           "name": "Modern PDF Şablonu",
-          "description": "Modern ve profesyonel PDF tasarımı"
+          "description": "Temiz tipografiyle çağdaş tasarım"
         },
         "classicPdf": {
           "name": "Klasik PDF Şablonu",
-          "description": "Klasik ve şık PDF tasarımı"
+          "description": "Zamansız çekiciliğe sahip geleneksel özgeçmiş düzeni"
+        },
+        "minimalPdf": {
+          "name": "Minimal PDF Şablonu",
+          "description": "Temiz ve minimalist tasarım"
+        },
+        "creativePdf": {
+          "name": "Yaratıcı PDF Şablonu",
+          "description": "Öne çıkmak için cesur tasarım"
+        },
+        "professionalPdf": {
+          "name": "Profesyonel PDF Şablonu",
+          "description": "Modern öğelerle iş odaklı düzen"
         }
       }
+    },
+    "preview": {
+      "templatePreview": "Şablon Önizleme",
+      "ready": "CV'niz Hazır!",
+      "createSuccess": "CV'niz başarıyla oluşturuldu. Aşağıdaki linki paylaşarak CV'nizi paylaşabilirsiniz.",
+      "close": "Kapat",
+      "openCv": "CV'yi Aç",
+      "urlCopied": "URL panoya kopyalandı!",
+      "loadError": "CV verisi yüklenemedi",
+      "selectTemplate": "Lütfen bir şablon seçin",
+      "copyError": "URL kopyalanamadı",
+      "downloadSuccess": "CV başarıyla indirildi",
+      "pdfError": "PDF oluşturulurken bir hata oluştu",
+      "generateError": "CV oluşturulurken bir hata oluştu",
+      "completeError": "İşlem tamamlanırken bir hata oluştu"
     },
     "video": {
       "title": "Video Tanıtım",

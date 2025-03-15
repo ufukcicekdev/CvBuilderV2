@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "CV Builder",
-    "tagline": "Create your professional CV and take a step ahead in your career",
+    "tagline": "Create your professional CV and take a step forward in your career",
     "description": "Simplify your job search process and find your dream job"
   },
   "nav": {
@@ -566,48 +566,53 @@
     },
     "progress": "Progress",
     "template": {
-      "selectTitle": "Select Template",
-      "selectTemplate": "Select a template",
-      "selectLanguage": "Select PDF Language",
-      "selectRequired": "Please select a template",
-      "generateButton": "Generate",
+      "selectTitle": "Select CV Template",
       "webVersion": "Web Version",
       "pdfVersion": "PDF Version",
-      "generatePDF": "Generate PDF",
-      "generateWeb": "Generate Web CV",
-      "downloadPDF": "Download PDF",
-      "copyURL": "Copy URL",
-      "urlCopied": "URL copied to clipboard!",
-      "close": "Close",
       "preview": "Preview",
+      "generateWeb": "Generate Web CV",
+      "generatePDF": "Generate PDF CV",
+      "pdfButton": "Generate PDF CV",
       "templates": {
-        "web-template1": {
-          "name": "Modern Template",
-          "description": "A modern and interactive web design"
+        "modernWeb": {
+          "name": "Modern Web Template",
+          "description": "Clean and professional design with modern layout"
         },
-        "web-template2": {
-          "name": "Minimal Template",
-          "description": "A clean and elegant web design"
+        "minimalWeb": {
+          "name": "Minimal Web Template",
+          "description": "Simple and elegant design focusing on content"
         },
-        "web-template3": {
-          "name": "Colorful Template",
-          "description": "A vibrant and modern template with colorful accents"
+        "colorfulWeb": {
+          "name": "Colorful Web Template",
+          "description": "Vibrant and eye-catching design with color accents"
         },
-        "web-template4": {
-          "name": "Professional Template",
-          "description": "A clean and professional template for corporate profiles"
+        "professionalWeb": {
+          "name": "Professional Web Template",
+          "description": "Corporate style with structured layout"
         },
-        "web-template5": {
-          "name": "Creative Template",
-          "description": "A unique and creative template for artistic profiles"
+        "creativeWeb": {
+          "name": "Creative Web Template",
+          "description": "Unique design for creative professionals"
         },
         "modernPdf": {
-          "name": "Modern PDF",
-          "description": "A modern design for PDF format"
+          "name": "Modern PDF Template",
+          "description": "Contemporary design with clean typography"
         },
         "classicPdf": {
-          "name": "Classic PDF",
-          "description": "A traditional design for PDF format"
+          "name": "Classic PDF Template",
+          "description": "Traditional resume layout with timeless appeal"
+        },
+        "minimalPdf": {
+          "name": "Minimal PDF Template",
+          "description": "Clean and minimalist design"
+        },
+        "creativePdf": {
+          "name": "Creative PDF Template",
+          "description": "Bold design for standing out"
+        },
+        "professionalPdf": {
+          "name": "Professional PDF Template",
+          "description": "Business-focused layout with modern elements"
         }
       }
     },
@@ -625,26 +630,65 @@
       "languagesRequired": "Please add at least one language"
     },
     "templates": {
-      "modern": {
-        "name": "Modern Template",
-        "description": "A modern and interactive web design"
+      "web": {
+        "modern": {
+          "name": "Modern Web Template",
+          "description": "Clean and professional design with modern layout"
+        },
+        "minimal": {
+          "name": "Minimal Web Template",
+          "description": "Simple and elegant design focusing on content"
+        },
+        "colorful": {
+          "name": "Colorful Web Template",
+          "description": "Vibrant and eye-catching design with color accents"
+        },
+        "professional": {
+          "name": "Professional Web Template",
+          "description": "Corporate style with structured layout"
+        },
+        "creative": {
+          "name": "Creative Web Template",
+          "description": "Unique design for creative professionals"
+        }
       },
-      "minimal": {
-        "name": "Minimal Template",
-        "description": "A clean and elegant web design"
-      },
-      "colorful": {
-        "name": "Colorful Template",
-        "description": "A vibrant and modern template with colorful accents"
-      },
-      "professional": {
-        "name": "Professional Template",
-        "description": "A clean and professional template for corporate profiles"
-      },
-      "creative": {
-        "name": "Creative Template",
-        "description": "A unique and creative template for artistic profiles"
+      "pdf": {
+        "modern": {
+          "name": "Modern PDF Template",
+          "description": "Contemporary design with clean typography"
+        },
+        "classic": {
+          "name": "Classic PDF Template",
+          "description": "Traditional resume layout with timeless appeal"
+        },
+        "minimal": {
+          "name": "Minimal PDF Template",
+          "description": "Clean and minimalist design"
+        },
+        "creative": {
+          "name": "Creative PDF Template",
+          "description": "Bold design for standing out"
+        },
+        "professional": {
+          "name": "Professional PDF Template",
+          "description": "Business-focused layout with modern elements"
+        }
       }
+    },
+    "preview": {
+      "templatePreview": "Template Preview",
+      "ready": "Your CV is Ready!",
+      "createSuccess": "Your CV has been successfully created. Share the link below to share your CV.",
+      "close": "Close",
+      "openCv": "Open CV",
+      "urlCopied": "URL copied to clipboard!",
+      "loadError": "Failed to load CV data",
+      "selectTemplate": "Please select a template",
+      "copyError": "Failed to copy URL",
+      "downloadSuccess": "CV successfully downloaded",
+      "pdfError": "Error generating PDF",
+      "generateError": "Error generating CV",
+      "completeError": "Error completing operation"
     }
   },
   "validation": {

@@ -36,6 +36,11 @@ import ProfessionalTemplate from '@/templates/web/ProfessionalTemplate';
 import CreativeTemplate from '@/templates/web/CreativeTemplate';
 import { CV } from '@/types/cv';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import ReactDOM from 'react-dom/client';
+
+// html2pdf component olarak değil, modül olarak kullanılacak
+// const html2pdf = dynamic(() => import('html2pdf.js'), { ssr: false });
 
 interface TemplatePreviewFormProps {
   cvId: string;
@@ -264,6 +269,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('tr');
+  
+  // html2pdf'yi sadece client-side'da yükle - state kullanmayalım, doğrudan çağıralım
+  useEffect(() => {
+    // HTML2PDF modulünü yüklediğimizden emin olalım, ancak bunu state'e kaydetmeyelim
+    if (typeof window !== 'undefined') {
+      import('html2pdf.js');
+    }
+  }, []);
 
   useEffect(() => {
     const fetchCVData = async () => {
@@ -276,12 +289,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         setSelectedLanguage('tr');
       } catch (error) {
         console.error('Error fetching CV data:', error);
-        toast.error('Failed to load CV data');
+        toast.error(t('cv.preview.loadError'));
+      } finally {
+        setPreviewLoading(false);
       }
     };
 
     fetchCVData();
-  }, [cvId]);
+  }, [cvId, t]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -294,7 +309,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
 
   const handlePreview = async () => {
     if (!selectedTemplate) {
-      toast.error('Please select a template');
+      toast.error(t('cv.preview.selectTemplate'));
       return;
     }
 
@@ -320,7 +335,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       setPreviewOpen(true);
     } catch (error) {
       console.error('Error fetching CV data:', error);
-      toast.error('Failed to load CV data');
+      toast.error(t('cv.preview.loadError'));
     } finally {
       setPreviewLoading(false);
     }
@@ -330,10 +345,8 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
     try {
       await navigator.clipboard.writeText(generatedUrl);
       setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy URL:', err);
-      toast.error('Failed to copy URL');
+    } catch (error) {
+      toast.error(t('cv.preview.copyError'));
     }
   };
 
@@ -361,9 +374,361 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
     }
   };
 
+  // PDF şablonu oluşturma fonksiyonu - frontend'de şablon içeriğini render etmek için kullanacağız
+  const renderPdfTemplate = (templateId: string, data: any) => {
+    // Seçilen şablon ID'ye göre şablonu oluştur
+    const templateName = templateId.replace('pdf-', '');
+    
+    // Şablon içeriğinin oluşturulması
+    switch(templateName) {
+      case 'modern':
+      default:
+        return (
+          <div id="pdf-container" style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: '30px', borderBottom: '2px solid #2196f3', paddingBottom: '20px' }}>
+              <h1>{data.personal_info?.name || ''}</h1>
+              <div style={{ marginTop: '10px', fontSize: '14px' }}>
+                {data.personal_info?.email && <div>{data.personal_info.email} {data.personal_info?.phone && `| ${data.personal_info.phone}`}</div>}
+                {data.personal_info?.address && <div>{data.personal_info.address}</div>}
+              </div>
+            </div>
+            
+            {data.personal_info?.summary && (
+              <div style={{ margin: '20px 0' }}>
+                <h2 style={{ color: '#2196f3', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>
+                  {translations[selectedLanguage]?.summary || 'Summary'}
+                </h2>
+                <p>{data.personal_info.summary}</p>
+              </div>
+            )}
+            
+            {data.experience && data.experience.length > 0 && (
+              <div style={{ margin: '20px 0' }}>
+                <h2 style={{ color: '#2196f3', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>
+                  {translations[selectedLanguage]?.experience || 'Work Experience'}
+                </h2>
+                {data.experience.map((exp: any, index: number) => (
+                  <div key={index} style={{ marginBottom: '15px' }}>
+                    {exp.position && <h3 style={{ margin: '5px 0' }}>{exp.position}</h3>}
+                    <div>
+                      {exp.company && exp.company}
+                      {exp.location && ` • ${exp.location}`}
+                    </div>
+                    <div>
+                      {exp.start_date && exp.start_date} - {exp.end_date || t('common.present')}
+                    </div>
+                    {exp.description && <p>{exp.description}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {data.education && data.education.length > 0 && (
+              <div style={{ margin: '20px 0' }}>
+                <h2 style={{ color: '#2196f3', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>
+                  {translations[selectedLanguage]?.education || 'Education'}
+                </h2>
+                {data.education.map((edu: any, index: number) => (
+                  <div key={index} style={{ marginBottom: '15px' }}>
+                    {edu.degree && <h3 style={{ margin: '5px 0' }}>{edu.degree}</h3>}
+                    <div>
+                      {edu.school && edu.school}
+                      {edu.location && ` • ${edu.location}`}
+                    </div>
+                    <div>
+                      {edu.start_date && edu.start_date} - {edu.end_date || t('common.present')}
+                    </div>
+                    {edu.description && <p>{edu.description}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {data.skills && data.skills.length > 0 && (
+              <div style={{ margin: '20px 0' }}>
+                <h2 style={{ color: '#2196f3', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>
+                  {translations[selectedLanguage]?.skills || 'Skills'}
+                </h2>
+                {data.skills.map((skill: any, index: number) => (
+                  <div key={index}>
+                    <span>
+                      {skill.name && skill.name} {skill.level && `(${skill.level}/5 ${translations[selectedLanguage]?.skill_level || ''})`}
+                    </span>
+                    <div style={{ width: '100px', height: '10px', background: '#eee', display: 'inline-block', marginLeft: '10px' }}>
+                      <div style={{ height: '100%', background: '#2196f3', width: `${(skill.level || 3) * 20}%` }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {data.languages && data.languages.length > 0 && (
+              <div style={{ margin: '20px 0' }}>
+                <h2 style={{ color: '#2196f3', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>
+                  {translations[selectedLanguage]?.languages || 'Languages'}
+                </h2>
+                {data.languages.map((lang: any, index: number) => (
+                  <div key={index}>
+                    <span>
+                      {lang.name && lang.name} {lang.level && `(${lang.level}/5 ${translations[selectedLanguage]?.skill_level || ''})`}
+                    </span>
+                    <div style={{ width: '100px', height: '10px', background: '#eee', display: 'inline-block', marginLeft: '10px' }}>
+                      <div style={{ height: '100%', background: '#2196f3', width: `${(lang.level || 3) * 20}%` }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {data.certificates && data.certificates.length > 0 && (
+              <div style={{ margin: '20px 0' }}>
+                <h2 style={{ color: '#2196f3', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>
+                  {translations[selectedLanguage]?.certificates || 'Certificates'}
+                </h2>
+                {data.certificates.map((cert: any, index: number) => (
+                  <div key={index} style={{ marginBottom: '10px' }}>
+                    {cert.name && <h4 style={{ margin: '5px 0' }}>{cert.name}</h4>}
+                    <div>
+                      {cert.issuer && cert.issuer}
+                      {cert.date && ` - ${cert.date}`}
+                    </div>
+                    {cert.description && <p>{cert.description}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+    }
+  };
+
+  // Frontend'de PDF oluşturma fonksiyonu
+  const generatePdfInFrontend = async (data: any) => {
+    try {
+      if (!selectedTemplate) {
+        throw new Error('No template selected');
+      }
+
+      // Önce HTML2PDF modulünü doğrudan yükleyelim
+      const html2pdf = (await import('html2pdf.js')).default;
+
+      // PDF şablonunu render etmek için geçici bir div oluştur
+      const tempContainer = document.createElement('div');
+      tempContainer.style.position = 'absolute';
+      tempContainer.style.left = '-9999px';
+      tempContainer.style.top = '-9999px';
+      document.body.appendChild(tempContainer);
+
+      // Seçilen template'e göre stil ve yapıyı belirle
+      const templateStyles = {
+        'pdf-modern': {
+          fontFamily: 'Arial, sans-serif',
+          headerColor: '#2196f3',
+          headerStyle: 'border-bottom: 2px solid #2196f3',
+          sectionTitleColor: '#2196f3'
+        },
+        'pdf-classic': {
+          fontFamily: 'Times New Roman, serif',
+          headerColor: '#333333',
+          headerStyle: 'background: #333; color: white; padding: 20px',
+          sectionTitleColor: '#333333'
+        },
+        'pdf-minimal': {
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          headerColor: '#555555',
+          headerStyle: 'border-left: 4px solid #555',
+          sectionTitleColor: '#555555'
+        },
+        'pdf-creative': {
+          fontFamily: 'Roboto, Arial, sans-serif',
+          headerColor: '#6200EA',
+          headerStyle: 'background: #6200EA; color: white',
+          sectionTitleColor: '#6200EA'
+        },
+        'pdf-professional': {
+          fontFamily: 'Segoe UI, Arial, sans-serif',
+          headerColor: '#1976D2',
+          headerStyle: 'background: #1976D2; color: white',
+          sectionTitleColor: '#1976D2'
+        }
+      };
+
+      const style = templateStyles[selectedTemplate as keyof typeof templateStyles] || templateStyles['pdf-modern'];
+
+      // Template HTML'ini oluştur
+      tempContainer.innerHTML = `
+        <div id="pdf-container" style="font-family: ${style.fontFamily}; padding: 20px; max-width: 800px; margin: 0 auto;">
+          <div style="${style.headerStyle}; padding: 20px; margin-bottom: 30px;">
+            <h1 style="margin: 0 0 10px 0;">${data.personal_info?.name || ''}</h1>
+            <div style="font-size: 14px;">
+              ${data.personal_info?.title ? `<div>${data.personal_info.title}</div>` : ''}
+              ${data.personal_info?.email ? `<div>${data.personal_info.email}${data.personal_info?.phone ? ` | ${data.personal_info.phone}` : ''}</div>` : ''}
+              ${data.personal_info?.address ? `<div>${data.personal_info.address}</div>` : ''}
+            </div>
+          </div>
+
+          ${data.personal_info?.summary ? `
+            <div style="margin: 20px 0;">
+              <h2 style="color: ${style.sectionTitleColor}; border-bottom: 1px solid ${style.headerColor}; padding-bottom: 5px; margin-bottom: 15px;">
+                ${translations[selectedLanguage]?.summary || 'Summary'}
+              </h2>
+              <p>${data.personal_info.summary}</p>
+            </div>
+          ` : ''}
+
+          ${data.experience && data.experience.length > 0 ? `
+            <div style="margin: 20px 0;">
+              <h2 style="color: ${style.sectionTitleColor}; border-bottom: 1px solid ${style.headerColor}; padding-bottom: 5px; margin-bottom: 15px;">
+                ${translations[selectedLanguage]?.experience || 'Work Experience'}
+              </h2>
+              ${data.experience.map((exp: any) => `
+                <div style="margin-bottom: 15px;">
+                  <h3 style="margin: 5px 0;">${exp.position || ''}</h3>
+                  <div>${exp.company || ''}${exp.location ? ` • ${exp.location}` : ''}</div>
+                  <div>${exp.start_date || ''} - ${exp.end_date || t('common.present')}</div>
+                  ${exp.description ? `<p>${exp.description}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+
+          ${data.education && data.education.length > 0 ? `
+            <div style="margin: 20px 0;">
+              <h2 style="color: ${style.sectionTitleColor}; border-bottom: 1px solid ${style.headerColor}; padding-bottom: 5px; margin-bottom: 15px;">
+                ${translations[selectedLanguage]?.education || 'Education'}
+              </h2>
+              ${data.education.map((edu: any) => `
+                <div style="margin-bottom: 15px;">
+                  <h3 style="margin: 5px 0;">${edu.degree || ''}</h3>
+                  <div>${edu.school || ''}${edu.location ? ` • ${edu.location}` : ''}</div>
+                  <div>${edu.start_date || ''} - ${edu.end_date || t('common.present')}</div>
+                  ${edu.description ? `<p>${edu.description}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+
+          ${data.skills && data.skills.length > 0 ? `
+            <div style="margin: 20px 0;">
+              <h2 style="color: ${style.sectionTitleColor}; border-bottom: 1px solid ${style.headerColor}; padding-bottom: 5px; margin-bottom: 15px;">
+                ${translations[selectedLanguage]?.skills || 'Skills'}
+              </h2>
+              ${data.skills.map((skill: any) => `
+                <div style="margin-bottom: 10px;">
+                  <span>${skill.name || ''}${skill.level ? ` (${skill.level}/5 ${translations[selectedLanguage]?.skill_level || ''})` : ''}</span>
+                  <div style="width: 100px; height: 10px; background: #eee; display: inline-block; margin-left: 10px;">
+                    <div style="height: 100%; background: ${style.headerColor}; width: ${(skill.level || 3) * 20}%;"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+
+          ${data.languages && data.languages.length > 0 ? `
+            <div style="margin: 20px 0;">
+              <h2 style="color: ${style.sectionTitleColor}; border-bottom: 1px solid ${style.headerColor}; padding-bottom: 5px; margin-bottom: 15px;">
+                ${translations[selectedLanguage]?.languages || 'Languages'}
+              </h2>
+              ${data.languages.map((lang: any) => `
+                <div style="margin-bottom: 10px;">
+                  <span>${lang.name || ''}${lang.level ? ` (${lang.level}/5 ${translations[selectedLanguage]?.skill_level || ''})` : ''}</span>
+                  <div style="width: 100px; height: 10px; background: #eee; display: inline-block; margin-left: 10px;">
+                    <div style="height: 100%; background: ${style.headerColor}; width: ${(lang.level || 3) * 20}%;"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+
+          ${data.certificates && data.certificates.length > 0 ? `
+            <div style="margin: 20px 0;">
+              <h2 style="color: ${style.sectionTitleColor}; border-bottom: 1px solid ${style.headerColor}; padding-bottom: 5px; margin-bottom: 15px;">
+                ${translations[selectedLanguage]?.certificates || 'Certificates'}
+              </h2>
+              ${data.certificates.map((cert: any) => `
+                <div style="margin-bottom: 10px;">
+                  <h4 style="margin: 5px 0;">${cert.name || ''}</h4>
+                  <div>
+                    ${cert.issuer || ''}
+                    ${cert.date ? ` - ${cert.date}` : ''}
+                  </div>
+                  ${cert.description ? `<p>${cert.description}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      // PDF seçenekleri
+      const options = {
+        margin: [15, 15, 15, 15], // top, left, bottom, right margins
+        filename: `${data.title || 'cv'}_${selectedLanguage}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+          scale: 4,
+          useCORS: true,
+          letterRendering: true,
+          scrollY: 0,
+          windowWidth: 1200,
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait',
+          compress: true,
+          hotfixes: ["px_scaling"]
+        }
+      };
+
+      // html2pdf ile PDF oluştur
+      const container = tempContainer.querySelector('#pdf-container') as HTMLElement;
+      if (!container) {
+        throw new Error('PDF container not found');
+      }
+
+      // Container'ın boyutunu ayarla
+      tempContainer.style.width = '1200px';
+      container.style.width = '1200px';
+      container.style.padding = '40px';
+      container.style.boxSizing = 'border-box';
+      container.style.minHeight = '1123px'; // A4 height in pixels at 96 DPI
+
+      return new Promise<{success: boolean, error?: any}>((resolve, reject) => {
+        html2pdf()
+          .set(options)
+          .from(container)
+          .outputPdf('blob')
+          .then((blob: Blob) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${data.personal_info?.full_name || 'CV'}.pdf`;
+            a.click();
+            URL.revokeObjectURL(url);
+            toast.success(t('cv.preview.downloadSuccess'));
+            // Geçici div'i temizle
+            document.body.removeChild(tempContainer);
+            resolve({ success: true });
+          })
+          .catch((error: any) => {
+            console.error('PDF generation error inside promise:', error);
+            document.body.removeChild(tempContainer);
+            reject(error);
+          });
+      });
+
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error(t('cv.preview.pdfError'));
+      return { success: false, error };
+    }
+  };
+
+  // PDF oluşturma fonksiyonu (frontend versiyonuyla değiştir)
   const handleGenerateCV = async () => {
     if (!selectedTemplate) {
-      toast.error('Please select a template');
+      toast.error(t('cv.preview.selectTemplate'));
       return;
     }
 
@@ -373,12 +738,13 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       const isWebTemplate = selectedTemplate.startsWith('web-');
       const templateFormat = mapTemplateIdToUrlFormat(selectedTemplate);
       
-      const response = await axiosInstance.post(`/api/cvs/${cvId}/${isWebTemplate ? 'generate-web' : 'generate-pdf'}/`, {
-        template_id: templateFormat,
-        language: selectedLanguage
-      });
-
       if (isWebTemplate) {
+        // Web template için backend API'yi kullan (değişiklik yok)
+        const response = await axiosInstance.post(`/api/cvs/${cvId}/generate-web/`, {
+          template_id: templateFormat,
+          language: selectedLanguage
+        });
+        
         const webUrl = response.data.web_url;
         const baseUrl = window.location.origin;
         const fullUrl = webUrl.startsWith('/') ? `${baseUrl}${webUrl}` : `${baseUrl}/${webUrl}`;
@@ -386,33 +752,30 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         setGeneratedUrl(fullUrl);
         setUrlModalOpen(true);
       } else {
-        // PDF indirme işlemi - base64 formatında gelen PDF'i dönüştür ve indir
-        const { pdf_base64, filename, content_type } = response.data;
+        // PDF için frontend'de oluştur
+        // Önce CV verilerini API'den al
+        const cvResponse = await axiosInstance.get(`/api/cvs/${cvId}/?language=${selectedLanguage}`);
+        const cvData = cvResponse.data;
         
-        // Base64 verisini Blob'a dönüştür
-        const pdfBlob = await fetch(`data:${content_type};base64,${pdf_base64}`).then(res => res.blob());
+        // Frontend'de PDF oluştur
+        const result = await generatePdfInFrontend(cvData);
         
-        // Blob'dan URL oluştur
-        const blobUrl = URL.createObjectURL(pdfBlob);
-        
-        // PDF'i indir
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // Blob URL'ini temizle
-        URL.revokeObjectURL(blobUrl);
-        
-        // router.push('/dashboard'); yerine toast mesajı göster
-        toast.success(t('CV başarıyla indirildi'));
+        if (result && result.success) {
+          // Başarılı mesajı göster
+          toast.success(t('cv.preview.downloadSuccess'));
+          
+          // PDF için adımı tamamla - bu kısmı kaldırıyoruz
+          // onStepComplete({
+          //   template_id: selectedTemplate,
+          //   output_type: 'pdf',
+          //   output_url: null
+          // });
+        }
       }
 
     } catch (error) {
       console.error('Error generating CV:', error);
-      toast.error('Failed to generate CV');
+      toast.error(t('cv.preview.generateError'));
     } finally {
       setLoading(false);
     }
@@ -427,12 +790,13 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
 
   const handleStepComplete = async (data: any) => {
     try {
-      await onStepComplete(data);
-      // Başarıyla tamamlandı mesajı göster
-      toast.success(t('CV başarıyla oluşturuldu!'));
+      setLoading(true);
+      await handleGenerateCV();
     } catch (error) {
       console.error('Error completing step:', error);
-      toast.error(t('CV oluşturulurken bir hata oluştu.'));
+      toast.error(t('cv.preview.completeError'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -659,7 +1023,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   {previewData.skills && previewData.skills.length > 0 && (
                     <Box sx={{ mt: 3 }}>
                       <Typography variant="h6" gutterBottom sx={{ color: '#fff' }}>
-                        {t('Yetenekler')}
+                        {t('common.skills')}
                       </Typography>
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                         {previewData.skills.map((skill: any, index: number) => (
@@ -682,7 +1046,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   {previewData.experience && previewData.experience.length > 0 && (
                     <Box sx={{ mb: 3 }}>
                       <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
-                        {t('Deneyim')}
+                        {t('common.workExperience')}
                       </Typography>
                       {previewData.experience.map((exp: any, index: number) => (
                         <Box key={index} sx={{ mb: 2 }}>
@@ -690,7 +1054,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                             {exp.title} - {exp.company}
                           </Typography>
                           <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {exp.start_date} - {exp.end_date || t('Devam Ediyor')}
+                            {exp.start_date} - {exp.end_date || t('common.present')}
                           </Typography>
                           <Typography variant="body2">
                             {exp.description}
@@ -704,7 +1068,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   {previewData.education && previewData.education.length > 0 && (
                     <Box sx={{ mb: 3 }}>
                       <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
-                        {t('Eğitim')}
+                        {t('common.education')}
                       </Typography>
                       {previewData.education.map((edu: any, index: number) => (
                         <Box key={index} sx={{ mb: 2 }}>
@@ -712,7 +1076,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                             {edu.school} - {edu.degree}
                           </Typography>
                           <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {edu.start_date} - {edu.end_date || t('Devam Ediyor')}
+                            {edu.start_date} - {edu.end_date || t('common.present')}
                           </Typography>
                           {edu.description && (
                             <Typography variant="body2">
@@ -750,7 +1114,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                 {previewData.experience && previewData.experience.length > 0 && (
                   <Box sx={{ mb: 3 }}>
                     <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
-                      {t('Deneyim')}
+                      {t('common.workExperience')}
                     </Typography>
                     {previewData.experience.map((exp: any, index: number) => (
                       <Box key={index} sx={{ mb: 2 }}>
@@ -758,7 +1122,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                           {exp.title} - {exp.company}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
-                          {exp.start_date} - {exp.end_date || t('Devam Ediyor')}
+                          {exp.start_date} - {exp.end_date || t('common.present')}
                         </Typography>
                         <Typography variant="body2">
                           {exp.description}
@@ -772,7 +1136,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                 {previewData.education && previewData.education.length > 0 && (
                   <Box sx={{ mb: 3 }}>
                     <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
-                      {t('Eğitim')}
+                      {t('common.education')}
                     </Typography>
                     {previewData.education.map((edu: any, index: number) => (
                       <Box key={index} sx={{ mb: 2 }}>
@@ -780,7 +1144,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                           {edu.school} - {edu.degree}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
-                          {edu.start_date} - {edu.end_date || t('Devam Ediyor')}
+                          {edu.start_date} - {edu.end_date || t('common.present')}
                         </Typography>
                         {edu.description && (
                           <Typography variant="body2">
@@ -796,7 +1160,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                 {previewData.skills && previewData.skills.length > 0 && (
                   <Box sx={{ mb: 3 }}>
                     <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
-                      {t('Yetenekler')}
+                      {t('common.skills')}
                     </Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                       {previewData.skills.map((skill: any, index: number) => (
@@ -817,7 +1181,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                 {previewData.languages && previewData.languages.length > 0 && (
                   <Box sx={{ mb: 3 }}>
                     <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
-                      {t('Yabancı Diller')}
+                      {t('common.languages')}
                     </Typography>
                     {previewData.languages.map((lang: any, index: number) => (
                       <Box key={index} sx={{ mb: 1 }}>
@@ -842,7 +1206,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
             startIcon={<DownloadIcon />}
             sx={{ mt: 2 }}
           >
-            {t('PDF CV Oluştur')}
+            {t('cv.template.pdfButton')}
           </Button>
         </Box>
       );
@@ -851,10 +1215,78 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
     return null;
   };
 
+  // Çeviri nesnesi - PDF içinde kullanılmak üzere
+  const translations: Record<string, Record<string, string>> = {
+    en: {
+      summary: t('common.professionalSummary'),
+      experience: t('common.workExperience'),
+      education: t('common.education'),
+      skills: t('common.skills'),
+      languages: t('common.languages'),
+      certificates: t('common.certificates'),
+      present: t('common.present'),
+      skill_level: 'out of 5',
+      // Web template translations
+      'cv.template.templates.modernWeb.name': t('cv.template.templates.modernWeb.name'),
+      'cv.template.templates.modernWeb.description': t('cv.template.templates.modernWeb.description'),
+      'cv.template.templates.minimalWeb.name': t('cv.template.templates.minimalWeb.name'),
+      'cv.template.templates.minimalWeb.description': t('cv.template.templates.minimalWeb.description'),
+      'cv.template.templates.colorfulWeb.name': t('cv.template.templates.colorfulWeb.name'),
+      'cv.template.templates.colorfulWeb.description': t('cv.template.templates.colorfulWeb.description'),
+      'cv.template.templates.professionalWeb.name': t('cv.template.templates.professionalWeb.name'),
+      'cv.template.templates.professionalWeb.description': t('cv.template.templates.professionalWeb.description'),
+      'cv.template.templates.creativeWeb.name': t('cv.template.templates.creativeWeb.name'),
+      'cv.template.templates.creativeWeb.description': t('cv.template.templates.creativeWeb.description'),
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': t('cv.template.templates.modernPdf.name'),
+      'cv.template.templates.modernPdf.description': t('cv.template.templates.modernPdf.description'),
+      'cv.template.templates.classicPdf.name': t('cv.template.templates.classicPdf.name'),
+      'cv.template.templates.classicPdf.description': t('cv.template.templates.classicPdf.description'),
+      'cv.template.templates.minimalPdf.name': t('cv.template.templates.minimalPdf.name'),
+      'cv.template.templates.minimalPdf.description': t('cv.template.templates.minimalPdf.description'),
+      'cv.template.templates.creativePdf.name': t('cv.template.templates.creativePdf.name'),
+      'cv.template.templates.creativePdf.description': t('cv.template.templates.creativePdf.description'),
+      'cv.template.templates.professionalPdf.name': t('cv.template.templates.professionalPdf.name'),
+      'cv.template.templates.professionalPdf.description': t('cv.template.templates.professionalPdf.description')
+    },
+    tr: {
+      summary: t('common.professionalSummary'),
+      experience: t('common.workExperience'),
+      education: t('common.education'),
+      skills: t('common.skills'),
+      languages: t('common.languages'),
+      certificates: t('common.certificates'),
+      present: t('common.present'),
+      skill_level: 'out of 5',
+      // Web template translations
+      'cv.template.templates.modernWeb.name': t('cv.template.templates.modernWeb.name'),
+      'cv.template.templates.modernWeb.description': t('cv.template.templates.modernWeb.description'),
+      'cv.template.templates.minimalWeb.name': t('cv.template.templates.minimalWeb.name'),
+      'cv.template.templates.minimalWeb.description': t('cv.template.templates.minimalWeb.description'),
+      'cv.template.templates.colorfulWeb.name': t('cv.template.templates.colorfulWeb.name'),
+      'cv.template.templates.colorfulWeb.description': t('cv.template.templates.colorfulWeb.description'),
+      'cv.template.templates.professionalWeb.name': t('cv.template.templates.professionalWeb.name'),
+      'cv.template.templates.professionalWeb.description': t('cv.template.templates.professionalWeb.description'),
+      'cv.template.templates.creativeWeb.name': t('cv.template.templates.creativeWeb.name'),
+      'cv.template.templates.creativeWeb.description': t('cv.template.templates.creativeWeb.description'),
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': t('cv.template.templates.modernPdf.name'),
+      'cv.template.templates.modernPdf.description': t('cv.template.templates.modernPdf.description'),
+      'cv.template.templates.classicPdf.name': t('cv.template.templates.classicPdf.name'),
+      'cv.template.templates.classicPdf.description': t('cv.template.templates.classicPdf.description'),
+      'cv.template.templates.minimalPdf.name': t('cv.template.templates.minimalPdf.name'),
+      'cv.template.templates.minimalPdf.description': t('cv.template.templates.minimalPdf.description'),
+      'cv.template.templates.creativePdf.name': t('cv.template.templates.creativePdf.name'),
+      'cv.template.templates.creativePdf.description': t('cv.template.templates.creativePdf.description'),
+      'cv.template.templates.professionalPdf.name': t('cv.template.templates.professionalPdf.name'),
+      'cv.template.templates.professionalPdf.description': t('cv.template.templates.professionalPdf.description')
+    }
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h6" gutterBottom>
-        {t('CV Şablonu Seçin')}
+        {t('cv.template.selectTitle')}
       </Typography>
 
       <Box sx={{ mb: 3 }}>
@@ -873,12 +1305,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         >
           <Tab 
             icon={<WebIcon />} 
-            label={t('Web Versiyonu')}
+            label={t('cv.template.webVersion')}
             sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
           />
           <Tab 
             icon={<DownloadIcon />} 
-            label={t('PDF Versiyonu')}
+            label={t('cv.template.pdfVersion')}
             sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
           />
         </Tabs>
@@ -951,14 +1383,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(modernWebTemplateSvg)}
-                  alt="Modern Web Template"
+                  alt={t('cv.template.templates.modernWeb.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.web.modern.name')}
+                    {t('cv.template.templates.modernWeb.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.web.modern.description')}
+                    {t('cv.template.templates.modernWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -984,14 +1416,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(classicWebTemplateSvg)}
-                  alt="Minimal Web Template"
+                  alt={t('cv.template.templates.minimalWeb.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.web.minimal.name')}
+                    {t('cv.template.templates.minimalWeb.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.web.minimal.description')}
+                    {t('cv.template.templates.minimalWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1017,14 +1449,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(colorfulWebTemplateSvg)}
-                  alt="Colorful Web Template"
+                  alt={t('cv.template.templates.colorfulWeb.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.web.colorful.name')}
+                    {t('cv.template.templates.colorfulWeb.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.web.colorful.description')}
+                    {t('cv.template.templates.colorfulWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1050,14 +1482,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(professionalWebTemplateSvg)}
-                  alt="Professional Web Template"
+                  alt={t('cv.template.templates.professionalWeb.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.web.professional.name')}
+                    {t('cv.template.templates.professionalWeb.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.web.professional.description')}
+                    {t('cv.template.templates.professionalWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1083,14 +1515,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(creativeWebTemplateSvg)}
-                  alt="Creative Web Template"
+                  alt={t('cv.template.templates.creativeWeb.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.web.creative.name')}
+                    {t('cv.template.templates.creativeWeb.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.web.creative.description')}
+                    {t('cv.template.templates.creativeWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1118,14 +1550,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(modernPdfTemplateSvg)}
-                  alt="Modern PDF Template"
+                  alt={t('cv.template.templates.modernPdf.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.pdf.modern.name')}
+                    {t('cv.template.templates.modernPdf.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.pdf.modern.description')}
+                    {t('cv.template.templates.modernPdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1151,14 +1583,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(classicPdfTemplateSvg)}
-                  alt="Classic PDF Template"
+                  alt={t('cv.template.templates.classicPdf.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.pdf.classic.name')}
+                    {t('cv.template.templates.classicPdf.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.pdf.classic.description')}
+                    {t('cv.template.templates.classicPdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1184,14 +1616,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(minimalPdfTemplateSvg)}
-                  alt="Minimal PDF Template"
+                  alt={t('cv.template.templates.minimalPdf.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.pdf.minimal.name')}
+                    {t('cv.template.templates.minimalPdf.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.pdf.minimal.description')}
+                    {t('cv.template.templates.minimalPdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1217,14 +1649,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(creativePdfTemplateSvg)}
-                  alt="Creative PDF Template"
+                  alt={t('cv.template.templates.creativePdf.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.pdf.creative.name')}
+                    {t('cv.template.templates.creativePdf.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.pdf.creative.description')}
+                    {t('cv.template.templates.creativePdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1250,14 +1682,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   component="img"
                   height="140"
                   image={svgToDataUrl(professionalPdfTemplateSvg)}
-                  alt="Professional PDF Template"
+                  alt={t('cv.template.templates.professionalPdf.name')}
                 />
                 <CardContent>
                   <Typography variant="subtitle1" gutterBottom>
-                    {t('cv.templates.pdf.professional.name')}
+                    {t('cv.template.templates.professionalPdf.name')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('cv.templates.pdf.professional.description')}
+                    {t('cv.template.templates.professionalPdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -1274,7 +1706,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
               variant="contained"
               disabled={loading}
             >
-              {t('Geri')}
+              {t('common.previous')}
             </Button>
           )}
         </Box>
@@ -1284,7 +1716,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
             variant="outlined"
             disabled={!selectedTemplate || loading}
           >
-            {previewLoading ? <CircularProgress size={24} /> : t('Önizleme')}
+            {previewLoading ? <CircularProgress size={24} /> : t('cv.template.preview')}
           </Button>
           <Button
             onClick={handleGenerateCV}
@@ -1296,9 +1728,9 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
             {loading ? (
               <CircularProgress size={24} color="inherit" />
             ) : activeTab === 0 ? (
-              t('Web CV Oluştur')
+              t('cv.template.generateWeb')
             ) : (
-              t('PDF CV Oluştur')
+              t('cv.template.generatePDF')
             )}
           </Button>
         </Box>
@@ -1311,7 +1743,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         fullWidth
       >
         <DialogTitle>
-          {t('Şablon Önizleme')}
+          {t('cv.preview.templatePreview')}
           <IconButton
             onClick={() => setPreviewOpen(false)}
             sx={{ position: 'absolute', right: 8, top: 8 }}
@@ -1331,11 +1763,11 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       </Dialog>
 
       <Dialog open={urlModalOpen} onClose={() => setUrlModalOpen(false)}>
-        <DialogTitle>{t('CV\'niz Hazır!')}</DialogTitle>
+        <DialogTitle>{t('cv.preview.ready')}</DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Typography variant="body1" gutterBottom>
-              {t('CV\'niz başarıyla oluşturuldu. Aşağıdaki adresten erişebilirsiniz:')}
+              {t('cv.preview.createSuccess')}
             </Typography>
             <TextField
               fullWidth
@@ -1354,14 +1786,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         <DialogActions>
           <Button onClick={() => {
             setUrlModalOpen(false);
-          }}>{t('Kapat')}</Button>
+          }}>{t('cv.preview.close')}</Button>
           <Button
             href={generatedUrl}
             target="_blank"
             rel="noopener noreferrer"
             startIcon={<WebIcon />}
           >
-            {t('CV\'yi Aç')}
+            {t('cv.preview.openCv')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -1369,8 +1801,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       <Snackbar
         open={copySuccess}
         autoHideDuration={2000}
-        onClose={() => setCopySuccess(false)}
-        message={t('URL panoya kopyalandı!')}
+        message={t('cv.preview.urlCopied')}
       />
     </Box>
   );
