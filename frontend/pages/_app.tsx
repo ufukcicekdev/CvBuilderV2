@@ -12,6 +12,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import Script from 'next/script';
 import Head from 'next/head';
+import { SessionProvider } from "next-auth/react";
 
 const cacheRtl = createCache({
   key: 'muirtl',
@@ -42,30 +43,32 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <title>CV Builder</title>
       </Head>
-      <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-HDJ50NB3XE"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-HDJ50NB3XE');
-          `}
-        </Script>
-        
-        <AuthProvider>
-          <LanguageProvider>
-            <Providers>
-              <Component {...pageProps} />
-              <Toaster position={isRTL ? "top-left" : "top-right"} />
-            </Providers>
-          </LanguageProvider>
-        </AuthProvider>
-      </CacheProvider>
+      <SessionProvider session={pageProps.session}>
+        <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
+          {/* Google Analytics */}
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-HDJ50NB3XE"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-HDJ50NB3XE');
+            `}
+          </Script>
+          
+          <AuthProvider>
+            <LanguageProvider>
+              <Providers>
+                <Component {...pageProps} />
+                <Toaster position={isRTL ? "top-left" : "top-right"} />
+              </Providers>
+            </LanguageProvider>
+          </AuthProvider>
+        </CacheProvider>
+      </SessionProvider>
     </>
   );
 }
