@@ -90,7 +90,7 @@ const PdfGenerator = dynamic(
       const [isGenerating, setIsGenerating] = useState(false);
 
       // PDF indirme işlemini başlat
-      const handleGeneratePdf = async () => {
+      const handleGeneratePdf = React.useCallback(async () => {
         if (!containerRef.current) return;
         
         setIsGenerating(true);
@@ -126,7 +126,7 @@ const PdfGenerator = dynamic(
         } finally {
           setIsGenerating(false);
         }
-      };
+      }, [data.personal_info?.full_name, containerRef]);
 
       // TemplatePreviewForm'dan gelen PDF oluşturma eventini dinle
       useEffect(() => {
@@ -161,7 +161,7 @@ const PdfGenerator = dynamic(
         return () => {
           document.removeEventListener('generate-pdf', handleGeneratePdfEvent);
         };
-      }, [data, language]); // data ve language değiştiğinde event listener'ı güncelle
+      }, [data, language, handleGeneratePdf]); // data, language ve handleGeneratePdf değiştiğinde event listener'ı güncelle
 
       // Seçilen şablonu render et
       const renderTemplate = () => {

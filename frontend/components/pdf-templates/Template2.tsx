@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import Image from 'next/image';
 import { PDFTemplateProps } from './types';
 
 const Template2: React.FC<PDFTemplateProps> = ({ data, language, translations = {} }) => {
@@ -59,12 +62,12 @@ const Template2: React.FC<PDFTemplateProps> = ({ data, language, translations = 
         {/* Profile picture */}
         {data.personal_info?.photo && (
           <div>
-            <img
+            <Image
               src={data.personal_info.photo}
               alt="Profile"
+              width={80}
+              height={80}
               style={{
-                width: '80px',
-                height: '80px',
                 borderRadius: '50%',
                 objectFit: 'cover',
                 border: '2px solid white'

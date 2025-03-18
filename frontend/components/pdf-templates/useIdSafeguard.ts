@@ -31,4 +31,10 @@ export function safeId(prefix: string = 'id'): string {
   return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 }
 
-export default { patchReactUseId, safeId }; 
+// Create a named object for export to avoid ESLint warning
+const safeGuardUtils = { 
+  patchReactUseId, 
+  safeId 
+};
+
+export default safeGuardUtils; 

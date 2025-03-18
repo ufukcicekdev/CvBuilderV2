@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import Image from 'next/image';
 import { PDFTemplateProps } from './types';
 import { CustomTemplateData, TemplateSection } from './TemplateBuilder';
 
@@ -100,19 +103,18 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
       {/* Profil fotoğrafı */}
       {templateData.globalSettings.showPhoto && data.personal_info?.photo && (
         <div>
-          <img
+          <Image
             src={data.personal_info.photo}
             alt="Profile"
+            width={templateData.globalSettings.photoSize}
+            height={templateData.globalSettings.photoSize}
             style={{
-              width: `${templateData.globalSettings.photoSize}px`,
-              height: `${templateData.globalSettings.photoSize}px`,
               borderRadius: templateData.globalSettings.photoStyle === 'circle' 
                 ? '50%' 
                 : templateData.globalSettings.photoStyle === 'rounded' 
                   ? '10px' 
                   : '0',
-              objectFit: 'cover',
-              border: `2px solid ${templateData.globalSettings.primaryColor}`
+              objectFit: 'cover'
             }}
           />
         </div>
