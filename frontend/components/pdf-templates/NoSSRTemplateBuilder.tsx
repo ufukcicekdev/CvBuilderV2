@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { PDFTemplateProps } from './types';
-import { CustomTemplateData } from './TemplateBuilder';
+import { TemplateBuilderProps, CustomTemplateData } from './NoDndTemplateBuilder';
 
 // Dynamically import the No-DnD version of the template builder with no SSR
 const NoDndTemplateBuilder = dynamic(() => import('./NoDndTemplateBuilder'), {
@@ -21,19 +21,11 @@ const NoDndTemplateBuilder = dynamic(() => import('./NoDndTemplateBuilder'), {
   )
 });
 
-interface NoSSRTemplateBuilderProps {
-  data: PDFTemplateProps['data'];
-  language?: string;
-  translations?: Record<string, string>;
-  onSaveTemplate?: (templateData: CustomTemplateData) => void;
-  savedTemplates?: CustomTemplateData[];
-}
-
 /**
  * A wrapper component that ensures NoDndTemplateBuilder only renders client-side
  * without any problematic React.useId hooks
  */
-const NoSSRTemplateBuilder: React.FC<NoSSRTemplateBuilderProps> = (props) => {
+const NoSSRTemplateBuilder: React.FC<TemplateBuilderProps> = (props) => {
   const [isMounted, setIsMounted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');

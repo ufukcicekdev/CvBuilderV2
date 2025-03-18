@@ -48,6 +48,9 @@ import { templateService } from '../../services/templateService';
 import CustomTemplateRenderer from '../pdf-templates/CustomTemplateRenderer';
 import { CustomTemplateData } from '../pdf-templates/TemplateBuilder';
 import { useSession } from 'next-auth/react';
+// İmport kısmına eklenecek
+import { CustomTemplateData as NoDndCustomTemplateData } from '../pdf-templates/NoDndTemplateBuilder';
+import { CustomTemplateData as TemplateBuilderCustomTemplateData } from '../pdf-templates/TemplateBuilder';
 
 // Create a client-only wrapper component for TemplateBuilder
 const ClientOnlyTemplateBuilder = ({ children }: { children: React.ReactNode }) => {
@@ -708,6 +711,33 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       certificates: "Certificates",
       present: "Present",
       skill_level: 'out of 5',
+      // Section visibility translations
+      sectionVisibility: "Section Visibility",
+      header: "Header",
+      layout: "Layout",
+      layoutSettings: "Layout Settings",
+      showPhoto: "Show Photo",
+      photoStyle: "Photo Style",
+      photoSize: "Photo Size",
+      colors: "Colors",
+      typography: "Typography",
+      primaryColor: "Primary Color",
+      secondaryColor: "Secondary Color",
+      backgroundColor: "Background Color",
+      textColor: "Text Color",
+      fontSize: "Font Size",
+      fontFamily: "Font Family",
+      // Layout options
+      singleColumn: "Single Column",
+      doubleColumn: "Double Column",
+      // Photo styles
+      circle: "Circle",
+      square: "Square",
+      rounded: "Rounded",
+      // ATS related
+      atsOptimization: "ATS Optimization",
+      enableAtsOptimization: "Enable ATS Optimization",
+      atsExplanation: "Optimizes your CV for better scanning by ATS (Applicant Tracking Systems)",
       // Web template translations
       'cv.template.templates.modernWeb.name': t('cv.template.templates.modernWeb.name'),
       'cv.template.templates.modernWeb.description': t('cv.template.templates.modernWeb.description'),
@@ -740,6 +770,33 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       certificates: "Sertifikalar",
       present: "Halen",
       skill_level: '/ 5',
+      // Section visibility translations
+      sectionVisibility: "Bölüm Görünürlüğü",
+      header: "Başlık",
+      layout: "Düzen",
+      layoutSettings: "Düzen Ayarları",
+      showPhoto: "Fotoğraf Göster",
+      photoStyle: "Fotoğraf Stili",
+      photoSize: "Fotoğraf Boyutu",
+      colors: "Renkler",
+      typography: "Tipografi",
+      primaryColor: "Ana Renk",
+      secondaryColor: "İkincil Renk",
+      backgroundColor: "Arka Plan Rengi",
+      textColor: "Yazı Rengi",
+      fontSize: "Yazı Boyutu",
+      fontFamily: "Yazı Tipi",
+      // Layout options
+      singleColumn: "Tek Sütun",
+      doubleColumn: "Çift Sütun",
+      // Photo styles
+      circle: "Yuvarlak",
+      square: "Kare",
+      rounded: "Yuvarlatılmış",
+      // ATS related
+      atsOptimization: "ATS Optimizasyonu",
+      enableAtsOptimization: "ATS Optimizasyonunu Etkinleştir",
+      atsExplanation: "CV'nizi ATS (Başvuru Takip Sistemleri) tarafından daha iyi taranması için optimize eder",
       // Web template translations
       'cv.template.templates.modernWeb.name': t('cv.template.templates.modernWeb.name'),
       'cv.template.templates.modernWeb.description': t('cv.template.templates.modernWeb.description'),
@@ -762,6 +819,238 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       'cv.template.templates.creativePdf.description': t('cv.template.templates.creativePdf.description'),
       'cv.template.templates.professionalPdf.name': t('cv.template.templates.professionalPdf.name'),
       'cv.template.templates.professionalPdf.description': t('cv.template.templates.professionalPdf.description')
+    },
+    ar: {
+      summary: "ملخص مهني",
+      experience: "الخبرة العملية",
+      education: "التعليم",
+      skills: "المهارات",
+      languages: "اللغات",
+      certificates: "الشهادات",
+      present: "حتى الآن",
+      skill_level: 'من 5',
+      // Section visibility translations
+      sectionVisibility: "رؤية الأقسام",
+      header: "العنوان",
+      layout: "التخطيط",
+      layoutSettings: "إعدادات التخطيط",
+      showPhoto: "إظهار الصورة",
+      photoStyle: "نمط الصورة",
+      photoSize: "حجم الصورة",
+      colors: "الألوان",
+      typography: "الطباعة",
+      primaryColor: "اللون الرئيسي",
+      secondaryColor: "اللون الثانوي",
+      backgroundColor: "لون الخلفية",
+      fontSize: "حجم الخط",
+      fontFamily: "نوع الخط",
+      // Layout options
+      singleColumn: "عمود واحد",
+      doubleColumn: "عمودان",
+      // Photo styles
+      circle: "دائرة",
+      square: "مربع",
+      rounded: "مستدير",
+      // ATS related
+      atsOptimization: "تحسين ATS",
+      enableAtsOptimization: "تفعيل تحسين ATS",
+      atsExplanation: "يحسن سيرتك الذاتية للمسح الأفضل بواسطة ATS (أنظمة تتبع المتقدمين)",
+      // Web template translations
+      'cv.template.templates.modernWeb.name': "قالب ويب حديث",
+      'cv.template.templates.modernWeb.description': "قالب بتصميم عصري وأنيق مع تخطيط نظيف",
+      'cv.template.templates.minimalWeb.name': "قالب ويب بسيط",
+      'cv.template.templates.minimalWeb.description': "تصميم بسيط وأنيق يركز على المحتوى",
+      'cv.template.templates.colorfulWeb.name': "قالب ويب ملون",
+      'cv.template.templates.colorfulWeb.description': "قالب ملون يبرز مهاراتك وخبراتك",
+      'cv.template.templates.professionalWeb.name': "قالب ويب احترافي",
+      'cv.template.templates.professionalWeb.description': "قالب احترافي مناسب للمجالات التقليدية",
+      'cv.template.templates.creativeWeb.name': "قالب ويب إبداعي",
+      'cv.template.templates.creativeWeb.description': "قالب مبتكر للمهن الإبداعية والتصميم",
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': "قالب PDF حديث",
+      'cv.template.templates.modernPdf.description': "تصميم أنيق وعصري لسيرتك الذاتية",
+      'cv.template.templates.classicPdf.name': "قالب PDF كلاسيكي",
+      'cv.template.templates.classicPdf.description': "قالب تقليدي مناسب لجميع المجالات",
+      'cv.template.templates.minimalPdf.name': "قالب PDF بسيط",
+      'cv.template.templates.minimalPdf.description': "تصميم بسيط وواضح للسيرة الذاتية",
+      'cv.template.templates.creativePdf.name': "قالب PDF إبداعي",
+      'cv.template.templates.creativePdf.description': "قالب مبتكر يظهر شخصيتك وإبداعك",
+      'cv.template.templates.professionalPdf.name': "قالب PDF احترافي",
+      'cv.template.templates.professionalPdf.description': "قالب رسمي واحترافي للمهنيين"
+    },
+    zh: {
+      summary: "专业摘要",
+      experience: "工作经验",
+      education: "教育背景",
+      skills: "技能",
+      languages: "语言能力",
+      certificates: "证书",
+      present: "至今",
+      skill_level: '/ 5分',
+      // Section visibility translations
+      sectionVisibility: "板块可见性",
+      header: "页眉",
+      layout: "布局",
+      layoutSettings: "布局设置",
+      showPhoto: "显示照片",
+      photoStyle: "照片样式",
+      photoSize: "照片大小",
+      colors: "颜色",
+      typography: "排版",
+      primaryColor: "主色",
+      secondaryColor: "次色",
+      backgroundColor: "背景色",
+      fontSize: "字体大小",
+      fontFamily: "字体",
+      // Layout options
+      singleColumn: "单栏",
+      doubleColumn: "双栏",
+      // Photo styles
+      circle: "圆形",
+      square: "方形",
+      rounded: "圆角",
+      // ATS related
+      atsOptimization: "ATS优化",
+      enableAtsOptimization: "启用ATS优化",
+      atsExplanation: "优化您的简历以便于ATS（申请人跟踪系统）更好地扫描",
+      // Web template translations
+      'cv.template.templates.modernWeb.name': "现代网页模板",
+      'cv.template.templates.modernWeb.description': "清新现代的设计布局",
+      'cv.template.templates.minimalWeb.name': "简约网页模板",
+      'cv.template.templates.minimalWeb.description': "专注于内容的简约设计",
+      'cv.template.templates.colorfulWeb.name': "多彩网页模板",
+      'cv.template.templates.colorfulWeb.description': "生动多彩的设计突显您的技能",
+      'cv.template.templates.professionalWeb.name': "专业网页模板",
+      'cv.template.templates.professionalWeb.description': "适合传统行业的专业设计",
+      'cv.template.templates.creativeWeb.name': "创意网页模板",
+      'cv.template.templates.creativeWeb.description': "适合创意职业的独特设计",
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': "现代PDF简历",
+      'cv.template.templates.modernPdf.description': "时尚现代的PDF简历设计",
+      'cv.template.templates.classicPdf.name': "经典PDF简历",
+      'cv.template.templates.classicPdf.description': "适合各行业的传统简历格式",
+      'cv.template.templates.minimalPdf.name': "简约PDF简历",
+      'cv.template.templates.minimalPdf.description': "简洁清晰的简历布局",
+      'cv.template.templates.creativePdf.name': "创意PDF简历",
+      'cv.template.templates.creativePdf.description': "展示个性与创造力的模板",
+      'cv.template.templates.professionalPdf.name': "专业PDF简历",
+      'cv.template.templates.professionalPdf.description': "正式专业的简历设计"
+    },
+    hi: {
+      summary: "पेशेवर सारांश",
+      experience: "कार्य अनुभव",
+      education: "शिक्षा",
+      skills: "कौशल",
+      languages: "भाषाएँ",
+      certificates: "प्रमाणपत्र",
+      present: "वर्तमान",
+      skill_level: '5 में से',
+      // Section visibility translations
+      sectionVisibility: "अनुभाग दृश्यता",
+      header: "शीर्षक",
+      layout: "लेआउट",
+      layoutSettings: "लेआउट सेटिंग्स",
+      showPhoto: "फोटो दिखाएं",
+      photoStyle: "फोटो शैली",
+      photoSize: "फोटो आकार",
+      colors: "रंग",
+      typography: "टाइपोग्राफी",
+      primaryColor: "प्राथमिक रंग",
+      secondaryColor: "द्वितीयक रंग",
+      backgroundColor: "पृष्ठभूमि रंग",
+      fontSize: "फॉन्ट आकार",
+      fontFamily: "फॉन्ट परिवार",
+      // Layout options
+      singleColumn: "एकल कॉलम",
+      doubleColumn: "दोहरा कॉलम",
+      // Photo styles
+      circle: "गोल",
+      square: "वर्ग",
+      rounded: "गोलाकार",
+      // ATS related
+      atsOptimization: "ATS अनुकूलन",
+      enableAtsOptimization: "ATS अनुकूलन सक्षम करें",
+      atsExplanation: "आपके CV को ATS (आवेदक ट्रैकिंग सिस्टम) द्वारा बेहतर स्कैनिंग के लिए अनुकूलित करता है",
+      // Web template translations
+      'cv.template.templates.modernWeb.name': "आधुनिक वेब टेम्प्लेट",
+      'cv.template.templates.modernWeb.description': "साफ और आधुनिक डिजाइन के साथ",
+      'cv.template.templates.minimalWeb.name': "मिनिमल वेब टेम्प्लेट",
+      'cv.template.templates.minimalWeb.description': "सामग्री पर केंद्रित सरल डिज़ाइन",
+      'cv.template.templates.colorfulWeb.name': "रंगीन वेब टेम्प्लेट",
+      'cv.template.templates.colorfulWeb.description': "आपके कौशल को उजागर करने वाला रंगीन डिज़ाइन",
+      'cv.template.templates.professionalWeb.name': "पेशेवर वेब टेम्प्लेट",
+      'cv.template.templates.professionalWeb.description': "पारंपरिक क्षेत्रों के लिए उपयुक्त व्यावसायिक डिज़ाइन",
+      'cv.template.templates.creativeWeb.name': "क्रिएटिव वेब टेम्प्लेट",
+      'cv.template.templates.creativeWeb.description': "रचनात्मक पेशेवरों के लिए अनोखा डिज़ाइन",
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': "आधुनिक PDF बायोडाटा",
+      'cv.template.templates.modernPdf.description': "स्टाइलिश और आधुनिक रिज्यूमे डिज़ाइन",
+      'cv.template.templates.classicPdf.name': "क्लासिक PDF बायोडाटा",
+      'cv.template.templates.classicPdf.description': "सभी क्षेत्रों के लिए पारंपरिक प्रारूप",
+      'cv.template.templates.minimalPdf.name': "मिनिमल PDF बायोडाटा",
+      'cv.template.templates.minimalPdf.description': "सरल और स्पष्ट बायोडाटा लेआउट",
+      'cv.template.templates.creativePdf.name': "क्रिएटिव PDF बायोडाटा",
+      'cv.template.templates.creativePdf.description': "आपकी व्यक्तित्व और रचनात्मकता दिखाने वाला टेम्प्लेट",
+      'cv.template.templates.professionalPdf.name': "पेशेवर PDF बायोडाटा",
+      'cv.template.templates.professionalPdf.description': "औपचारिक और व्यावसायिक बायोडाटा डिज़ाइन"
+    },
+    es: {
+      summary: "Resumen Profesional",
+      experience: "Experiencia Laboral",
+      education: "Educación",
+      skills: "Habilidades",
+      languages: "Idiomas",
+      certificates: "Certificados",
+      present: "Actualidad",
+      skill_level: 'de 5',
+      // Section visibility translations
+      sectionVisibility: "Visibilidad de Secciones",
+      header: "Encabezado",
+      layout: "Diseño",
+      layoutSettings: "Ajustes de Diseño",
+      showPhoto: "Mostrar Foto",
+      photoStyle: "Estilo de Foto",
+      photoSize: "Tamaño de Foto",
+      colors: "Colores",
+      typography: "Tipografía",
+      primaryColor: "Color Primario",
+      secondaryColor: "Color Secundario",
+      backgroundColor: "Color de Fondo",
+      fontSize: "Tamaño de Fuente",
+      fontFamily: "Tipo de Fuente",
+      // Layout options
+      singleColumn: "Una Columna",
+      doubleColumn: "Dos Columnas",
+      // Photo styles
+      circle: "Círculo",
+      square: "Cuadrado",
+      rounded: "Redondeado",
+      // ATS related
+      atsOptimization: "Optimización ATS",
+      enableAtsOptimization: "Habilitar Optimización ATS",
+      atsExplanation: "Optimiza tu CV para mejor escaneo por ATS (Sistemas de Seguimiento de Candidatos)",
+      // Web template translations
+      'cv.template.templates.modernWeb.name': "Plantilla Web Moderna",
+      'cv.template.templates.modernWeb.description': "Diseño moderno y elegante con un layout limpio",
+      'cv.template.templates.minimalWeb.name': "Plantilla Web Minimalista",
+      'cv.template.templates.minimalWeb.description': "Diseño simple y elegante enfocado en el contenido",
+      'cv.template.templates.colorfulWeb.name': "Plantilla Web Colorida",
+      'cv.template.templates.colorfulWeb.description': "Diseño colorido que destaca tus habilidades",
+      'cv.template.templates.professionalWeb.name': "Plantilla Web Profesional",
+      'cv.template.templates.professionalWeb.description': "Diseño formal para profesiones tradicionales",
+      'cv.template.templates.creativeWeb.name': "Plantilla Web Creativa",
+      'cv.template.templates.creativeWeb.description': "Diseño único para profesiones creativas",
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': "CV PDF Moderno",
+      'cv.template.templates.modernPdf.description': "Diseño de currículum elegante y contemporáneo",
+      'cv.template.templates.classicPdf.name': "CV PDF Clásico",
+      'cv.template.templates.classicPdf.description': "Formato tradicional adecuado para todas las industrias",
+      'cv.template.templates.minimalPdf.name': "CV PDF Minimalista",
+      'cv.template.templates.minimalPdf.description': "Diseño de currículum simple y claro",
+      'cv.template.templates.creativePdf.name': "CV PDF Creativo",
+      'cv.template.templates.creativePdf.description': "Plantilla que muestra tu personalidad y creatividad",
+      'cv.template.templates.professionalPdf.name': "CV PDF Profesional",
+      'cv.template.templates.professionalPdf.description': "Diseño de currículum formal y profesional"
     }
   };
 
@@ -802,9 +1091,30 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   </svg>`;
 
   // Özel şablonu kaydet
-  const handleSaveTemplate = async (templateData: CustomTemplateData) => {
+  const handleSaveTemplate = async (templateData: TemplateBuilderCustomTemplateData | NoDndCustomTemplateData) => {
     try {
-      const saved = await templateService.saveCustomTemplate(templateData, user?.id);
+      // İşlemi gerçekleştirmeden önce tür kontrolü yapalım ve gerekli dönüşümleri uygulayalım
+      let adaptedTemplateData: TemplateBuilderCustomTemplateData;
+      
+      // Eğer NoDndTemplateBuilder'dan gelen veri ise, uyumlu hale getirelim
+      if ('globalSettings' in templateData && 'isAtsOptimized' in templateData.globalSettings) {
+        const { globalSettings, ...rest } = templateData as NoDndCustomTemplateData;
+        const { isAtsOptimized, layout, ...otherSettings } = globalSettings;
+        
+        // TemplateBuilder formatına dönüştürelim
+        adaptedTemplateData = {
+          ...rest,
+          globalSettings: {
+            ...otherSettings,
+            layout: ['single', 'double'].includes(layout) ? layout as 'single' | 'double' : 'single'
+          }
+        } as TemplateBuilderCustomTemplateData;
+      } else {
+        // Zaten TemplateBuilder formatında ise doğrudan kullan
+        adaptedTemplateData = templateData as TemplateBuilderCustomTemplateData;
+      }
+      
+      const saved = await templateService.saveCustomTemplate(adaptedTemplateData, user?.id);
       
       // Şablonları güncelle
       setCustomTemplates(prev => {
@@ -820,7 +1130,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       return saved;
     } catch (error) {
       console.error('Error saving template:', error);
-      toast.error(t('cv.template.savedError'));
+      toast.error(t('common.errorOccurred'));
       throw error;
     }
   };
@@ -873,20 +1183,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {t('cv.preview.title')}
-            {/* Dil seçimi */}
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
-              <InputLabel id="preview-language-label">{t('common.language')}</InputLabel>
-              <Select
-                labelId="preview-language-label"
-                value={previewSelectedLanguage}
-                onChange={(e) => handlePreviewLanguageChange(e as any)}
-                label={t('common.language')}
-              >
-                <MenuItem value="en">English</MenuItem>
-                <MenuItem value="tr">Türkçe</MenuItem>
-                <MenuItem value="ar">العربية</MenuItem>
-              </Select>
-            </FormControl>
+            {/* Dil seçimi kaldırıldı */}
           </Box>
           <IconButton edge="end" onClick={handleClose}>
             <CloseIcon />
@@ -1096,7 +1393,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                     language={previewSelectedLanguage}
                     translations={translations[previewSelectedLanguage] || translations.tr || {}}
                     onSaveTemplate={handleSaveTemplate}
-                    savedTemplates={customTemplates}
+                    savedTemplates={[]}
                   />
                 </ClientOnlyTemplateBuilder>
               )}
@@ -1111,6 +1408,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         </DialogActions>
       </Dialog>
     );
+  };
+
+  // NoSSR template builder kullanımı
+  const handleNoDndSaveTemplate = (templateData: NoDndCustomTemplateData) => {
+    // void dönüş tipi ile Promise'ı görmezden gelelim
+    void handleSaveTemplate(templateData);
   };
 
   return (

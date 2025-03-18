@@ -19,7 +19,9 @@ import {
   Divider,
   Tooltip,
   Slider,
-  CircularProgress 
+  CircularProgress,
+  FormControlLabel,
+  Switch
 } from '@mui/material';
 import { PDFTemplateProps } from './types';
 import { 
@@ -33,11 +35,14 @@ import {
   ArrowDownward,
   Visibility,
   VisibilityOff,
-  Edit
+  Edit,
+  Palette,
+  Close
 } from '@mui/icons-material';
+import AtsOptimizationPanel from './AtsOptimizationPanel';
 
 // Component interface
-interface TemplateBuilderProps {
+export interface TemplateBuilderProps {
   data: PDFTemplateProps['data'];
   language?: string;
   translations?: Record<string, string>;
@@ -78,10 +83,25 @@ export interface CustomTemplateData {
     showPhoto: boolean;
     photoStyle: 'circle' | 'square' | 'rounded';
     photoSize: number;
-    layout: 'single' | 'double';
+    layout: 'single' | 'double' | 'sidebar-left' | 'sidebar-right' | 'three-column' | 'header-highlight';
+    isAtsOptimized: boolean;
+    textColor: string;
   };
   sections: TemplateSection[];
 }
+
+export type GlobalSettings = {
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
+  fontSize: number;
+  backgroundColor: string;
+  showPhoto: boolean;
+  photoStyle: 'circle' | 'square' | 'rounded';
+  photoSize: number;
+  layout: 'single' | 'double' | 'sidebar-left' | 'sidebar-right' | 'three-column' | 'header-highlight';
+  isAtsOptimized: boolean;
+};
 
 /**
  * NoDndTemplateBuilder component allows users to create and customize PDF templates
@@ -117,13 +137,15 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       showPhoto: true,
       photoStyle: 'circle',
       photoSize: 80,
-      layout: 'single'
+      layout: 'single',
+      isAtsOptimized: false,
+      textColor: '#333333'
     },
     sections: [
       {
         id: 'header',
         type: 'header',
-        title: translations.header || 'Header',
+        title: translations.header || t('common.header', 'Header'),
         visible: true,
         order: 0,
         settings: {
@@ -136,7 +158,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       {
         id: 'summary',
         type: 'summary',
-        title: translations.summary || 'Summary',
+        title: translations.summary || t('common.professionalSummary', 'Professional Summary'),
         visible: true,
         order: 1,
         settings: {
@@ -149,7 +171,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       {
         id: 'experience',
         type: 'experience',
-        title: translations.experience || 'Experience',
+        title: translations.experience || t('common.workExperience', 'Work Experience'),
         visible: true,
         order: 2,
         settings: {
@@ -163,7 +185,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       {
         id: 'education',
         type: 'education',
-        title: translations.education || 'Education',
+        title: translations.education || t('common.education', 'Education'),
         visible: true,
         order: 3,
         settings: {
@@ -177,7 +199,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       {
         id: 'skills',
         type: 'skills',
-        title: translations.skills || 'Skills',
+        title: translations.skills || t('common.skills', 'Skills'),
         visible: true,
         order: 4,
         settings: {
@@ -192,7 +214,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       {
         id: 'languages',
         type: 'languages',
-        title: translations.languages || 'Languages',
+        title: translations.languages || t('common.languages', 'Languages'),
         visible: true,
         order: 5,
         settings: {
@@ -206,7 +228,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       {
         id: 'certificates',
         type: 'certificates',
-        title: translations.certificates || 'Certificates',
+        title: translations.certificates || t('common.certificates', 'Certificates'),
         visible: true,
         order: 6,
         settings: {
@@ -303,10 +325,15 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
     });
   };
 
+  // Toggle ATS optimization mode
+  const handleToggleAts = (isOptimized: boolean) => {
+    updateGlobalSettings({ isAtsOptimized: isOptimized });
+  };
+
   // Save template
   const saveTemplate = async () => {
     if (!templateName) {
-      alert(t('cv.template.nameRequired'));
+      alert(t('cv.template.nameRequired', 'Lütfen şablon için bir isim girin'));
       return;
     }
     
@@ -335,17 +362,8 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
   // Open section editing panel
   const openSectionEditor = (sectionId: string) => {
     setEditingSectionId(sectionId);
-    // Switch to the appropriate tab based on section type
-    const section = templateData.sections.find(s => s.id === sectionId);
-    if (section) {
-      if (['skills', 'languages'].includes(section.type)) {
-        setActiveTab(2); // Typography tab for rating styles
-      } else if (section.id === 'header') {
-        setActiveTab(1); // Colors tab for header styling
-      } else {
-        setActiveTab(0); // Layout tab as default
-      }
-    }
+    // Now we don't change tabs, we stay on the current tab
+    // So the editing panel opens regardless of which tab the user is on
   };
 
   // Close section editing panel
@@ -358,27 +376,113 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
     return templateData.sections.find(section => section.id === editingSectionId);
   };
 
+  // Check if we're currently editing the header
+  const isEditingHeader = editingSectionId === 'header';
+
   // Render section specific editing panel
   const renderSectionEditor = () => {
     const section = getEditingSection();
     if (!section) return null;
 
+    const isHeaderSection = section.id === 'header';
+
     return (
-      <Paper sx={{ p: 2, mb: 2, border: '2px solid', borderColor: 'primary.main' }}>
+      <Paper sx={{ 
+        p: 2, 
+        mb: 2, 
+        border: '2px solid', 
+        borderColor: 'primary.main',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        position: 'relative',
+        overflow: 'visible'
+      }}>
+        {/* Arrow Indicator */}
+        <Box sx={{ 
+          position: 'absolute',
+          top: -15,
+          left: 30,
+          width: 0,
+          height: 0,
+          borderLeft: '15px solid transparent',
+          borderRight: '15px solid transparent',
+          borderBottom: '15px solid #2196f3',
+        }} />
+
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6">{t('cv.template.editSection')}: {section.title}</Typography>
-          <Button size="small" onClick={closeSectionEditor}>{t('common.close')}</Button>
+          <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+            {t('cv.template.editSection', 'Bölüm Düzenle')}: {section.title}
+          </Typography>
+          <Button 
+            size="small" 
+            variant="outlined" 
+            onClick={closeSectionEditor}
+            startIcon={<Close fontSize="small" />}
+          >
+            {t('common.close', 'Kapat')}
+          </Button>
         </Box>
 
         <Divider sx={{ mb: 2 }} />
 
         {/* Section specific settings */}
         <Grid container spacing={2}>
+          {/* Header section warning */}
+          {isHeaderSection && (
+            <Grid item xs={12}>
+              <Typography variant="body2" color="warning.main" sx={{ mb: 2 }}>
+                {t('cv.template.headerEditWarning', 'Header düzenlemeleri önizlemede uygun görünmeyebilir. Değişiklikler kaydedildikten sonra doğru şekilde görüntülenecektir.')}
+              </Typography>
+              
+              {/* Header preview */}
+              <Box sx={{ 
+                border: '1px solid #ddd', 
+                borderRadius: '4px', 
+                p: 2, 
+                mb: 2, 
+                backgroundColor: section.settings.backgroundColor,
+                overflow: 'hidden'
+              }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  {templateData.globalSettings.showPhoto && (
+                    <Box sx={{ 
+                      width: `${templateData.globalSettings.photoSize}px`,
+                      height: `${templateData.globalSettings.photoSize}px`,
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: templateData.globalSettings.photoStyle === 'circle' ? '50%' : 
+                                     templateData.globalSettings.photoStyle === 'rounded' ? '10px' : '0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Typography sx={{ color: '#9e9e9e', fontSize: '12px' }}>{t('cv.template.photo', 'Fotoğraf')}</Typography>
+                    </Box>
+                  )}
+                  <Box>
+                    <Typography sx={{ 
+                      color: section.settings.textColor,
+                      fontSize: `${section.settings.fontSize || 10}pt`,
+                      fontWeight: 'bold'
+                    }}>
+                      {t('cv.template.fullName', 'Ad Soyad')}
+                    </Typography>
+                    <Typography sx={{ 
+                      color: section.settings.textColor,
+                      fontSize: `${(section.settings.fontSize || 10) * 0.9}pt`,
+                      opacity: 0.8
+                    }}>
+                      {t('cv.template.profession', 'Pozisyon / Meslek')}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+          )}
+          
           {/* Common settings for all sections */}
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label={t('cv.template.backgroundColor')}
+              label={t('cv.template.backgroundColor', 'Arka Plan Rengi')}
               type="color"
               value={section.settings.backgroundColor}
               onChange={(e) => updateSectionSettings(section.id, { backgroundColor: e.target.value })}
@@ -389,7 +493,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label={t('cv.template.textColor')}
+              label={t('cv.template.textColor', 'Yazı Rengi')}
               type="color"
               value={section.settings.textColor}
               onChange={(e) => updateSectionSettings(section.id, { textColor: e.target.value })}
@@ -398,8 +502,27 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
             />
           </Grid>
           
+          {/* Font selection option for all sections */}
           <Grid item xs={12}>
-            <Typography variant="subtitle2" gutterBottom>{t('cv.template.fontSize')}</Typography>
+            <FormControl fullWidth margin="normal" size="small">
+              <InputLabel>{t('cv.template.fontFamily', 'Yazı Tipi')}</InputLabel>
+              <Select
+                value={section.settings.fontFamily || templateData.globalSettings.fontFamily}
+                onChange={(e) => updateSectionSettings(section.id, { fontFamily: e.target.value })}
+                label={t('cv.template.fontFamily', 'Yazı Tipi')}
+              >
+                <MenuItem value="Arial, sans-serif">Arial</MenuItem>
+                <MenuItem value="'Times New Roman', serif">Times New Roman</MenuItem>
+                <MenuItem value="'Courier New', monospace">Courier New</MenuItem>
+                <MenuItem value="Georgia, serif">Georgia</MenuItem>
+                <MenuItem value="'Trebuchet MS', sans-serif">Trebuchet MS</MenuItem>
+                <MenuItem value="Verdana, sans-serif">Verdana</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          
+          <Grid item xs={12}>
+            <Typography variant="subtitle2" gutterBottom>{t('cv.template.fontSize', 'Yazı Boyutu')}</Typography>
             <Slider
               value={section.settings.fontSize}
               onChange={(_, value) => updateSectionSettings(section.id, { fontSize: value as number })}
@@ -415,16 +538,16 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
           {(section.type === 'skills' || section.type === 'languages') && (
             <Grid item xs={12}>
               <FormControl fullWidth margin="normal" size="small">
-                <InputLabel>{t('cv.template.ratingStyle')}</InputLabel>
+                <InputLabel>{t('cv.template.ratingStyle', 'Değerlendirme Stili')}</InputLabel>
                 <Select
                   value={section.settings.ratingStyle || 'dots'}
                   onChange={(e) => updateSectionSettings(section.id, { ratingStyle: e.target.value as 'dots' | 'stars' | 'bars' | 'numbers' })}
-                  label={t('cv.template.ratingStyle')}
+                  label={t('cv.template.ratingStyle', 'Değerlendirme Stili')}
                 >
-                  <MenuItem value="dots">{t('cv.template.dots')}</MenuItem>
-                  <MenuItem value="stars">{t('cv.template.stars')}</MenuItem>
-                  <MenuItem value="bars">{t('cv.template.bars')}</MenuItem>
-                  <MenuItem value="numbers">{t('cv.template.numbers')}</MenuItem>
+                  <MenuItem value="dots">{t('cv.template.dots', 'Noktalar')}</MenuItem>
+                  <MenuItem value="stars">{t('cv.template.stars', 'Yıldızlar')}</MenuItem>
+                  <MenuItem value="bars">{t('cv.template.bars', 'Çubuklar')}</MenuItem>
+                  <MenuItem value="numbers">{t('cv.template.numbers', 'Sayılar')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -433,14 +556,14 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
           {(section.type === 'experience' || section.type === 'education') && (
             <Grid item xs={12}>
               <FormControl fullWidth margin="normal" size="small">
-                <InputLabel>{t('cv.template.displayStyle')}</InputLabel>
+                <InputLabel>{t('cv.template.displayStyle', 'Görüntüleme Stili')}</InputLabel>
                 <Select
                   value={section.settings.displayStyle || 'timeline'}
                   onChange={(e) => updateSectionSettings(section.id, { displayStyle: e.target.value as 'list' | 'grid' | 'timeline' })}
-                  label={t('cv.template.displayStyle')}
+                  label={t('cv.template.displayStyle', 'Görüntüleme Stili')}
                 >
-                  <MenuItem value="list">{t('cv.template.list')}</MenuItem>
-                  <MenuItem value="timeline">{t('cv.template.timeline')}</MenuItem>
+                  <MenuItem value="list">{t('cv.template.list', 'Liste')}</MenuItem>
+                  <MenuItem value="timeline">{t('cv.template.timeline', 'Zaman Çizelgesi')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -457,7 +580,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       .sort((a, b) => a.order - b.order);
     
     // Get summary text with safe fallback
-    let summaryText = 'Bu alana profesyonel özetiniz gelecek. Kendinizi kısaca tanıtın.';
+    let summaryText = t('cv.template.summaryPlaceholder', 'Bu alana profesyonel özetiniz gelecek. Kendinizi kısaca tanıtın.');
     
     // We use optional chaining and type assertion to safely access data
     // @ts-ignore - We're handling this carefully with fallbacks
@@ -465,6 +588,226 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
     if (summary) {
       summaryText = String(summary);
     }
+    
+    // Function to render a section for reuse in different layouts
+    const renderSection = (section: TemplateSection) => {
+      // Header bölümü için özel işlem
+      if (section.id === 'header') {
+        // Artık header düzenlenirken placeholder yerine gerçek içeriği gösteriyoruz
+        return (
+          <div
+            key={section.id}
+            style={{
+              backgroundColor: section.settings.backgroundColor,
+              color: section.settings.textColor,
+              padding: isEditingHeader ? '15px' : '8px',
+              margin: '5px 0',
+              fontSize: `${section.settings.fontSize}pt`,
+              fontFamily: section.settings.fontFamily,
+              borderRadius: templateData.globalSettings.isAtsOptimized ? '0' : '3px',
+              position: 'relative',
+              overflow: 'hidden',
+              zIndex: 10,
+              // Düzenleme sırasında belirgin olması için hafif bir kenarlık
+              border: isEditingHeader ? '2px dashed #2196f3' : 'none',
+              ...(templateData.globalSettings.isAtsOptimized && {
+                border: 'none',
+                boxShadow: 'none',
+                padding: '10px 0',
+                backgroundColor: '#ffffff'
+              })
+            }}
+          >
+            {isEditingHeader && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                padding: '2px 6px',
+                backgroundColor: '#2196f3',
+                color: 'white',
+                fontSize: '10px',
+                borderBottomLeftRadius: '4px',
+                zIndex: 15
+              }}>
+                {t('cv.template.editing', 'Düzenleniyor')}
+              </div>
+            )}
+            <h3 style={{ 
+              margin: '0 0 5px 0', 
+              color: templateData.globalSettings.isAtsOptimized ? '#000000' : templateData.globalSettings.primaryColor,
+              position: 'relative',
+              zIndex: 11,
+              ...(templateData.globalSettings.isAtsOptimized && {
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                borderBottom: '1px solid #000000',
+                paddingBottom: '4px'
+              })
+            }}>
+              {section.title}
+            </h3>
+            <div style={{ 
+              minHeight: '30px', 
+              backgroundColor: templateData.globalSettings.isAtsOptimized ? '#ffffff' : '#f0f0f0', 
+              borderRadius: templateData.globalSettings.isAtsOptimized ? '0' : '3px',
+              position: 'relative',
+              zIndex: 11
+            }}>
+              <p style={{ padding: '5px', margin: 0, fontSize: 'inherit' }}>
+                {t('cv.template.headerContent', 'Header içeriği')}
+              </p>
+            </div>
+          </div>
+        );
+      }
+
+      // Diğer bölümler için normal render
+      return (
+        <div
+          key={section.id}
+          style={{
+            backgroundColor: section.settings.backgroundColor,
+            color: section.settings.textColor,
+            padding: '8px',
+            margin: '5px 0',
+            fontSize: `${section.settings.fontSize}pt`,
+            fontFamily: section.settings.fontFamily,
+            borderRadius: templateData.globalSettings.isAtsOptimized ? '0' : '3px',
+            ...(templateData.globalSettings.isAtsOptimized && {
+              border: 'none',
+              boxShadow: 'none',
+              padding: '10px 0',
+              backgroundColor: '#ffffff'
+            })
+          }}
+        >
+          <h3 style={{ 
+            margin: '0 0 5px 0', 
+            color: templateData.globalSettings.isAtsOptimized ? '#000000' : templateData.globalSettings.primaryColor,
+            ...(templateData.globalSettings.isAtsOptimized && {
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              borderBottom: '1px solid #000000',
+              paddingBottom: '4px'
+            })
+          }}>
+            {section.title}
+          </h3>
+          <div style={{ 
+            minHeight: '30px', 
+            backgroundColor: templateData.globalSettings.isAtsOptimized ? '#ffffff' : '#f0f0f0', 
+            borderRadius: templateData.globalSettings.isAtsOptimized ? '0' : '3px'
+          }}>
+            {section.type === 'summary' && (
+              <p style={{ padding: '5px', margin: 0, fontSize: 'inherit' }}>
+                {summaryText}
+              </p>
+            )}
+            {(section.type === 'skills' || section.type === 'languages') && (
+              <div style={{ 
+                display: 'flex', 
+                flexWrap: 'wrap', 
+                gap: '5px', 
+                padding: '5px' 
+              }}>
+                {Array(3).fill(0).map((_, i) => (
+                  <div key={i} style={{ 
+                    backgroundColor: templateData.globalSettings.isAtsOptimized ? '#ffffff' : '#e0e0e0', 
+                    padding: '4px 8px',
+                    borderRadius: templateData.globalSettings.isAtsOptimized ? '0' : '3px',
+                    fontSize: 'inherit',
+                    ...(templateData.globalSettings.isAtsOptimized && {
+                      border: 'none',
+                      display: 'inline',
+                      marginRight: '20px'
+                    })
+                  }}>
+                    {section.type === 'skills' 
+                      ? `${t('cv.template.skill', 'Beceri')} ${i+1}` 
+                      : `${t('cv.template.language', 'Dil')} ${i+1}`} 
+                    {!templateData.globalSettings.isAtsOptimized && (
+                      <>
+                        {section.settings.ratingStyle === 'dots' && ' ●●●○○'}
+                        {section.settings.ratingStyle === 'stars' && ' ★★★☆☆'}
+                        {section.settings.ratingStyle === 'bars' && ' ▮▮▮▯▯'}
+                        {section.settings.ratingStyle === 'numbers' && ' 3/5'}
+                      </>
+                    )}
+                    {templateData.globalSettings.isAtsOptimized && `: ${t('cv.template.advancedLevel', 'İleri Seviye')}`}
+                  </div>
+                ))}
+              </div>
+            )}
+            {['experience', 'education'].includes(section.type) && section.settings.displayStyle === 'timeline' && (
+              <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {Array(2).fill(0).map((_, i) => (
+                  <div key={i} style={{ 
+                    display: 'flex',
+                    borderLeft: `2px solid ${templateData.globalSettings.primaryColor}`,
+                    paddingLeft: '10px'
+                  }}>
+                    <div style={{ fontSize: 'inherit' }}>
+                      <div style={{ fontWeight: 'bold' }}>
+                        {section.type === 'experience' 
+                          ? `${t('cv.template.companyName', 'Şirket Adı')} ${i+1}` 
+                          : `${t('cv.template.schoolName', 'Okul Adı')} ${i+1}`}
+                      </div>
+                      <div>2020 - 2023</div>
+                      <div style={{ fontSize: '0.9em', opacity: 0.8 }}>
+                        {section.type === 'experience' 
+                          ? t('cv.template.positionName', 'Pozisyon Adı')
+                          : t('cv.template.degree', 'Derece')}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {['experience', 'education'].includes(section.type) && section.settings.displayStyle === 'list' && (
+              <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {Array(2).fill(0).map((_, i) => (
+                  <div key={i} style={{ 
+                    border: '1px solid #ddd',
+                    padding: '5px',
+                    borderRadius: '3px'
+                  }}>
+                    <div style={{ fontSize: 'inherit' }}>
+                      <div style={{ fontWeight: 'bold' }}>
+                        {section.type === 'experience' 
+                          ? `${t('cv.template.companyName', 'Şirket Adı')} ${i+1}` 
+                          : `${t('cv.template.schoolName', 'Okul Adı')} ${i+1}`}
+                      </div>
+                      <div>2020 - 2023</div>
+                      <div style={{ fontSize: '0.9em', opacity: 0.8 }}>
+                        {section.type === 'experience' 
+                          ? t('cv.template.positionName', 'Pozisyon Adı')
+                          : t('cv.template.degree', 'Derece')}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {section.type === 'certificates' && (
+              <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                {Array(2).fill(0).map((_, i) => (
+                  <div key={i} style={{ fontSize: 'inherit' }}>
+                    <div style={{ fontWeight: 'bold' }}>{t('cv.template.certificate', 'Sertifika')} {i+1}</div>
+                    <div style={{ fontSize: '0.9em', opacity: 0.8 }}>2022 • {t('cv.template.issuer', 'Veren Kurum')}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+    
+    // Get sections by type
+    const mainSections = sortedSections.filter(s => ['summary', 'experience', 'education'].includes(s.type));
+    const sideSections = sortedSections.filter(s => ['skills', 'languages', 'certificates'].includes(s.type));
+    const headerSection = sortedSections.find(s => s.id === 'header');
     
     return (
       <div
@@ -478,256 +821,227 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
           margin: '0 auto',
           direction: language === 'ar' ? 'rtl' : 'ltr',
           textAlign: language === 'ar' ? 'right' : 'left',
+          position: 'relative',
+          zIndex: 1
         }}
       >
-        {/* Header section with photo if enabled */}
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: templateData.globalSettings.layout === 'double' ? 'row' : 'column',
-          marginBottom: '10px',
-          backgroundColor: sortedSections.find(s => s.id === 'header')?.settings.backgroundColor || '#2196f3',
-          padding: '15px',
-          borderRadius: '3px',
-        }}>
-          {templateData.globalSettings.showPhoto && (
+        {/* Header for all layouts */}
+        {headerSection && headerSection.visible && (
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: templateData.globalSettings.layout === 'double' || 
+                          templateData.globalSettings.layout === 'sidebar-left' || 
+                          templateData.globalSettings.layout === 'sidebar-right' ? 'row' : 'column',
+            marginBottom: '10px',
+            backgroundColor: sortedSections.find(s => s.id === 'header')?.settings.backgroundColor || '#2196f3',
+            padding: '15px',
+            borderRadius: '3px',
+            position: 'relative',
+            overflow: 'hidden',
+            zIndex: 10,
+            isolation: 'isolate',
+            // Düzenleme sırasında belirgin olması için dashed kenarlık
+            border: isEditingHeader ? '2px dashed #2196f3' : 'none',
+            ...(templateData.globalSettings.layout === 'header-highlight' && {
+              textAlign: 'center',
+              borderBottom: `5px solid ${templateData.globalSettings.primaryColor}`,
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+            }),
+          }}>
+            {isEditingHeader && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                padding: '2px 6px',
+                backgroundColor: '#2196f3',
+                color: 'white',
+                fontSize: '10px',
+                borderBottomLeftRadius: '4px',
+                zIndex: 15
+              }}>
+                {t('cv.template.editing', 'Düzenleniyor')}
+              </div>
+            )}
             <div style={{ 
-              width: `${templateData.globalSettings.photoSize}px`,
-              height: `${templateData.globalSettings.photoSize}px`,
-              backgroundColor: '#e0e0e0',
-              borderRadius: templateData.globalSettings.photoStyle === 'circle' ? '50%' : 
-                            templateData.globalSettings.photoStyle === 'rounded' ? '10px' : '0',
-              backgroundImage: data.personal_info?.photo ? `url(${data.personal_info.photo})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              position: 'relative', 
+              zIndex: 11,
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: templateData.globalSettings.layout === 'double' ? '20px' : '0',
-              marginBottom: templateData.globalSettings.layout === 'single' ? '10px' : '0',
-              flexShrink: 0,
+              flexDirection: templateData.globalSettings.layout === 'double' || 
+                            templateData.globalSettings.layout === 'sidebar-left' || 
+                            templateData.globalSettings.layout === 'sidebar-right' ? 'row' : 'column',
+              width: '100%'
             }}>
-              {!data.personal_info?.photo && <Typography sx={{ color: '#9e9e9e', textAlign: 'center', fontSize: '10px' }}>Fotoğraf</Typography>}
+              {templateData.globalSettings.showPhoto && (
+                <div style={{ 
+                  width: `${templateData.globalSettings.photoSize}px`,
+                  height: `${templateData.globalSettings.photoSize}px`,
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: templateData.globalSettings.photoStyle === 'circle' ? '50%' : 
+                                templateData.globalSettings.photoStyle === 'rounded' ? '10px' : '0',
+                  backgroundImage: data.personal_info?.photo ? `url(${data.personal_info.photo})` : 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: ['double', 'sidebar-left', 'sidebar-right'].includes(templateData.globalSettings.layout) ? '20px' : '0',
+                  marginBottom: ['single', 'three-column', 'header-highlight'].includes(templateData.globalSettings.layout) ? '10px' : '0',
+                  flexShrink: 0,
+                  ...(templateData.globalSettings.layout === 'header-highlight' && {
+                    margin: '0 auto 10px auto',
+                    border: `3px solid ${templateData.globalSettings.secondaryColor}`
+                  }),
+                }}>
+                  {!data.personal_info?.photo && <Typography sx={{ color: '#9e9e9e', textAlign: 'center', fontSize: '10px' }}>{t('cv.template.photo', 'Fotoğraf')}</Typography>}
+                </div>
+              )}
+              <div style={{ flex: 1 }}>
+                <Typography variant="h5" sx={{ 
+                  fontFamily: 'inherit', 
+                  color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
+                  mb: 1,
+                  position: 'relative',
+                  zIndex: 12
+                }}>
+                  {data.personal_info?.full_name || t('cv.template.fullName', 'Ad Soyad')}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  fontFamily: 'inherit', 
+                  color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
+                  opacity: 0.9,
+                  position: 'relative',
+                  zIndex: 12
+                }}>
+                  {data.personal_info?.title || t('cv.template.profession', 'Meslek / Pozisyon')}
+                </Typography>
+              </div>
             </div>
-          )}
-          <div style={{ flex: 1 }}>
-            <Typography variant="h5" sx={{ 
-              fontFamily: 'inherit', 
-              color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
-              mb: 1
-            }}>
-              {data.personal_info?.full_name || 'Ad Soyad'}
-            </Typography>
-            <Typography variant="body1" sx={{ 
-              fontFamily: 'inherit', 
-              color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
-              opacity: 0.9
-            }}>
-              {data.personal_info?.title || 'Meslek / Pozisyon'}
-            </Typography>
           </div>
-        </div>
+        )}
         
-        {/* Main content - split into columns if double column layout */}
-        <div style={{ 
-          display: templateData.globalSettings.layout === 'double' ? 'flex' : 'block',
-          gap: '20px'
-        }}>
-          {/* Left column or full width column */}
-          <div style={{ flex: templateData.globalSettings.layout === 'double' ? '0.35' : '1' }}>
-            {sortedSections
-              .filter(section => ['summary', 'skills', 'languages'].includes(section.type))
-              .map(section => (
-                <div
-                  key={section.id}
-                  style={{
-                    backgroundColor: section.settings.backgroundColor,
-                    color: section.settings.textColor,
-                    padding: '8px',
-                    margin: '5px 0',
-                    fontSize: `${section.settings.fontSize}pt`,
-                    fontFamily: section.settings.fontFamily,
-                    borderRadius: '3px',
-                  }}
-                >
-                  <h3 style={{ margin: '0 0 5px 0', color: templateData.globalSettings.primaryColor }}>
-                    {section.title}
-                  </h3>
-                  <div style={{ minHeight: '30px', backgroundColor: '#f0f0f0', borderRadius: '3px' }}>
-                    {section.type === 'summary' && (
-                      <p style={{ padding: '5px', margin: 0, fontSize: 'inherit' }}>
-                        {summaryText}
-                      </p>
-                    )}
-                    {(section.type === 'skills' || section.type === 'languages') && (
-                      <div style={{ 
-                        display: 'flex', 
-                        flexWrap: 'wrap', 
-                        gap: '5px', 
-                        padding: '5px' 
-                      }}>
-                        {Array(3).fill(0).map((_, i) => (
-                          <div key={i} style={{ 
-                            backgroundColor: '#e0e0e0', 
-                            padding: '4px 8px',
-                            borderRadius: '3px',
-                            fontSize: 'inherit'
-                          }}>
-                            {section.type === 'skills' ? `Beceri ${i+1}` : `Dil ${i+1}`} 
-                            {section.settings.ratingStyle === 'dots' && ' ●●●○○'}
-                            {section.settings.ratingStyle === 'stars' && ' ★★★☆☆'}
-                            {section.settings.ratingStyle === 'bars' && ' ▮▮▮▯▯'}
-                            {section.settings.ratingStyle === 'numbers' && ' 3/5'}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-          </div>
-          
-          {/* Right column (only shown in double column layout) */}
-          {templateData.globalSettings.layout === 'double' && (
-            <div style={{ flex: '0.65' }}>
+        {/* Render different layouts based on selected layout */}
+        <div style={{ position: 'relative', zIndex: 5 }}>
+          {templateData.globalSettings.layout === 'single' && (
+            <div>
               {sortedSections
-                .filter(section => ['experience', 'education', 'certificates'].includes(section.type))
-                .map(section => (
-                  <div
-                    key={section.id}
-                    style={{
-                      backgroundColor: section.settings.backgroundColor,
-                      color: section.settings.textColor,
-                      padding: '8px',
-                      margin: '5px 0',
-                      fontSize: `${section.settings.fontSize}pt`,
-                      fontFamily: section.settings.fontFamily,
-                      borderRadius: '3px',
-                    }}
-                  >
-                    <h3 style={{ margin: '0 0 5px 0', color: templateData.globalSettings.primaryColor }}>
-                      {section.title}
-                    </h3>
-                    <div style={{ minHeight: '50px', backgroundColor: '#f0f0f0', borderRadius: '3px' }}>
-                      {['experience', 'education'].includes(section.type) && section.settings.displayStyle === 'timeline' && (
-                        <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          {Array(2).fill(0).map((_, i) => (
-                            <div key={i} style={{ 
-                              display: 'flex',
-                              borderLeft: `2px solid ${templateData.globalSettings.primaryColor}`,
-                              paddingLeft: '10px'
-                            }}>
-                              <div style={{ fontSize: 'inherit' }}>
-                                <div style={{ fontWeight: 'bold' }}>{section.type === 'experience' ? 'Şirket Adı' : 'Okul Adı'} {i+1}</div>
-                                <div>2020 - 2023</div>
-                                <div style={{ fontSize: '0.9em', opacity: 0.8 }}>{section.type === 'experience' ? 'Pozisyon Adı' : 'Derece'}</div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      {['experience', 'education'].includes(section.type) && section.settings.displayStyle === 'list' && (
-                        <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          {Array(2).fill(0).map((_, i) => (
-                            <div key={i} style={{ 
-                              border: '1px solid #ddd',
-                              padding: '5px',
-                              borderRadius: '3px'
-                            }}>
-                              <div style={{ fontSize: 'inherit' }}>
-                                <div style={{ fontWeight: 'bold' }}>{section.type === 'experience' ? 'Şirket Adı' : 'Okul Adı'} {i+1}</div>
-                                <div>2020 - 2023</div>
-                                <div style={{ fontSize: '0.9em', opacity: 0.8 }}>{section.type === 'experience' ? 'Pozisyon Adı' : 'Derece'}</div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      {section.type === 'certificates' && (
-                        <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                          {Array(2).fill(0).map((_, i) => (
-                            <div key={i} style={{ fontSize: 'inherit' }}>
-                              <div style={{ fontWeight: 'bold' }}>Sertifika {i+1}</div>
-                              <div style={{ fontSize: '0.9em', opacity: 0.8 }}>2022 • Veren Kurum</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                .filter(section => section.id !== 'header')
+                .map(section => renderSection(section))}
             </div>
           )}
           
-          {/* Show experience/education/certificates in single column layout */}
-          {templateData.globalSettings.layout === 'single' && 
-            sortedSections
-              .filter(section => ['experience', 'education', 'certificates'].includes(section.type))
-              .map(section => (
-                <div
-                  key={section.id}
-                  style={{
-                    backgroundColor: section.settings.backgroundColor,
-                    color: section.settings.textColor,
-                    padding: '8px',
-                    margin: '5px 0',
-                    fontSize: `${section.settings.fontSize}pt`,
-                    fontFamily: section.settings.fontFamily,
-                    borderRadius: '3px',
-                  }}
-                >
-                  <h3 style={{ margin: '0 0 5px 0', color: templateData.globalSettings.primaryColor }}>
-                    {section.title}
-                  </h3>
-                  <div style={{ minHeight: '50px', backgroundColor: '#f0f0f0', borderRadius: '3px' }}>
-                    {/* Same content as above for each section type */}
-                    {['experience', 'education'].includes(section.type) && section.settings.displayStyle === 'timeline' && (
-                      <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {Array(2).fill(0).map((_, i) => (
-                          <div key={i} style={{ 
-                            display: 'flex',
-                            borderLeft: `2px solid ${templateData.globalSettings.primaryColor}`,
-                            paddingLeft: '10px'
-                          }}>
-                            <div style={{ fontSize: 'inherit' }}>
-                              <div style={{ fontWeight: 'bold' }}>{section.type === 'experience' ? 'Şirket Adı' : 'Okul Adı'} {i+1}</div>
-                              <div>2020 - 2023</div>
-                              <div style={{ fontSize: '0.9em', opacity: 0.8 }}>{section.type === 'experience' ? 'Pozisyon Adı' : 'Derece'}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {['experience', 'education'].includes(section.type) && section.settings.displayStyle === 'list' && (
-                      <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {Array(2).fill(0).map((_, i) => (
-                          <div key={i} style={{ 
-                            border: '1px solid #ddd',
-                            padding: '5px',
-                            borderRadius: '3px'
-                          }}>
-                            <div style={{ fontSize: 'inherit' }}>
-                              <div style={{ fontWeight: 'bold' }}>{section.type === 'experience' ? 'Şirket Adı' : 'Okul Adı'} {i+1}</div>
-                              <div>2020 - 2023</div>
-                              <div style={{ fontSize: '0.9em', opacity: 0.8 }}>{section.type === 'experience' ? 'Pozisyon Adı' : 'Derece'}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {section.type === 'certificates' && (
-                      <div style={{ padding: '5px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        {Array(2).fill(0).map((_, i) => (
-                          <div key={i} style={{ fontSize: 'inherit' }}>
-                            <div style={{ fontWeight: 'bold' }}>Sertifika {i+1}</div>
-                            <div style={{ fontSize: '0.9em', opacity: 0.8 }}>2022 • Veren Kurum</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+          {templateData.globalSettings.layout === 'double' && (
+            <div style={{ display: 'flex', gap: '20px' }}>
+              {/* Left column (narrower) */}
+              <div style={{ flex: '0.35' }}>
+                {sortedSections
+                  .filter(section => ['summary', 'skills', 'languages'].includes(section.type))
+                  .map(section => renderSection(section))}
+              </div>
+              
+              {/* Right column (wider) */}
+              <div style={{ flex: '0.65' }}>
+                {sortedSections
+                  .filter(section => ['experience', 'education', 'certificates'].includes(section.type))
+                  .map(section => renderSection(section))}
+              </div>
+            </div>
+          )}
+          
+          {templateData.globalSettings.layout === 'sidebar-left' && (
+            <div style={{ display: 'flex', gap: '20px' }}>
+              {/* Left sidebar */}
+              <div style={{ width: '30%', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
+                {sideSections.map(section => renderSection(section))}
+              </div>
+              
+              {/* Main content area */}
+              <div style={{ flex: '1' }}>
+                {mainSections.map(section => renderSection(section))}
+              </div>
+            </div>
+          )}
+          
+          {templateData.globalSettings.layout === 'sidebar-right' && (
+            <div style={{ display: 'flex', gap: '20px' }}>
+              {/* Main content area */}
+              <div style={{ flex: '1' }}>
+                {mainSections.map(section => renderSection(section))}
+              </div>
+              
+              {/* Right sidebar */}
+              <div style={{ width: '30%', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
+                {sideSections.map(section => renderSection(section))}
+              </div>
+            </div>
+          )}
+          
+          {templateData.globalSettings.layout === 'three-column' && (
+            <div style={{ display: 'flex', gap: '15px' }}>
+              {/* Column 1 - Skills */}
+              <div style={{ flex: '1' }}>
+                {sortedSections
+                  .filter(section => ['skills'].includes(section.type))
+                  .map(section => renderSection(section))}
+              </div>
+              
+              {/* Column 2 - Summary & Experience */}
+              <div style={{ flex: '1' }}>
+                {sortedSections
+                  .filter(section => ['summary', 'experience'].includes(section.type))
+                  .map(section => renderSection(section))}
+              </div>
+              
+              {/* Column 3 - Education, Languages, Certificates */}
+              <div style={{ flex: '1' }}>
+                {sortedSections
+                  .filter(section => ['education', 'languages', 'certificates'].includes(section.type))
+                  .map(section => renderSection(section))}
+              </div>
+            </div>
+          )}
+          
+          {templateData.globalSettings.layout === 'header-highlight' && (
+            <div>
+              {/* Special header-highlight layout: Big header with emphasis, then content below */}
+              <div style={{ borderTop: `3px solid ${templateData.globalSettings.primaryColor}` }}>
+                {/* Summary section right after header */}
+                {sortedSections
+                  .filter(section => section.type === 'summary')
+                  .map(section => (
+                    <div
+                      key={section.id}
+                      style={{
+                        backgroundColor: section.settings.backgroundColor,
+                        color: section.settings.textColor,
+                        padding: '15px',
+                        margin: '0 0 20px 0',
+                        fontSize: `${section.settings.fontSize}pt`,
+                        fontFamily: section.settings.fontFamily,
+                        textAlign: 'center',
+                        fontStyle: 'italic'
+                      }}
+                    >
+                      <p style={{ margin: 0, fontSize: 'inherit' }}>{summaryText}</p>
+                    </div>
+                  ))}
+                
+                {/* Two column layout for the rest of content */}
+                <div style={{ display: 'flex', gap: '20px' }}>
+                  <div style={{ flex: '1' }}>
+                    {sortedSections
+                      .filter(section => ['experience', 'education'].includes(section.type))
+                      .map(section => renderSection(section))}
+                  </div>
+                  <div style={{ flex: '1' }}>
+                    {sortedSections
+                      .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
+                      .map(section => renderSection(section))}
                   </div>
                 </div>
-              ))
-          }
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -740,396 +1054,372 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       <div
         role="tabpanel"
         hidden={value !== index}
-        id={`tabpanel-${index}`}
-        aria-labelledby={`tab-${index}`}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            {children}
+          </Box>
+        )}
       </div>
     );
   };
 
+  // Tab accessibility props
+  const a11yProps = (index: number) => {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  };
+
   return (
-    <Box sx={{ width: '100%', mt: 2 }}>
-      <Paper sx={{ mb: 2, p: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h5">{t('cv.template.customBuilder')}</Typography>
-          <TextField
-            label={t('cv.template.templateName')}
-            variant="outlined"
-            size="small"
-            value={templateName}
-            onChange={(e) => setTemplateName(e.target.value)}
-            sx={{ width: '300px' }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={isSaving ? <CircularProgress size={20} color="inherit" /> : <Save />}
-            onClick={saveTemplate}
-            disabled={isSaving || !templateName}
-          >
-            {t('cv.template.saveTemplate')}
-          </Button>
-        </Box>
-        
-        <Tabs
-          value={activeTab}
-          onChange={(_, newValue) => setActiveTab(newValue)}
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
-        >
-          <Tab icon={<ViewCompact />} label={t('cv.template.layout')} />
-          <Tab icon={<ColorLens />} label={t('cv.template.colors')} />
-          <Tab icon={<TextFormat />} label={t('cv.template.typography')} />
-        </Tabs>
-        
-        {/* Show section editor if a section is being edited */}
-        {editingSectionId && renderSectionEditor()}
-        
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            {/* Tab content for different settings */}
+    <div>
+      <Box sx={{ mb: 4 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={8} md={6}>
+            <TextField
+              fullWidth
+              label={t('cv.template.templateName', 'Şablon Adı')}
+              value={templateName}
+              onChange={(e) => setTemplateName(e.target.value)}
+              margin="normal"
+              size="small"
+            />
+          </Grid>
+          <Grid item xs={12} sm={4} md={6}>
+            <Button
+              variant="contained"
+              startIcon={<Save />}
+              onClick={saveTemplate}
+              disabled={isSaving || !templateName}
+              sx={{ mt: { xs: 0, sm: 2 } }}
+            >
+              {isSaving ? <CircularProgress size={24} /> : t('common.save', 'Kaydet')}
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Main content - split into two columns */}
+      <Grid container spacing={3}>
+        {/* Left column - Settings */}
+        <Grid item xs={12} md={6} lg={7}>
+          <Paper sx={{ width: '100%', mb: { xs: 4, md: 0 } }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs 
+                value={activeTab} 
+                onChange={(_, newValue) => setActiveTab(newValue)} 
+                aria-label="template settings tabs"
+              >
+                <Tab 
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ViewCompact sx={{ mr: 1 }} fontSize="small" />
+                      {t('cv.template.layout', 'Düzen')}
+                    </Box>
+                  } 
+                  {...a11yProps(0)}
+                />
+                <Tab 
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Palette sx={{ mr: 1 }} fontSize="small" />
+                      {t('cv.template.colors', 'Renkler')}
+                    </Box>
+                  } 
+                  {...a11yProps(1)}
+                />
+              </Tabs>
+            </Box>
+
+            {/* Section editor - displayed when a section is being edited */}
+            {editingSectionId && renderSectionEditor()}
+
+            {/* Layout tab */}
             <TabPanel value={activeTab} index={0}>
-              <Typography variant="h6" gutterBottom>{t('cv.template.layoutSettings')}</Typography>
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>{t('cv.template.layout')}</InputLabel>
-                <Select
-                  value={templateData.globalSettings.layout}
-                  onChange={(e) => updateGlobalSettings({ layout: e.target.value as 'single' | 'double' })}
-                  label={t('cv.template.layout')}
-                >
-                  <MenuItem value="single">{t('cv.template.singleColumn')}</MenuItem>
-                  <MenuItem value="double">{t('cv.template.doubleColumn')}</MenuItem>
-                </Select>
-              </FormControl>
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>{t('cv.template.showPhoto')}</InputLabel>
-                <Select
-                  value={templateData.globalSettings.showPhoto}
-                  onChange={(e) => updateGlobalSettings({ showPhoto: e.target.value === 'true' })}
-                  label={t('cv.template.showPhoto')}
-                >
-                  <MenuItem value="true">{t('common.yes')}</MenuItem>
-                  <MenuItem value="false">{t('common.no')}</MenuItem>
-                </Select>
-              </FormControl>
-              
-              {templateData.globalSettings.showPhoto && (
-                <>
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel>{t('cv.template.photoStyle')}</InputLabel>
+              <Typography variant="h6" gutterBottom>{t('cv.template.layoutSettings', 'Düzen Ayarları')}</Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="h6" gutterBottom>{t('cv.template.layout', 'Düzen')}</Typography>
+                  
+                  <FormControl fullWidth margin="normal" size="small">
+                    <InputLabel>{t('cv.template.layout', 'Düzen')}</InputLabel>
                     <Select
-                      value={templateData.globalSettings.photoStyle}
-                      onChange={(e) => updateGlobalSettings({ photoStyle: e.target.value as 'circle' | 'square' | 'rounded' })}
-                      label={t('cv.template.photoStyle')}
+                      value={templateData.globalSettings.layout}
+                      onChange={(e) => updateGlobalSettings({ layout: e.target.value as any })}
+                      label={t('cv.template.layout', 'Düzen')}
                     >
-                      <MenuItem value="circle">{t('cv.template.circle')}</MenuItem>
-                      <MenuItem value="square">{t('cv.template.square')}</MenuItem>
-                      <MenuItem value="rounded">{t('cv.template.rounded')}</MenuItem>
+                      <MenuItem value="single">{t('cv.template.singleColumn', 'Tek Sütun')}</MenuItem>
+                      <MenuItem value="double">{t('cv.template.doubleColumn', 'Çift Sütun')}</MenuItem>
+                      <MenuItem value="sidebar-left">{t('cv.template.sidebarLeft', 'Kenar Çubuğu - Sol')}</MenuItem>
+                      <MenuItem value="sidebar-right">{t('cv.template.sidebarRight', 'Kenar Çubuğu - Sağ')}</MenuItem>
+                      <MenuItem value="three-column">{t('cv.template.threeColumn', 'Üç Sütun')}</MenuItem>
+                      <MenuItem value="header-highlight">{t('cv.template.headerHighlight', 'Başlık Vurgulu')}</MenuItem>
                     </Select>
                   </FormControl>
                   
-                  <Box sx={{ mt: 2 }}>
-                    <Typography gutterBottom>{t('cv.template.photoSize')}</Typography>
-                    <Slider
-                      value={templateData.globalSettings.photoSize}
-                      onChange={(_, value) => updateGlobalSettings({ photoSize: value as number })}
-                      min={40}
-                      max={160}
-                      step={10}
-                      valueLabelDisplay="auto"
-                      marks
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={templateData.globalSettings.showPhoto}
+                        onChange={(e) => updateGlobalSettings({ showPhoto: e.target.checked })}
+                        color="primary"
+                      />
+                    }
+                    label={t('cv.template.showPhoto', 'Fotoğraf Göster')}
+                    sx={{ mt: 2, display: 'block' }}
+                  />
+                  
+                  {templateData.globalSettings.showPhoto && (
+                    <>
+                      <FormControl fullWidth margin="normal" size="small">
+                        <InputLabel>{t('cv.template.photoStyle', 'Fotoğraf Stili')}</InputLabel>
+                        <Select
+                          value={templateData.globalSettings.photoStyle}
+                          onChange={(e) => updateGlobalSettings({ photoStyle: e.target.value as 'circle' | 'square' | 'rounded' })}
+                          label={t('cv.template.photoStyle', 'Fotoğraf Stili')}
+                        >
+                          <MenuItem value="circle">{t('cv.template.circle', 'Yuvarlak')}</MenuItem>
+                          <MenuItem value="square">{t('cv.template.square', 'Kare')}</MenuItem>
+                          <MenuItem value="rounded">{t('cv.template.rounded', 'Yuvarlatılmış')}</MenuItem>
+                        </Select>
+                      </FormControl>
+                      
+                      <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>{t('cv.template.photoSize', 'Fotoğraf Boyutu')}</Typography>
+                      <Slider
+                        value={templateData.globalSettings.photoSize}
+                        onChange={(_, value) => updateGlobalSettings({ photoSize: value as number })}
+                        min={40}
+                        max={150}
+                        step={5}
+                        valueLabelDisplay="auto"
+                        marks
+                      />
+                    </>
+                  )}
+                  
+                  {/* ATS Optimization Panel */}
+                  <Box sx={{ mt: 3 }}>
+                    <Typography variant="h6" gutterBottom>{t('cv.template.atsOptimization', 'ATS Optimizasyonu')}</Typography>
+                    <AtsOptimizationPanel
+                      isAtsOptimized={templateData.globalSettings.isAtsOptimized}
+                      onToggleAts={handleToggleAts}
+                      sections={templateData.sections}
+                      globalSettings={templateData.globalSettings}
                     />
                   </Box>
-                </>
-              )}
-              
-              <Divider sx={{ my: 2 }} />
-              
-              <Typography variant="h6" gutterBottom>{t('cv.template.sections')}</Typography>
-              
-              {/* Manual section reordering without drag and drop */}
-              <Box>
-                {templateData.sections
-                  .sort((a, b) => a.order - b.order)
-                  .map((section, index) => (
-                    <Paper
-                      key={section.id}
-                      sx={{ 
-                        p: 2, 
-                        mb: 1, 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center',
-                        bgcolor: section.visible ? 'background.paper' : 'action.disabledBackground',
-                        opacity: section.visible ? 1 : 0.7,
-                        // Highlight if this section is being edited
-                        border: editingSectionId === section.id ? '2px solid' : 'none',
-                        borderColor: 'primary.main',
-                      }}
-                    >
-                      <Box>
-                        <Typography 
-                          variant="subtitle1" 
-                          sx={{ 
-                            opacity: section.visible ? 1 : 0.5,
-                            textDecoration: section.visible ? 'none' : 'line-through' 
-                          }}
-                        >
-                          {section.title}
-                        </Typography>
-                      </Box>
-                      
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* Up/Down buttons for reordering */}
-                        <Tooltip title={t('cv.template.moveUp')}>
-                          <IconButton 
-                            size="small" 
+                </Grid>
+                
+                <Grid item xs={12} md={6}>
+                  <Typography variant="h6" gutterBottom>{t('cv.template.sectionVisibility', 'Bölüm Görünürlüğü')}</Typography>
+                  <Paper variant="outlined" sx={{ p: 2 }}>
+                    {templateData.sections.map((section) => (
+                      <Box
+                        key={section.id}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          mb: 1,
+                          pb: 1,
+                          borderBottom: '1px solid #eee',
+                          // Aktif düzenlenen bölüm için arka plan rengi
+                          backgroundColor: editingSectionId === section.id ? 'rgba(33, 150, 243, 0.1)' : 'transparent',
+                          borderRadius: '4px',
+                          padding: '8px 4px',
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                          <IconButton
+                            size="small"
                             onClick={() => moveSectionUp(section.id)}
-                            disabled={index === 0}
-                            sx={{ opacity: index === 0 ? 0.5 : 1 }}
+                            disabled={section.order === 0}
                           >
                             <ArrowUpward fontSize="small" />
                           </IconButton>
-                        </Tooltip>
-                        
-                        <Tooltip title={t('cv.template.moveDown')}>
-                          <IconButton 
-                            size="small" 
+                          <IconButton
+                            size="small"
                             onClick={() => moveSectionDown(section.id)}
-                            disabled={index === templateData.sections.length - 1}
-                            sx={{ opacity: index === templateData.sections.length - 1 ? 0.5 : 1 }}
+                            disabled={section.order === templateData.sections.length - 1}
                           >
                             <ArrowDownward fontSize="small" />
                           </IconButton>
-                        </Tooltip>
-                        
-                        {/* Visibility toggle */}
-                        <Tooltip title={section.visible ? t('cv.template.hide') : t('cv.template.show')}>
-                          <IconButton 
-                            size="small" 
-                            onClick={() => toggleSectionVisibility(section.id)}
-                            sx={{ opacity: section.visible ? 1 : 0.5 }}
-                          >
-                            {section.visible ? <Visibility /> : <VisibilityOff />}
-                          </IconButton>
-                        </Tooltip>
-                        
-                        {/* Edit button */}
-                        <Tooltip title={t('cv.template.edit')}>
-                          <IconButton 
-                            size="small"
+                          <Box 
+                            sx={{ 
+                              ml: 1,
+                              cursor: 'pointer',
+                              flex: 1,
+                              display: 'flex',
+                              alignItems: 'center',
+                              padding: '4px 8px',
+                              borderRadius: '4px',
+                              '&:hover': { 
+                                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                              },
+                            }}
                             onClick={() => openSectionEditor(section.id)}
                           >
-                            <Edit />
+                            <Typography 
+                              sx={{ 
+                                fontWeight: editingSectionId === section.id ? 'bold' : 'normal',
+                                color: editingSectionId === section.id ? 'primary.main' : 'text.primary',
+                              }}
+                            >
+                              {section.title}
+                            </Typography>
+                            {editingSectionId === section.id && (
+                              <Typography variant="caption" sx={{ ml: 1, color: 'primary.main' }}>
+                                ({t('cv.template.editing', 'Düzenleniyor')})
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
+                        <Box>
+                          <IconButton
+                            size="small"
+                            onClick={() => toggleSectionVisibility(section.id)}
+                          >
+                            {section.visible ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
                           </IconButton>
-                        </Tooltip>
+                          <IconButton
+                            size="small"
+                            color={editingSectionId === section.id ? "primary" : "default"}
+                            onClick={() => openSectionEditor(section.id)}
+                            sx={{ ml: 1 }}
+                          >
+                            <Edit fontSize="small" />
+                          </IconButton>
+                        </Box>
                       </Box>
-                    </Paper>
-                  ))}
-              </Box>
+                    ))}
+                  </Paper>
+                </Grid>
+              </Grid>
             </TabPanel>
-            
+
+            {/* Colors tab */}
             <TabPanel value={activeTab} index={1}>
-              <Typography variant="h6" gutterBottom>{t('cv.template.colorSettings')}</Typography>
-              
+              <Typography variant="h6" gutterBottom>{t('cv.template.colorSettings', 'Renk Ayarları')}</Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label={t('cv.template.primaryColor')}
+                    label={t('cv.template.primaryColor', 'Ana Renk')}
                     type="color"
                     value={templateData.globalSettings.primaryColor}
                     onChange={(e) => updateGlobalSettings({ primaryColor: e.target.value })}
                     margin="normal"
+                    size="small"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label={t('cv.template.secondaryColor')}
+                    label={t('cv.template.secondaryColor', 'İkincil Renk')}
                     type="color"
                     value={templateData.globalSettings.secondaryColor}
                     onChange={(e) => updateGlobalSettings({ secondaryColor: e.target.value })}
                     margin="normal"
+                    size="small"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label={t('cv.template.backgroundColor')}
+                    label={t('cv.template.backgroundColor', 'Arka Plan Rengi')}
                     type="color"
                     value={templateData.globalSettings.backgroundColor}
                     onChange={(e) => updateGlobalSettings({ backgroundColor: e.target.value })}
                     margin="normal"
+                    size="small"
                   />
                 </Grid>
-              </Grid>
-              
-              <Divider sx={{ my: 2 }} />
-              
-              <Typography variant="h6" gutterBottom>{t('cv.template.sectionColors')}</Typography>
-              
-              {templateData.sections.map(section => (
-                <Paper key={section.id} sx={{ p: 2, mb: 1 }}>
-                  <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('cv.template.backgroundColor')}
-                        type="color"
-                        value={section.settings.backgroundColor}
-                        onChange={(e) => updateSectionSettings(section.id, { backgroundColor: e.target.value })}
-                        margin="normal"
-                        size="small"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label={t('cv.template.textColor')}
-                        type="color"
-                        value={section.settings.textColor}
-                        onChange={(e) => updateSectionSettings(section.id, { textColor: e.target.value })}
-                        margin="normal"
-                        size="small"
-                      />
-                    </Grid>
-                  </Grid>
-                </Paper>
-              ))}
-            </TabPanel>
-            
-            <TabPanel value={activeTab} index={2}>
-              <Typography variant="h6" gutterBottom>{t('cv.template.typographySettings')}</Typography>
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>{t('cv.template.fontFamily')}</InputLabel>
-                <Select
-                  value={templateData.globalSettings.fontFamily}
-                  onChange={(e) => updateGlobalSettings({ fontFamily: e.target.value as string })}
-                  label={t('cv.template.fontFamily')}
-                >
-                  <MenuItem value="Arial, sans-serif">Arial</MenuItem>
-                  <MenuItem value="'Times New Roman', serif">Times New Roman</MenuItem>
-                  <MenuItem value="'Courier New', monospace">Courier New</MenuItem>
-                  <MenuItem value="'Roboto', sans-serif">Roboto</MenuItem>
-                  <MenuItem value="'Open Sans', sans-serif">Open Sans</MenuItem>
-                </Select>
-              </FormControl>
-              
-              <Box sx={{ mt: 2 }}>
-                <Typography gutterBottom>{t('cv.template.fontSize')}</Typography>
-                <Slider
-                  value={templateData.globalSettings.fontSize}
-                  onChange={(_, value) => updateGlobalSettings({ fontSize: value as number })}
-                  min={8}
-                  max={14}
-                  step={0.5}
-                  valueLabelDisplay="auto"
-                  marks
-                />
-              </Box>
-              
-              <Divider sx={{ my: 2 }} />
-              
-              {/* Section level typography settings */}
-              <Typography variant="h6" gutterBottom>{t('cv.template.sectionTypography')}</Typography>
-              
-              {templateData.sections.map(section => (
-                <Paper key={section.id} sx={{ p: 2, mb: 1 }}>
-                  <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
-                  
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label={t('cv.template.textColor', 'Yazı Rengi')}
+                    type="color"
+                    value={templateData.globalSettings.textColor || '#333333'}
+                    onChange={(e) => updateGlobalSettings({ textColor: e.target.value })}
+                    margin="normal"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle2" gutterBottom>{t('cv.template.globalFontSize', 'Genel Yazı Boyutu')}</Typography>
+                  <Slider
+                    value={templateData.globalSettings.fontSize}
+                    onChange={(_, value) => updateGlobalSettings({ fontSize: value as number })}
+                    min={8}
+                    max={12}
+                    step={0.5}
+                    valueLabelDisplay="auto"
+                    marks
+                  />
+                </Grid>
+                <Grid item xs={12}>
                   <FormControl fullWidth margin="normal" size="small">
-                    <InputLabel>{t('cv.template.fontFamily')}</InputLabel>
+                    <InputLabel>{t('cv.template.fontFamily', 'Yazı Tipi')}</InputLabel>
                     <Select
-                      value={section.settings.fontFamily}
-                      onChange={(e) => updateSectionSettings(section.id, { fontFamily: e.target.value as string })}
-                      label={t('cv.template.fontFamily')}
+                      value={templateData.globalSettings.fontFamily}
+                      onChange={(e) => updateGlobalSettings({ fontFamily: e.target.value as string })}
+                      label={t('cv.template.fontFamily', 'Yazı Tipi')}
                     >
-                      <MenuItem value="inherit">{t('cv.template.useGlobal')}</MenuItem>
                       <MenuItem value="Arial, sans-serif">Arial</MenuItem>
                       <MenuItem value="'Times New Roman', serif">Times New Roman</MenuItem>
                       <MenuItem value="'Courier New', monospace">Courier New</MenuItem>
-                      <MenuItem value="'Roboto', sans-serif">Roboto</MenuItem>
+                      <MenuItem value="Georgia, serif">Georgia</MenuItem>
+                      <MenuItem value="'Trebuchet MS', sans-serif">Trebuchet MS</MenuItem>
+                      <MenuItem value="Verdana, sans-serif">Verdana</MenuItem>
                       <MenuItem value="'Open Sans', sans-serif">Open Sans</MenuItem>
+                      <MenuItem value="'Roboto', sans-serif">Roboto</MenuItem>
                     </Select>
                   </FormControl>
-                  
-                  <Box sx={{ mt: 1 }}>
-                    <Typography variant="body2" gutterBottom>{t('cv.template.fontSize')}</Typography>
-                    <Slider
-                      value={section.settings.fontSize}
-                      onChange={(_, value) => updateSectionSettings(section.id, { fontSize: value as number })}
-                      min={8}
-                      max={16}
-                      step={0.5}
-                      valueLabelDisplay="auto"
-                    />
-                  </Box>
-                  
-                  {(section.type === 'skills' || section.type === 'languages') && (
-                    <FormControl fullWidth margin="normal" size="small">
-                      <InputLabel>{t('cv.template.ratingStyle')}</InputLabel>
-                      <Select
-                        value={section.settings.ratingStyle}
-                        onChange={(e) => updateSectionSettings(section.id, { ratingStyle: e.target.value as 'dots' | 'stars' | 'bars' | 'numbers' })}
-                        label={t('cv.template.ratingStyle')}
-                      >
-                        <MenuItem value="dots">{t('cv.template.dots')}</MenuItem>
-                        <MenuItem value="stars">{t('cv.template.stars')}</MenuItem>
-                        <MenuItem value="bars">{t('cv.template.bars')}</MenuItem>
-                        <MenuItem value="numbers">{t('cv.template.numbers')}</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                  
-                  {(section.type === 'experience' || section.type === 'education') && (
-                    <FormControl fullWidth margin="normal" size="small">
-                      <InputLabel>{t('cv.template.displayStyle')}</InputLabel>
-                      <Select
-                        value={section.settings.displayStyle}
-                        onChange={(e) => updateSectionSettings(section.id, { displayStyle: e.target.value as 'list' | 'grid' | 'timeline' })}
-                        label={t('cv.template.displayStyle')}
-                      >
-                        <MenuItem value="list">{t('cv.template.list')}</MenuItem>
-                        <MenuItem value="timeline">{t('cv.template.timeline')}</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                </Paper>
-              ))}
+                </Grid>
+                {/* ATS Optimization Toggle */}
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={templateData.globalSettings.isAtsOptimized || false}
+                        onChange={(e) => updateGlobalSettings({ isAtsOptimized: e.target.checked })}
+                      />
+                    }
+                    label={t('cv.template.atsOptimize', "ATS Optimizasyonunu Etkinleştir")}
+                  />
+                  <Typography variant="caption" color="text.secondary" display="block">
+                    {t('cv.template.atsOptimizeDescription', "ATS (Başvuru Takip Sistemi) tarafından daha iyi taranması için CV'nizi optimize eder")}
+                  </Typography>
+                </Grid>
+              </Grid>
             </TabPanel>
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <Box sx={{ p: 2 }}>
-              <Typography variant="h6" gutterBottom align="center">
-                {t('cv.template.preview')}
-              </Typography>
-              <Paper
-                elevation={3}
-                sx={{ 
-                  p: 2, 
-                  height: '600px', 
-                  overflow: 'auto',
-                  bgcolor: '#f9f9f9',
-                  border: '1px solid #ddd'
-                }}
-              >
-                <div ref={previewRef}>
-                  {renderPreview()}
-                </div>
-              </Paper>
-            </Box>
-          </Grid>
+          </Paper>
         </Grid>
-      </Paper>
-    </Box>
+        
+        {/* Right column - Preview */}
+        <Grid item xs={12} md={6} lg={5}>
+          <Box sx={{ position: 'sticky', top: 16 }}>
+            <Typography variant="h6" gutterBottom>{t('cv.template.preview', 'Önizleme')}</Typography>
+            <Paper 
+              variant="outlined" 
+              sx={{ 
+                p: 2,
+                maxHeight: { md: 'calc(100vh - 150px)' },
+                overflow: 'auto'
+              }}
+            >
+              <div ref={previewRef}>
+                {renderPreview()}
+              </div>
+            </Paper>
+          </Box>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
-export default NoDndTemplateBuilder; 
+export default NoDndTemplateBuilder;

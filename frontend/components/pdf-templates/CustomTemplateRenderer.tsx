@@ -3,7 +3,45 @@
 import React from 'react';
 import Image from 'next/image';
 import { PDFTemplateProps } from './types';
-import { CustomTemplateData, TemplateSection } from './TemplateBuilder';
+
+// Represent a section in the template
+export interface TemplateSection {
+  id: string;
+  type: string;
+  title: string;
+  visible: boolean;
+  order: number;
+  settings: {
+    backgroundColor?: string;
+    textColor?: string;
+    fontSize?: number;
+    fontFamily?: string;
+    borderColor?: string;
+    displayStyle?: 'list' | 'grid' | 'timeline';
+    ratingStyle?: 'dots' | 'stars' | 'bars' | 'numbers';
+  };
+}
+
+export interface CustomTemplateData {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  globalSettings: GlobalSettings;
+  sections: TemplateSection[];
+}
+
+export type GlobalSettings = {
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
+  fontSize: number;
+  backgroundColor: string;
+  showPhoto: boolean;
+  photoStyle: 'circle' | 'square' | 'rounded';
+  photoSize: number;
+  layout: 'single' | 'double' | 'sidebar-left' | 'sidebar-right' | 'three-column' | 'header-highlight';
+};
 
 interface CustomTemplateRendererProps extends PDFTemplateProps {
   templateData: CustomTemplateData;
@@ -57,16 +95,30 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
       display: 'flex', 
       justifyContent: 'space-between', 
       alignItems: 'center',
-      flexDirection: templateData.globalSettings.layout === 'single' ? 'column' : 'row'
+      flexDirection: ['single', 'three-column', 'header-highlight'].includes(templateData.globalSettings.layout) ? 'column' : 'row',
+      ...(templateData.globalSettings.layout === 'header-highlight' && {
+        textAlign: 'center',
+        borderBottom: `5px solid ${templateData.globalSettings.primaryColor}`,
+        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        padding: '15px',
+        backgroundColor: section.settings.backgroundColor || '#f5f5f5',
+        marginBottom: '20px'
+      })
     }}>
       <div style={{ 
-        textAlign: templateData.globalSettings.layout === 'single' ? 'center' : 'left',
-        marginBottom: templateData.globalSettings.layout === 'single' ? '10px' : '0'
+        textAlign: ['single', 'three-column', 'header-highlight'].includes(templateData.globalSettings.layout) ? 'center' : 'left',
+        marginBottom: ['single', 'three-column', 'header-highlight'].includes(templateData.globalSettings.layout) ? '10px' : '0'
       }}>
         <h1 style={{ 
           margin: '0 0 5px 0', 
           fontSize: `${section.settings.fontSize || templateData.globalSettings.fontSize + 6}pt`,
-          color: section.settings.textColor
+          color: section.settings.textColor,
+          ...(templateData.globalSettings.layout === 'header-highlight' && {
+            marginBottom: '10px',
+            borderBottom: `2px solid ${templateData.globalSettings.secondaryColor}`,
+            paddingBottom: '5px',
+            display: 'inline-block'
+          })
         }}>
           {data.personal_info?.first_name} {data.personal_info?.last_name}
         </h1>
@@ -74,19 +126,22 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
           <p style={{ 
             margin: '0 0 5px 0', 
             fontSize: `${(section.settings.fontSize || templateData.globalSettings.fontSize) - 1}pt`,
-            color: section.settings.textColor
+            color: section.settings.textColor,
+            ...(templateData.globalSettings.layout === 'header-highlight' && {
+              fontStyle: 'italic'
+            })
           }}>
             {data.personal_info.title}
           </p>
         )}
         <div style={{ 
           display: 'flex', 
-          flexDirection: templateData.globalSettings.layout === 'single' ? 'row' : 'column',
+          flexDirection: ['single', 'three-column', 'header-highlight'].includes(templateData.globalSettings.layout) ? 'row' : 'column',
           flexWrap: 'wrap', 
           gap: '8px', 
           fontSize: `${(section.settings.fontSize || templateData.globalSettings.fontSize) - 2}pt`,
           color: section.settings.textColor,
-          justifyContent: templateData.globalSettings.layout === 'single' ? 'center' : 'flex-start'
+          justifyContent: ['single', 'three-column', 'header-highlight'].includes(templateData.globalSettings.layout) ? 'center' : 'flex-start'
         }}>
           {data.personal_info?.email && (
             <span>📧 {data.personal_info.email}</span>
@@ -102,7 +157,12 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
       
       {/* Profil fotoğrafı */}
       {templateData.globalSettings.showPhoto && data.personal_info?.photo && (
-        <div>
+        <div style={{
+          ...(templateData.globalSettings.layout === 'header-highlight' && {
+            margin: '0 auto 10px auto',
+            border: `3px solid ${templateData.globalSettings.secondaryColor}`
+          })
+        }}>
           <Image
             src={data.personal_info.photo}
             alt="Profile"
@@ -385,42 +445,39 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
     }
   };
   
+  // Render main template based on layout type
   return (
-    <div
-      id="pdf-container"
-      style={{
-        fontFamily: templateData.globalSettings.fontFamily,
-        fontSize: `${templateData.globalSettings.fontSize}pt`,
-        backgroundColor: templateData.globalSettings.backgroundColor,
-        padding: '15px',
-        color: '#333',
-        maxWidth: '100%',
-        margin: '0 auto',
-        direction: isRTL ? 'rtl' : 'ltr',
-        textAlign: isRTL ? 'right' : 'left',
-      }}
-    >
-      {templateData.globalSettings.layout === 'single' ? (
-        // Tek sütunlu düzen
-        <>
-          {visibleSections.map((section) => (
+    <div style={{ 
+      fontFamily: templateData.globalSettings.fontFamily || 'Arial, sans-serif',
+      fontSize: `${templateData.globalSettings.fontSize}pt`,
+      backgroundColor: templateData.globalSettings.backgroundColor,
+      color: '#333333',
+      padding: '20px',
+      width: '100%',
+      boxSizing: 'border-box',
+      direction: isRTL ? 'rtl' : 'ltr',
+    }}>
+      {/* Use different layouts based on layout setting */}
+      {templateData.globalSettings.layout === 'single' && (
+        // Single column layout
+        <div>
+          {visibleSections.map(section => (
             <div 
               key={section.id}
-              style={{
+              style={{ 
+                marginBottom: '20px',
                 backgroundColor: section.settings.backgroundColor,
-                marginBottom: '15px',
                 padding: '10px',
-                borderRadius: '3px',
-                borderLeft: `3px solid ${templateData.globalSettings.primaryColor}`
+                borderRadius: '4px',
               }}
             >
+              {/* Section title except for header section */}
               {section.type !== 'header' && (
                 <h2 style={{ 
-                  color: templateData.globalSettings.primaryColor, 
-                  margin: '0 0 8px 0', 
-                  fontSize: `${(section.settings.fontSize || templateData.globalSettings.fontSize) + 2}pt`,
-                  borderBottom: `1px solid ${templateData.globalSettings.secondaryColor}`,
-                  paddingBottom: '5px'
+                  borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                  paddingBottom: '5px',
+                  marginTop: 0,
+                  color: templateData.globalSettings.primaryColor
                 }}>
                   {section.title}
                 </h2>
@@ -428,33 +485,33 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
               {renderSectionContent(section)}
             </div>
           ))}
-        </>
-      ) : (
-        // Çift sütunlu düzen
-        <div style={{ display: 'flex', gap: '15px' }}>
-          {/* Sol sütun (geniş) */}
-          <div style={{ flex: '3' }}>
+        </div>
+      )}
+
+      {templateData.globalSettings.layout === 'double' && (
+        // Double column layout
+        <div style={{ display: 'flex', gap: '20px' }}>
+          {/* Left column (narrower) */}
+          <div style={{ flex: '0.35' }}>
             {visibleSections
-              .filter(section => ['header', 'summary', 'experience', 'education'].includes(section.type))
-              .sort((a, b) => a.order - b.order)
-              .map((section) => (
+              .filter(section => ['header', 'summary', 'skills', 'languages'].includes(section.type))
+              .map(section => (
                 <div 
                   key={section.id}
-                  style={{
+                  style={{ 
+                    marginBottom: '20px',
                     backgroundColor: section.settings.backgroundColor,
-                    marginBottom: '15px',
                     padding: '10px',
-                    borderRadius: '3px',
-                    borderLeft: `3px solid ${templateData.globalSettings.primaryColor}`
+                    borderRadius: '4px',
                   }}
                 >
+                  {/* Section title except for header section */}
                   {section.type !== 'header' && (
                     <h2 style={{ 
-                      color: templateData.globalSettings.primaryColor, 
-                      margin: '0 0 8px 0', 
-                      fontSize: `${(section.settings.fontSize || templateData.globalSettings.fontSize) + 2}pt`,
-                      borderBottom: `1px solid ${templateData.globalSettings.secondaryColor}`,
-                      paddingBottom: '5px'
+                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                      paddingBottom: '5px',
+                      marginTop: 0,
+                      color: templateData.globalSettings.primaryColor
                     }}>
                       {section.title}
                     </h2>
@@ -464,34 +521,359 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
               ))}
           </div>
           
-          {/* Sağ sütun (dar) */}
-          <div style={{ flex: '1' }}>
+          {/* Right column (wider) */}
+          <div style={{ flex: '0.65' }}>
             {visibleSections
-              .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
-              .sort((a, b) => a.order - b.order)
-              .map((section) => (
+              .filter(section => ['experience', 'education', 'certificates'].includes(section.type))
+              .map(section => (
                 <div 
                   key={section.id}
-                  style={{
+                  style={{ 
+                    marginBottom: '20px',
                     backgroundColor: section.settings.backgroundColor,
-                    marginBottom: '15px',
                     padding: '10px',
-                    borderRadius: '3px',
-                    borderLeft: `3px solid ${templateData.globalSettings.primaryColor}`
+                    borderRadius: '4px',
                   }}
                 >
                   <h2 style={{ 
-                    color: templateData.globalSettings.primaryColor, 
-                    margin: '0 0 8px 0', 
-                    fontSize: `${(section.settings.fontSize || templateData.globalSettings.fontSize) + 2}pt`,
-                    borderBottom: `1px solid ${templateData.globalSettings.secondaryColor}`,
-                    paddingBottom: '5px'
+                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                    paddingBottom: '5px',
+                    marginTop: 0,
+                    color: templateData.globalSettings.primaryColor
                   }}>
                     {section.title}
                   </h2>
                   {renderSectionContent(section)}
                 </div>
               ))}
+          </div>
+        </div>
+      )}
+
+      {templateData.globalSettings.layout === 'sidebar-left' && (
+        // Left sidebar layout
+        <div style={{ display: 'flex', gap: '20px' }}>
+          {/* Left sidebar */}
+          <div style={{ width: '30%', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
+            {visibleSections
+              .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <h2 style={{ 
+                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                    paddingBottom: '5px',
+                    marginTop: 0,
+                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
+                    color: templateData.globalSettings.primaryColor
+                  }}>
+                    {section.title}
+                  </h2>
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+          
+          {/* Main content */}
+          <div style={{ flex: '1' }}>
+            {visibleSections
+              .filter(section => ['header', 'summary', 'experience', 'education'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  {/* Section title except for header section */}
+                  {section.type !== 'header' && (
+                    <h2 style={{ 
+                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                      paddingBottom: '5px',
+                      marginTop: 0,
+                      color: templateData.globalSettings.primaryColor
+                    }}>
+                      {section.title}
+                    </h2>
+                  )}
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {templateData.globalSettings.layout === 'sidebar-right' && (
+        // Right sidebar layout
+        <div style={{ display: 'flex', gap: '20px' }}>
+          {/* Main content */}
+          <div style={{ flex: '1' }}>
+            {visibleSections
+              .filter(section => ['header', 'summary', 'experience', 'education'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  {/* Section title except for header section */}
+                  {section.type !== 'header' && (
+                    <h2 style={{ 
+                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                      paddingBottom: '5px',
+                      marginTop: 0,
+                      color: templateData.globalSettings.primaryColor
+                    }}>
+                      {section.title}
+                    </h2>
+                  )}
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+          
+          {/* Right sidebar */}
+          <div style={{ width: '30%', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
+            {visibleSections
+              .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <h2 style={{ 
+                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                    paddingBottom: '5px',
+                    marginTop: 0,
+                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
+                    color: templateData.globalSettings.primaryColor
+                  }}>
+                    {section.title}
+                  </h2>
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {templateData.globalSettings.layout === 'three-column' && (
+        // Three column layout
+        <div style={{ display: 'flex', gap: '15px' }}>
+          {/* Column 1 - Skills */}
+          <div style={{ flex: '1' }}>
+            {visibleSections
+              .filter(section => ['skills'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <h2 style={{ 
+                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                    paddingBottom: '5px',
+                    marginTop: 0,
+                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
+                    color: templateData.globalSettings.primaryColor
+                  }}>
+                    {section.title}
+                  </h2>
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+          
+          {/* Column 2 - Summary & Experience */}
+          <div style={{ flex: '1' }}>
+            {visibleSections
+              .filter(section => ['header', 'summary', 'experience'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  {/* Section title except for header section */}
+                  {section.type !== 'header' && (
+                    <h2 style={{ 
+                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                      paddingBottom: '5px',
+                      marginTop: 0,
+                      color: templateData.globalSettings.primaryColor
+                    }}>
+                      {section.title}
+                    </h2>
+                  )}
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+          
+          {/* Column 3 - Education, Languages, Certificates */}
+          <div style={{ flex: '1' }}>
+            {visibleSections
+              .filter(section => ['education', 'languages', 'certificates'].includes(section.type))
+              .map(section => (
+                <div 
+                  key={section.id}
+                  style={{ 
+                    marginBottom: '20px',
+                    backgroundColor: section.settings.backgroundColor,
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <h2 style={{ 
+                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                    paddingBottom: '5px',
+                    marginTop: 0,
+                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
+                    color: templateData.globalSettings.primaryColor
+                  }}>
+                    {section.title}
+                  </h2>
+                  {renderSectionContent(section)}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {templateData.globalSettings.layout === 'header-highlight' && (
+        // Header highlight layout with special header and 2-column content
+        <div>
+          {/* Header section first */}
+          {visibleSections
+            .filter(section => section.type === 'header')
+            .map(section => (
+              <div 
+                key={section.id}
+                style={{ 
+                  marginBottom: '20px',
+                  backgroundColor: section.settings.backgroundColor,
+                  padding: '15px',
+                  borderRadius: '4px',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                  borderBottom: `5px solid ${templateData.globalSettings.primaryColor}`
+                }}
+              >
+                {renderSectionContent(section)}
+              </div>
+            ))}
+
+          {/* Summary section with special styling */}
+          {visibleSections
+            .filter(section => section.type === 'summary')
+            .map(section => (
+              <div 
+                key={section.id}
+                style={{ 
+                  marginBottom: '20px',
+                  backgroundColor: section.settings.backgroundColor,
+                  padding: '15px',
+                  borderRadius: '4px',
+                  textAlign: 'center',
+                  fontStyle: 'italic',
+                  borderTop: `3px solid ${templateData.globalSettings.primaryColor}`
+                }}
+              >
+                <h2 style={{ 
+                  borderBottom: `2px solid ${templateData.globalSettings.secondaryColor}`,
+                  paddingBottom: '5px',
+                  marginTop: 0,
+                  color: templateData.globalSettings.primaryColor,
+                  display: 'inline-block'
+                }}>
+                  {section.title}
+                </h2>
+                {renderSectionContent(section)}
+              </div>
+            ))}
+            
+          {/* Two column layout for the rest of the content */}
+          <div style={{ display: 'flex', gap: '20px' }}>
+            {/* Left column */}
+            <div style={{ flex: '1' }}>
+              {visibleSections
+                .filter(section => ['experience', 'education'].includes(section.type))
+                .map(section => (
+                  <div 
+                    key={section.id}
+                    style={{ 
+                      marginBottom: '20px',
+                      backgroundColor: section.settings.backgroundColor,
+                      padding: '10px',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <h2 style={{ 
+                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                      paddingBottom: '5px',
+                      marginTop: 0,
+                      color: templateData.globalSettings.primaryColor
+                    }}>
+                      {section.title}
+                    </h2>
+                    {renderSectionContent(section)}
+                  </div>
+                ))}
+            </div>
+            
+            {/* Right column */}
+            <div style={{ flex: '1' }}>
+              {visibleSections
+                .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
+                .map(section => (
+                  <div 
+                    key={section.id}
+                    style={{ 
+                      marginBottom: '20px',
+                      backgroundColor: section.settings.backgroundColor,
+                      padding: '10px',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <h2 style={{ 
+                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+                      paddingBottom: '5px',
+                      marginTop: 0,
+                      color: templateData.globalSettings.primaryColor
+                    }}>
+                      {section.title}
+                    </h2>
+                    {renderSectionContent(section)}
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       )}

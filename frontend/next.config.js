@@ -26,7 +26,7 @@ const nextConfig = {
   
   // Image optimization
   images: {
-    domains: ['web-production-9f41e.up.railway.app'],
+    domains: ['web-production-9f41e.up.railway.app', 'cekfisi.fra1.cdn.digitaloceanspaces.com'],
     formats: ['image/avif', 'image/webp'],
   },
   
