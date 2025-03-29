@@ -803,5 +803,151 @@
     "switchToMonthly": "Switch to Monthly Billing",
     "switchToYearly": "Switch to Yearly Billing",
     "cancelSubscription": "Cancel Subscription"
+  },
+  "privacy": {
+    "pageTitle": "Privacy Policy - CV Builder",
+    "pageDescription": "Learn how we collect, use, and protect your personal information at CV Builder",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "lastUpdatedDate": "March 29, 2023",
+    "introduction": "This Privacy Policy describes how CV Builder ('we', 'our', or 'us') collects, uses, and discloses your personal information when you use our service. We are committed to protecting your privacy and ensuring you have a positive experience on our website and when using our services.",
+    "dataCollection": {
+      "title": "Information We Collect",
+      "description": "We may collect several types of information from and about users of our service, including:",
+      "personalInfo": "Personal identification information (such as your name, email address, and phone number)",
+      "profileInfo": "Profile information (such as your professional background, education, skills, and other career-related information)",
+      "resumeData": "Information contained in the resumes and CVs you create using our service",
+      "usageInfo": "Usage details (such as how you interact with our service, access times, and pages viewed)"
+    },
+    "dataUsage": {
+      "title": "How We Use Your Information",
+      "description": "We use the information we collect about you or that you provide to us for various purposes, including:",
+      "providingService": "To provide, maintain, and improve our services",
+      "improving": "To understand and analyze how you use our service and to develop new products, services, features, and functionality",
+      "personalizing": "To personalize your experience and to deliver content relevant to your interests",
+      "communications": "To communicate with you about our service, including sending service-related notices and promotional messages"
+    },
+    "dataSharing": {
+      "title": "How We Share Your Information",
+      "description": "We may disclose your personal information in the following circumstances:",
+      "serviceProviders": "With service providers who work on our behalf and need access to your information to perform their services",
+      "legal": "When required by law or to protect our rights, privacy, safety, or property, or that of our users or others",
+      "business": "In connection with a business transaction, such as a merger, sale of assets, or bankruptcy"
+    },
+    "dataSecurity": {
+      "title": "Data Security",
+      "description": "We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, so we cannot guarantee its absolute security."
+    },
+    "dataRetention": {
+      "title": "Data Retention",
+      "description": "We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law."
+    },
+    "userRights": {
+      "title": "Your Rights",
+      "description": "Depending on your location, you may have certain rights regarding your personal information, including:",
+      "access": "The right to access and review the personal information we have collected about you",
+      "correction": "The right to correct inaccurate or incomplete information",
+      "deletion": "The right to request deletion of your personal information",
+      "objection": "The right to object to our processing of your personal information",
+      "withdrawal": "The right to withdraw your consent at any time, where we rely on consent to process your information"
+    },
+    "cookies": {
+      "title": "Cookies and Tracking Technologies",
+      "description": "We use cookies and similar tracking technologies to track activity on our service and hold certain information. Cookies are files with a small amount of data that may include an anonymous unique identifier. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent."
+    },
+    "thirdParty": {
+      "title": "Third-Party Services",
+      "description": "Our service may contain links to other websites or services that are not operated by us. If you click on a third-party link, you will be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services."
+    },
+    "children": {
+      "title": "Children's Privacy",
+      "description": "Our service is not intended for use by children under the age of 16. We do not knowingly collect personal information from children under 16. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us so that we can take necessary actions."
+    },
+    "changes": {
+      "title": "Changes to This Privacy Policy",
+      "description": "We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the 'Last Updated' date. You are advised to review this Privacy Policy periodically for any changes."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you have any questions about this Privacy Policy, please contact us at:",
+      "email": "Email"
+    }
+  },
+  "terms": {
+    "pageTitle": "Terms of Service - CV Builder",
+    "pageDescription": "Read our terms and conditions for using CV Builder services",
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated",
+    "lastUpdatedDate": "March 29, 2023",
+    "introduction": "These Terms of Service ('Terms') govern your access to and use of CV Builder's website, services, and applications (collectively, the 'Service'). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you may not access the Service.",
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "description": "By creating an account or by using our Service, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you are using the Service on behalf of an organization, you are agreeing to these Terms on behalf of that organization."
+    },
+    "accountRegistration": {
+      "title": "Account Registration and Security",
+      "description": "To use certain features of our Service, you may need to create an account. When registering for an account, you agree to:",
+      "accurate": "Provide true, accurate, current, and complete information about yourself",
+      "oneAccount": "Maintain only one account, unless explicitly permitted to create multiple accounts",
+      "security": "Maintain the security of your account by protecting your password and restricting access to your account",
+      "prohibited": "Not allow others to use your account or transfer your account to another person or entity"
+    },
+    "userContent": {
+      "title": "User Content",
+      "description": "Our Service allows you to create, store, and share content such as resumes, CVs, and profile information ('User Content'). Regarding User Content, you acknowledge that:",
+      "ownership": "You retain ownership of any intellectual property rights you hold in the User Content",
+      "license": "You grant CV Builder a worldwide, royalty-free license to use, reproduce, modify, distribute, and display the User Content to provide and improve the Service",
+      "prohibited": "You will not upload, share, or create any content that violates these Terms or any applicable laws or regulations"
+    },
+    "subscriptions": {
+      "title": "Subscriptions and Payments",
+      "description": "We offer free and paid subscription plans for our Service. By subscribing to a paid plan, you agree to the following terms:",
+      "payment": "You agree to pay all fees associated with your subscription plan",
+      "renewal": "Subscriptions automatically renew at the end of each billing period unless cancelled before the renewal date",
+      "cancellation": "You may cancel your subscription at any time through your account settings or by contacting us",
+      "refunds": "Refunds are provided in accordance with our refund policy and applicable law"
+    },
+    "intellectualProperty": {
+      "title": "Intellectual Property Rights",
+      "description": "The Service and its original content, features, and functionality are and will remain the exclusive property of CV Builder and its licensors. The Service is protected by copyright, trademark, and other laws of both the country where you reside and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of CV Builder."
+    },
+    "prohibition": {
+      "title": "Prohibited Uses",
+      "description": "You agree not to use the Service in any way that:",
+      "illegal": "Violates any applicable laws or regulations",
+      "harmful": "Is harmful, threatening, abusive, harassing, defamatory, or otherwise objectionable",
+      "impersonation": "Involves impersonating any person or entity or falsely stating or misrepresenting your affiliation with a person or entity",
+      "data": "Attempts to collect or store personal data about other users without their knowledge and express consent",
+      "interference": "Interferes with or disrupts the integrity or performance of the Service or its components"
+    },
+    "termination": {
+      "title": "Termination",
+      "description": "We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including but not limited to a breach of the Terms. Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service or delete your account through the account settings."
+    },
+    "disclaimer": {
+      "title": "Disclaimer of Warranties",
+      "description": "The Service is provided 'as is' and 'as available' without any warranties of any kind, either express or implied, including but not limited to, the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not warrant that the Service will be uninterrupted, timely, secure, or error-free."
+    },
+    "limitation": {
+      "title": "Limitation of Liability",
+      "description": "To the maximum extent permitted by law, in no event shall CV Builder, its directors, employees, partners, agents, suppliers, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of or inability to use the Service."
+    },
+    "indemnification": {
+      "title": "Indemnification",
+      "description": "You agree to defend, indemnify, and hold harmless CV Builder and its licensors, service providers, employees, agents, officers, and directors from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms or your use of the Service."
+    },
+    "governing": {
+      "title": "Governing Law",
+      "description": "These Terms shall be governed by and construed in accordance with the laws of the country where CV Builder is established, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "description": "We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you have any questions about these Terms, please contact us at:",
+      "email": "Email"
+    }
   }
 }

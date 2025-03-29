@@ -37,7 +37,8 @@ export default function Footer() {
             <Link href="/" color="text.secondary" display="block">{t('footer.home')}</Link>
             {/* <Link href="/about" color="text.secondary" display="block">{t('footer.about')}</Link> */}
             <Link href="/contact" color="text.secondary" display="block">{t('footer.contact')}</Link>
-            {/* <Link href="/privacy" color="text.secondary" display="block">{t('footer.privacy')}</Link> */}
+            <Link href="/privacy-policy" color="text.secondary" display="block">{t('footer.privacy')}</Link>
+            <Link href="/terms-of-service" color="text.secondary" display="block">{t('footer.terms')}</Link>
           </Grid>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>

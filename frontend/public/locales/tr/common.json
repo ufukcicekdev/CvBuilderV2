@@ -373,7 +373,7 @@
     "validUntil": "Geçerlilik Tarihi",
     "confirmCancellation": "İptal İşlemini Onayla",
     "cancelSuccess": "Aboneliğiniz başarıyla iptal edildi.",
-    "cancelError": "Abonelik iptal edilirken hata oluştu. Lütfen tekrar deneyin.",
+    "cancelError": "Abonelik iptal edilirken hata oluştu.",
     "periodUpdateSuccess": "Fatura dönemi başarıyla güncellendi.",
     "periodUpdateError": "Fatura dönemi güncellenirken hata oluştu.",
     "switchToMonthly": "Aylık Ödemeye Geç",
@@ -779,5 +779,151 @@
     "switchToMonthly": "Aylık Ödemeye Geç",
     "switchToYearly": "Yıllık Ödemeye Geç",
     "cancelSubscription": "Aboneliği İptal Et"
+  },
+  "privacy": {
+    "pageTitle": "Gizlilik Politikası - CV Builder",
+    "pageDescription": "CV Builder'da kişisel bilgilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu öğrenin",
+    "title": "Gizlilik Politikası",
+    "lastUpdated": "Son Güncelleme",
+    "lastUpdatedDate": "29 Mart 2023",
+    "introduction": "Bu Gizlilik Politikası, CV Builder ('biz', 'bizim' veya 'bize') olarak hizmetimizi kullandığınızda kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı ve paylaştığımızı açıklamaktadır. Gizliliğinizi korumaya ve web sitemizi ve hizmetlerimizi kullanırken olumlu bir deneyim yaşamanızı sağlamaya kararlıyız.",
+    "dataCollection": {
+      "title": "Topladığımız Bilgiler",
+      "description": "Hizmetimizin kullanıcılarından aşağıdakiler de dahil olmak üzere çeşitli türde bilgiler toplayabiliriz:",
+      "personalInfo": "Kişisel tanımlama bilgileri (adınız, e-posta adresiniz ve telefon numaranız gibi)",
+      "profileInfo": "Profil bilgileri (mesleki geçmişiniz, eğitiminiz, becerileriniz ve diğer kariyer ile ilgili bilgiler gibi)",
+      "resumeData": "Hizmetimizi kullanarak oluşturduğunuz özgeçmişlerde bulunan bilgiler",
+      "usageInfo": "Kullanım detayları (hizmetimizle nasıl etkileşim kurduğunuz, erişim süreleri ve görüntülenen sayfalar gibi)"
+    },
+    "dataUsage": {
+      "title": "Bilgilerinizi Nasıl Kullanıyoruz",
+      "description": "Hakkınızda topladığımız veya bize sağladığınız bilgileri çeşitli amaçlar için kullanırız, bunlar arasında:",
+      "providingService": "Hizmetlerimizi sağlamak, sürdürmek ve geliştirmek",
+      "improving": "Hizmetimizi nasıl kullandığınızı anlamak ve analiz etmek ve yeni ürünler, hizmetler, özellikler ve işlevler geliştirmek",
+      "personalizing": "Deneyiminizi kişiselleştirmek ve ilgi alanlarınıza uygun içerik sunmak",
+      "communications": "Servis ile ilgili bildirimleri ve promosyon mesajları da dahil olmak üzere hizmetimizle ilgili sizinle iletişim kurmak"
+    },
+    "dataSharing": {
+      "title": "Bilgilerinizi Nasıl Paylaşıyoruz",
+      "description": "Kişisel bilgilerinizi aşağıdaki durumlarda paylaşabiliriz:",
+      "serviceProviders": "Bizim adımıza çalışan ve hizmetlerini gerçekleştirmek için bilgilerinize erişmeye ihtiyaç duyan servis sağlayıcılarla",
+      "legal": "Yasal olarak gerektiğinde veya bizim, kullanıcılarımızın veya başkalarının haklarını, gizliliğini, güvenliğini veya mülkiyetini korumak için",
+      "business": "Birleşme, varlık satışı veya iflas gibi bir iş işlemi ile bağlantılı olarak"
+    },
+    "dataSecurity": {
+      "title": "Veri Güvenliği",
+      "description": "Kişisel bilgilerinizi yetkisiz erişim, değiştirme, açıklama veya imhadan korumak için uygun güvenlik önlemleri uyguluyoruz. Ancak, internet üzerinden hiçbir aktarım yöntemi veya elektronik depolama %100 güvenli değildir, bu nedenle mutlak güvenliğini garanti edemeyiz."
+    },
+    "dataRetention": {
+      "title": "Veri Saklama",
+      "description": "Kişisel bilgilerinizi, yasalar tarafından daha uzun bir saklama süresi gerekmedikçe veya izin verilmedikçe, bu Gizlilik Politikasında belirtilen amaçları yerine getirmek için gerekli olduğu sürece saklarız."
+    },
+    "userRights": {
+      "title": "Haklarınız",
+      "description": "Bulunduğunuz yere bağlı olarak, kişisel bilgilerinizle ilgili aşağıdakiler de dahil olmak üzere belirli haklara sahip olabilirsiniz:",
+      "access": "Hakkınızda topladığımız kişisel bilgilere erişme ve inceleme hakkı",
+      "correction": "Yanlış veya eksik bilgileri düzeltme hakkı",
+      "deletion": "Kişisel bilgilerinizin silinmesini talep etme hakkı",
+      "objection": "Kişisel bilgilerinizin işlenmesine itiraz etme hakkı",
+      "withdrawal": "Bilgilerinizi işlemek için izninize güvendiğimiz durumlarda, istediğiniz zaman izninizi geri çekme hakkı"
+    },
+    "cookies": {
+      "title": "Çerezler ve İzleme Teknolojileri",
+      "description": "Hizmetimizdeki etkinliği izlemek ve belirli bilgileri tutmak için çerezler ve benzer izleme teknolojileri kullanıyoruz. Çerezler, anonim bir benzersiz tanımlayıcı içerebilen küçük miktarda veri içeren dosyalardır. Tarayıcınıza tüm çerezleri reddetmesi veya bir çerezin ne zaman gönderildiğini belirtmesi talimatını verebilirsiniz."
+    },
+    "thirdParty": {
+      "title": "Üçüncü Taraf Hizmetleri",
+      "description": "Hizmetimiz, bizim tarafımızdan işletilmeyen diğer web sitelerine veya hizmetlere bağlantılar içerebilir. Üçüncü taraf bir bağlantıya tıklarsanız, o üçüncü tarafın sitesine yönlendirileceksiniz. Ziyaret ettiğiniz her sitenin Gizlilik Politikasını incelemenizi şiddetle tavsiye ederiz. Herhangi bir üçüncü taraf site veya hizmetin içeriği, gizlilik politikaları veya uygulamaları üzerinde hiçbir kontrolümüz yoktur ve hiçbir sorumluluk kabul etmiyoruz."
+    },
+    "children": {
+      "title": "Çocukların Gizliliği",
+      "description": "Hizmetimiz 16 yaşın altındaki çocuklar tarafından kullanılmak üzere tasarlanmamıştır. 16 yaşın altındaki çocuklardan bilerek kişisel bilgi toplamıyoruz. Ebeveyn veya veli iseniz ve çocuğunuzun bize kişisel bilgi verdiğinin farkındaysanız, gerekli işlemleri yapabilmemiz için lütfen bizimle iletişime geçin."
+    },
+    "changes": {
+      "title": "Bu Gizlilik Politikasındaki Değişiklikler",
+      "description": "Gizlilik Politikamızı zaman zaman güncelleyebiliriz. Herhangi bir değişikliği, yeni Gizlilik Politikasını bu sayfada yayınlayarak ve 'Son Güncelleme' tarihini güncelleyerek size bildireceğiz. Bu Gizlilik Politikasını herhangi bir değişiklik için periyodik olarak gözden geçirmeniz önerilir."
+    },
+    "contact": {
+      "title": "Bize Ulaşın",
+      "description": "Bu Gizlilik Politikası hakkında herhangi bir sorunuz varsa, lütfen bizimle şu adresten iletişime geçin:",
+      "email": "E-posta"
+    }
+  },
+  "terms": {
+    "pageTitle": "Hizmet Şartları - CV Builder",
+    "pageDescription": "CV Builder hizmetlerini kullanmak için şartlarımızı ve koşullarımızı okuyun",
+    "title": "Hizmet Şartları",
+    "lastUpdated": "Son Güncelleme",
+    "lastUpdatedDate": "29 Mart 2023",
+    "introduction": "Bu Hizmet Şartları ('Şartlar'), CV Builder'ın web sitesine, hizmetlerine ve uygulamalarına (toplu olarak 'Hizmet') erişiminizi ve kullanımınızı yönetir. Hizmete erişerek veya kullanarak, bu Şartlara bağlı olmayı kabul edersiniz. Şartların herhangi bir kısmına katılmıyorsanız, Hizmete erişemezsiniz.",
+    "acceptance": {
+      "title": "Şartların Kabulü",
+      "description": "Bir hesap oluşturarak veya Hizmetimizi kullanarak, bu Şartları okuduğunuzu, anladığınızı ve bunlara bağlı olmayı kabul ettiğinizi kabul edersiniz. Hizmeti bir kuruluş adına kullanıyorsanız, bu Şartları o kuruluş adına kabul ediyorsunuz."
+    },
+    "accountRegistration": {
+      "title": "Hesap Kaydı ve Güvenliği",
+      "description": "Hizmetimizin belirli özelliklerini kullanmak için bir hesap oluşturmanız gerekebilir. Bir hesap kaydolurken, şunları kabul edersiniz:",
+      "accurate": "Kendiniz hakkında doğru, kesin, güncel ve eksiksiz bilgi sağlamak",
+      "oneAccount": "Açıkça birden fazla hesap oluşturma izni verilmedikçe yalnızca bir hesap tutmak",
+      "security": "Şifrenizi koruyarak ve hesabınıza erişimi kısıtlayarak hesabınızın güvenliğini sağlamak",
+      "prohibited": "Başkalarının hesabınızı kullanmasına izin vermemek veya hesabınızı başka bir kişiye veya kuruluşa aktarmamak"
+    },
+    "userContent": {
+      "title": "Kullanıcı İçeriği",
+      "description": "Hizmetimiz, özgeçmişler ve profil bilgileri gibi içerikler oluşturmanıza, saklamanıza ve paylaşmanıza olanak tanır ('Kullanıcı İçeriği'). Kullanıcı İçeriği ile ilgili olarak, şunları kabul edersiniz:",
+      "ownership": "Kullanıcı İçeriğinde sahip olduğunuz her türlü fikri mülkiyet hakkının mülkiyetini elinizde tutarsınız",
+      "license": "CV Builder'a, Hizmeti sağlamak ve geliştirmek için Kullanıcı İçeriğini kullanma, çoğaltma, değiştirme, dağıtma ve görüntüleme konusunda dünya çapında, telifsiz bir lisans verirsiniz",
+      "prohibited": "Bu Şartları veya geçerli yasaları veya düzenlemeleri ihlal eden herhangi bir içerik yüklemeyecek, paylaşmayacak veya oluşturmayacaksınız"
+    },
+    "subscriptions": {
+      "title": "Abonelikler ve Ödemeler",
+      "description": "Hizmetimiz için ücretsiz ve ücretli abonelik planları sunuyoruz. Ücretli bir plana abone olarak aşağıdaki şartları kabul edersiniz:",
+      "payment": "Abonelik planınızla ilişkili tüm ücretleri ödemeyi kabul edersiniz",
+      "renewal": "Yenileme tarihinden önce iptal edilmedikçe abonelikler her fatura döneminin sonunda otomatik olarak yenilenir",
+      "cancellation": "Aboneliğinizi istediğiniz zaman hesap ayarlarınız aracılığıyla veya bizimle iletişime geçerek iptal edebilirsiniz",
+      "refunds": "İadeler, iade politikamıza ve geçerli yasalara uygun olarak sağlanır"
+    },
+    "intellectualProperty": {
+      "title": "Fikri Mülkiyet Hakları",
+      "description": "Hizmet ve orijinal içeriği, özellikleri ve işlevselliği CV Builder ve lisans verenlerinin münhasır mülkiyetinde kalacaktır. Hizmet, telif hakkı, ticari marka ve ikamet ettiğiniz ülkenin ve yabancı ülkelerin diğer yasaları tarafından korunmaktadır. Ticari markalarımız ve ticari giysilerimiz, CV Builder'ın önceden yazılı izni olmadan herhangi bir ürün veya hizmetle bağlantılı olarak kullanılamaz."
+    },
+    "prohibition": {
+      "title": "Yasaklanan Kullanımlar",
+      "description": "Hizmeti aşağıdaki şekillerde kullanmamayı kabul edersiniz:",
+      "illegal": "Geçerli herhangi bir yasa veya düzenlemeyi ihlal eden",
+      "harmful": "Zararlı, tehdit edici, taciz edici, iftira niteliğinde veya başka şekilde itiraz edilebilir olan",
+      "impersonation": "Herhangi bir kişi veya kuruluşu taklit etmeyi veya bir kişi veya kuruluşla ilişkinizi yanlış belirtmeyi veya yanlış tanıtmayı içeren",
+      "data": "Diğer kullanıcılar hakkında kişisel verileri bilgileri ve açık izinleri olmadan toplamaya veya depolamaya çalışan",
+      "interference": "Hizmetin veya bileşenlerinin bütünlüğüne veya performansına müdahale eden veya bozan"
+    },
+    "termination": {
+      "title": "Fesih",
+      "description": "Şartların ihlali de dahil olmak üzere herhangi bir nedenle, önceden bildirimde bulunmaksızın veya sorumluluk olmaksızın hesabınızı ve Hizmete erişiminizi derhal feshedebilir veya askıya alabiliriz. Fesih üzerine, Hizmeti kullanma hakkınız derhal sona erecektir. Hesabınızı feshetmek istiyorsanız, Hizmeti kullanmayı bırakabilir veya hesap ayarları aracılığıyla hesabınızı silebilirsiniz."
+    },
+    "disclaimer": {
+      "title": "Garantilerin Reddi",
+      "description": "Hizmet, ticari olarak satılabilirlik, belirli bir amaca uygunluk veya ihlal etmeme zımni garantileri dahil ancak bunlarla sınırlı olmamak üzere, açık veya zımni herhangi bir garanti olmaksızın 'olduğu gibi' ve 'mevcut olduğu gibi' sağlanır. Hizmetin kesintisiz, zamanında, güvenli veya hatasız olacağını garanti etmiyoruz."
+    },
+    "limitation": {
+      "title": "Sorumluluk Sınırlaması",
+      "description": "Yasaların izin verdiği azami ölçüde, CV Builder, yöneticileri, çalışanları, ortakları, acenteleri, tedarikçileri veya bağlı kuruluşları, kar, veri, kullanım, iyi niyet veya diğer maddi olmayan kayıplar dahil ancak bunlarla sınırlı olmamak üzere, Hizmeti kullanımınızdan veya kullanamamanızdan kaynaklanan herhangi bir dolaylı, arızi, özel, sonuç olarak ortaya çıkan veya cezai zararlardan sorumlu olmayacaktır."
+    },
+    "indemnification": {
+      "title": "Tazminat",
+      "description": "Bu Şartları ihlal etmenizden veya Hizmeti kullanmanızdan kaynaklanan veya bunlarla ilgili her türlü iddia, yükümlülük, zarar, karar, ödül, kayıp, maliyet, gider veya ücretten (makul avukatlık ücretleri dahil) CV Builder ve lisans verenlerini, servis sağlayıcılarını, çalışanlarını, acentelerini, görevlilerini ve yöneticilerini savunmayı, tazmin etmeyi ve zarar görmelerini önlemeyi kabul edersiniz."
+    },
+    "governing": {
+      "title": "Geçerli Kanun",
+      "description": "Bu Şartlar, CV Builder'ın kurulduğu ülkenin yasalarına uygun olarak, kanunlar ihtilafı hükümleri dikkate alınmaksızın yönetilecek ve yorumlanacaktır. Bu Şartlardaki herhangi bir hak veya hükmü uygulamamız, bu haklardan feragat etme olarak kabul edilmeyecektir."
+    },
+    "changes": {
+      "title": "Şartlardaki Değişiklikler",
+      "description": "Bu Şartları istediğimiz zaman değiştirme veya değiştirme hakkını saklı tutarız. Bir revizyon önemli ise, yeni şartlar yürürlüğe girmeden önce en az 30 gün önceden bildirimde bulunacağız. Neyin önemli bir değişiklik oluşturduğu, yalnızca bizim takdirimizde belirlenecektir. Bu revizyonlar yürürlüğe girdikten sonra Hizmetimize erişmeye veya kullanmaya devam ederek, revize edilmiş şartlara bağlı olmayı kabul edersiniz."
+    },
+    "contact": {
+      "title": "Bize Ulaşın",
+      "description": "Bu Şartlar hakkında herhangi bir sorunuz varsa, lütfen bizimle şu adresten iletişime geçin:",
+      "email": "E-posta"
+    }
   }
 }
