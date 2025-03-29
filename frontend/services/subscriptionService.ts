@@ -17,6 +17,8 @@ export interface SubscriptionPlan {
   currency: string;
   features: Record<string, boolean>; // Features as keys with boolean values
   is_active: boolean;
+  paddle_product_id?: string;
+  paddle_price_id?: string;
 }
 
 export interface UserSubscription {
@@ -39,8 +41,8 @@ export interface PaymentHistory {
   currency: string;
   status: string;
   payment_date: string;
-  iyzico_payment_id: string | null;
-  iyzico_payment_transaction_id: string | null;
+  paddle_payment_id: string | null;
+  paddle_checkout_id: string | null;
 }
 
 // Default subscription plan for when API fails
@@ -59,8 +61,13 @@ export const DEFAULT_SUBSCRIPTION_PLAN: SubscriptionPlan = {
     'feature.aiAssistant': true,
     'feature.unlimitedCvs': true,
   },
-  is_active: true
+  is_active: true,
+  paddle_product_id: 'pro_01jpfc9498chc8f3gxw8az5ywc',
+  paddle_price_id: 'pri_01jpfcexy9qjyv2m7p040x1hye'
 };
+
+// Call initialization on import - this will be handled by the usePaddle hook in components
+// that need Paddle functionality
 
 // Subscription service functions
 const subscriptionService = {
@@ -92,48 +99,61 @@ const subscriptionService = {
     }
   },
 
-  // Create a subscription with Iyzico
-  createSubscription: async (planId: string, isYearly: boolean, cardToken?: string) => {
+  // Create a subscription with Paddle
+  createSubscription: async (planId: string, isYearly: boolean) => {
     try {
       // Get the selected language from localStorage
       const selectedLanguage = localStorage.getItem('selectedLanguage') || 'en';
       
+      // Call our backend to start the subscription process
       const response = await api.post('/api/subscriptions/subscriptions/create_subscription/', {
         plan_id: planId,
         period: isYearly ? 'yearly' : 'monthly',
-        card_token: cardToken
       }, {
         headers: {
           'Accept-Language': selectedLanguage
         }
       });
       
-      return response.data;
+      // Return the checkout URL and subscription data
+      return {
+        checkout_url: response.data.checkout_url,
+        subscription_id: response.data.subscription_id,
+        passthrough: response.data.passthrough,
+        checkout_id: response.data.checkout_id,
+        price_id: response.data.price_id,
+      };
     } catch (error) {
       console.error('Error creating subscription:', error);
       throw error;
     }
   },
 
-  // Process payment with Iyzico (simulation for demo)
-  processPayment: async (planId: string, isYearly: boolean): Promise<{ success: boolean, cardToken?: string }> => {
+  // Open Paddle checkout - this is now simplified and will use the usePaddle hook
+  // in components that need checkout functionality
+  openPaddleCheckout: async (checkoutData: { 
+    checkout_url: string, 
+    price_id?: string, 
+  }): Promise<boolean> => {
     try {
-      // In a real implementation, this would integrate with Iyzico's payment system
-      // For demo purposes, we're simulating a successful payment
+      // If there's no price_id, just open the checkout URL directly
+      if (!checkoutData.price_id && checkoutData.checkout_url) {
+        window.open(checkoutData.checkout_url, '_blank');
+        return true;
+      }
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Simulate successful payment with a fake card token
-      const cardToken = `iyzico_token_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
-      
-      return {
-        success: true,
-        cardToken: cardToken
-      };
+      // Otherwise, the component will use the usePaddle hook to open the checkout
+      // This is just a fallback method
+      return false;
     } catch (error) {
-      console.error('Error processing payment:', error);
-      return { success: false };
+      console.error('Error in openPaddleCheckout fallback:', error);
+      
+      // Fallback to redirect method
+      if (checkoutData.checkout_url) {
+        window.open(checkoutData.checkout_url, '_blank');
+        return true;
+      }
+      return false;
     }
   },
 
@@ -179,11 +199,9 @@ const subscriptionService = {
   },
 
   // Cancel subscription
-  cancelSubscription: async (subscriptionId?: number) => {
+  cancelSubscription: async () => {
     try {
-      const response = await api.post('/api/subscriptions/subscriptions/cancel_subscription/', {
-        subscription_id: subscriptionId
-      });
+      const response = await api.post('/api/subscriptions/subscriptions/cancel_subscription/', {});
       return response.data;
     } catch (error) {
       console.error('Error cancelling subscription:', error);
@@ -191,25 +209,13 @@ const subscriptionService = {
     }
   },
 
-  // Update subscription
-  updateSubscription: async (planId: string, isYearly: boolean, cardToken?: string) => {
+  // Get URL to update payment method
+  getUpdatePaymentMethodUrl: async () => {
     try {
-      // Get the selected language from localStorage
-      const selectedLanguage = localStorage.getItem('selectedLanguage') || 'en';
-      
-      const response = await api.post('/api/subscriptions/subscriptions/update_card/', {
-        plan_id: planId,
-        period: isYearly ? 'yearly' : 'monthly',
-        card_token: cardToken
-      }, {
-        headers: {
-          'Accept-Language': selectedLanguage
-        }
-      });
-      
-      return response.data;
+      const response = await api.post('/api/subscriptions/subscriptions/update_payment_method/', {});
+      return response.data.update_url;
     } catch (error) {
-      console.error('Error updating subscription:', error);
+      console.error('Error getting update payment URL:', error);
       throw error;
     }
   }

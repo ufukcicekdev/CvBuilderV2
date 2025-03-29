@@ -54,7 +54,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
     try {
       if (!subscription) return;
       
-      await subscriptionService.cancelSubscription(subscription.id);
+      await subscriptionService.cancelSubscription();
       toast.success(t('pricing.cancelSuccess'));
       setCancelDialogOpen(false);
       
@@ -78,7 +78,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
     const newPeriod = subscription.period === 'yearly' ? 'monthly' : 'yearly';
     
     try {
-      await subscriptionService.updateSubscription(
+      await subscriptionService.createSubscription(
         subscription.plan.plan_id,
         newPeriod === 'yearly'
       );

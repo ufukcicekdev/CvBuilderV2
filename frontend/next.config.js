@@ -44,6 +44,10 @@ const nextConfig = {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin-allow-popups',
           },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://*.paddle.com https://sandbox-buy.paddle.com https://*.paddle.com:* http://localhost:* http://localhost;",
+          },
         ],
       },
     ];

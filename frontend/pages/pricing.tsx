@@ -10,20 +10,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Switch,
-  FormControlLabel,
   useTheme,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from '@mui/material';
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
+import Head from 'next/head';
 import subscriptionService, { 
   SubscriptionPlan, 
   UserSubscription, 
@@ -37,17 +31,24 @@ export default function Pricing() {
   const { t } = useTranslation('common');
   const theme = useTheme();
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
-  const [isYearly, setIsYearly] = useState(false);
+  const { isAuthenticated, user } = useAuth();
+  const isYearly = false;
   const [plan, setPlan] = useState<SubscriptionPlan>(DEFAULT_SUBSCRIPTION_PLAN);
   const [currentSubscription, setCurrentSubscription] = useState<UserSubscription | null>(null);
   const [loading, setLoading] = useState(true);
-  const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        
+        // localStorage'dan user verisini kontrol et
+        const userFromStorage = localStorage.getItem('user');
+        if (userFromStorage) {
+          const parsedUser = JSON.parse(userFromStorage);
+        
+        }
+        
         const plansData = await subscriptionService.getPlans();
         if (plansData && plansData.length > 0) {
           setPlan(plansData[0]); // Just take the first plan
@@ -68,46 +69,110 @@ export default function Pricing() {
     fetchData();
   }, [isAuthenticated, t]);
 
-  const handlePlanSelect = () => {
+  // Paddle.js'in yüklendiğini kontrol eden useEffect
+  useEffect(() => {
+    // Paddle script'ini yükle
+    if (typeof window !== 'undefined' && !(window as any).Paddle) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
+      script.async = true;
+      
+      // Script yüklendikten sonra
+      script.onload = () => {
+        console.log("Paddle script loaded");
+        
+        // Paddle ortamını ayarla
+        if ((window as any).Paddle && (window as any).Paddle.Environment) {
+          (window as any).Paddle.Environment.set("sandbox");
+          console.log("Paddle environment set to sandbox");
+          
+          // Paddle'ı initialize et
+          (window as any).Paddle.Initialize({
+            token: process.env.NEXT_PUBLIC_PADDLE_TOKEN,
+            checkout: {
+              settings: {
+                locale: localStorage.getItem('selectedLanguage')
+              }
+            }
+          });
+          
+          console.log("Paddle initialized");
+        }
+      };
+      
+      document.head.appendChild(script);
+    }
+  }, []);
+
+  // Paddle.js'i kullanarak doğrudan ödeme işlemini başlat
+  const handlePlanSelect = async () => {
     if (!isAuthenticated) {
       // Redirect to login page with redirect back to pricing
       router.push(`/login?redirect=${encodeURIComponent('/pricing')}`);
       return;
     }
 
-    // Open the checkout dialog instead of directly creating a subscription
-    setCheckoutDialogOpen(true);
-  };
-
-  const handleCheckoutSubmit = async () => {
     try {
-      // Show payment processing toast
-      toast.loading(t('pricing.paymentProcessing'), { id: 'payment-toast' });
+      // Paddle işleminin başladığını göster
+      toast.loading(t('pricing.processingCheckout'), { id: 'paddle-toast' });
       
-      // Process payment with Iyzico (simulated)
-      const paymentResult = await subscriptionService.processPayment(plan.plan_id, isYearly);
+      // Paddle için price_id'yi kullan
+      const priceId = plan.paddle_price_id;
       
-      if (paymentResult.success && paymentResult.cardToken) {
-        // Update toast to success
-        toast.success(t('pricing.paymentSuccess'), { id: 'payment-toast' });
+      // Kullanıcı dilini al (varsayılan tr)
+      const userLocale = localStorage.getItem('selectedLanguage') || 'tr';
+
+      console.log("Locale:", userLocale);
+      
+      // Paddle'ın kullanılmaya hazır olup olmadığını kontrol et
+      if (typeof window !== 'undefined' && 
+          (window as any).Paddle && 
+          (window as any).Paddle.Checkout) {
         
-        // Then create the subscription with the card token
-        await subscriptionService.createSubscription(plan.plan_id, isYearly, paymentResult.cardToken);
-        toast.success(t('pricing.subscriptionSuccess'));
+        console.log("Paddle is ready, opening checkout...");
         
-        // Refresh the current subscription
-        const subscription = await subscriptionService.getCurrentSubscription();
-        setCurrentSubscription(subscription);
-        
-        // Close the dialog
-        setCheckoutDialogOpen(false);
+        // Checkout'u aç - daha güvenli şekilde
+        try {
+          (window as any).Paddle.Checkout.open({
+            items: [{ 
+              priceId: priceId, 
+              quantity: 1 
+            }],
+            displayMode: "overlay",
+            theme: "light",
+            locale: userLocale,
+            allowQuantity: false,
+            customer: user?.paddle_customer_id ? {
+              id: user.paddle_customer_id
+            } : undefined,
+            success: (data: any) => {
+              console.log('Ödeme başarılı!', data);
+              // İşlem başarılı olduğunda checkout penceresini kapat
+              toast.success(t('pricing.subscriptionSuccess') || 'Aboneliğiniz başarıyla oluşturuldu!', { id: 'paddle-success-toast' });
+              
+              // Başarılı ödeme sonrası kullanıcıyı dashboard'a yönlendirme
+              setTimeout(() => {
+                window.location.href = '/dashboard'; 
+              }, 1500);
+            },
+            closeCallback: () => {
+              console.log('Checkout penceresi kapatıldı');
+              // Kullanıcı pencereyi kapattığında yapılacak işlemler
+            }
+          });
+          console.log("Paddle checkout opened successfully");
+          toast.success(t('pricing.checkoutOpened'), { id: 'paddle-toast' });
+        } catch (checkoutError) {
+          console.error("Error opening Paddle checkout:", checkoutError);
+          toast.error(t('pricing.checkoutError'), { id: 'paddle-toast' });
+        }
       } else {
-        // Payment failed
-        toast.error(t('pricing.paymentError'), { id: 'payment-toast' });
+        console.error("Paddle is not loaded properly");
+        toast.error(t('pricing.paddleNotLoaded'), { id: 'paddle-toast' });
       }
     } catch (error) {
-      console.error('Error creating subscription:', error);
-      toast.error(t('pricing.subscriptionError'), { id: 'payment-toast' });
+      console.error('Error:', error);
+      toast.error(t('pricing.checkoutError'), { id: 'paddle-toast' });
     }
   };
 
@@ -129,16 +194,18 @@ export default function Pricing() {
     'feature.basicCvTemplates'
   ];
 
-  const price = isYearly ? plan.price_yearly : plan.price_monthly;
+  const price = plan.price_monthly;
   const isCurrentPlan = currentSubscription && 
     currentSubscription.plan.plan_id === plan.plan_id && 
     currentSubscription.status === 'active';
-  const isPeriodMatch = currentSubscription && 
-    ((isYearly && currentSubscription.period === 'yearly') || 
-      (!isYearly && currentSubscription.period === 'monthly'));
+  const isPeriodMatch = currentSubscription && currentSubscription.period === 'monthly';
 
   return (
     <Layout>
+      <Head>
+        <title>{t('pricing.pageTitle')}</title>
+        <meta name="description" content={t('pricing.pageDescription')} />
+      </Head>
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Typography variant="h2" component="h1" align="center" gutterBottom>
           {t('pricing.title')}
@@ -146,37 +213,6 @@ export default function Pricing() {
         <Typography variant="h6" align="center" color="text.secondary" paragraph>
           {t('pricing.description')}
         </Typography>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6 }}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isYearly}
-                onChange={(e) => setIsYearly(e.target.checked)}
-                color="primary"
-              />
-            }
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography>{t('pricing.monthly')}</Typography>
-                <Typography
-                  sx={{
-                    bgcolor: 'success.main',
-                    color: 'white',
-                    px: 1,
-                    py: 0.5,
-                    borderRadius: 1,
-                    fontSize: '0.75rem',
-                  }}
-                >
-                  {t('pricing.saveYearly')}
-                </Typography>
-                <Typography>{t('pricing.yearly')}</Typography>
-              </Box>
-            }
-            labelPlacement="end"
-          />
-        </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Card 
@@ -206,7 +242,7 @@ export default function Pricing() {
                   ${price}
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
-                  {isYearly ? t('pricing.perYear') : t('pricing.perMonth')}
+                  {t('pricing.perMonth')}
                 </Typography>
               </Box>
 
@@ -258,62 +294,6 @@ export default function Pricing() {
             </CardContent>
           </Card>
         </Box>
-
-        {/* Checkout Dialog */}
-        <Dialog 
-          open={checkoutDialogOpen} 
-          onClose={() => setCheckoutDialogOpen(false)}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>{t('pricing.checkout')}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {t('pricing.checkoutDescription')}
-            </DialogContentText>
-            
-            <Box sx={{ mt: 3, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                {t('pricing.orderSummary')}
-              </Typography>
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">{t(plan.name)}</Typography>
-                <Typography variant="body2">${price}</Typography>
-              </Box>
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <Typography variant="body2">{isYearly ? t('pricing.yearly') : t('pricing.monthly')}</Typography>
-                <Typography variant="body2">{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}</Typography>
-              </Box>
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 2, borderTop: '1px solid #eee' }}>
-                <Typography variant="subtitle2">{t('pricing.total')}</Typography>
-                <Typography variant="subtitle2" color="primary">${price}</Typography>
-              </Box>
-            </Box>
-            
-            <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
-              {t('pricing.paymentDetails')}
-            </Typography>
-            
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              {t('pricing.demoNotice')}
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setCheckoutDialogOpen(false)}>
-              {t('common.cancel')}
-            </Button>
-            <Button 
-              onClick={handleCheckoutSubmit} 
-              variant="contained" 
-              color="primary"
-            >
-              {t('pricing.completePayment')}
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Container>
     </Layout>
   );

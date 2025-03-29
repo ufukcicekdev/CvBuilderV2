@@ -6,7 +6,9 @@ interface User {
   id: number;
   email: string;
   user_type?: 'jobseeker' | 'employer';
+  paddle_customer_id: string;
   [key: string]: any; // Diğer olası alanlar için
+  
 }
 
 interface AuthContextType {
@@ -46,8 +48,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
 
-      // Doğrudan backend URL'sine istek gönder
-      const response = await fetch('https://web-production-9f41e.up.railway.app/api/auth/login/', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      
+      const response = await fetch(`${apiUrl}/api/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
