@@ -527,7 +527,6 @@ function Profile() {
               >
                 <Tab label={t('profile.personalInfo')} />
                 <Tab label={t('subscription.membership', 'Membership')} />
-                <Tab label={t('subscription.paymentHistory', 'Payment History')} />
               </Tabs>
             </Paper>
           </Grid>
@@ -741,10 +740,6 @@ function Profile() {
 
             {activeTab === 1 && (
               <SubscriptionInfo onSubscriptionChange={() => {}} />
-            )}
-
-            {activeTab === 2 && (
-              <SubscriptionPaymentHistory />
             )}
           </Grid>
         </Grid>

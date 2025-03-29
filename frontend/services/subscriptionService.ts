@@ -158,19 +158,21 @@ const subscriptionService = {
   },
 
   // Get user's current subscription
-  getCurrentSubscription: async (): Promise<UserSubscription | null> => {
+  getCurrentSubscription: async (): Promise<UserSubscription | null | any> => {
     try {
       // Get the selected language from localStorage
       const selectedLanguage = localStorage.getItem('selectedLanguage') || 'en';
       
-      const response = await api.get('/api/subscriptions/subscriptions/current/', {
+      const response = await api.get('/api/subscriptions/current/', {
         headers: {
           'Accept-Language': selectedLanguage
         }
       });
       
+      // Return the data as is, even if it has status: 'no_subscription'
       return response.data;
     } catch (error: any) {
+      // If it's a 404 error, return null to indicate no subscription
       if (error.response && error.response.status === 404) {
         return null;
       }
@@ -179,22 +181,34 @@ const subscriptionService = {
     }
   },
 
-  // Get subscription payment history
-  getPaymentHistory: async (): Promise<PaymentHistory[]> => {
+  // Get Paddle customer portal URL
+  getCustomerPortalUrl: async (): Promise<string | { portal_url: string, sandbox_mode?: boolean, error?: string } | null> => {
     try {
-      // Get the selected language from localStorage
-      const selectedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+      const response = await api.get('/api/subscriptions/subscriptions/customer_portal/');
       
-      const response = await api.get('/api/subscriptions/payment-history/', {
-        headers: {
-          'Accept-Language': selectedLanguage
-        }
-      });
+      // API sandbox modundayken farklı bir yanıt formatı dönebilir
+      if (response.data.sandbox_mode) {
+        return {
+          portal_url: response.data.portal_url,
+          sandbox_mode: true,
+          error: response.data.error
+        };
+      }
       
-      return response.data;
+      return response.data.portal_url;
     } catch (error: any) {
-      console.error('Error fetching payment history:', error);
-      return [];
+      console.error('Error getting customer portal URL:', error);
+      
+      // Sandbox URL'si varsa onu döndür
+      if (error.response?.data?.sandbox_mode && error.response?.data?.portal_url) {
+        return {
+          portal_url: error.response.data.portal_url,
+          sandbox_mode: true,
+          error: error.response.data.error || 'Error getting customer portal URL'
+        };
+      }
+      
+      return null;
     }
   },
 

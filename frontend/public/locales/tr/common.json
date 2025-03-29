@@ -778,7 +778,8 @@
     "validUntil": "Geçerlilik Tarihi",
     "switchToMonthly": "Aylık Ödemeye Geç",
     "switchToYearly": "Yıllık Ödemeye Geç",
-    "cancelSubscription": "Aboneliği İptal Et"
+    "cancelSubscription": "Aboneliği İptal Et",
+    "customerPortal": "Yönetim Paneli"
   },
   "privacy": {
     "pageTitle": "Gizlilik Politikası - CV Builder",

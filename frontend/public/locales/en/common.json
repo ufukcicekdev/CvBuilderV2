@@ -386,7 +386,8 @@
     "total": "Total",
     "paymentDetails": "Payment Details",
     "demoNotice": "This is a demo checkout page. In a real implementation, you would enter your payment information here. For now, you can just click the button below to simulate a successful payment.",
-    "completePayment": "Complete Payment"
+    "completePayment": "Complete Payment",
+    "customerPortal": "Customer Portal"
   },
   "toast": {
     "success": "Success!",
@@ -802,7 +803,8 @@
     "validUntil": "Valid Until",
     "switchToMonthly": "Switch to Monthly Billing",
     "switchToYearly": "Switch to Yearly Billing",
-    "cancelSubscription": "Cancel Subscription"
+    "cancelSubscription": "Cancel Subscription",
+    "customerPortal": "Customer Portal"
   },
   "privacy": {
     "pageTitle": "Privacy Policy - CV Builder",
