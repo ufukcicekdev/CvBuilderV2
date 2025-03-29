@@ -83,8 +83,14 @@ export default function Pricing() {
         
         // Paddle ortamını ayarla
         if ((window as any).Paddle && (window as any).Paddle.Environment) {
-          (window as any).Paddle.Environment.set("sandbox");
-          console.log("Paddle environment set to sandbox");
+          // Use the environment variable instead of hardcoding
+          const isSandbox = process.env.NEXT_PUBLIC_PADDLE_SANDBOX === 'true';
+          if (isSandbox) {
+            (window as any).Paddle.Environment.set("sandbox");
+            console.log("Paddle environment set to sandbox");
+          } else {
+            console.log("Paddle environment set to production");
+          }
           
           // Paddle'ı initialize et
           (window as any).Paddle.Initialize({
