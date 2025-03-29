@@ -202,7 +202,7 @@ export default function Pricing() {
 
   const price = plan.price_monthly;
   const isCurrentPlan = currentSubscription && 
-    currentSubscription.plan.plan_id === plan.plan_id && 
+    currentSubscription?.plan?.plan_id === plan.plan_id && 
     currentSubscription.status === 'active';
   const isPeriodMatch = currentSubscription && currentSubscription.period === 'monthly';
 
