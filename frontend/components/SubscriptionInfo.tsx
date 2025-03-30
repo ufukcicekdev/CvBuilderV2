@@ -8,11 +8,6 @@ import {
   Chip,
   Divider,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Alert,
   Snackbar,
 } from '@mui/material';
@@ -31,7 +26,6 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
   const [subscription, setSubscription] = useState<UserSubscription | null | any>(null);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [customerPortalUrl, setCustomerPortalUrl] = useState<string | null>(null);
   const [portalError, setPortalError] = useState<string | null>(null);
   const [showPortalError, setShowPortalError] = useState(false);
@@ -114,54 +108,6 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
 
   const handleUpgrade = () => {
     router.push('/pricing');
-  };
-
-  const handleCancelSubscription = async () => {
-    try {
-      if (!subscription) return;
-      
-      await subscriptionService.cancelSubscription();
-      toast.success(t('pricing.cancelSuccess'));
-      setCancelDialogOpen(false);
-      
-      // Refresh subscription data
-      const data = await subscriptionService.getCurrentSubscription();
-      setSubscription(data);
-      
-      if (onSubscriptionChange) {
-        onSubscriptionChange();
-      }
-    } catch (error) {
-      console.error('Error cancelling subscription:', error);
-      toast.error(t('pricing.cancelError'));
-    }
-  };
-
-  // Function to switch between monthly and yearly billing
-  const handleSwitchBillingPeriod = async () => {
-    if (!subscription || !subscription.plan) return;
-    
-    const newPeriod = subscription.period === 'yearly' ? 'monthly' : 'yearly';
-    
-    try {
-      await subscriptionService.createSubscription(
-        subscription.plan.plan_id,
-        newPeriod === 'yearly'
-      );
-      
-      toast.success(t('pricing.periodUpdateSuccess', 'Billing period updated successfully'));
-      
-      // Refresh subscription data
-      const data = await subscriptionService.getCurrentSubscription();
-      setSubscription(data);
-      
-      if (onSubscriptionChange) {
-        onSubscriptionChange();
-      }
-    } catch (error) {
-      console.error('Error switching billing period:', error);
-      toast.error(t('pricing.periodUpdateError', 'Failed to update billing period'));
-    }
   };
 
   const handleOpenCustomerPortal = () => {
@@ -311,28 +257,6 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
                 {t('subscription.customerPortal', 'Yönetim Paneli')}
               </Button>
             )}
-            
-            {isActive && (
-              <Button 
-                variant="outlined" 
-                color="primary" 
-                onClick={handleSwitchBillingPeriod}
-              >
-                {subscription.period === 'yearly' 
-                  ? t('pricing.switchToMonthly', 'Switch to Monthly Billing')
-                  : t('pricing.switchToYearly', 'Switch to Yearly Billing')}
-              </Button>
-            )}
-            
-            {isActive && (
-              <Button 
-                variant="outlined" 
-                color="error" 
-                onClick={() => setCancelDialogOpen(true)}
-              >
-                {t('pricing.cancelSubscription')}
-              </Button>
-            )}
 
             {!isActive && (
               <Button 
@@ -346,27 +270,6 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
           </Box>
         </CardContent>
       </Card>
-      
-      {/* Cancel Subscription Dialog */}
-      <Dialog
-        open={cancelDialogOpen}
-        onClose={() => setCancelDialogOpen(false)}
-      >
-        <DialogTitle>{t('pricing.confirmCancellation')}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t('pricing.confirmCancel')}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCancelDialogOpen(false)}>
-            {t('common.cancel')}
-          </Button>
-          <Button onClick={handleCancelSubscription} color="error" autoFocus>
-            {t('pricing.cancelSubscription')}
-          </Button>
-        </DialogActions>
-      </Dialog>
       
       {/* Portal Error Dialog */}
       <Snackbar

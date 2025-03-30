@@ -33,18 +33,6 @@ export interface UserSubscription {
   updated_at: string;
 }
 
-export interface PaymentHistory {
-  id: number;
-  subscription: number;
-  payment_id: string;
-  amount: number;
-  currency: string;
-  status: string;
-  payment_date: string;
-  paddle_payment_id: string | null;
-  paddle_checkout_id: string | null;
-}
-
 // Default subscription plan for when API fails
 export const DEFAULT_SUBSCRIPTION_PLAN: SubscriptionPlan = {
   id: '1',
