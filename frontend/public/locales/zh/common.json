@@ -610,7 +610,9 @@
     "errors": {
       "skillsRequired": "请至少添加一项技能",
       "languagesRequired": "请至少添加一种语言"
-    }
+    },
+    "editDisabled": "由于您没有有效订阅，您无法编辑您的简历。您处于查看模式。",
+    "editNotAllowed": "编辑简历需要有效订阅。"
   },
   "validation": {
     "required": "此字段为必填项",

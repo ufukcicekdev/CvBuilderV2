@@ -605,7 +605,9 @@
       "deleteSuccess": "Video eliminado con éxito",
       "deleteError": "Error al eliminar el video",
       "confirmDelete": "¿Estás seguro de que deseas eliminar este video?"
-    }
+    },
+    "editDisabled": "No puede editar su CV porque no tiene una suscripción activa. Está en modo de visualización.",
+    "editNotAllowed": "Se requiere una suscripción activa para editar el CV."
   },
   "validation": {
     "required": "Este campo es obligatorio",

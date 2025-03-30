@@ -343,6 +343,7 @@
     "selectPlan": "Planı Seç",
     "currentPlan": "Mevcut Plan",
     "changePlan": "Planı Değiştir",
+    "alreadySubscribed": "Zaten Aktif Aboneliğiniz Var",
     "saveYearly": "Yıllık ödemede %15 indirim",
     "features": {
       "feature.basicCvTemplates": "Temel CV şablonları",
@@ -442,6 +443,8 @@
       "locationPlaceholder": "Şehir/Ülke bilgisini girin",
       "socialLinks": "Sosyal Medya Bağlantıları"
     },
+    "editDisabled": "Aktif aboneliğiniz olmadığı için CV'nizi düzenleyemezsiniz. Görüntüleme modundasınız.",
+    "editNotAllowed": "CV düzenleme için aktif abonelik gerekli",
     "experience": {
       "title": "İş Deneyimi",
       "subtitle": "En son deneyimden başlayarak iş geçmişinizi ekleyin",
@@ -696,7 +699,9 @@
       "atsKeywordsPlaceholder": "İş ilanından başlıca anahtar kelimeleri girin",
       "atsCompatibilityScore": "ATS Uyumluluk Puanı",
       "atsCompatible": "ATS Uyumlu",
-      "atsSuggestions": "ATS Önerileri"
+      "atsSuggestions": "ATS Önerileri",
+      "viewCertificate": "Sertifikayı Görüntüle",
+      "close": "Kapat"
     },
     "preview": {
       "templatePreview": "Şablon Önizleme",

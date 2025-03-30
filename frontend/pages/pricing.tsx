@@ -56,7 +56,14 @@ export default function Pricing() {
         
         if (isAuthenticated) {
           const subscription = await subscriptionService.getCurrentSubscription();
-          setCurrentSubscription(subscription);
+          // Check if subscription exists and has a valid structure
+          if (subscription && subscription.status !== 'no_subscription') {
+            console.log("User has a subscription:", subscription);
+            setCurrentSubscription(subscription);
+          } else {
+            console.log("User has no active subscription");
+            setCurrentSubscription(null);
+          }
         }
       } catch (error) {
         console.error('Error fetching plan:', error);
@@ -205,6 +212,8 @@ export default function Pricing() {
     currentSubscription?.plan?.plan_id === plan.plan_id && 
     currentSubscription.status === 'active';
   const isPeriodMatch = currentSubscription && currentSubscription.period === 'monthly';
+  // Yeni kontrol: herhangi bir aktif abonelik var mı?
+  const hasActiveSubscription = currentSubscription && currentSubscription.status === 'active';
 
   return (
     <Layout>
@@ -276,14 +285,14 @@ export default function Pricing() {
               </List>
 
               <Box sx={{ mt: 4, textAlign: 'center' }}>
-                {isCurrentPlan && isPeriodMatch ? (
+                {hasActiveSubscription ? (
                   <Button
                     variant="outlined"
                     size="large"
                     fullWidth
                     disabled
                   >
-                    {t('pricing.currentPlan')}
+                    {isCurrentPlan ? t('pricing.currentPlan') : t('pricing.alreadySubscribed', 'Zaten Aboneliğiniz Var')}
                   </Button>
                 ) : (
                   <Button
@@ -293,7 +302,7 @@ export default function Pricing() {
                     color="primary"
                     onClick={handlePlanSelect}
                   >
-                    {isCurrentPlan ? t('pricing.changePlan') : t('pricing.selectPlan')}
+                    {t('pricing.selectPlan')}
                   </Button>
                 )}
               </Box>

@@ -10,7 +10,9 @@ import {
   MobileStepper,
   CircularProgress,
   Backdrop,
-  Typography
+  Typography,
+  Alert,
+  Stack
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'next-i18next';
@@ -24,14 +26,16 @@ import VideoForm from './VideoForm';
 import TemplatePreviewForm from './TemplatePreviewForm';
 import { cvAPI, CV } from '../../services/api';
 import { toast } from 'react-hot-toast';
+import Link from 'next/link';
 
 interface CVFormContentProps {
   activeStep: number;
   cvId: number;
   onStepChange: (step: number) => void;
+  isReadOnly?: boolean;
 }
 
-export default function CVFormContent({ activeStep, cvId, onStepChange }: CVFormContentProps) {
+export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOnly = false }: CVFormContentProps) {
   const { t } = useTranslation('common');
   const [cvData, setCvData] = useState<CV | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +84,17 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
 
   const handleStepComplete = useCallback(async (data: any) => {
     try {
+      // Eğer salt okunur modda ise, düzenlemeye izin verme
+      if (isReadOnly) {
+        toast.error(t('cv.editNotAllowed'));
+        
+        // Görüntüleme modunda da adımlar arası geçişe izin ver
+        if (activeStep < steps.length - 1) {
+          onStepChange(activeStep + 1);
+        }
+        return;
+      }
+
       setIsLoading(true);
       await cvAPI.update(cvId, {
         ...data,
@@ -94,22 +109,25 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
     } finally {
       setIsLoading(false);
     }
-  }, [activeStep, cvId, onStepChange, t]);
+  }, [activeStep, cvId, onStepChange, t, isReadOnly, steps.length]);
 
   const renderStepContent = useCallback(() => {
     if (!cvData) return null;
 
+    // Form içeriğini oluştur
+    let formContent;
     switch (activeStep) {
       case 0:
-        return (
+        formContent = (
           <PersonalInfoForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
             onPrev={activeStep > 0 ? () => onStepChange(activeStep - 1) : undefined}
           />
         );
+        break;
       case 1:
-        return (
+        formContent = (
           <ExperienceForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
@@ -117,8 +135,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             initialData={cvData.experience}
           />
         );
+        break;
       case 2:
-        return (
+        formContent = (
           <EducationForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
@@ -126,8 +145,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             initialData={cvData.education}
           />
         );
+        break;
       case 3:
-        return (
+        formContent = (
           <SkillsForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
@@ -135,8 +155,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             initialData={cvData.skills}
           />
         );
+        break;
       case 4:
-        return (
+        formContent = (
           <LanguagesForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
@@ -144,8 +165,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             initialData={cvData.languages}
           />
         );
+        break;
       case 5:
-        return (
+        formContent = (
           <CertificatesForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
@@ -153,8 +175,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             initialData={cvData.certificates}
           />
         );
+        break;
       case 6:
-        return (
+        formContent = (
           <VideoForm 
             cvId={String(cvId)} 
             onStepComplete={handleStepComplete}
@@ -165,8 +188,9 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             }}
           />
         );
+        break;
       case 7:
-        return (
+        formContent = (
           <TemplatePreviewForm
             cvId={String(cvId)}
             onPrev={() => onStepChange(activeStep - 1)}
@@ -174,10 +198,89 @@ export default function CVFormContent({ activeStep, cvId, onStepChange }: CVForm
             initialData={cvData}
           />
         );
+        break;
       default:
         return null;
     }
-  }, [activeStep, cvData, cvId, handleStepComplete, onStepChange]);
+
+    // Eğer salt okunur modda ise ve Template Preview sayfasında değilse
+    if (isReadOnly && activeStep !== 7) {
+      return (
+        <Stack spacing={2}>
+          {/* Uyarı mesajı */}
+          <Alert 
+            severity="warning"
+            sx={{ mb: 2 }}
+            action={
+              <Button 
+                color="inherit" 
+                size="small" 
+                component={Link} 
+                href="/pricing"
+              >
+                {t('pricing.upgradeNow')}
+              </Button>
+            }
+          >
+            {t('cv.editDisabled')}
+          </Alert>
+          
+          {/* Form içeriği (salt okunur) */}
+          <Box sx={{ 
+            opacity: 0.8,
+            '& input, & textarea, & select': { 
+              pointerEvents: 'none !important',
+              backgroundColor: '#f9f9f9 !important'
+            },
+            '& .MuiOutlinedInput-root, & .MuiTextField-root, & .MuiSelect-select, & .MuiAutocomplete-root, & .MuiCheckbox-root, & .MuiRadio-root': {
+              pointerEvents: 'none !important'
+            },
+            '& button, & .MuiButton-root, & .MuiIconButton-root': {
+              display: 'none !important'
+            },
+            '& .custom-nav-button': {
+              display: 'inline-flex !important'
+            }
+          }}>
+            {formContent}
+          </Box>
+          
+          {/* Sadece bizim gezinme butonlarımız */}
+          <Box sx={{ 
+            display: 'flex',
+            justifyContent: 'space-between',
+            mt: 2,
+            borderTop: '1px solid #eee',
+            pt: 2
+          }}>
+            {activeStep > 0 && (
+              <Button
+                variant="outlined"
+                onClick={() => onStepChange(activeStep - 1)}
+                className="custom-nav-button"
+              >
+                {t('common.previous')}
+              </Button>
+            )}
+            
+            {activeStep < steps.length - 1 && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => onStepChange(activeStep + 1)}
+                sx={{ ml: 'auto' }}
+                className="custom-nav-button"
+              >
+                {t('common.next')}
+              </Button>
+            )}
+          </Box>
+        </Stack>
+      );
+    }
+
+    return formContent;
+  }, [activeStep, cvData, cvId, handleStepComplete, onStepChange, isReadOnly, t, steps.length]);
 
   const renderStepper = useCallback(() => {
     if (isMobile) {

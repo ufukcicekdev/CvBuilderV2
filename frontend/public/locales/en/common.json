@@ -675,7 +675,9 @@
       "atsKeywordsPlaceholder": "Enter key keywords from the job posting",
       "atsCompatibilityScore": "ATS Compatibility Score",
       "atsCompatible": "ATS Compatible",
-      "atsSuggestions": "ATS Suggestions"
+      "atsSuggestions": "ATS Suggestions",
+      "viewCertificate": "View Certificate",
+      "close": "Close"
     },
     "video": {
       "title": "Video Introduction",
@@ -753,7 +755,9 @@
       "savedTemplates": "Your Saved Templates",
       "noCustomTemplates": "You don't have any custom templates yet",
       "createCustomTemplate": "Create Your First Template"
-    }
+    },
+    "editDisabled": "You cannot edit your CV because you don't have an active subscription. You are in view mode.",
+    "editNotAllowed": "Active subscription required for CV editing."
   },
   "validation": {
     "required": "This field is required",

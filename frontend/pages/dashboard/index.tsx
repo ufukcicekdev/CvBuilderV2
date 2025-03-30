@@ -15,6 +15,8 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
+  Alert,
+  Tooltip,
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
@@ -24,6 +26,7 @@ import NextLink from 'next/link';
 import { cvAPI } from '../../services/api';
 import { useRouter } from 'next/router';
 import { showToast } from '../../utils/toast';
+import subscriptionService from '../../services/subscriptionService';
 
 // steps array'ini create-cv.tsx ile aynı şekilde tanımlayalım
 const steps = ['personalInfo', 'experience', 'education', 'skills', 'languages', 'certificates'];
@@ -44,6 +47,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCvId, setSelectedCvId] = useState<number | null>(null);
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [checkingSubscription, setCheckingSubscription] = useState(true);
 
   const fetchCVs = useCallback(async () => {
     try {
@@ -59,9 +64,26 @@ function Dashboard() {
     }
   }, [t]);
 
+  // Abonelik durumunu kontrol et
+  const checkSubscription = useCallback(async () => {
+    try {
+      setCheckingSubscription(true);
+      const subscription = await subscriptionService.getCurrentSubscription();
+      const isActive = subscription && subscription.status === 'active';
+      setHasActiveSubscription(isActive);
+      console.log('Subscription status:', isActive ? 'Active' : 'Not active');
+    } catch (error) {
+      console.error('Error checking subscription status:', error);
+      setHasActiveSubscription(false);
+    } finally {
+      setCheckingSubscription(false);
+    }
+  }, []);
+
   // Dil değişikliğini izle (router ve özel event için)
   useEffect(() => {
     fetchCVs();
+    checkSubscription();
 
     // Dil değişikliklerini dinle
     const handleLanguageChange = () => {
@@ -70,7 +92,7 @@ function Dashboard() {
 
     window.addEventListener('languageChange', handleLanguageChange);
     return () => window.removeEventListener('languageChange', handleLanguageChange);
-  }, [router.locale, fetchCVs]);
+  }, [router.locale, fetchCVs, checkSubscription]);
 
   const handleDeleteClick = (cvId: number) => {
     setSelectedCvId(cvId);
@@ -113,15 +135,50 @@ function Dashboard() {
               <Typography variant="h4" component="h1">
                 {t('nav.dashboard')}
               </Typography>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                component={NextLink}
-                href="/dashboard/create-cv"
-              >
-                {t('dashboard.createNew')}
-              </Button>
+              {!checkingSubscription && (
+                hasActiveSubscription ? (
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    component={NextLink}
+                    href="/dashboard/create-cv"
+                  >
+                    {t('dashboard.createNew')}
+                  </Button>
+                ) : (
+                  <Tooltip title={t('pricing.subscribePrompt')}>
+                    <span>
+                      <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        disabled
+                      >
+                        {t('dashboard.createNew')}
+                      </Button>
+                    </span>
+                  </Tooltip>
+                )
+              )}
             </Box>
+            
+            {!checkingSubscription && !hasActiveSubscription && (
+              <Alert 
+                severity="warning" 
+                sx={{ mb: 3 }}
+                action={
+                  <Button 
+                    color="inherit" 
+                    size="small" 
+                    component={NextLink}
+                    href="/pricing"
+                  >
+                    {t('pricing.upgradeNow')}
+                  </Button>
+                }
+              >
+                {t('pricing.subscribePrompt')}
+              </Alert>
+            )}
           </Grid>
 
           {/* CVs List */}
@@ -137,15 +194,26 @@ function Dashboard() {
                 <Typography color="textSecondary">
                   {t('cv.noCVs')}
                 </Typography>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  component={Link}
-                  href="/dashboard/create-cv"
-                  sx={{ mt: 2 }}
-                >
-                  {t('cv.createFirst')}
-                </Button>
+                {hasActiveSubscription ? (
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    component={NextLink}
+                    href="/dashboard/create-cv"
+                    sx={{ mt: 2 }}
+                  >
+                    {t('cv.createFirst')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    component={NextLink}
+                    href="/pricing"
+                    sx={{ mt: 2 }}
+                  >
+                    {t('pricing.upgradeNow')}
+                  </Button>
+                )}
               </Paper>
             </Grid>
           ) : (
