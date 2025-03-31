@@ -327,48 +327,73 @@
   "pricing": {
     "title": "定价",
     "description": "选择适合您需求的计划",
+    "pageTitle": "订阅计划 - 简历生成器",
+    "pageDescription": "选择适合您需求的专业简历创建计划，推进您的职业发展。",
     "monthly": "每月",
     "yearly": "每年",
-    "jobseeker": {
-      "title": "求职者",
-      "price": {
-        "monthly": "2",
-        "yearly": "20"
-      },
-      "features": [
-        "无限创建简历",
-        "高级简历模板",
-        "下载简历（PDF/Word）",
-        "申请职位",
-        "突出个人资料",
-        "24/7支持"
-      ]
+    "free": {
+      "title": "免费",
+      "description": "基本功能，帮助您开始"
     },
-    "employer": {
-      "title": "雇主",
-      "price": {
-        "monthly": "20",
-        "yearly": "200"
-      },
-      "features": [
-        "无限发布职位",
-        "候选人筛选",
-        "访问简历数据库",
-        "公司资料",
-        "统计和报告",
-        "优先支持"
-      ]
+    "premium": {
+      "title": "高级计划",
+      "description": "创建专业简历所需的所有功能"
     },
     "currency": "美元",
     "perMonth": "/月",
     "perYear": "/年",
     "selectPlan": "选择计划",
     "currentPlan": "当前计划",
+    "changePlan": "更改计划",
+    "alreadySubscribed": "您已有活跃订阅",
     "saveYearly": "年度付款节省15%",
-    "premium": {
-      "title": "高级计划",
-      "description": "创建专业简历所需的所有功能"
-    }
+    "features": {
+      "feature.basicCvTemplates": "基本简历模板",
+      "feature.limitedCvCount": "最多3份简历",
+      "feature.pdfDownload": "PDF下载",
+      "feature.basicSupport": "基本支持",
+      "feature.videoCV": "视频简历支持",
+      "feature.aiAssistant": "AI助手",
+      "feature.premiumTemplates": "高级模板",
+      "feature.prioritySupport": "优先支持",
+      "feature.unlimitedCvs": "无限制简历"
+    },
+    "subscribe": "订阅",
+    "upgradeNow": "立即升级",
+    "manageSubscription": "管理订阅",
+    "cancelSubscription": "取消订阅",
+    "confirmCancel": "您确定要取消订阅吗？",
+    "paymentProcessing": "正在处理付款...",
+    "paymentSuccess": "付款成功！",
+    "paymentError": "付款失败。请重试。",
+    "subscriptionSuccess": "订阅创建成功！",
+    "subscriptionError": "创建订阅时出错。请重试。",
+    "errorFetchingPlans": "加载订阅计划时出错。",
+    "noSubscription": "无活跃订阅",
+    "subscribePrompt": "订阅以访问高级功能。",
+    "currentSubscription": "当前订阅",
+    "period": "结算周期",
+    "validUntil": "有效期至",
+    "confirmCancellation": "确认取消",
+    "cancelSuccess": "您的订阅已成功取消。",
+    "cancelError": "取消订阅时出错。请重试。",
+    "periodUpdateSuccess": "结算周期更新成功。",
+    "periodUpdateError": "更新结算周期失败。",
+    "switchToMonthly": "切换至月度结算",
+    "switchToYearly": "切换至年度结算",
+    "resubscribe": "重新订阅",
+    "checkout": "结账",
+    "checkoutDescription": "请检查您的订单并完成付款以激活您的订阅。",
+    "orderSummary": "订单摘要",
+    "total": "总计",
+    "paymentDetails": "付款详情",
+    "demoNotice": "这是演示结账页面。在实际实现中，您将在此处输入付款信息。现在，您可以点击下方按钮模拟成功付款。",
+    "completePayment": "完成付款",
+    "customerPortal": "客户门户",
+    "paddleNotLoaded": "支付系统无法加载。请重试。",
+    "checkoutError": "打开结账页面时出错。请重试。",
+    "checkoutOpened": "结账页面已打开。",
+    "processingCheckout": "正在准备付款..."
   },
   "toast": {
     "success": "成功！",

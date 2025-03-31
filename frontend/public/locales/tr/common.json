@@ -327,6 +327,8 @@
   "pricing": {
     "title": "Fiyatlandırma",
     "description": "İhtiyaçlarınıza uygun planı seçin",
+    "pageTitle": "Abonelik Planları - CV Builder",
+    "pageDescription": "İhtiyaçlarınıza uygun profesyonel CV oluşturma planını seçin ve kariyerinizde ilerleme kaydedin.",
     "monthly": "Aylık",
     "yearly": "Yıllık",
     "free": {
@@ -386,7 +388,12 @@
     "total": "Toplam",
     "paymentDetails": "Ödeme Bilgileri",
     "demoNotice": "Bu bir demo ödeme sayfasıdır. Gerçek bir uygulamada, burada ödeme bilgilerinizi girersiniz. Şimdilik, başarılı bir ödeme simülasyonu için aşağıdaki düğmeye tıklayabilirsiniz.",
-    "completePayment": "Ödemeyi Tamamla"
+    "completePayment": "Ödemeyi Tamamla",
+    "customerPortal": "Müşteri Portalı",
+    "paddleNotLoaded": "Ödeme sistemi yüklenemedi. Lütfen tekrar deneyin.",
+    "checkoutError": "Ödeme sayfası açılırken bir hata oluştu. Lütfen tekrar deneyin.",
+    "checkoutOpened": "Ödeme sayfası açıldı.",
+    "processingCheckout": "Ödeme işlemi hazırlanıyor..."
   },
   "toast": {
     "success": "Başarılı!",

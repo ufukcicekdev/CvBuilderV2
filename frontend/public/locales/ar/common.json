@@ -327,48 +327,73 @@
   "pricing": {
     "title": "التسعير",
     "description": "اختر الخطة التي تناسب احتياجاتك",
+    "pageTitle": "خطط الاشتراك - منشئ السيرة الذاتية",
+    "pageDescription": "اختر خطة إنشاء سيرة ذاتية احترافية تناسب احتياجاتك وتطور مسيرتك المهنية.",
     "monthly": "شهري",
     "yearly": "سنوي",
-    "jobseeker": {
-      "title": "باحث عن عمل",
-      "price": {
-        "monthly": "2",
-        "yearly": "20"
-      },
-      "features": [
-        "إنشاء سير ذاتية غير محدود",
-        "قوالب سيرة ذاتية مميزة",
-        "تنزيل السيرة الذاتية (PDF/Word)",
-        "التقديم على عروض العمل",
-        "تمييز الملف الشخصي",
-        "دعم على مدار الساعة"
-      ]
+    "free": {
+      "title": "مجاني",
+      "description": "ميزات أساسية للبدء"
     },
-    "employer": {
-      "title": "صاحب العمل",
-      "price": {
-        "monthly": "20",
-        "yearly": "200"
-      },
-      "features": [
-        "نشر عروض عمل غير محدودة",
-        "تصفية المرشحين",
-        "الوصول إلى قاعدة بيانات السير الذاتية",
-        "الملف الشخصي للشركة",
-        "الإحصائيات والتقارير",
-        "دعم متميز"
-      ]
+    "premium": {
+      "title": "الخطة المتميزة",
+      "description": "جميع الميزات التي تحتاجها لإنشاء سيرة ذاتية احترافية"
     },
     "currency": "USD",
     "perMonth": "/شهر",
     "perYear": "/سنة",
     "selectPlan": "اختر الخطة",
     "currentPlan": "الخطة الحالية",
+    "changePlan": "تغيير الخطة",
+    "alreadySubscribed": "لديك بالفعل اشتراك نشط",
     "saveYearly": "وفر 15% مع الدفع السنوي",
-    "premium": {
-      "title": "الخطة المتميزة",
-      "description": "جميع الميزات التي تحتاجها لإنشاء سيرة ذاتية احترافية"
-    }
+    "features": {
+      "feature.basicCvTemplates": "قوالب سيرة ذاتية أساسية",
+      "feature.limitedCvCount": "حتى 3 سير ذاتية",
+      "feature.pdfDownload": "تنزيل بصيغة PDF",
+      "feature.basicSupport": "دعم أساسي",
+      "feature.videoCV": "دعم سيرة ذاتية فيديو",
+      "feature.aiAssistant": "مساعد الذكاء الاصطناعي",
+      "feature.premiumTemplates": "قوالب متميزة",
+      "feature.prioritySupport": "دعم متميز",
+      "feature.unlimitedCvs": "سير ذاتية غير محدودة"
+    },
+    "subscribe": "اشترك",
+    "upgradeNow": "الترقية الآن",
+    "manageSubscription": "إدارة الاشتراك",
+    "cancelSubscription": "إلغاء الاشتراك",
+    "confirmCancel": "هل أنت متأكد من أنك تريد إلغاء اشتراكك؟",
+    "paymentProcessing": "جارِ معالجة الدفع...",
+    "paymentSuccess": "تم الدفع بنجاح!",
+    "paymentError": "فشل الدفع. الرجاء المحاولة مرة أخرى.",
+    "subscriptionSuccess": "تم إنشاء الاشتراك بنجاح!",
+    "subscriptionError": "خطأ في إنشاء الاشتراك. الرجاء المحاولة مرة أخرى.",
+    "errorFetchingPlans": "خطأ في تحميل خطط الاشتراك.",
+    "noSubscription": "لا يوجد اشتراك نشط",
+    "subscribePrompt": "اشترك للوصول إلى الميزات المتميزة.",
+    "currentSubscription": "الاشتراك الحالي",
+    "period": "فترة الفوترة",
+    "validUntil": "صالح حتى",
+    "confirmCancellation": "تأكيد الإلغاء",
+    "cancelSuccess": "تم إلغاء اشتراكك بنجاح.",
+    "cancelError": "خطأ في إلغاء الاشتراك. الرجاء المحاولة مرة أخرى.",
+    "periodUpdateSuccess": "تم تحديث فترة الفوترة بنجاح.",
+    "periodUpdateError": "فشل تحديث فترة الفوترة.",
+    "switchToMonthly": "التحويل إلى الفوترة الشهرية",
+    "switchToYearly": "التحويل إلى الفوترة السنوية",
+    "resubscribe": "إعادة الاشتراك",
+    "checkout": "الدفع",
+    "checkoutDescription": "يرجى مراجعة طلبك وإكمال الدفع لتفعيل اشتراكك.",
+    "orderSummary": "ملخص الطلب",
+    "total": "المجموع",
+    "paymentDetails": "تفاصيل الدفع",
+    "demoNotice": "هذه صفحة دفع تجريبية. في التطبيق الفعلي، ستدخل معلومات الدفع الخاصة بك هنا. الآن، يمكنك النقر على الزر أدناه لمحاكاة عملية دفع ناجحة.",
+    "completePayment": "إكمال الدفع",
+    "customerPortal": "بوابة العملاء",
+    "paddleNotLoaded": "تعذر تحميل نظام الدفع. الرجاء المحاولة مرة أخرى.",
+    "checkoutError": "حدث خطأ أثناء فتح صفحة الدفع. الرجاء المحاولة مرة أخرى.",
+    "checkoutOpened": "تم فتح صفحة الدفع.",
+    "processingCheckout": "جارِ تجهيز الدفع..."
   },
   "toast": {
     "success": "نجاح!",

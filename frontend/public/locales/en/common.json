@@ -328,6 +328,8 @@
   "pricing": {
     "title": "Pricing",
     "description": "Choose the plan that suits your needs",
+    "pageTitle": "Subscription Plans - CV Builder",
+    "pageDescription": "Choose a professional CV creation plan that suits your needs and advance in your career.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "free": {
@@ -344,6 +346,7 @@
     "selectPlan": "Select Plan",
     "currentPlan": "Current Plan",
     "changePlan": "Change Plan",
+    "alreadySubscribed": "You Already Have an Active Subscription",
     "saveYearly": "Save 15% with yearly payment",
     "features": {
       "feature.basicCvTemplates": "Basic CV templates",
@@ -387,7 +390,11 @@
     "paymentDetails": "Payment Details",
     "demoNotice": "This is a demo checkout page. In a real implementation, you would enter your payment information here. For now, you can just click the button below to simulate a successful payment.",
     "completePayment": "Complete Payment",
-    "customerPortal": "Customer Portal"
+    "customerPortal": "Customer Portal",
+    "paddleNotLoaded": "Payment system could not be loaded. Please try again.",
+    "checkoutError": "An error occurred while opening the checkout page. Please try again.",
+    "checkoutOpened": "Checkout page opened.",
+    "processingCheckout": "Preparing payment..."
   },
   "toast": {
     "success": "Success!",

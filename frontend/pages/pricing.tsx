@@ -106,6 +106,28 @@ export default function Pricing() {
               settings: {
                 locale: localStorage.getItem('selectedLanguage')
               }
+            },
+            eventCallback: function(eventData: any) {
+              // Checkout tamamlandı olayını dinle (başarılı ödeme)
+              if (eventData.name === 'checkout.completed') {
+                console.log('Ödeme başarıyla tamamlandı!', eventData);
+                
+                // Başarılı mesajı göster
+                toast.success(t('pricing.subscriptionSuccess') || 'Aboneliğiniz başarıyla oluşturuldu!', { id: 'paddle-success-toast' });
+                
+                // Dashboard'a yönlendir
+                window.location.href = '/dashboard';
+              } 
+              // Checkout kapatıldı olayı (kullanıcı pencereyi kapattığında)
+              else if (eventData.name === 'checkout.closed') {
+                console.log('Checkout penceresi kapatıldı', eventData);
+                toast.dismiss('paddle-toast');
+              }
+              // Checkout yüklendi olayı
+              else if (eventData.name === 'checkout.loaded') {
+                console.log('Checkout yüklendi', eventData);
+                toast.dismiss('paddle-toast');
+              }
             }
           });
           
@@ -115,7 +137,7 @@ export default function Pricing() {
       
       document.head.appendChild(script);
     }
-  }, []);
+  }, [t]);
 
   // Paddle.js'i kullanarak doğrudan ödeme işlemini başlat
   const handlePlanSelect = async () => {
@@ -157,24 +179,9 @@ export default function Pricing() {
             allowQuantity: false,
             customer: user?.paddle_customer_id ? {
               id: user.paddle_customer_id
-            } : undefined,
-            success: (data: any) => {
-              console.log('Ödeme başarılı!', data);
-              // İşlem başarılı olduğunda checkout penceresini kapat
-              toast.success(t('pricing.subscriptionSuccess') || 'Aboneliğiniz başarıyla oluşturuldu!', { id: 'paddle-success-toast' });
-              
-              // Başarılı ödeme sonrası kullanıcıyı dashboard'a yönlendirme
-              setTimeout(() => {
-                window.location.href = '/dashboard'; 
-              }, 1500);
-            },
-            closeCallback: () => {
-              console.log('Checkout penceresi kapatıldı');
-              // Kullanıcı pencereyi kapattığında yapılacak işlemler
-            }
+            } : undefined
           });
           console.log("Paddle checkout opened successfully");
-          toast.success(t('pricing.checkoutOpened'), { id: 'paddle-toast' });
         } catch (checkoutError) {
           console.error("Error opening Paddle checkout:", checkoutError);
           toast.error(t('pricing.checkoutError'), { id: 'paddle-toast' });

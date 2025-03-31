@@ -312,50 +312,75 @@
     }
   },
   "pricing": {
-    "title": "定价",
-    "description": "选择适合您需求的计划",
-    "monthly": "每月",
-    "yearly": "每年",
-    "jobseeker": {
-      "title": "求职者",
-      "price": {
-        "monthly": "2",
-        "yearly": "20"
-      },
-      "features": [
-        "无限创建简历",
-        "高级简历模板",
-        "下载简历（PDF/Word）",
-        "申请职位",
-        "突出显示个人资料",
-        "24/7支持"
-      ]
+    "title": "मूल्य निर्धारण",
+    "description": "अपनी जरूरतों के अनुसार योजना चुनें",
+    "pageTitle": "सदस्यता योजनाएँ - CV बिल्डर",
+    "pageDescription": "अपनी आवश्यकताओं के अनुरूप एक पेशेवर CV निर्माण योजना चुनें और अपने करियर में आगे बढ़ें।",
+    "monthly": "मासिक",
+    "yearly": "वार्षिक",
+    "free": {
+      "title": "मुफ्त",
+      "description": "शुरुआत के लिए बुनियादी सुविधाएँ"
     },
-    "employer": {
-      "title": "雇主",
-      "price": {
-        "monthly": "20",
-        "yearly": "200"
-      },
-      "features": [
-        "无限发布职位",
-        "候选人筛选",
-        "访问简历数据库",
-        "公司资料",
-        "统计和报告",
-        "优先支持"
-      ]
-    },
-    "currency": "美元",
-    "perMonth": "/月",
-    "perYear": "/年",
-    "selectPlan": "选择计划",
-    "currentPlan": "当前计划",
-    "saveYearly": "年度付款节省15%",
     "premium": {
       "title": "प्रीमियम प्लान",
       "description": "पेशेवर सीवी बनाने के लिए आवश्यक सभी सुविधाएं"
-    }
+    },
+    "currency": "USD",
+    "perMonth": "/माह",
+    "perYear": "/वर्ष",
+    "selectPlan": "योजना चुनें",
+    "currentPlan": "वर्तमान योजना",
+    "changePlan": "योजना बदलें",
+    "alreadySubscribed": "आपके पास पहले से ही एक सक्रिय सदस्यता है",
+    "saveYearly": "वार्षिक भुगतान के साथ 15% बचाएं",
+    "features": {
+      "feature.basicCvTemplates": "बुनियादी CV टेम्प्लेट",
+      "feature.limitedCvCount": "3 CV तक",
+      "feature.pdfDownload": "PDF के रूप में डाउनलोड",
+      "feature.basicSupport": "बुनियादी सहायता",
+      "feature.videoCV": "वीडियो CV सपोर्ट",
+      "feature.aiAssistant": "AI सहायक",
+      "feature.premiumTemplates": "प्रीमियम टेम्प्लेट",
+      "feature.prioritySupport": "प्राथमिकता समर्थन",
+      "feature.unlimitedCvs": "असीमित CVs"
+    },
+    "subscribe": "सदस्यता लें",
+    "upgradeNow": "अभी अपग्रेड करें",
+    "manageSubscription": "सदस्यता प्रबंधित करें",
+    "cancelSubscription": "सदस्यता रद्द करें",
+    "confirmCancel": "क्या आप वाकई अपनी सदस्यता रद्द करना चाहते हैं?",
+    "paymentProcessing": "भुगतान प्रक्रिया चल रही है...",
+    "paymentSuccess": "भुगतान सफल!",
+    "paymentError": "भुगतान विफल हुआ। कृपया पुनः प्रयास करें।",
+    "subscriptionSuccess": "सदस्यता सफलतापूर्वक बनाई गई!",
+    "subscriptionError": "सदस्यता बनाते समय त्रुटि। कृपया पुनः प्रयास करें।",
+    "errorFetchingPlans": "सदस्यता योजनाएँ लोड करने में त्रुटि।",
+    "noSubscription": "कोई सक्रिय सदस्यता नहीं",
+    "subscribePrompt": "प्रीमियम सुविधाओं तक पहुंचने के लिए सदस्यता लें।",
+    "currentSubscription": "वर्तमान सदस्यता",
+    "period": "बिलिंग अवधि",
+    "validUntil": "तक वैध",
+    "confirmCancellation": "रद्दीकरण की पुष्टि करें",
+    "cancelSuccess": "आपकी सदस्यता सफलतापूर्वक रद्द कर दी गई है।",
+    "cancelError": "सदस्यता रद्द करने में त्रुटि। कृपया पुनः प्रयास करें।",
+    "periodUpdateSuccess": "बिलिंग अवधि सफलतापूर्वक अपडेट की गई।",
+    "periodUpdateError": "बिलिंग अवधि अपडेट करने में विफल।",
+    "switchToMonthly": "मासिक बिलिंग पर स्विच करें",
+    "switchToYearly": "वार्षिक बिलिंग पर स्विच करें",
+    "resubscribe": "पुनः सदस्यता लें",
+    "checkout": "चेकआउट",
+    "checkoutDescription": "कृपया अपने आदेश की समीक्षा करें और अपनी सदस्यता सक्रिय करने के लिए भुगतान पूरा करें।",
+    "orderSummary": "आदेश सारांश",
+    "total": "कुल",
+    "paymentDetails": "भुगतान विवरण",
+    "demoNotice": "यह एक डेमो चेकआउट पेज है। वास्तविक कार्यान्वयन में, आप यहां अपनी भुगतान जानकारी दर्ज करेंगे। अभी के लिए, आप सफल भुगतान का अनुकरण करने के लिए नीचे दिए गए बटन पर क्लिक कर सकते हैं।",
+    "completePayment": "भुगतान पूरा करें",
+    "customerPortal": "ग्राहक पोर्टल",
+    "paddleNotLoaded": "भुगतान प्रणाली लोड नहीं की जा सकी। कृपया पुनः प्रयास करें।",
+    "checkoutError": "चेकआउट पेज खोलते समय त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "checkoutOpened": "चेकआउट पेज खुला।",
+    "processingCheckout": "भुगतान की तैयारी हो रही है..."
   },
   "toast": {
     "success": "成功！",
@@ -534,10 +559,10 @@
       "close": "关闭",
       "loading": "加载中...",
       "error": "加载翻译时发生错误。请重试。",
-      "viewCertificate": "查看证书",
-      "location": "地点",
-      "webVersion": "网页版",
-      "pdfVersion": "PDF版",
+      "atsCompatible": "兼容 ATS",
+      "atsSuggestions": "ATS 建议",
+      "viewCertificate": "प्रमाणपत्र देखें",
+      "close": "बंद करें",
       "templates": {
         "web-template1": {
           "name": "आधुनिक वेब टेम्पलेट",

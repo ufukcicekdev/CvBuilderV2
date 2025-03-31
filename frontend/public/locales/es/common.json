@@ -327,48 +327,73 @@
   "pricing": {
     "title": "Precios",
     "description": "Elige el plan que mejor se adapte a tus necesidades",
+    "pageTitle": "Planes de Suscripción - CV Builder",
+    "pageDescription": "Elige un plan de creación de CV profesional que se adapte a tus necesidades y avanza en tu carrera.",
     "monthly": "Mensual",
     "yearly": "Anual",
-    "jobseeker": {
-      "title": "Buscador de Empleo",
-      "price": {
-        "monthly": "2",
-        "yearly": "20"
-      },
-      "features": [
-        "Creación ilimitada de CVs",
-        "Plantillas de CV premium",
-        "Descarga de CV (PDF/Word)",
-        "Postulación a ofertas de empleo",
-        "Destacar perfil",
-        "Soporte 24/7"
-      ]
+    "free": {
+      "title": "Gratis",
+      "description": "Funciones básicas para comenzar"
     },
-    "employer": {
-      "title": "Empleador",
-      "price": {
-        "monthly": "20",
-        "yearly": "200"
-      },
-      "features": [
-        "Publicación ilimitada de ofertas",
-        "Filtrado de candidatos",
-        "Acceso a base de datos de CVs",
-        "Perfil de empresa",
-        "Estadísticas y reportes",
-        "Soporte prioritario"
-      ]
+    "premium": {
+      "title": "Plan Premium",
+      "description": "Todas las funciones que necesitas para crear un CV profesional"
     },
     "currency": "USD",
     "perMonth": "/mes",
     "perYear": "/año",
     "selectPlan": "Seleccionar Plan",
     "currentPlan": "Plan Actual",
+    "changePlan": "Cambiar Plan",
+    "alreadySubscribed": "Ya Tienes una Suscripción Activa",
     "saveYearly": "Ahorra un 15% con pago anual",
-    "premium": {
-      "title": "Plan Premium",
-      "description": "Todas las funciones que necesitas para crear un CV profesional"
-    }
+    "features": {
+      "feature.basicCvTemplates": "Plantillas básicas de CV",
+      "feature.limitedCvCount": "Hasta 3 CVs",
+      "feature.pdfDownload": "Descargar como PDF",
+      "feature.basicSupport": "Soporte básico",
+      "feature.videoCV": "Soporte para CV en video",
+      "feature.aiAssistant": "Asistente de IA",
+      "feature.premiumTemplates": "Plantillas premium",
+      "feature.prioritySupport": "Soporte prioritario",
+      "feature.unlimitedCvs": "CVs ilimitados"
+    },
+    "subscribe": "Suscribirse",
+    "upgradeNow": "Actualizar Ahora",
+    "manageSubscription": "Gestionar Suscripción",
+    "cancelSubscription": "Cancelar Suscripción",
+    "confirmCancel": "¿Estás seguro de que deseas cancelar tu suscripción?",
+    "paymentProcessing": "Procesando pago...",
+    "paymentSuccess": "¡Pago exitoso!",
+    "paymentError": "Error en el pago. Por favor, inténtalo de nuevo.",
+    "subscriptionSuccess": "¡Suscripción creada con éxito!",
+    "subscriptionError": "Error al crear la suscripción. Por favor, inténtalo de nuevo.",
+    "errorFetchingPlans": "Error al cargar los planes de suscripción.",
+    "noSubscription": "No Hay Suscripción Activa",
+    "subscribePrompt": "Suscríbete para acceder a funciones premium.",
+    "currentSubscription": "Suscripción Actual",
+    "period": "Período de Facturación",
+    "validUntil": "Válido Hasta",
+    "confirmCancellation": "Confirmar Cancelación",
+    "cancelSuccess": "Tu suscripción ha sido cancelada con éxito.",
+    "cancelError": "Error al cancelar la suscripción. Por favor, inténtalo de nuevo.",
+    "periodUpdateSuccess": "Período de facturación actualizado con éxito.",
+    "periodUpdateError": "Error al actualizar el período de facturación.",
+    "switchToMonthly": "Cambiar a Facturación Mensual",
+    "switchToYearly": "Cambiar a Facturación Anual",
+    "resubscribe": "Volver a Suscribirse",
+    "checkout": "Pago",
+    "checkoutDescription": "Por favor, revisa tu pedido y completa el pago para activar tu suscripción.",
+    "orderSummary": "Resumen del Pedido",
+    "total": "Total",
+    "paymentDetails": "Detalles de Pago",
+    "demoNotice": "Esta es una página de pago de demostración. En una implementación real, introducirías aquí tu información de pago. Por ahora, puedes hacer clic en el botón de abajo para simular un pago exitoso.",
+    "completePayment": "Completar Pago",
+    "customerPortal": "Portal del Cliente",
+    "paddleNotLoaded": "El sistema de pago no pudo cargarse. Por favor, inténtalo de nuevo.",
+    "checkoutError": "Se produjo un error al abrir la página de pago. Por favor, inténtalo de nuevo.",
+    "checkoutOpened": "Página de pago abierta.",
+    "processingCheckout": "Preparando pago..."
   },
   "toast": {
     "success": "¡Éxito!",
