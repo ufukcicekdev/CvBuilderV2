@@ -153,6 +153,7 @@
     "cancel": "取消",
     "edit": "编辑",
     "preview": "预览",
+    "close": "关闭",
     "next": "继续",
     "previous": "返回",
     "delete": "删除",
@@ -176,14 +177,15 @@
     "education": "教育",
     "professionalSummary": "职业概述",
     "errors": {
-      "badRequest": "无效请求",
-      "unauthorized": "请登录",
-      "forbidden": "您无权执行此操作",
-      "notFound": "未找到请求",
-      "serverError": "服务器错误",
-      "unknown": "发生未知错误",
-      "networkError": "网络连接错误",
-      "validationError": "请检查表单信息"
+      "badRequest": "अमान्य अनुरोध",
+      "unauthorized": "कृपया लॉगिन करें",
+      "forbidden": "आपके पास इस ऑपरेशन के लिए अनुमति नहीं है",
+      "notFound": "अनुरोध नहीं मिला",
+      "serverError": "सर्वर त्रुटि हुई",
+      "unknown": "एक अज्ञात त्रुटि हुई",
+      "networkError": "नेटवर्क कनेक्शन त्रुटि",
+      "validationError": "कृपया फॉर्म जानकारी जांचें",
+      "errorOccurred": "एक त्रुटि हुई, कृपया पुनः प्रयास करें"
     },
     "uploadSuccess": "फ़ाइल सफलतापूर्वक अपलोड की गई"
   },
@@ -544,53 +546,53 @@
     },
     "progress": "进度",
     "template": {
-      "selectTitle": "选择简历模板",
-      "selectRequired": "请选择一个模板",
-      "preview": "预览",
-      "generateWeb": "生成网页简历",
-      "generatePDF": "下载PDF",
-      "generating": "生成中...",
-      "generateSuccess": "简历生成成功",
-      "generateError": "生成简历时发生错误",
-      "language": "语言",
-      "changeLanguage": "更改语言",
-      "downloadPDF": "下载PDF",
-      "viewImage": "查看图片",
-      "close": "关闭",
-      "loading": "加载中...",
-      "error": "加载翻译时发生错误。请重试。",
-      "atsCompatible": "兼容 ATS",
-      "atsSuggestions": "ATS 建议",
-      "viewCertificate": "प्रमाणपत्र देखें",
-      "close": "बंद करें",
+      "selectTitle": "सीवी टेम्पलेट चुनें",
+      "webVersion": "वेब संस्करण",
+      "pdfVersion": "पीडीएफ संस्करण",
+      "preview": "पूर्वावलोकन",
+      "generateWeb": "वेब सीवी जनरेट करें",
+      "generatePDF": "पीडीएफ सीवी जनरेट करें",
+      "pdfButton": "पीडीएफ सीवी जनरेट करें",
       "templates": {
-        "web-template1": {
+        "modernWeb": {
           "name": "आधुनिक वेब टेम्पलेट",
-          "description": "आधुनिक और इंटरैक्टिव वेब डिज़ाइन"
+          "description": "आधुनिक लेआउट के साथ साफ और पेशेवर डिज़ाइन"
         },
-        "web-template2": {
-          "name": "क्लासिक वेब टेम्पलेट",
-          "description": "क्लासिक और पेशेवर वेब डिज़ाइन"
+        "minimalWeb": {
+          "name": "मिनिमल वेब टेम्पलेट",
+          "description": "सामग्री पर केंद्रित सरल और सुरुचिपूर्ण डिज़ाइन"
         },
-        "web-template3": {
-          "name": "रंगीन टेम्पलेट",
-          "description": "रंगीन तत्वों के साथ जीवंत और आधुनिक टेम्पलेट"
+        "colorfulWeb": {
+          "name": "रंगीन वेब टेम्पलेट",
+          "description": "रंगीन एक्सेंट के साथ जीवंत और आकर्षक डिज़ाइन"
         },
-        "web-template4": {
-          "name": "पेशेवर टेम्पलेट",
-          "description": "कॉर्पोरेट प्रोफाइल के लिए साफ और पेशेवर टेम्पलेट"
+        "professionalWeb": {
+          "name": "प्रोफेशनल वेब टेम्पलेट",
+          "description": "संरचित लेआउट के साथ कॉर्पोरेट स्टाइल"
         },
-        "web-template5": {
-          "name": "रचनात्मक टेम्पलेट",
-          "description": "कलात्मक प्रोफाइल के लिए अद्वितीय और रचनात्मक डिज़ाइन"
+        "creativeWeb": {
+          "name": "क्रिएटिव वेब टेम्पलेट",
+          "description": "रचनात्मक पेशेवरों के लिए अनोखा डिज़ाइन"
         },
         "modernPdf": {
-          "name": "现代PDF模板",
-          "description": "现代和专业的PDF设计"
+          "name": "आधुनिक पीडीएफ टेम्पलेट",
+          "description": "साफ टाइपोग्राफी के साथ समकालीन डिज़ाइन"
         },
         "classicPdf": {
-          "name": "经典PDF模板",
-          "description": "经典和优雅的PDF设计"
+          "name": "क्लासिक पीडीएफ टेम्पलेट",
+          "description": "समयरहित आकर्षण वाला पारंपरिक रेज्यूमे लेआउट"
+        },
+        "minimalPdf": {
+          "name": "मिनिमल पीडीएफ टेम्पलेट",
+          "description": "साफ और मिनिमलिस्ट डिज़ाइन"
+        },
+        "creativePdf": {
+          "name": "क्रिएटिव पीडीएफ टेम्पलेट",
+          "description": "अलग दिखने के लिए बोल्ड डिज़ाइन"
+        },
+        "professionalPdf": {
+          "name": "प्रोफेशनल पीडीएफ टेम्पलेट",
+          "description": "आधुनिक तत्वों के साथ व्यापार-केंद्रित लेआउट"
         }
       }
     },
@@ -604,7 +606,28 @@
       "confirmDelete": "您确定要删除此视频吗？"
     },
     "editDisabled": "आपके पास सक्रिय सदस्यता नहीं होने के कारण आप अपना CV संपादित नहीं कर सकते। आप देखने के मोड में हैं।",
-    "editNotAllowed": "CV संपादित करने के लिए सक्रिय सदस्यता आवश्यक है।"
+    "editNotAllowed": "CV संपादित करने के लिए सक्रिय सदस्यता आवश्यक है।",
+    "preview": {
+      "title": "सीवी प्रीव्यू",
+      "templatePreview": "टेम्पलेट प्रीव्यू",
+      "selectTemplate": "कृपया पहले एक टेम्पलेट चुनें",
+      "loadError": "सीवी डेटा लोड करने में त्रुटि",
+      "noData": "प्रदर्शित करने के लिए कोई डेटा नहीं",
+      "templateNotFound": "टेम्पलेट नहीं मिला",
+      "downloadPdf": "पीडीएफ डाउनलोड करें",
+      "generating": "जनरेट हो रहा है...",
+      "downloadFailed": "डाउनलोड विफल",
+      "templateSelection": "टेम्पलेट चुनें",
+      "standardTemplates": "मानक टेम्पलेट",
+      "customTemplates": "कस्टम टेम्पलेट",
+      "customBuilderTab": "कस्टम टेम्पलेट बनाएं",
+      "savedTemplates": "आपके सहेजे गए टेम्पलेट",
+      "noCustomTemplates": "आपके पास अभी तक कोई कस्टम टेम्पलेट नहीं हैं",
+      "createCustomTemplate": "अपना पहला टेम्पलेट बनाएं",
+      "pdfGenerating": "PDF उत्पन्न किया जा रहा है...",
+      "pdfError": "PDF उत्पन्न करते समय एक त्रुटि हुई",
+      "createExplanation": "यह टेम्पलेट आपको अपने रिज्यूमे को अनुकूलित करने की अनुमति देता है"
+    }
   },
   "validation": {
     "required": "此字段为必填项",

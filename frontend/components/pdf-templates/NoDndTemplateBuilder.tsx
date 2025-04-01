@@ -37,16 +37,18 @@ import {
   VisibilityOff,
   Edit,
   Palette,
-  Close
+  Close,
+  PhotoCamera
 } from '@mui/icons-material';
 import AtsOptimizationPanel from './AtsOptimizationPanel';
+import { toast } from 'react-hot-toast';
 
 // Component interface
-export interface TemplateBuilderProps {
-  data: PDFTemplateProps['data'];
+interface TemplateBuilderProps {
+  data?: any;
   language?: string;
   translations?: Record<string, string>;
-  onSaveTemplate?: (templateData: CustomTemplateData) => void;
+  onSaveTemplate?: (templateData: CustomTemplateData) => Promise<any>;
   savedTemplates?: CustomTemplateData[];
 }
 
@@ -101,6 +103,7 @@ export type GlobalSettings = {
   photoSize: number;
   layout: 'single' | 'double' | 'sidebar-left' | 'sidebar-right' | 'three-column' | 'header-highlight';
   isAtsOptimized: boolean;
+  textColor: string;
 };
 
 /**
@@ -333,7 +336,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
   // Save template
   const saveTemplate = async () => {
     if (!templateName) {
-      alert(t('cv.template.nameRequired', 'Lütfen şablon için bir isim girin'));
+      toast.error(t('cv.template.nameRequired', 'Lütfen şablon için bir isim girin'));
       return;
     }
     
@@ -345,15 +348,28 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
         name: templateName
       };
       
+      console.log('Saving template data:', templateToSave);
+      
       // Call the save function from props
       if (onSaveTemplate) {
-        await onSaveTemplate(templateToSave);
+        const savedTemplate = await onSaveTemplate(templateToSave);
+        
+        if (savedTemplate) {
+          // Show success notification
+          toast.success(t('cv.template.saveSuccess', 'Şablon başarıyla kaydedildi!'));
+        } else {
+          toast.error(t('cv.template.saveFailed', 'Şablon kaydedilemedi. Lütfen tekrar deneyin.'));
+        }
+      } else {
+        // Show error if there's no save function provided
+        toast.error(t('cv.template.saveFailed', 'Şablon kaydedilemedi: Kaydetme işlevi tanımlanmamış.'));
+        console.error('No save function (onSaveTemplate) provided to NoDndTemplateBuilder');
       }
-      
-      // Success notification could go here
     } catch (error) {
       console.error('Error saving template:', error);
-      // Error notification could go here
+      // Show error message
+      const errorMessage = error instanceof Error ? error.message : t('cv.template.saveFailed', 'Şablon kaydedilemedi. Lütfen tekrar deneyin.');
+      toast.error(errorMessage);
     } finally {
       setIsSaving(false);
     }
@@ -879,7 +895,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                   backgroundColor: '#e0e0e0',
                   borderRadius: templateData.globalSettings.photoStyle === 'circle' ? '50%' : 
                                 templateData.globalSettings.photoStyle === 'rounded' ? '10px' : '0',
-                  backgroundImage: data.personal_info?.photo ? `url(${data.personal_info.photo})` : 'none',
+                  backgroundImage: data && data.personal_info?.photo ? `url(${data.personal_info.photo})` : 'none',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   display: 'flex',
@@ -893,7 +909,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                     border: `3px solid ${templateData.globalSettings.secondaryColor}`
                   }),
                 }}>
-                  {!data.personal_info?.photo && <Typography sx={{ color: '#9e9e9e', textAlign: 'center', fontSize: '10px' }}>{t('cv.template.photo', 'Fotoğraf')}</Typography>}
+                  {(!data || !data.personal_info?.photo) && <Typography sx={{ color: '#9e9e9e', textAlign: 'center', fontSize: '10px' }}>{t('cv.template.photo', 'Fotoğraf')}</Typography>}
                 </div>
               )}
               <div style={{ flex: 1 }}>
@@ -904,7 +920,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                   position: 'relative',
                   zIndex: 12
                 }}>
-                  {data.personal_info?.full_name || t('cv.template.fullName', 'Ad Soyad')}
+                  {data && data.personal_info?.full_name || t('cv.template.fullName', 'Ad Soyad')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   fontFamily: 'inherit', 
@@ -913,7 +929,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                   position: 'relative',
                   zIndex: 12
                 }}>
-                  {data.personal_info?.title || t('cv.template.profession', 'Meslek / Pozisyon')}
+                  {data && data.personal_info?.title || t('cv.template.profession', 'Meslek / Pozisyon')}
                 </Typography>
               </div>
             </div>
@@ -1078,6 +1094,10 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
   return (
     <div>
       <Box sx={{ mb: 4 }}>
+        <Typography variant="body1" gutterBottom sx={{ mb: 2, color: 'text.secondary' }}>
+          {t('cv.template.createExplanation', 'Özel CV şablonunuzu oluşturmak için aşağıdaki seçenekleri kullanın. Şablonunuza bir isim verdikten sonra düzen, renkler ve yazı tipi ayarlarını özelleştirebilirsiniz. İşiniz bittiğinde "Kaydet" düğmesine tıklayın.')}
+        </Typography>
+        
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={8} md={6}>
             <TextField
@@ -1087,6 +1107,10 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
               onChange={(e) => setTemplateName(e.target.value)}
               margin="normal"
               size="small"
+              required
+              error={!templateName && isSaving}
+              helperText={!templateName && isSaving ? t('cv.template.nameRequired', 'Şablon için bir isim girmelisiniz') : ''}
+              placeholder={t('cv.template.namePlaceholder', 'Örn: Mavi Profesyonel Şablon')}
             />
           </Grid>
           <Grid item xs={12} sm={4} md={6}>

@@ -4,7 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { PDFTemplateProps } from './types';
-import { TemplateBuilderProps, CustomTemplateData } from './NoDndTemplateBuilder';
+import { CustomTemplateData } from './NoDndTemplateBuilder';
+
+// Define the interface here to avoid import issues
+interface TemplateBuilderProps {
+  data?: any;
+  language?: string;
+  translations?: Record<string, string>;
+  onSaveTemplate?: (templateData: CustomTemplateData) => Promise<any>;
+  savedTemplates?: CustomTemplateData[];
+}
 
 // Dynamically import the No-DnD version of the template builder with no SSR
 const NoDndTemplateBuilder = dynamic(() => import('./NoDndTemplateBuilder'), {

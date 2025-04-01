@@ -44,6 +44,7 @@ const Template1: React.FC<PDFTemplateProps> = ({ data, language, translations = 
               alt="Profile"
               width={80}
               height={80}
+              priority={true}
               style={{
                 borderRadius: '50%',
                 objectFit: 'cover'

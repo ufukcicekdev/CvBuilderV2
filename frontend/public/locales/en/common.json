@@ -164,6 +164,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
+    "close": "Close",
     "preview": "Preview",
     "next": "Next",
     "previous": "Previous",
@@ -195,7 +196,8 @@
       "serverError": "A server error occurred",
       "unknown": "An unknown error occurred",
       "networkError": "Network connection error",
-      "validationError": "Please check the form information"
+      "validationError": "Please check the form information",
+      "errorOccurred": "An error occurred, please try again"
     },
     "uploadSuccess": "File uploaded successfully",
     "confirm": "Confirm"
@@ -425,6 +427,8 @@
     "create": "Create CV",
     "createSuccess": "CV created successfully",
     "createError": "An error occurred while creating the CV",
+    "chooseTemplate": "Choose Template",
+    "preview": "Preview",
     "steps": {
       "personalInfo": "Personal Information",
       "experience": "Experience",
@@ -435,6 +439,28 @@
       "video": "Video",
       "template": "Template",
       "completed": "Completed"
+    },
+    "templates": {
+      "modern": {
+        "name": "Modern Template",
+        "description": "A modern and interactive web design"
+      },
+      "minimal": {
+        "name": "Minimal Template",
+        "description": "A clean and elegant web design"
+      },
+      "colorful": {
+        "name": "Colorful Template",
+        "description": "A vibrant and modern template with colorful accents"
+      },
+      "professional": {
+        "name": "Professional Template",
+        "description": "A clean and professional template for corporate profiles"
+      },
+      "creative": {
+        "name": "Creative Template",
+        "description": "A unique and creative template for artistic profiles"
+      }
     },
     "personalInfo": {
       "title": "Personal Information",
@@ -582,25 +608,25 @@
       "generatePDF": "Generate PDF CV",
       "pdfButton": "Generate PDF CV",
       "templates": {
-        "modernWeb": {
-          "name": "Modern Web Template",
-          "description": "Clean and professional design with modern layout"
+        "modern": {
+          "name": "Modern Template",
+          "description": "A modern and interactive web design"
         },
-        "minimalWeb": {
-          "name": "Minimal Web Template",
-          "description": "Simple and elegant design focusing on content"
+        "minimal": {
+          "name": "Minimal Template",
+          "description": "A clean and elegant web design"
         },
-        "colorfulWeb": {
-          "name": "Colorful Web Template",
-          "description": "Vibrant and eye-catching design with color accents"
+        "colorful": {
+          "name": "Colorful Template",
+          "description": "A vibrant and modern template with colorful accents"
         },
-        "professionalWeb": {
-          "name": "Professional Web Template",
-          "description": "Corporate style with structured layout"
+        "professional": {
+          "name": "Professional Template",
+          "description": "A clean and professional template for corporate profiles"
         },
-        "creativeWeb": {
-          "name": "Creative Web Template",
-          "description": "Unique design for creative professionals"
+        "creative": {
+          "name": "Creative Template",
+          "description": "A unique and creative template for artistic profiles"
         },
         "modernPdf": {
           "name": "Modern PDF Template",
@@ -621,6 +647,26 @@
         "professionalPdf": {
           "name": "Professional PDF Template",
           "description": "Business-focused layout with modern elements"
+        },
+        "modernWeb": {
+          "name": "Modern Web Template",
+          "description": "Clean and professional design with modern layout"
+        },
+        "minimalWeb": {
+          "name": "Minimal Web Template",
+          "description": "Simple and elegant design focusing on content"
+        },
+        "colorfulWeb": {
+          "name": "Colorful Web Template",
+          "description": "Vibrant and eye-catching design with color accents"
+        },
+        "professionalWeb": {
+          "name": "Professional Web Template",
+          "description": "Corporate style with structured layout"
+        },
+        "creativeWeb": {
+          "name": "Creative Web Template",
+          "description": "Unique design for creative professionals"
         }
       },
       "customBuilder": "Custom Template Builder",
@@ -755,16 +801,30 @@
       "downloadPdf": "Download PDF",
       "generating": "Generating...",
       "downloadFailed": "Download failed",
-      "templateSelection": "Select Template",
+      "templateSelection": "Template Selection",
       "standardTemplates": "Standard Templates",
       "customTemplates": "Custom Templates",
-      "customBuilderTab": "Create Custom Template",
+      "customBuilderTab": "Custom Template Builder",
       "savedTemplates": "Your Saved Templates",
       "noCustomTemplates": "You don't have any custom templates yet",
-      "createCustomTemplate": "Create Your First Template"
+      "createCustomTemplate": "Create Your First Template",
+      "ready": "CV preview ready",
+      "createSuccess": "CV created successfully",
+      "close": "Close",
+      "openCv": "Open CV",
+      "pdfGenerating": "Generating PDF...",
+      "pdfError": "An error occurred while generating the PDF",
+      "createExplanation": "This template allows you to customize your resume"
     },
     "editDisabled": "You cannot edit your CV because you don't have an active subscription. You are in view mode.",
-    "editNotAllowed": "Active subscription required for CV editing."
+    "editNotAllowed": "Active subscription required for CV editing.",
+    "professionalSummary": "Professional Summary",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certificates": "Certificates",
+    "present": "Present"
   },
   "validation": {
     "required": "This field is required",

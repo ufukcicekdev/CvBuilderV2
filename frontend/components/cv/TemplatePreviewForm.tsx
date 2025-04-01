@@ -1,5 +1,6 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, useCallback, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from "next-auth/react";
 import {
   Box,
   Button,
@@ -28,7 +29,7 @@ import {
   ListSubheader,
   CardActions
 } from '@mui/material';
-import { Download as DownloadIcon, Language as WebIcon, ContentCopy as CopyIcon, Close as CloseIcon, PictureAsPdf as PictureAsPdfIcon } from '@mui/icons-material';
+import { Download as DownloadIcon, Language as WebIcon, ContentCopy as CopyIcon, Close as CloseIcon, PictureAsPdf as PictureAsPdfIcon, ArrowBack as ArrowBackIcon, Preview as PreviewIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
 import axiosInstance from '@/utils/axios';
 import { toast } from 'react-hot-toast';
@@ -46,11 +47,9 @@ import PdfGenerator from '../pdf-templates/PdfGenerator';
 import { templateService } from '../../services/templateService';
 // Dynamic imports for client-side only components
 import CustomTemplateRenderer from '../pdf-templates/CustomTemplateRenderer';
-import { CustomTemplateData } from '../pdf-templates/TemplateBuilder';
-import { useSession } from 'next-auth/react';
-// İmport kısmına eklenecek
-import { CustomTemplateData as NoDndCustomTemplateData } from '../pdf-templates/NoDndTemplateBuilder';
+import { GlobalSettings, CustomTemplateData as NoDndCustomTemplateData } from '../pdf-templates/NoDndTemplateBuilder';
 import { CustomTemplateData as TemplateBuilderCustomTemplateData } from '../pdf-templates/TemplateBuilder';
+import NoDndTemplateBuilder from '../../components/pdf-templates/NoDndTemplateBuilder';
 
 // Create a client-only wrapper component for TemplateBuilder
 const ClientOnlyTemplateBuilder = ({ children }: { children: React.ReactNode }) => {
@@ -313,6 +312,68 @@ const svgToDataUrl = (svgContent: string) => {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`;
 };
 
+interface ExtendedCustomTemplateData extends Omit<TemplateBuilderCustomTemplateData, 'globalSettings'> {
+  globalSettings: NoDndCustomTemplateData['globalSettings'];
+}
+
+interface CVData {
+  id?: string;
+  title?: string;
+  personal_info?: {
+    first_name?: string;
+    last_name?: string;
+    full_name?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    birth_date?: string;
+    nationality?: string;
+    linkedin?: string;
+    website?: string;
+    summary?: string;
+    photo?: string;
+  };
+  experience?: Array<{
+    id?: string;
+    company: string;
+    position: string;
+    start_date: string;
+    end_date?: string;
+    location?: string;
+    description: string;
+  }>;
+  education?: Array<{
+    id?: string;
+    school: string;
+    degree: string;
+    field: string;
+    start_date: string;
+    end_date?: string;
+    description?: string;
+    location?: string;
+  }>;
+  skills?: Array<{
+    id?: string;
+    name: string;
+    level: number;
+  }>;
+  languages?: Array<{
+    id?: string;
+    name: string;
+    level: number;
+  }>;
+  certificates?: Array<{
+    id?: string;
+    name: string;
+    issuer: string;
+    date: string;
+    description?: string;
+    documentUrl?: string;
+    document_type?: string;
+  }>;
+  i18n?: Record<string, string>;
+}
+
 const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoading }: TemplatePreviewFormProps) => {
   const router = useRouter();
   const { t, i18n } = useTranslation('common');
@@ -330,10 +391,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   const [selectedLanguage, setSelectedLanguage] = useState<string>('tr');
   const [previewSelectedLanguage, setPreviewSelectedLanguage] = useState<string>('tr');
   const [selectedTab, setSelectedTab] = useState(0);
-  const [customTemplates, setCustomTemplates] = useState<CustomTemplateData[]>([]);
-  const [selectedCustomTemplate, setSelectedCustomTemplate] = useState<CustomTemplateData | null>(null);
+  const [customTemplates, setCustomTemplates] = useState<NoDndCustomTemplateData[]>([]);
+  const [selectedCustomTemplate, setSelectedCustomTemplate] = useState<NoDndCustomTemplateData | null>(null);
   const [previewTabIndex, setPreviewTabIndex] = useState(0);
   const [templateBuilderLoaded, setTemplateBuilderLoaded] = useState(false);
+  const [loadingTemplates, setLoadingTemplates] = useState(false);
+  const [isWebTemplate, setIsWebTemplate] = useState(false);
   
   // html2pdf'yi sadece client-side'da yükle - state kullanmayalım, doğrudan çağıralım
   useEffect(() => {
@@ -366,17 +429,82 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   useEffect(() => {
     const fetchCustomTemplates = async () => {
       try {
-        const templates = await templateService.getCustomTemplates(user?.id);
-        setCustomTemplates(templates);
+        setLoadingTemplates(true);
+        // user?.id parametresini artık geçmiyoruz - API'nin mevcut kullanıcıyı belirleyeceğine güveniyoruz
+        const templates = await templateService.getCustomTemplates();
+        console.log('Fetched custom templates:', templates);
+        setCustomTemplates(templates as any); // any tipine cast ediyoruz
       } catch (error) {
         console.error('Error fetching custom templates:', error);
+        toast.error(t('common.errors.loadFailed', 'Özel şablonlar yüklenemedi.'));
+      } finally {
+        setLoadingTemplates(false);
       }
+      return undefined; // Açıkça undefined döndür
     };
     
-    if (open) {
-      fetchCustomTemplates();
+    // open kontrolünü kaldırdık - bu component mount olduğunda her zaman şablonları yükleyin
+    fetchCustomTemplates();
+  }, [t]); // sadece t'ye bağlı, open'a değil
+
+  // Şablon kaydedildikten sonra şablonları yeniden yükle
+  const refreshCustomTemplates = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/api/templates/templates/for_current_user/');
+      if (response.status === 200) {
+        setCustomTemplates(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching templates:', error);
     }
-  }, [open, user]);
+  }, []);
+
+  // Şablon seçildiğinde şablon özelliklerini editöre yükle
+  const loadTemplateToEditor = (template: any) => {
+    if (!template) return;
+    
+    console.log('Loading template to editor:', template);
+    
+    // Template Builder şablonu
+    if (template.globalSettings) {
+      // Layout ayarlarını yükle (single, double, right-sidebar, left-sidebar)
+      if (template.globalSettings.layout) {
+        // Layout dropdown'ında gösterilecek değeri ayarla
+        // Bu değeri DOM'da ilgili dropdown'a yansıtma işlemi yapılmalı
+        console.log('Setting layout to:', template.globalSettings.layout);
+        
+        // Fotoğraf gösterme ayarını yükle
+        if (template.globalSettings.showPhoto !== undefined) {
+          console.log('Setting showPhoto to:', template.globalSettings.showPhoto);
+        }
+        
+        // Fotoğraf stili ayarını yükle
+        if (template.globalSettings.photoStyle) {
+          console.log('Setting photoStyle to:', template.globalSettings.photoStyle);
+        }
+        
+        // Fotoğraf boyutu ayarını yükle
+        if (template.globalSettings.photoSize !== undefined) {
+          console.log('Setting photoSize to:', template.globalSettings.photoSize);
+        }
+        
+        // ATS optimizasyon ayarını yükle
+        if ('isAtsOptimized' in template.globalSettings) {
+          console.log('Setting enableAtsOptimization to:', template.globalSettings.isAtsOptimized);
+        }
+      }
+    }
+    
+    // Bölüm görünürlük ayarlarını yükle
+    if (template.sectionSettings) {
+      console.log('Loading section settings:', template.sectionSettings);
+    }
+    
+    // Renk ayarlarını yükle
+    if (template.colorSettings) {
+      console.log('Loading color settings:', template.colorSettings);
+    }
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -490,135 +618,296 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
 
   // Template önizleme ekranında PDF şablonunu göster
   const renderPreviewContent = () => {
-    if (previewLoading) {
-      return <CircularProgress />;
-    }
-
-    if (!previewData || !selectedTemplate) {
-      return <Typography>{t('cv.preview.noData')}</Typography>;
-    }
-
-    // Verileri hazırla
-    const mappedData = {
-      id: previewData.id ? String(previewData.id) : undefined,
-      title: previewData.title,
-      personal_info: {
-        ...previewData.personal_info,
-        photo: previewData.personal_info?.photo || undefined
-      },
-      experience: previewData.experience?.map(exp => ({
-        ...exp,
-        id: exp.id ? String(exp.id) : undefined,
-        end_date: exp.end_date === null ? undefined : exp.end_date
-      })),
-      education: previewData.education?.map(edu => ({
-        ...edu,
-        id: edu.id ? String(edu.id) : undefined,
-        end_date: edu.end_date === null ? undefined : edu.end_date
-      })),
-      skills: previewData.skills?.map(skill => ({
-        ...skill,
-        id: skill.id ? String(skill.id) : undefined,
-        level: typeof skill.level === 'string' ? parseInt(skill.level, 10) || 3 : skill.level
-      })),
-      languages: previewData.languages?.map(lang => ({
-        ...lang,
-        id: lang.id ? String(lang.id) : undefined,
-        level: typeof lang.level === 'string' ? parseInt(lang.level, 10) || 3 : lang.level
-      })),
-      certificates: previewData.certificates?.map(cert => ({
-        ...cert,
-        id: cert.id ? String(cert.id) : undefined
-      })),
-      // Çeviri verilerini doğrudan tanımlayalım
-      i18n: {
-        summary: translations[previewSelectedLanguage]?.summary || translations.tr?.summary || 'Summary',
-        experience: translations[previewSelectedLanguage]?.experience || translations.tr?.experience || 'Experience',
-        education: translations[previewSelectedLanguage]?.education || translations.tr?.education || 'Education',
-        skills: translations[previewSelectedLanguage]?.skills || translations.tr?.skills || 'Skills',
-        languages: translations[previewSelectedLanguage]?.languages || translations.tr?.languages || 'Languages',
-        certificates: translations[previewSelectedLanguage]?.certificates || translations.tr?.certificates || 'Certificates',
-        present: translations[previewSelectedLanguage]?.present || translations.tr?.present || 'Present'
-      }
-    };
-
-    // Web şablonları için içerik
-    if (selectedTemplate?.startsWith('web-')) {
-      const templates = {
-        'web-modern': ModernTemplate,
-        'web-minimal': MinimalTemplate,
-        'web-colorful': ColorfulTemplate,
-        'web-professional': ProfessionalTemplate,
-        'web-creative': CreativeTemplate,
-      };
-
-      const TemplateComponent = templates[selectedTemplate as keyof typeof templates];
-      if (TemplateComponent) {
-        return (
-          <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
-            <TemplateComponent cv={previewData} />
-          </Box>
-        );
-      }
-    } else {
-      // PDF şablonları için içerik
+    // Check if there's a template and cv data
+    if (!previewData) {
       return (
-        <PdfGenerator 
-          data={mappedData}
-          language={previewSelectedLanguage}
-          translations={translations[previewSelectedLanguage] || translations.tr}
-        />
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+          <Typography variant="body1">
+            {t('cv.preview.selectTemplate')}
+          </Typography>
+        </Box>
       );
     }
 
-    return <Typography>{t('cv.preview.templateNotFound')}</Typography>;
+    // Load corresponding template component
+    const renderTemplate = () => {
+      try {
+        // Web templates
+        if (selectedTemplate === 'web-modern') {
+          return (
+            <Box sx={{ 
+              maxWidth: '100%', 
+              overflow: 'auto',
+              // Web şablonlar genellikle büyük olduğundan taşma durumunda scroll olacak
+              '& *': { 
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              },
+              '& img': {
+                maxWidth: '100%',
+                height: 'auto'
+              },
+              '& table': {
+                maxWidth: '100%',
+                tableLayout: 'fixed'
+              },
+              '& td, & th': {
+                wordBreak: 'break-word'
+              }
+            }}>
+              <ModernTemplate 
+                cv={previewData} 
+              />
+            </Box>
+          );
+        } else if (selectedTemplate === 'web-minimal') {
+          return (
+            <Box sx={{ 
+              maxWidth: '100%', 
+              overflow: 'auto',
+              '& *': { 
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              },
+              '& img': {
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}>
+              <MinimalTemplate 
+                cv={previewData} 
+              />
+            </Box>
+          );
+        } else if (selectedTemplate === 'web-colorful') {
+          return (
+            <Box sx={{ 
+              maxWidth: '100%', 
+              overflow: 'auto',
+              '& *': { 
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              },
+              '& img': {
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}>
+              <ColorfulTemplate 
+                cv={previewData} 
+              />
+            </Box>
+          );
+        } else if (selectedTemplate === 'web-professional') {
+          return (
+            <Box sx={{ 
+              maxWidth: '100%', 
+              overflow: 'auto',
+              '& *': { 
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              },
+              '& img': {
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}>
+              <ProfessionalTemplate 
+                cv={previewData} 
+              />
+            </Box>
+          );
+        } else if (selectedTemplate === 'web-creative') {
+          return (
+            <Box sx={{ 
+              maxWidth: '100%', 
+              overflow: 'auto',
+              '& *': { 
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              },
+              '& img': {
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}>
+              <CreativeTemplate 
+                cv={previewData} 
+              />
+            </Box>
+          );
+        }
+        // PDF templates using PdfGenerator component
+        else if (selectedTemplate?.startsWith('pdf-')) {
+          // Prepare data for PDF generation
+          const mappedData = {
+            id: previewData.id ? String(previewData.id) : undefined,
+            title: previewData.title,
+            personal_info: {
+              ...previewData.personal_info,
+              photo: previewData.personal_info?.photo || undefined
+            },
+            experience: previewData.experience?.map(exp => ({
+              ...exp,
+              id: exp.id ? String(exp.id) : undefined,
+              end_date: exp.end_date === null ? undefined : exp.end_date,
+              description: exp.description || ''
+            })),
+            education: previewData.education?.map(edu => ({
+              ...edu,
+              id: edu.id ? String(edu.id) : undefined,
+              end_date: edu.end_date === null ? undefined : edu.end_date,
+              field: edu.degree || '', // Use degree as field since they represent the same thing in our case
+              start_date: edu.start_date || '',
+              description: edu.description || '',
+              location: edu.location || ''
+            })),
+            skills: previewData.skills?.map(skill => ({
+              ...skill,
+              id: skill.id ? String(skill.id) : undefined,
+              level: typeof skill.level === 'string' ? parseInt(skill.level, 10) || 3 : (skill.level || 3)
+            })),
+            languages: previewData.languages?.map(lang => ({
+              ...lang,
+              id: lang.id ? String(lang.id) : undefined,
+              level: typeof lang.level === 'string' ? parseInt(lang.level, 10) || 3 : (lang.level || 3)
+            })),
+            certificates: previewData.certificates?.map(cert => ({
+              ...cert,
+              id: cert.id ? String(cert.id) : undefined,
+              date: cert.date || new Date().toISOString().split('T')[0]
+            })),
+            // Use translations specific to the selected language
+            i18n: translations[previewSelectedLanguage] || translations.en
+          };
+          
+          return (
+            <Box sx={{ 
+              maxWidth: '100%', 
+              overflow: 'auto',
+              // PDF şablonları için özel stiller
+              '& .MuiBox-root': { 
+                maxWidth: '100%'
+              },
+              '& iframe': {
+                maxWidth: '100%',
+                height: 'auto',
+                minHeight: '500px'
+              }
+            }}>
+              <PdfGenerator
+                data={mappedData}
+                language={previewSelectedLanguage}
+                translations={translations[previewSelectedLanguage] || translations.en}
+              />
+            </Box>
+          );
+        }
+        return <div>Template not found</div>;
+      } catch (error) {
+        console.error('Error rendering template:', error);
+        return <div>Error loading template: {(error as Error).message}</div>;
+      }
+    };
+
+    return (
+      <Box sx={{ 
+        width: '100%', 
+        mt: 2,
+        overflow: 'auto',
+        '& iframe': { // PDF iframe için
+          maxWidth: '100%',
+          height: 'auto',
+          minHeight: '500px'
+        },
+        '& img': { // Şablonların içindeki görseller için
+          maxWidth: '100%',
+          height: 'auto'
+        },
+        '& table': { // Tabloların responsive olması için
+          tableLayout: 'fixed',
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& td, & th': {
+          wordBreak: 'break-word'
+        },
+        // Web şablonları için container stillerini özelleştir
+        '& [class*="web-template"]': {
+          maxWidth: '100%',
+          overflowX: 'hidden'
+        }
+      }}>
+        {renderTemplate()}
+      </Box>
+    );
   };
 
   // Frontend'de PDF oluşturma fonksiyonu
   const generatePdfInFrontend = async (data: any) => {
     try {
-      if (!selectedTemplate) {
-        throw new Error('No template selected');
-      }
-
       // Tarayıcı ortamında olduğumuzu kontrol et
       if (typeof window === 'undefined') {
         return { success: false, error: 'This function can only be run in the browser' };
       }
 
-      // Seçilen template ID'sini uygun formata dönüştür
-      const formattedTemplateId = mapTemplateIdToUrlFormat(selectedTemplate);
-      console.log('Selected template format:', formattedTemplateId);
-
-      // Profil resmi ekleyerek veriyi oluşturalım
-      const enhancedData = {
-        ...data,
-        personal_info: {
-          ...data.personal_info,
-          // Profil resmi 'photo' alanında
-          photo: data.personal_info?.photo || undefined
+      console.log('Generating PDF with data:', data);
+      
+      // Özel şablon veya standart şablon kontrolü
+      const isCustomTemplate = previewTabIndex === 1 && selectedCustomTemplate;
+      
+      // PDF işlemi detayını oluştur
+      let eventDetail: any = {
+        data: {
+          ...data,
+          personal_info: {
+            ...data.personal_info,
+            // Profil resmi 'photo' alanında
+            photo: data.personal_info?.photo || undefined
+          },
+          // Use complete translations object for the selected language
+          i18n: translations[previewSelectedLanguage] || translations.en
         },
-        // Çeviri verilerini doğrudan ekle
-        i18n: {
-          summary: translations[previewSelectedLanguage]?.summary || translations.tr?.summary || 'Summary',
-          experience: translations[previewSelectedLanguage]?.experience || translations.tr?.experience || 'Experience',
-          education: translations[previewSelectedLanguage]?.education || translations.tr?.education || 'Education',
-          skills: translations[previewSelectedLanguage]?.skills || translations.tr?.skills || 'Skills',
-          languages: translations[previewSelectedLanguage]?.languages || translations.tr?.languages || 'Languages',
-          certificates: translations[previewSelectedLanguage]?.certificates || translations.tr?.certificates || 'Certificates',
-          present: translations[previewSelectedLanguage]?.present || translations.tr?.present || 'Present'
-        }
+        language: previewSelectedLanguage,
+        translations: translations[previewSelectedLanguage] || translations.en
       };
+      
+      // Özel şablon ise şablon bilgilerini ekle
+      if (isCustomTemplate && selectedCustomTemplate) {
+        console.log('Using custom template for PDF generation:', selectedCustomTemplate.name);
+        eventDetail = {
+          ...eventDetail,
+          isCustomTemplate: true,
+          customTemplate: {
+            ...selectedCustomTemplate,
+            type: 'pdf',
+            globalSettings: {
+              ...selectedCustomTemplate.globalSettings,
+              textColor: selectedCustomTemplate.globalSettings.primaryColor || '#000000'
+            }
+          }
+        };
+      } 
+      // Standart şablon ise template ID'sini ekle
+      else if (selectedTemplate) {
+        const formattedTemplateId = mapTemplateIdToUrlFormat(selectedTemplate);
+        console.log('Using standard template for PDF generation:', formattedTemplateId);
+        eventDetail = {
+          ...eventDetail,
+          templateId: formattedTemplateId
+        };
+      }
+      else {
+        throw new Error('No template selected');
+      }
 
       // Event oluştur ve özel bir olay tetikle
       const event = new CustomEvent('generate-pdf', {
-        detail: {
-          templateId: formattedTemplateId,
-          data: enhancedData,
-          language: previewSelectedLanguage,
-          translations: translations[previewSelectedLanguage] || translations.tr
-        }
+        detail: eventDetail
       });
+      
+      // PDF oluşturma eventini tetikle
+      console.log('Dispatching generate-pdf event with detail:', eventDetail);
       document.dispatchEvent(event);
       
       // Bilgilendirme mesajı göster
@@ -883,12 +1172,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       experience: "工作经验",
       education: "教育背景",
       skills: "技能",
-      languages: "语言能力",
+      languages: "语言",
       certificates: "证书",
       present: "至今",
-      skill_level: '/ 5分',
+      skill_level: '满分5分',
       // Section visibility translations
-      sectionVisibility: "板块可见性",
+      sectionVisibility: "版块可见性",
       header: "页眉",
       layout: "布局",
       layoutSettings: "布局设置",
@@ -896,10 +1185,11 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       photoStyle: "照片样式",
       photoSize: "照片大小",
       colors: "颜色",
-      typography: "排版",
+      typography: "版式",
       primaryColor: "主色",
-      secondaryColor: "次色",
+      secondaryColor: "辅助色",
       backgroundColor: "背景色",
+      textColor: "文字颜色",
       fontSize: "字体大小",
       fontFamily: "字体",
       // Layout options
@@ -912,29 +1202,88 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       // ATS related
       atsOptimization: "ATS优化",
       enableAtsOptimization: "启用ATS优化",
-      atsExplanation: "优化您的简历以便于ATS（申请人跟踪系统）更好地扫描",
-      // Web template translations
+      atsExplanation: "优化您的简历以更好地适应申请追踪系统(ATS)",
+      // Website templates
       'cv.template.templates.modernWeb.name': "现代网页模板",
-      'cv.template.templates.modernWeb.description': "清新现代的设计布局",
-      'cv.template.templates.minimalWeb.name': "简约网页模板",
-      'cv.template.templates.minimalWeb.description': "专注于内容的简约设计",
+      'cv.template.templates.modernWeb.description': "简洁专业的设计，现代布局",
+      'cv.template.templates.minimalWeb.name': "极简网页模板",
+      'cv.template.templates.minimalWeb.description': "简单优雅的设计，注重内容",
       'cv.template.templates.colorfulWeb.name': "多彩网页模板",
-      'cv.template.templates.colorfulWeb.description': "生动多彩的设计突显您的技能",
+      'cv.template.templates.colorfulWeb.description': "色彩丰富的设计，引人注目",
       'cv.template.templates.professionalWeb.name': "专业网页模板",
-      'cv.template.templates.professionalWeb.description': "适合传统行业的专业设计",
+      'cv.template.templates.professionalWeb.description': "适合企业风格的结构化布局",
       'cv.template.templates.creativeWeb.name': "创意网页模板",
-      'cv.template.templates.creativeWeb.description': "适合创意职业的独特设计",
+      'cv.template.templates.creativeWeb.description': "适合创意专业人士的独特设计",
       // PDF template translations
-      'cv.template.templates.modernPdf.name': "现代PDF简历",
-      'cv.template.templates.modernPdf.description': "时尚现代的PDF简历设计",
-      'cv.template.templates.classicPdf.name': "经典PDF简历",
-      'cv.template.templates.classicPdf.description': "适合各行业的传统简历格式",
-      'cv.template.templates.minimalPdf.name': "简约PDF简历",
-      'cv.template.templates.minimalPdf.description': "简洁清晰的简历布局",
-      'cv.template.templates.creativePdf.name': "创意PDF简历",
-      'cv.template.templates.creativePdf.description': "展示个性与创造力的模板",
-      'cv.template.templates.professionalPdf.name': "专业PDF简历",
-      'cv.template.templates.professionalPdf.description': "正式专业的简历设计"
+      'cv.template.templates.modernPdf.name': "现代PDF模板",
+      'cv.template.templates.modernPdf.description': "干净的排版，现代风格",
+      'cv.template.templates.classicPdf.name': "经典PDF模板",
+      'cv.template.templates.classicPdf.description': "传统简历布局，经典风格",
+      'cv.template.templates.minimalPdf.name': "极简PDF模板",
+      'cv.template.templates.minimalPdf.description': "简洁的设计",
+      'cv.template.templates.creativePdf.name': "创意PDF模板",
+      'cv.template.templates.creativePdf.description': "个性设计，让您脱颖而出",
+      'cv.template.templates.professionalPdf.name': "专业PDF模板",
+      'cv.template.templates.professionalPdf.description': "专业商务布局"
+    },
+    es: {
+      summary: "Resumen Profesional",
+      experience: "Experiencia Laboral",
+      education: "Educación",
+      skills: "Habilidades",
+      languages: "Idiomas",
+      certificates: "Certificados",
+      present: "Presente",
+      skill_level: 'de 5',
+      // Section visibility translations
+      sectionVisibility: "Visibilidad de Secciones",
+      header: "Encabezado",
+      layout: "Diseño",
+      layoutSettings: "Ajustes de Diseño",
+      showPhoto: "Mostrar Foto",
+      photoStyle: "Estilo de Foto",
+      photoSize: "Tamaño de Foto",
+      colors: "Colores",
+      typography: "Tipografía",
+      primaryColor: "Color Primario",
+      secondaryColor: "Color Secundario",
+      backgroundColor: "Color de Fondo",
+      textColor: "Color de Texto",
+      fontSize: "Tamaño de Fuente",
+      fontFamily: "Tipo de Fuente",
+      // Layout options
+      singleColumn: "Columna Única",
+      doubleColumn: "Doble Columna",
+      // Photo styles
+      circle: "Círculo",
+      square: "Cuadrado",
+      rounded: "Redondeado",
+      // ATS related
+      atsOptimization: "Optimización ATS",
+      enableAtsOptimization: "Habilitar Optimización ATS",
+      atsExplanation: "Optimiza tu CV para mejor lectura por sistemas ATS",
+      // Web template translations
+      'cv.template.templates.modernWeb.name': "Plantilla Web Moderna",
+      'cv.template.templates.modernWeb.description': "Diseño limpio y profesional con layout moderno",
+      'cv.template.templates.minimalWeb.name': "Plantilla Web Minimalista",
+      'cv.template.templates.minimalWeb.description': "Diseño simple y elegante enfocado en el contenido",
+      'cv.template.templates.colorfulWeb.name': "Plantilla Web Colorida",
+      'cv.template.templates.colorfulWeb.description': "Diseño vibrante y llamativo con acentos de color",
+      'cv.template.templates.professionalWeb.name': "Plantilla Web Profesional",
+      'cv.template.templates.professionalWeb.description': "Estilo corporativo con layout estructurado",
+      'cv.template.templates.creativeWeb.name': "Plantilla Web Creativa",
+      'cv.template.templates.creativeWeb.description': "Diseño único para profesionales creativos",
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': "Plantilla PDF Moderna",
+      'cv.template.templates.modernPdf.description': "Diseño contemporáneo con tipografía limpia",
+      'cv.template.templates.classicPdf.name': "Plantilla PDF Clásica",
+      'cv.template.templates.classicPdf.description': "Layout tradicional de currículum con atractivo atemporal",
+      'cv.template.templates.minimalPdf.name': "Plantilla PDF Minimalista",
+      'cv.template.templates.minimalPdf.description': "Diseño limpio y minimalista",
+      'cv.template.templates.creativePdf.name': "Plantilla PDF Creativa",
+      'cv.template.templates.creativePdf.description': "Diseño audaz para destacar",
+      'cv.template.templates.professionalPdf.name': "Plantilla PDF Profesional",
+      'cv.template.templates.professionalPdf.description': "Layout enfocado a negocios con elementos modernos"
     },
     hi: {
       summary: "पेशेवर सारांश",
@@ -951,106 +1300,49 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       layout: "लेआउट",
       layoutSettings: "लेआउट सेटिंग्स",
       showPhoto: "फोटो दिखाएं",
-      photoStyle: "फोटो शैली",
-      photoSize: "फोटो आकार",
+      photoStyle: "फोटो स्टाइल",
+      photoSize: "फोटो साइज़",
       colors: "रंग",
       typography: "टाइपोग्राफी",
       primaryColor: "प्राथमिक रंग",
       secondaryColor: "द्वितीयक रंग",
-      backgroundColor: "पृष्ठभूमि रंग",
-      fontSize: "फॉन्ट आकार",
-      fontFamily: "फॉन्ट परिवार",
+      backgroundColor: "पृष्ठभूमि का रंग",
+      textColor: "टेक्स्ट का रंग",
+      fontSize: "फ़ॉन्ट साइज़",
+      fontFamily: "फ़ॉन्ट परिवार",
       // Layout options
       singleColumn: "एकल कॉलम",
-      doubleColumn: "दोहरा कॉलम",
+      doubleColumn: "डबल कॉलम",
       // Photo styles
       circle: "गोल",
       square: "वर्ग",
       rounded: "गोलाकार",
       // ATS related
-      atsOptimization: "ATS अनुकूलन",
-      enableAtsOptimization: "ATS अनुकूलन सक्षम करें",
-      atsExplanation: "आपके CV को ATS (आवेदक ट्रैकिंग सिस्टम) द्वारा बेहतर स्कैनिंग के लिए अनुकूलित करता है",
+      atsOptimization: "एटीएस अनुकूलन",
+      enableAtsOptimization: "एटीएस अनुकूलन सक्षम करें",
+      atsExplanation: "अपने सीवी को एटीएस (एप्लिकेंट ट्रैकिंग सिस्टम) द्वारा बेहतर स्कैनिंग के लिए अनुकूलित करता है",
       // Web template translations
-      'cv.template.templates.modernWeb.name': "आधुनिक वेब टेम्प्लेट",
-      'cv.template.templates.modernWeb.description': "साफ और आधुनिक डिजाइन के साथ",
-      'cv.template.templates.minimalWeb.name': "मिनिमल वेब टेम्प्लेट",
-      'cv.template.templates.minimalWeb.description': "सामग्री पर केंद्रित सरल डिज़ाइन",
-      'cv.template.templates.colorfulWeb.name': "रंगीन वेब टेम्प्लेट",
-      'cv.template.templates.colorfulWeb.description': "आपके कौशल को उजागर करने वाला रंगीन डिज़ाइन",
-      'cv.template.templates.professionalWeb.name': "पेशेवर वेब टेम्प्लेट",
-      'cv.template.templates.professionalWeb.description': "पारंपरिक क्षेत्रों के लिए उपयुक्त व्यावसायिक डिज़ाइन",
-      'cv.template.templates.creativeWeb.name': "क्रिएटिव वेब टेम्प्लेट",
+      'cv.template.templates.modernWeb.name': "आधुनिक वेब टेम्पलेट",
+      'cv.template.templates.modernWeb.description': "आधुनिक लेआउट के साथ साफ और पेशेवर डिज़ाइन",
+      'cv.template.templates.minimalWeb.name': "मिनिमल वेब टेम्पलेट",
+      'cv.template.templates.minimalWeb.description': "सामग्री पर केंद्रित सरल और सुरुचिपूर्ण डिज़ाइन",
+      'cv.template.templates.colorfulWeb.name': "रंगीन वेब टेम्पलेट",
+      'cv.template.templates.colorfulWeb.description': "रंगीन एक्सेंट के साथ जीवंत और आकर्षक डिज़ाइन",
+      'cv.template.templates.professionalWeb.name': "प्रोफेशनल वेब टेम्पलेट",
+      'cv.template.templates.professionalWeb.description': "संरचित लेआउट के साथ कॉर्पोरेट स्टाइल",
+      'cv.template.templates.creativeWeb.name': "क्रिएटिव वेब टेम्पलेट",
       'cv.template.templates.creativeWeb.description': "रचनात्मक पेशेवरों के लिए अनोखा डिज़ाइन",
       // PDF template translations
-      'cv.template.templates.modernPdf.name': "आधुनिक PDF बायोडाटा",
-      'cv.template.templates.modernPdf.description': "स्टाइलिश और आधुनिक रिज्यूमे डिज़ाइन",
-      'cv.template.templates.classicPdf.name': "क्लासिक PDF बायोडाटा",
-      'cv.template.templates.classicPdf.description': "सभी क्षेत्रों के लिए पारंपरिक प्रारूप",
-      'cv.template.templates.minimalPdf.name': "मिनिमल PDF बायोडाटा",
-      'cv.template.templates.minimalPdf.description': "सरल और स्पष्ट बायोडाटा लेआउट",
-      'cv.template.templates.creativePdf.name': "क्रिएटिव PDF बायोडाटा",
-      'cv.template.templates.creativePdf.description': "आपकी व्यक्तित्व और रचनात्मकता दिखाने वाला टेम्प्लेट",
-      'cv.template.templates.professionalPdf.name': "पेशेवर PDF बायोडाटा",
-      'cv.template.templates.professionalPdf.description': "औपचारिक और व्यावसायिक बायोडाटा डिज़ाइन"
-    },
-    es: {
-      summary: "Resumen Profesional",
-      experience: "Experiencia Laboral",
-      education: "Educación",
-      skills: "Habilidades",
-      languages: "Idiomas",
-      certificates: "Certificados",
-      present: "Actualidad",
-      skill_level: 'de 5',
-      // Section visibility translations
-      sectionVisibility: "Visibilidad de Secciones",
-      header: "Encabezado",
-      layout: "Diseño",
-      layoutSettings: "Ajustes de Diseño",
-      showPhoto: "Mostrar Foto",
-      photoStyle: "Estilo de Foto",
-      photoSize: "Tamaño de Foto",
-      colors: "Colores",
-      typography: "Tipografía",
-      primaryColor: "Color Primario",
-      secondaryColor: "Color Secundario",
-      backgroundColor: "Color de Fondo",
-      fontSize: "Tamaño de Fuente",
-      fontFamily: "Tipo de Fuente",
-      // Layout options
-      singleColumn: "Una Columna",
-      doubleColumn: "Dos Columnas",
-      // Photo styles
-      circle: "Círculo",
-      square: "Cuadrado",
-      rounded: "Redondeado",
-      // ATS related
-      atsOptimization: "Optimización ATS",
-      enableAtsOptimization: "Habilitar Optimización ATS",
-      atsExplanation: "Optimiza tu CV para mejor escaneo por ATS (Sistemas de Seguimiento de Candidatos)",
-      // Web template translations
-      'cv.template.templates.modernWeb.name': "Plantilla Web Moderna",
-      'cv.template.templates.modernWeb.description': "Diseño moderno y elegante con un layout limpio",
-      'cv.template.templates.minimalWeb.name': "Plantilla Web Minimalista",
-      'cv.template.templates.minimalWeb.description': "Diseño simple y elegante enfocado en el contenido",
-      'cv.template.templates.colorfulWeb.name': "Plantilla Web Colorida",
-      'cv.template.templates.colorfulWeb.description': "Diseño colorido que destaca tus habilidades",
-      'cv.template.templates.professionalWeb.name': "Plantilla Web Profesional",
-      'cv.template.templates.professionalWeb.description': "Diseño formal para profesiones tradicionales",
-      'cv.template.templates.creativeWeb.name': "Plantilla Web Creativa",
-      'cv.template.templates.creativeWeb.description': "Diseño único para profesiones creativas",
-      // PDF template translations
-      'cv.template.templates.modernPdf.name': "CV PDF Moderno",
-      'cv.template.templates.modernPdf.description': "Diseño de currículum elegante y contemporáneo",
-      'cv.template.templates.classicPdf.name': "CV PDF Clásico",
-      'cv.template.templates.classicPdf.description': "Formato tradicional adecuado para todas las industrias",
-      'cv.template.templates.minimalPdf.name': "CV PDF Minimalista",
-      'cv.template.templates.minimalPdf.description': "Diseño de currículum simple y claro",
-      'cv.template.templates.creativePdf.name': "CV PDF Creativo",
-      'cv.template.templates.creativePdf.description': "Plantilla que muestra tu personalidad y creatividad",
-      'cv.template.templates.professionalPdf.name': "CV PDF Profesional",
-      'cv.template.templates.professionalPdf.description': "Diseño de currículum formal y profesional"
+      'cv.template.templates.modernPdf.name': "आधुनिक पीडीएफ टेम्पलेट",
+      'cv.template.templates.modernPdf.description': "साफ टाइपोग्राफी के साथ समकालीन डिज़ाइन",
+      'cv.template.templates.classicPdf.name': "क्लासिक पीडीएफ टेम्पलेट",
+      'cv.template.templates.classicPdf.description': "समयरहित आकर्षण वाला पारंपरिक रेज्यूमे लेआउट",
+      'cv.template.templates.minimalPdf.name': "मिनिमल पीडीएफ टेम्पलेट",
+      'cv.template.templates.minimalPdf.description': "साफ और मिनिमलिस्ट डिज़ाइन",
+      'cv.template.templates.creativePdf.name': "क्रिएटिव पीडीएफ टेम्पलेट",
+      'cv.template.templates.creativePdf.description': "अलग दिखने के लिए बोल्ड डिज़ाइन",
+      'cv.template.templates.professionalPdf.name': "प्रोफेशनल पीडीएफ टेम्पलेट",
+      'cv.template.templates.professionalPdf.description': "आधुनिक तत्वों के साथ व्यापार-केंद्रित लेआउट"
     }
   };
 
@@ -1093,6 +1385,8 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   // Özel şablonu kaydet
   const handleSaveTemplate = async (templateData: TemplateBuilderCustomTemplateData | NoDndCustomTemplateData) => {
     try {
+      console.log('Saving template data:', templateData);
+      
       // İşlemi gerçekleştirmeden önce tür kontrolü yapalım ve gerekli dönüşümleri uygulayalım
       let adaptedTemplateData: TemplateBuilderCustomTemplateData;
       
@@ -1106,7 +1400,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
           ...rest,
           globalSettings: {
             ...otherSettings,
-            layout: ['single', 'double'].includes(layout) ? layout as 'single' | 'double' : 'single'
+            layout: ['single', 'double', 'right-sidebar', 'left-sidebar'].includes(layout) 
+              ? layout as 'single' | 'double' | 'right-sidebar' | 'left-sidebar' 
+              : 'single',
+            showPhoto: globalSettings.showPhoto || false,
+            photoStyle: globalSettings.photoStyle || 'circle',
+            photoSize: globalSettings.photoSize || 100
           }
         } as TemplateBuilderCustomTemplateData;
       } else {
@@ -1114,18 +1413,41 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         adaptedTemplateData = templateData as TemplateBuilderCustomTemplateData;
       }
       
-      const saved = await templateService.saveCustomTemplate(adaptedTemplateData, user?.id);
+      // Tüm özelliklerin dahil edildiğinden emin ol
+      const finalTemplateData = {
+        ...adaptedTemplateData,
+        globalSettings: {
+          ...(adaptedTemplateData.globalSettings || {}),
+          // Eksik özellikleri varsayılan değerlerle ekle
+          layout: adaptedTemplateData.globalSettings?.layout || 'single',
+          showPhoto: adaptedTemplateData.globalSettings?.showPhoto ?? true,
+          photoStyle: adaptedTemplateData.globalSettings?.photoStyle || 'circle',
+          photoSize: adaptedTemplateData.globalSettings?.photoSize || 100
+        }
+      };
+      
+      console.log('Final template data to save:', finalTemplateData);
+      
+      if (!user?.id) {
+        toast.error(t('common.errors.loginRequired', 'Şablon kaydetmek için giriş yapmalısınız.'));
+        return null;
+      }
+      
+      // User ID parametresi kaldırıldı
+      const saved = await templateService.saveCustomTemplate(finalTemplateData);
       
       // Şablonları güncelle
       setCustomTemplates(prev => {
         const exists = prev.some(t => t.id === saved.id);
         if (exists) {
-          return prev.map(t => t.id === saved.id ? saved : t);
+          return prev.map(t => t.id === saved.id ? saved : t) as any;
         }
-        return [...prev, saved];
+        return [...prev, saved] as any;
       });
       
-      setSelectedCustomTemplate(saved);
+      setSelectedCustomTemplate(saved as any);
+      // Şablonları yeniden yükle
+      await refreshCustomTemplates();
       toast.success(t('cv.template.savedSuccess'));
       return saved;
     } catch (error) {
@@ -1138,19 +1460,54 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   // Özel şablonu sil
   const handleDeleteTemplate = async (templateId: string) => {
     try {
-      await templateService.deleteCustomTemplate(templateId, user?.id);
+      // Daha detaylı loglama
+      console.log(`Deleting template with ID (TemplatePreviewForm): "${templateId}"`, typeof templateId);
       
-      // Şablonları güncelle
-      setCustomTemplates(prev => prev.filter(t => t.id !== templateId));
-      
-      if (selectedCustomTemplate?.id === templateId) {
-        setSelectedCustomTemplate(null);
+      // Template ID kontrolü - daha kapsamlı
+      if (!templateId) {
+        toast.error(t('cv.template.error.invalidTemplate', 'Geçersiz şablon ID\'si'));
+        return;
       }
       
-      toast.success(t('cv.template.deleteSuccess'));
+      // template ID'nin zaten doğru formatta olduğundan emin ol - bu tam olarak db'deki ID
+      console.log(`Using template ID directly from database: "${templateId}" (before deletion call)`);
+      console.log('All custom templates before deletion:', customTemplates.map(t => ({ id: t.id, name: t.name })));
+      
+      // Bulduğumuz template'ı konsolda gösterelim
+      const foundTemplate = customTemplates.find(t => t.id === templateId);
+      console.log('Found template for deletion:', foundTemplate);
+      
+      // Silme işlemi başlatıldı bildirimi - componentte göstermeyelim, serviste gösteriliyor
+      // toast.loading(t('cv.template.deleting', 'Şablon siliniyor...'));
+      
+      // Silme işlemini gerçekleştir - ID'yi olduğu gibi geçiriyoruz, formatta bir değişiklik yapmadan
+      const success = await templateService.deleteCustomTemplate(templateId);
+      
+      if (success) {
+        console.log(`Template with ID: "${templateId}" successfully deleted, updating UI`);
+        
+        // Şablonları güncelle - silinen şablonu listeden kaldır
+        setCustomTemplates(prev => prev.filter(t => t.id !== templateId));
+        
+        // Eğer seçili şablon siliniyorsa, seçimi temizle
+        if (selectedCustomTemplate?.id === templateId) {
+          setSelectedCustomTemplate(null);
+        }
+        
+        // UI için başarılı silme bildirimi - komponette göstermeyelim, serviste gösteriliyor
+        // toast.success(t('cv.template.deleteSuccess', 'Şablon başarıyla silindi'));
+      } else {
+        // Silme başarısız oldu ama hata oluşmadı (false döndü)
+        // toast.error(t('cv.template.error.deleteFailed', 'Şablon silinemedi'));
+      }
     } catch (error) {
       console.error('Error deleting template:', error);
-      toast.error(t('cv.template.deleteError'));
+      // Hata mesajını al
+      const errorMessage = error instanceof Error ? error.message : t('cv.template.error.deleteFailed', 'Şablon silinirken bir hata oluştu');
+      // Template service'te toast gösterildiği için burada tekrar göstermeye gerek yok
+      // Ancak şimdilik errorMessage'ı loglamak ile yetinelim
+      console.error('Template deletion error details:', errorMessage);
+      // toast.error(errorMessage);
     }
   };
 
@@ -1160,6 +1517,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
 
   // Aktif önizleme sekmesini değiştiren fonksiyon
   const handlePreviewTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    // Özel şablonlar sekmesine geçilince API isteği yap
+    if (newValue === 1) {
+      console.log('Switching to custom templates tab, refreshing templates...');
+      refreshCustomTemplates();
+    }
+    
     // If switching to template builder tab, first show a loading state
     if (newValue === 2 && !templateBuilderLoaded) {
       setTemplateBuilderLoaded(false);
@@ -1171,56 +1534,222 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
     setPreviewTabIndex(newValue);
   };
 
+  const transformCVData = (data: CV): CVData => ({
+    id: String(data.id),
+    title: data.title || '',
+    personal_info: data.personal_info ? {
+      ...data.personal_info,
+      photo: data.personal_info.photo || undefined
+    } : {},
+    experience: Array.isArray(data.experience) ? data.experience.map(exp => ({
+      ...exp,
+      id: exp.id ? String(exp.id) : undefined,
+      end_date: exp.end_date === null ? undefined : exp.end_date,
+      description: exp.description || ''
+    })) : [],
+    education: Array.isArray(data.education) ? data.education.map(edu => ({
+      id: edu.id ? String(edu.id) : undefined,
+      school: edu.school || '',
+      degree: edu.degree || '',
+      field: edu.degree || '', // Use degree as field since they represent the same thing in our case
+      start_date: edu.start_date || '',
+      end_date: edu.end_date === null ? undefined : edu.end_date || '',
+      description: edu.description || '',
+      location: edu.location || ''
+    })) : [],
+    skills: Array.isArray(data.skills) ? data.skills.map(skill => ({
+      ...skill,
+      id: skill.id ? String(skill.id) : undefined,
+      level: typeof skill.level === 'string' ? parseInt(skill.level, 10) || 3 : (skill.level || 3)
+    })) : [],
+    languages: Array.isArray(data.languages) ? data.languages.map(lang => ({
+      ...lang,
+      id: lang.id ? String(lang.id) : undefined,
+      level: typeof lang.level === 'string' ? parseInt(lang.level, 10) || 3 : (lang.level || 3)
+    })) : [],
+    certificates: Array.isArray(data.certificates) ? data.certificates.map(cert => ({
+      ...cert,
+      id: cert.id ? String(cert.id) : undefined,
+      date: cert.date || new Date().toISOString().split('T')[0]
+    })) : [],
+    i18n: translations[previewSelectedLanguage] || translations.en
+  });
+
   // Şablon önizleme diyaloğunda dialog içeriğini render eder
   const renderPreviewDialog = () => {
+    // Web template seçili ise sadece standart şablonları göster
+    const isWebTemplate = selectedTemplate?.startsWith('web-');
+
     return (
       <Dialog
         open={open}
         onClose={handleClose}
         maxWidth="lg"
         fullWidth
+        PaperProps={{
+          sx: {
+            maxHeight: '90vh', // Ekran yüksekliğinin %90'ını kullan
+            overflow: 'hidden' // Ana container taşmayı engelle
+          }
+        }}
       >
-        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {t('cv.preview.title')}
-            {/* Dil seçimi kaldırıldı */}
+        <DialogTitle sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          flexDirection: { xs: 'column', sm: 'row' }, // Mobilde alt alta, tablette yan yana
+          gap: { xs: 1, sm: 0 }, // Mobilde elemanlar arası boşluk
+          pb: { xs: 1, sm: 2 } // Mobilde padding azalt
+        }}>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 2,
+            width: { xs: '100%', sm: 'auto' }, // Mobilde tam genişlik
+            justifyContent: { xs: 'space-between', sm: 'flex-start' } // Mobilde aralarında boşluk
+          }}>
+            <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+              {t('cv.preview.title')}
+            </Typography>
+            {/* Add language selection for PDF templates */}
+            {!isWebTemplate && (
+              <FormControl size="small" sx={{ minWidth: { xs: 100, sm: 120 }, ml: { xs: 0, sm: 2 } }}>
+                <Select
+                  value={previewSelectedLanguage}
+                  onChange={(e) => {
+                    const newLang = e.target.value as string;
+                    setPreviewSelectedLanguage(newLang);
+                    fetchPreviewDataForLanguage(newLang);
+                  }}
+                  displayEmpty
+                  variant="outlined"
+                  sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}
+                >
+                  <MenuItem value="tr">Türkçe</MenuItem>
+                  <MenuItem value="en">English</MenuItem>
+                  <MenuItem value="zh">中文</MenuItem>
+                  <MenuItem value="es">Español</MenuItem>
+                  <MenuItem value="hi">हिन्दी</MenuItem>
+                  <MenuItem value="ar">العربية</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+              <IconButton edge="end" onClick={handleClose} size="small">
+                <CloseIcon />
+              </IconButton>
+            </Box>
           </Box>
-          <IconButton edge="end" onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            <IconButton edge="end" onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </DialogTitle>
         
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}>
-          <Tabs value={previewTabIndex} onChange={handlePreviewTabChange} aria-label="preview tabs">
-            <Tab label={t('cv.preview.standardTemplates')} />
-            <Tab label={t('cv.preview.customTemplates')} />
-            <Tab label={t('cv.preview.customBuilderTab')} />
-          </Tabs>
-        </Box>
+        {!isWebTemplate && (
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', px: { xs: 1, sm: 3 } }}>
+            <Tabs 
+              value={previewTabIndex} 
+              onChange={handlePreviewTabChange} 
+              aria-label="preview tabs"
+              variant="scrollable" // Mobil için scrollable tabs
+              scrollButtons="auto" // Scroll butonlarını göster
+              allowScrollButtonsMobile // Mobilde scroll butonlarına izin ver
+              sx={{
+                '& .MuiTab-root': {
+                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                  minWidth: { xs: 'auto', sm: 120 },
+                  px: { xs: 1, sm: 2 }
+                }
+              }}
+            >
+              <Tab label={t('cv.preview.standardTemplates')} />
+              <Tab label={t('cv.preview.customTemplates')} />
+              <Tab label={t('cv.preview.customBuilderTab')} />
+            </Tabs>
+          </Box>
+        )}
         
-        <DialogContent>
-          {previewTabIndex === 0 && (
-            <Box>
+        <DialogContent sx={{ 
+          p: { xs: 1, sm: 2, md: 3 }, // Responsive padding
+          overflow: 'auto', // İçerik taşarsa scroll göster
+          height: 'calc(90vh - 120px)' // Ekran yüksekliğinden başlık ve sekmeleri çıkar
+        }}>
+          {(!isWebTemplate && previewTabIndex === 0) && (
+            <Box sx={{ 
+              width: '100%',
+              overflow: 'auto',
+              '& > div': { // PdfGenerator içindeki Box
+                maxWidth: '100%',
+                '& iframe': { // PDF iframe
+                  maxWidth: '100%',
+                  height: 'auto',
+                  minHeight: '500px'
+                }
+              }
+            }}>
+              {renderPreviewContent()}
+            </Box>
+          )}
+
+          {isWebTemplate && (
+            <Box sx={{ 
+              width: '100%',
+              overflow: 'auto',
+              '& > div': { // Web template container
+                maxWidth: '100%',
+              }
+            }}>
               {renderPreviewContent()}
             </Box>
           )}
           
-          {previewTabIndex === 1 && (
+          {(!isWebTemplate && previewTabIndex === 1) && (
             <Box>
-              {customTemplates.length > 0 ? (
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="h6" gutterBottom>
-                    {t('cv.preview.savedTemplates')}
+              {loadingTemplates ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
+                  <CircularProgress size={40} />
+                  <Typography variant="h6" color="text.secondary" sx={{ ml: 2, fontSize: { xs: '0.9rem', sm: '1.25rem' } }}>
+                    {t('cv.preview.loadingTemplates', 'Şablonlar yükleniyor...')}
                   </Typography>
-                  <Grid container spacing={2}>
+                </Box>
+              ) : customTemplates.length > 0 ? (
+                <Box sx={{ mb: 2 }}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    justifyContent: 'space-between', 
+                    alignItems: { xs: 'flex-start', sm: 'center' }, 
+                    mb: 2,
+                    gap: { xs: 1, sm: 0 }
+                  }}>
+                    <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+                      {t('cv.preview.savedTemplates')}
+                    </Typography>
+                    {selectedCustomTemplate && previewData && (
+                      <Button 
+                        variant="contained" 
+                        color="primary"
+                        size="small"
+                        startIcon={<DownloadIcon />}
+                        onClick={() => generatePdfInFrontend(transformCVData(previewData))}
+                        sx={{ mt: { xs: 1, sm: 0 } }}
+                      >
+                        {t('cv.preview.downloadPdf')}
+                      </Button>
+                    )}
+                  </Box>
+                  <Grid container spacing={{ xs: 1, sm: 2 }}>
                     {customTemplates.map((template) => (
-                      <Grid item xs={12} sm={6} md={4} key={template.id}>
+                      <Grid item xs={6} sm={4} md={3} key={template.id}>
                         <Card
                           sx={{
                             cursor: 'pointer',
                             border: selectedCustomTemplate?.id === template.id ? 2 : 1,
                             borderColor: selectedCustomTemplate?.id === template.id ? 'primary.main' : 'divider',
                             borderRadius: 2,
+                            height: '100%',
                             bgcolor: selectedCustomTemplate?.id === template.id ? 'action.selected' : 'background.paper',
                             transition: 'all 0.2s ease-in-out',
                             '&:hover': {
@@ -1229,26 +1758,45 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                             },
                           }}
                           onClick={() => {
-                            setSelectedCustomTemplate(template);
+                            const freshTemplate = customTemplates.find(t => t.id === template.id);
+                            setSelectedCustomTemplate(freshTemplate || template);
+                            loadTemplateToEditor(freshTemplate || template);
                           }}
                         >
-                          <CardContent>
-                            <Typography variant="h6">{template.name}</Typography>
-                            <Typography variant="body2" color="text.secondary">
+                          <CardContent sx={{ py: { xs: 1, sm: 2 } }}>
+                            <Typography variant="h6" sx={{ fontSize: { xs: '0.9rem', sm: '1.25rem' } }}>
+                              {template.name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                               {new Date(template.updatedAt).toLocaleDateString()}
                             </Typography>
                           </CardContent>
-                          <CardActions>
+                          <CardActions sx={{ px: { xs: 1, sm: 2 }, py: { xs: 0.5, sm: 1 }, justifyContent: 'space-between' }}>
                             <Button 
                               size="small" 
-                              color="primary"
+                              color="error"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteTemplate(template.id);
                               }}
+                              sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
                             >
-                              {t('common.delete')}
+                              {t('common.delete', 'Sil')}
                             </Button>
+                            {selectedCustomTemplate?.id === template.id && previewData && (
+                              <Button 
+                                size="small" 
+                                color="primary"
+                                startIcon={<DownloadIcon />}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  generatePdfInFrontend(transformCVData(previewData));
+                                }}
+                                sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+                              >
+                                {t('common.download', 'İndir')}
+                              </Button>
+                            )}
                           </CardActions>
                         </Card>
                       </Grid>
@@ -1257,13 +1805,14 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                 </Box>
               ) : (
                 <Box sx={{ textAlign: 'center', py: 4 }}>
-                  <Typography variant="h6" color="text.secondary">
+                  <Typography variant="h6" color="text.secondary" sx={{ fontSize: { xs: '0.9rem', sm: '1.25rem' } }}>
                     {t('cv.preview.noCustomTemplates')}
                   </Typography>
                   <Button 
                     variant="contained" 
                     sx={{ mt: 2 }}
                     onClick={() => setPreviewTabIndex(2)}
+                    size="small"
                   >
                     {t('cv.preview.createCustomTemplate')}
                   </Button>
@@ -1271,150 +1820,113 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
               )}
               
               {selectedCustomTemplate && previewData && (
-                <Box sx={{ mt: 4 }}>
+                <Box sx={{ 
+                  mt: 4,
+                  overflow: 'auto',
+                  width: '100%'
+                }}>
                   <CustomTemplateRenderer
-                    data={{
-                      id: previewData.id ? String(previewData.id) : undefined,
-                      title: previewData.title,
-                      personal_info: {
-                        ...previewData.personal_info,
-                        photo: previewData.personal_info?.photo || undefined
-                      },
-                      experience: previewData.experience?.map(exp => ({
-                        ...exp,
-                        id: exp.id ? String(exp.id) : undefined,
-                        end_date: exp.end_date === null ? undefined : exp.end_date
-                      })),
-                      education: previewData.education?.map(edu => ({
-                        ...edu,
-                        id: edu.id ? String(edu.id) : undefined,
-                        end_date: edu.end_date === null ? undefined : edu.end_date
-                      })),
-                      skills: previewData.skills?.map(skill => ({
-                        ...skill,
-                        id: skill.id ? String(skill.id) : undefined,
-                        level: typeof skill.level === 'string' ? parseInt(skill.level, 10) || 3 : skill.level
-                      })),
-                      languages: previewData.languages?.map(lang => ({
-                        ...lang,
-                        id: lang.id ? String(lang.id) : undefined,
-                        level: typeof lang.level === 'string' ? parseInt(lang.level, 10) || 3 : lang.level
-                      })),
-                      certificates: previewData.certificates?.map(cert => ({
-                        ...cert,
-                        id: cert.id ? String(cert.id) : undefined
-                      })),
-                      i18n: {
-                        summary: translations[previewSelectedLanguage]?.summary || translations.tr?.summary || 'Summary',
-                        experience: translations[previewSelectedLanguage]?.experience || translations.tr?.experience || 'Experience',
-                        education: translations[previewSelectedLanguage]?.education || translations.tr?.education || 'Education',
-                        skills: translations[previewSelectedLanguage]?.skills || translations.tr?.skills || 'Skills',
-                        languages: translations[previewSelectedLanguage]?.languages || translations.tr?.languages || 'Languages',
-                        certificates: translations[previewSelectedLanguage]?.certificates || translations.tr?.certificates || 'Certificates',
-                        present: translations[previewSelectedLanguage]?.present || translations.tr?.present || 'Present'
+                    data={transformCVData(previewData)}
+                    language={previewSelectedLanguage}
+                    translations={translations[previewSelectedLanguage] || translations.en}
+                    templateData={{
+                      ...selectedCustomTemplate,
+                      type: 'pdf', // Type değerini pdf olarak değiştiriyoruz
+                      globalSettings: {
+                        ...selectedCustomTemplate.globalSettings,
+                        textColor: selectedCustomTemplate.globalSettings.primaryColor || '#000000',
+                        isAtsOptimized: false
                       }
                     }}
-                    language={previewSelectedLanguage}
-                    translations={translations[previewSelectedLanguage] || translations.tr || {}}
-                    templateData={selectedCustomTemplate}
                   />
-                  <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                      variant="contained" 
-                      startIcon={<DownloadIcon />}
-                      onClick={() => generatePdfInFrontend(previewData)}
-                    >
-                      {t('cv.preview.downloadPdf')}
-                    </Button>
-                  </Box>
                 </Box>
               )}
             </Box>
           )}
           
-          {previewTabIndex === 2 && previewData && (
-            <div className="template-builder-container">
-              {!templateBuilderLoaded ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '600px' }}>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <CircularProgress sx={{ mb: 2 }} />
-                    <Typography variant="body1" color="text.secondary">
-                      Loading template builder...
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-                      This may take a moment to load
-                    </Typography>
-                  </Box>
-                </Box>
-              ) : (
+          {(!isWebTemplate && previewTabIndex === 2) && (
+            <Box>
+              {templateBuilderLoaded ? (
                 <ClientOnlyTemplateBuilder>
-                  <NoSSRTemplateBuilder
-                    data={{
-                      id: previewData.id ? String(previewData.id) : undefined,
-                      title: previewData.title,
-                      personal_info: {
-                        ...previewData.personal_info,
-                        photo: previewData.personal_info?.photo || undefined
-                      },
-                      experience: previewData.experience?.map(exp => ({
-                        ...exp,
-                        id: exp.id ? String(exp.id) : undefined,
-                        end_date: exp.end_date === null ? undefined : exp.end_date
-                      })),
-                      education: previewData.education?.map(edu => ({
-                        ...edu,
-                        id: edu.id ? String(edu.id) : undefined,
-                        end_date: edu.end_date === null ? undefined : edu.end_date
-                      })),
-                      skills: previewData.skills?.map(skill => ({
-                        ...skill,
-                        id: skill.id ? String(skill.id) : undefined,
-                        level: typeof skill.level === 'string' ? parseInt(skill.level, 10) || 3 : skill.level
-                      })),
-                      languages: previewData.languages?.map(lang => ({
-                        ...lang,
-                        id: lang.id ? String(lang.id) : undefined,
-                        level: typeof lang.level === 'string' ? parseInt(lang.level, 10) || 3 : lang.level
-                      })),
-                      certificates: previewData.certificates?.map(cert => ({
-                        ...cert,
-                        id: cert.id ? String(cert.id) : undefined
-                      })),
-                      i18n: {
-                        summary: translations[previewSelectedLanguage]?.summary || translations.tr?.summary || 'Summary',
-                        experience: translations[previewSelectedLanguage]?.experience || translations.tr?.experience || 'Experience',
-                        education: translations[previewSelectedLanguage]?.education || translations.tr?.education || 'Education',
-                        skills: translations[previewSelectedLanguage]?.skills || translations.tr?.skills || 'Skills',
-                        languages: translations[previewSelectedLanguage]?.languages || translations.tr?.languages || 'Languages',
-                        certificates: translations[previewSelectedLanguage]?.certificates || translations.tr?.certificates || 'Certificates',
-                        present: translations[previewSelectedLanguage]?.present || translations.tr?.present || 'Present'
+                  <NoDndTemplateBuilder
+                    onSaveTemplate={handleNoDndSaveTemplate}
+                    savedTemplates={customTemplates.map(template => ({
+                      ...template,
+                      globalSettings: {
+                        ...template.globalSettings,
+                        textColor: template.globalSettings.primaryColor || '#000000',
+                        isAtsOptimized: false
                       }
-                    }}
-                    language={previewSelectedLanguage}
-                    translations={translations[previewSelectedLanguage] || translations.tr || {}}
-                    onSaveTemplate={handleSaveTemplate}
-                    savedTemplates={[]}
+                    }))}
                   />
                 </ClientOnlyTemplateBuilder>
+              ) : (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
+                  <CircularProgress size={40} />
+                </Box>
               )}
-            </div>
+            </Box>
           )}
         </DialogContent>
-        
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            {t('common.close')}
-          </Button>
-        </DialogActions>
       </Dialog>
     );
   };
 
   // NoSSR template builder kullanımı
-  const handleNoDndSaveTemplate = (templateData: NoDndCustomTemplateData) => {
-    // void dönüş tipi ile Promise'ı görmezden gelelim
-    void handleSaveTemplate(templateData);
+  const handleNoDndSaveTemplate = async (templateData: NoDndCustomTemplateData): Promise<any> => {
+    try {
+      console.log('Saving NoDnd template data:', templateData);
+      
+      // Kullanıcı kontrolünü kaldırıyoruz, backend tarafında zaten kimlik doğrulaması yapılıyor
+      // if (!user?.id) {
+      //   toast.error(t('common.errors.loginRequired', 'Şablon kaydetmek için giriş yapmalısınız.'));
+      //   return false;
+      // }
+      
+      // Make sure templateData is properly structured
+      const finalTemplateData = {
+        ...templateData,
+        name: templateData.name || `Özel Şablon ${new Date().toLocaleDateString()}`,
+        // Ensure necessary fields are present
+        globalSettings: {
+          ...(templateData.globalSettings || {}),
+          layout: templateData.globalSettings?.layout || 'single',
+          showPhoto: templateData.globalSettings?.showPhoto ?? true,
+          photoStyle: templateData.globalSettings?.photoStyle || 'circle',
+          photoSize: templateData.globalSettings?.photoSize || 100
+        }
+      };
+      
+      console.log('Sending finalized template data to API:', finalTemplateData);
+      
+      // API'ye doğrudan gönder
+      const savedTemplate = await templateService.saveCustomTemplate(finalTemplateData);
+      
+      if (savedTemplate) {
+        console.log('Template saved successfully:', savedTemplate);
+        // Şablonları yenile
+        await refreshCustomTemplates();
+        toast.success(t('cv.template.savedSuccess', 'Şablon başarıyla kaydedildi!'));
+        return savedTemplate;
+      } else {
+        toast.error(t('cv.template.saveFailed', 'Şablon kaydedilemedi.'));
+        return false;
+      }
+    } catch (error) {
+      console.error('Error saving template:', error);
+      const errorMessage = error instanceof Error ? error.message : t('common.errorOccurred', 'Bir hata oluştu');
+      toast.error(errorMessage);
+      return false;
+    }
   };
+
+  useEffect(() => {
+    // Dialog açıldığında ve özel şablonlar sekmesi seçiliyse şablonları yükle
+    if (open && previewTabIndex === 1) {
+      console.log('Dialog opened with custom templates tab, loading templates...');
+      refreshCustomTemplates();
+    }
+  }, [open, previewTabIndex]);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -1422,87 +1934,58 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         {t('cv.template.selectTitle')}
       </Typography>
 
-      <Box sx={{ mb: 3 }}>
+      {/* Improving tab layout for Web/PDF version tabs */}
+      <Box sx={{ mb: 2 }}>
         <Tabs 
           value={activeTab} 
-          onChange={handleTabChange} 
+          onChange={handleTabChange}
           variant="fullWidth"
           sx={{ 
             borderBottom: 1, 
             borderColor: 'divider',
             '& .MuiTab-root': {
               textTransform: 'none',
-              minWidth: 120,
+              minWidth: 'auto',
             }
           }}
         >
           <Tab 
             icon={<WebIcon />} 
             label={t('cv.template.webVersion')}
-            sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
+            sx={{ 
+              display: 'flex', 
+              flexDirection: { xs: 'column', sm: 'row' }, 
+              gap: { xs: 0.5, sm: 1 }, 
+              alignItems: 'center',
+              fontSize: { xs: '0.75rem', sm: '0.875rem' }
+            }}
           />
           <Tab 
             icon={<DownloadIcon />} 
             label={t('cv.template.pdfVersion')}
-            sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
+            sx={{ 
+              display: 'flex', 
+              flexDirection: { xs: 'column', sm: 'row' }, 
+              gap: { xs: 0.5, sm: 1 }, 
+              alignItems: 'center',
+              fontSize: { xs: '0.75rem', sm: '0.875rem' }
+            }}
           />
         </Tabs>
       </Box>
 
-      {activeTab === 1 && (
-        <Box sx={{ mb: 3 }}>
-          <FormControl sx={{ minWidth: 200 }}>
-            <Select
-              value={selectedLanguage}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              displayEmpty
-            >
-              <MenuItem value="tr">Türkçe</MenuItem>
-              <MenuItem value="en">English</MenuItem>
-              <MenuItem value="zh">中文</MenuItem>
-              <MenuItem value="es">Español</MenuItem>
-              <MenuItem value="hi">हिन्दी</MenuItem>
-              <MenuItem value="ar">العربية</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      )}
-
-      <Box sx={{ 
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
-        maxWidth: '100%',
-        overflowX: 'auto',
-        '&::-webkit-scrollbar': {
-          height: 8,
-        },
-        '&::-webkit-scrollbar-track': {
-          backgroundColor: 'rgba(0,0,0,0.1)',
-          borderRadius: 4,
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'rgba(0,0,0,0.2)',
-          borderRadius: 4,
-        },
-      }}>
-        <Box sx={{ 
-          display: 'flex', 
-          gap: 2, 
-          pb: 2, 
-          minWidth: 'min-content',
-          flexWrap: 'nowrap'
-        }}>
-          {activeTab === 0 ? (
-            <>
+      {/* Templates Grid */}
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        {activeTab === 0 ? (
+          <>
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'web-modern' ? 2 : 1,
                   borderColor: selectedTemplate === 'web-modern' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'web-modern' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1517,25 +2000,27 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(modernWebTemplateSvg)}
                   alt={t('cv.template.templates.modernWeb.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
-                <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                <CardContent sx={{ pb: { xs: 1, sm: 2 } }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.modernWeb.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.modernWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
+            </Grid>
 
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'web-minimal' ? 2 : 1,
                   borderColor: selectedTemplate === 'web-minimal' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'web-minimal' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1550,25 +2035,27 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(classicWebTemplateSvg)}
                   alt={t('cv.template.templates.minimalWeb.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
-                <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                <CardContent sx={{ pb: { xs: 1, sm: 2 } }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.minimalWeb.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.minimalWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
+            </Grid>
 
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'web-colorful' ? 2 : 1,
                   borderColor: selectedTemplate === 'web-colorful' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'web-colorful' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1583,25 +2070,27 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(colorfulWebTemplateSvg)}
                   alt={t('cv.template.templates.colorfulWeb.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
-                <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                <CardContent sx={{ pb: { xs: 1, sm: 2 } }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.colorfulWeb.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.colorfulWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
+            </Grid>
 
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'web-professional' ? 2 : 1,
                   borderColor: selectedTemplate === 'web-professional' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'web-professional' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1616,25 +2105,27 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(professionalWebTemplateSvg)}
                   alt={t('cv.template.templates.professionalWeb.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
-                <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                <CardContent sx={{ pb: { xs: 1, sm: 2 } }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.professionalWeb.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.professionalWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
-
+            </Grid>
+            
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'web-creative' ? 2 : 1,
                   borderColor: selectedTemplate === 'web-creative' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'web-creative' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1649,27 +2140,29 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(creativeWebTemplateSvg)}
                   alt={t('cv.template.templates.creativeWeb.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
-                <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                <CardContent sx={{ pb: { xs: 1, sm: 2 } }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.creativeWeb.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.creativeWeb.description')}
                   </Typography>
                 </CardContent>
               </Card>
-            </>
-          ) : (
-            <>
+            </Grid>
+          </>
+        ) : (
+          <>
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'pdf-template1' ? 2 : 1,
                   borderColor: selectedTemplate === 'pdf-template1' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'pdf-template1' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1684,25 +2177,27 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(professionalPdfTemplateSvg)}
                   alt={t('cv.template.templates.modernPdf.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
                 <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.modernPdf.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.modernPdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
-
+            </Grid>
+            
+            <Grid item xs={6} sm={4} md={3}>
               <Card 
                 sx={{ 
-                  width: 240,
-                  minWidth: 240,
                   cursor: 'pointer',
                   border: selectedTemplate === 'pdf-template2' ? 2 : 1,
                   borderColor: selectedTemplate === 'pdf-template2' ? 'primary.main' : 'divider',
                   borderRadius: 2,
+                  height: '100%',
                   bgcolor: selectedTemplate === 'pdf-template2' ? 'action.selected' : 'background.paper',
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
@@ -1717,20 +2212,21 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   height="140"
                   image={svgToDataUrl(elegantPdfTemplateSvg)}
                   alt={t('cv.template.templates.professionalPdf.name')}
+                  sx={{ objectFit: 'contain', p: 1 }}
                 />
                 <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                     {t('cv.template.templates.professionalPdf.name')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {t('cv.template.templates.professionalPdf.description')}
                   </Typography>
                 </CardContent>
               </Card>
-            </>
-          )}
-        </Box>
-      </Box>
+            </Grid>
+          </>
+        )}
+      </Grid>
 
       <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'space-between' }}>
         <Box>
@@ -1739,34 +2235,43 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
               onClick={onPrev} 
               variant="contained"
               disabled={loading}
+              size="small"
+              sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
             >
               {t('common.previous')}
             </Button>
           )}
         </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
           <Button
             onClick={handlePreview}
             variant="outlined"
             disabled={!selectedTemplate || loading}
+            size="small"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
           >
-            {previewLoading ? <CircularProgress size={24} /> : t('cv.template.preview')}
+            {previewLoading ? <CircularProgress size={20} /> : t('cv.template.preview')}
           </Button>
-          <Button
-            onClick={handleGenerateCV}
-            variant="contained"
-            color="primary"
-            disabled={!selectedTemplate || loading}
-            startIcon={activeTab === 0 ? <WebIcon /> : <DownloadIcon />}
-          >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : activeTab === 0 ? (
-              t('cv.template.generateWeb')
-            ) : (
-              t('cv.template.generatePDF')
-            )}
-          </Button>
+          {activeTab === 0 && (
+            <Button
+              onClick={handleGenerateCV}
+              variant="contained"
+              color="primary"
+              disabled={!selectedTemplate || loading}
+              startIcon={<WebIcon />}
+              size="small"
+              sx={{ 
+                fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {loading ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : (
+                t('cv.template.generateWeb')
+              )}
+            </Button>
+          )}
         </Box>
       </Box>
 

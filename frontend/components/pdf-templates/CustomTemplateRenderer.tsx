@@ -25,6 +25,7 @@ export interface TemplateSection {
 export interface CustomTemplateData {
   id: string;
   name: string;
+  type: 'web' | 'pdf';
   createdAt: string;
   updatedAt: string;
   globalSettings: GlobalSettings;
@@ -37,14 +38,17 @@ export type GlobalSettings = {
   fontFamily: string;
   fontSize: number;
   backgroundColor: string;
+  textColor: string;
   showPhoto: boolean;
   photoStyle: 'circle' | 'square' | 'rounded';
   photoSize: number;
   layout: 'single' | 'double' | 'sidebar-left' | 'sidebar-right' | 'three-column' | 'header-highlight';
+  isAtsOptimized?: boolean;
 };
 
 interface CustomTemplateRendererProps extends PDFTemplateProps {
   templateData: CustomTemplateData;
+  onSaveTemplate?: (template: CustomTemplateData) => Promise<any>;
 }
 
 /**
@@ -55,37 +59,60 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
   data, 
   language = 'en', 
   translations = {},
-  templateData 
+  templateData,
+  onSaveTemplate
 }) => {
   // RTL desteği (Arapça gibi sağdan sola yazılan diller için)
   const isRTL = language === 'ar';
+  
+  // Log to debug template data
+  console.log('Rendering template with data:', templateData);
   
   // Görünür ve sıralanmış bölümleri al
   const visibleSections = templateData.sections
     .filter(section => section.visible)
     .sort((a, b) => a.order - b.order);
   
-  // Bölüm içeriğini render et
-  const renderSectionContent = (section: TemplateSection) => {
-    const { type } = section;
-    
+  // Bölüm başlığını getir
+  const getSectionTitle = (type: string) => {
     switch (type) {
-      case 'header':
-        return renderHeaderSection(section);
       case 'summary':
-        return renderSummarySection(section);
+        return data.i18n?.professionalSummary || 'Professional Summary';
       case 'experience':
-        return renderExperienceSection(section);
+        return data.i18n?.experience || 'Experience';
       case 'education':
-        return renderEducationSection(section);
+        return data.i18n?.education || 'Education';
       case 'skills':
-        return renderSkillsSection(section);
+        return data.i18n?.skills || 'Skills';
       case 'languages':
-        return renderLanguagesSection(section);
+        return data.i18n?.languages || 'Languages';
       case 'certificates':
-        return renderCertificatesSection(section);
+        return data.i18n?.certificates || 'Certificates';
       default:
-        return null;
+        return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+  };
+  
+  // Template layoutuna göre ana içerik stilini belirle
+  const getMainLayoutStyle = () => {
+    const layout = templateData.globalSettings.layout;
+    console.log('Using layout:', layout);
+    
+    switch (layout) {
+      case 'single':
+        return { display: 'flex', flexDirection: 'column' as const, gap: '20px' };
+      case 'double':
+        return { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' };
+      case 'sidebar-left':
+        return { display: 'grid', gridTemplateColumns: '30% 70%', gap: '20px' };
+      case 'sidebar-right':
+        return { display: 'grid', gridTemplateColumns: '70% 30%', gap: '20px' };
+      case 'three-column':
+        return { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' };
+      case 'header-highlight':
+        return { display: 'flex', flexDirection: 'column' as const, gap: '20px' };
+      default:
+        return { display: 'flex', flexDirection: 'column' as const, gap: '20px' };
     }
   };
   
@@ -445,438 +472,61 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
     }
   };
   
-  // Render main template based on layout type
+  // Bölüm içeriğini render et
+  const renderSectionContent = (section: TemplateSection) => {
+    const { type } = section;
+    
+    switch (type) {
+      case 'header':
+        return renderHeaderSection(section);
+      case 'summary':
+        return renderSummarySection(section);
+      case 'experience':
+        return renderExperienceSection(section);
+      case 'education':
+        return renderEducationSection(section);
+      case 'skills':
+        return renderSkillsSection(section);
+      case 'languages':
+        return renderLanguagesSection(section);
+      case 'certificates':
+        return renderCertificatesSection(section);
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div style={{ 
+    <div className="custom-template" style={{
       fontFamily: templateData.globalSettings.fontFamily || 'Arial, sans-serif',
-      fontSize: `${templateData.globalSettings.fontSize}pt`,
-      backgroundColor: templateData.globalSettings.backgroundColor,
-      color: '#333333',
+      fontSize: `${templateData.globalSettings.fontSize || 12}pt`,
+      backgroundColor: templateData.globalSettings.backgroundColor || '#ffffff',
       padding: '20px',
-      width: '100%',
-      boxSizing: 'border-box',
       direction: isRTL ? 'rtl' : 'ltr',
     }}>
-      {/* Use different layouts based on layout setting */}
-      {templateData.globalSettings.layout === 'single' && (
-        // Single column layout
-        <div>
-          {visibleSections.map(section => (
-            <div 
-              key={section.id}
-              style={{ 
-                marginBottom: '20px',
-                backgroundColor: section.settings.backgroundColor,
-                padding: '10px',
-                borderRadius: '4px',
-              }}
-            >
-              {/* Section title except for header section */}
-              {section.type !== 'header' && (
-                <h2 style={{ 
-                  borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                  paddingBottom: '5px',
-                  marginTop: 0,
-                  color: templateData.globalSettings.primaryColor
-                }}>
-                  {section.title}
-                </h2>
-              )}
-              {renderSectionContent(section)}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {templateData.globalSettings.layout === 'double' && (
-        // Double column layout
-        <div style={{ display: 'flex', gap: '20px' }}>
-          {/* Left column (narrower) */}
-          <div style={{ flex: '0.35' }}>
-            {visibleSections
-              .filter(section => ['header', 'summary', 'skills', 'languages'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  {/* Section title except for header section */}
-                  {section.type !== 'header' && (
-                    <h2 style={{ 
-                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                      paddingBottom: '5px',
-                      marginTop: 0,
-                      color: templateData.globalSettings.primaryColor
-                    }}>
-                      {section.title}
-                    </h2>
-                  )}
-                  {renderSectionContent(section)}
-                </div>
-              ))}
+      <div style={getMainLayoutStyle()}>
+        {visibleSections.map((section, index) => (
+          <div key={section.id} style={{
+            backgroundColor: section.settings.backgroundColor,
+            color: section.settings.textColor,
+            padding: '15px',
+            marginBottom: '20px',
+            borderRadius: '4px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+          }}>
+            <h2 style={{
+              margin: '0 0 15px 0',
+              fontSize: `${(section.settings.fontSize || templateData.globalSettings.fontSize) + 4}pt`,
+              color: section.settings.textColor || templateData.globalSettings.textColor,
+              borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
+              paddingBottom: '8px'
+            }}>
+              {getSectionTitle(section.type)}
+            </h2>
+            {renderSectionContent(section)}
           </div>
-          
-          {/* Right column (wider) */}
-          <div style={{ flex: '0.65' }}>
-            {visibleSections
-              .filter(section => ['experience', 'education', 'certificates'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <h2 style={{ 
-                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                    paddingBottom: '5px',
-                    marginTop: 0,
-                    color: templateData.globalSettings.primaryColor
-                  }}>
-                    {section.title}
-                  </h2>
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {templateData.globalSettings.layout === 'sidebar-left' && (
-        // Left sidebar layout
-        <div style={{ display: 'flex', gap: '20px' }}>
-          {/* Left sidebar */}
-          <div style={{ width: '30%', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
-            {visibleSections
-              .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <h2 style={{ 
-                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                    paddingBottom: '5px',
-                    marginTop: 0,
-                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
-                    color: templateData.globalSettings.primaryColor
-                  }}>
-                    {section.title}
-                  </h2>
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-          
-          {/* Main content */}
-          <div style={{ flex: '1' }}>
-            {visibleSections
-              .filter(section => ['header', 'summary', 'experience', 'education'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  {/* Section title except for header section */}
-                  {section.type !== 'header' && (
-                    <h2 style={{ 
-                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                      paddingBottom: '5px',
-                      marginTop: 0,
-                      color: templateData.globalSettings.primaryColor
-                    }}>
-                      {section.title}
-                    </h2>
-                  )}
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {templateData.globalSettings.layout === 'sidebar-right' && (
-        // Right sidebar layout
-        <div style={{ display: 'flex', gap: '20px' }}>
-          {/* Main content */}
-          <div style={{ flex: '1' }}>
-            {visibleSections
-              .filter(section => ['header', 'summary', 'experience', 'education'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  {/* Section title except for header section */}
-                  {section.type !== 'header' && (
-                    <h2 style={{ 
-                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                      paddingBottom: '5px',
-                      marginTop: 0,
-                      color: templateData.globalSettings.primaryColor
-                    }}>
-                      {section.title}
-                    </h2>
-                  )}
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-          
-          {/* Right sidebar */}
-          <div style={{ width: '30%', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
-            {visibleSections
-              .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <h2 style={{ 
-                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                    paddingBottom: '5px',
-                    marginTop: 0,
-                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
-                    color: templateData.globalSettings.primaryColor
-                  }}>
-                    {section.title}
-                  </h2>
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {templateData.globalSettings.layout === 'three-column' && (
-        // Three column layout
-        <div style={{ display: 'flex', gap: '15px' }}>
-          {/* Column 1 - Skills */}
-          <div style={{ flex: '1' }}>
-            {visibleSections
-              .filter(section => ['skills'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <h2 style={{ 
-                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                    paddingBottom: '5px',
-                    marginTop: 0,
-                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
-                    color: templateData.globalSettings.primaryColor
-                  }}>
-                    {section.title}
-                  </h2>
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-          
-          {/* Column 2 - Summary & Experience */}
-          <div style={{ flex: '1' }}>
-            {visibleSections
-              .filter(section => ['header', 'summary', 'experience'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  {/* Section title except for header section */}
-                  {section.type !== 'header' && (
-                    <h2 style={{ 
-                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                      paddingBottom: '5px',
-                      marginTop: 0,
-                      color: templateData.globalSettings.primaryColor
-                    }}>
-                      {section.title}
-                    </h2>
-                  )}
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-          
-          {/* Column 3 - Education, Languages, Certificates */}
-          <div style={{ flex: '1' }}>
-            {visibleSections
-              .filter(section => ['education', 'languages', 'certificates'].includes(section.type))
-              .map(section => (
-                <div 
-                  key={section.id}
-                  style={{ 
-                    marginBottom: '20px',
-                    backgroundColor: section.settings.backgroundColor,
-                    padding: '10px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <h2 style={{ 
-                    borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                    paddingBottom: '5px',
-                    marginTop: 0,
-                    fontSize: `${templateData.globalSettings.fontSize + 2}pt`,
-                    color: templateData.globalSettings.primaryColor
-                  }}>
-                    {section.title}
-                  </h2>
-                  {renderSectionContent(section)}
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {templateData.globalSettings.layout === 'header-highlight' && (
-        // Header highlight layout with special header and 2-column content
-        <div>
-          {/* Header section first */}
-          {visibleSections
-            .filter(section => section.type === 'header')
-            .map(section => (
-              <div 
-                key={section.id}
-                style={{ 
-                  marginBottom: '20px',
-                  backgroundColor: section.settings.backgroundColor,
-                  padding: '15px',
-                  borderRadius: '4px',
-                  textAlign: 'center',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                  borderBottom: `5px solid ${templateData.globalSettings.primaryColor}`
-                }}
-              >
-                {renderSectionContent(section)}
-              </div>
-            ))}
-
-          {/* Summary section with special styling */}
-          {visibleSections
-            .filter(section => section.type === 'summary')
-            .map(section => (
-              <div 
-                key={section.id}
-                style={{ 
-                  marginBottom: '20px',
-                  backgroundColor: section.settings.backgroundColor,
-                  padding: '15px',
-                  borderRadius: '4px',
-                  textAlign: 'center',
-                  fontStyle: 'italic',
-                  borderTop: `3px solid ${templateData.globalSettings.primaryColor}`
-                }}
-              >
-                <h2 style={{ 
-                  borderBottom: `2px solid ${templateData.globalSettings.secondaryColor}`,
-                  paddingBottom: '5px',
-                  marginTop: 0,
-                  color: templateData.globalSettings.primaryColor,
-                  display: 'inline-block'
-                }}>
-                  {section.title}
-                </h2>
-                {renderSectionContent(section)}
-              </div>
-            ))}
-            
-          {/* Two column layout for the rest of the content */}
-          <div style={{ display: 'flex', gap: '20px' }}>
-            {/* Left column */}
-            <div style={{ flex: '1' }}>
-              {visibleSections
-                .filter(section => ['experience', 'education'].includes(section.type))
-                .map(section => (
-                  <div 
-                    key={section.id}
-                    style={{ 
-                      marginBottom: '20px',
-                      backgroundColor: section.settings.backgroundColor,
-                      padding: '10px',
-                      borderRadius: '4px',
-                    }}
-                  >
-                    <h2 style={{ 
-                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                      paddingBottom: '5px',
-                      marginTop: 0,
-                      color: templateData.globalSettings.primaryColor
-                    }}>
-                      {section.title}
-                    </h2>
-                    {renderSectionContent(section)}
-                  </div>
-                ))}
-            </div>
-            
-            {/* Right column */}
-            <div style={{ flex: '1' }}>
-              {visibleSections
-                .filter(section => ['skills', 'languages', 'certificates'].includes(section.type))
-                .map(section => (
-                  <div 
-                    key={section.id}
-                    style={{ 
-                      marginBottom: '20px',
-                      backgroundColor: section.settings.backgroundColor,
-                      padding: '10px',
-                      borderRadius: '4px',
-                    }}
-                  >
-                    <h2 style={{ 
-                      borderBottom: `2px solid ${templateData.globalSettings.primaryColor}`,
-                      paddingBottom: '5px',
-                      marginTop: 0,
-                      color: templateData.globalSettings.primaryColor
-                    }}>
-                      {section.title}
-                    </h2>
-                    {renderSectionContent(section)}
-                  </div>
-                ))}
-            </div>
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

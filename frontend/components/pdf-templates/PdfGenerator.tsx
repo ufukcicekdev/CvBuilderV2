@@ -73,7 +73,7 @@ const PdfGenerator = dynamic(
         }
       }, []);
       
-      // Çevirileri props veya data içinden al, yoksa varsayılan değerleri kullan
+      // Use translations from props or data.i18n, prioritizing the explicitly passed translations
       const translationData = translations || data.i18n || {
         summary: "Özet",
         experience: "Deneyim",
@@ -178,7 +178,14 @@ const PdfGenerator = dynamic(
                 data={data} 
                 language={language}
                 translations={translationData}
-                templateData={customTemplate}
+                templateData={{
+                  ...customTemplate,
+                  type: 'pdf',
+                  globalSettings: {
+                    ...customTemplate.globalSettings,
+                    textColor: customTemplate.globalSettings.primaryColor || '#000000'
+                  }
+                }}
               />
             );
           }
@@ -209,8 +216,18 @@ const PdfGenerator = dynamic(
 
       return (
         <Box sx={{ mt: 4 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', sm: 'row' }, // Mobilde alt alta
+            justifyContent: 'space-between', 
+            alignItems: { xs: 'stretch', sm: 'center' },
+            mb: 3,
+            gap: { xs: 2, sm: 0 }
+          }}>
+            <FormControl variant="outlined" size="small" sx={{ 
+              minWidth: { xs: '100%', sm: 200 },
+              fontSize: { xs: '0.875rem', sm: '1rem' }
+            }}>
               <InputLabel id="template-select-label">{t('cv.preview.templateSelection')}</InputLabel>
               <Select
                 labelId="template-select-label"
@@ -229,6 +246,9 @@ const PdfGenerator = dynamic(
             <Button
               variant="contained"
               color="primary"
+              size="small"
+              fullWidth={false} // Mobilde tam genişlikte olmaması için
+              sx={{ alignSelf: { xs: 'flex-end', sm: 'auto' } }}
               startIcon={isGenerating ? <CircularProgress size={20} color="inherit" /> : <PictureAsPdfIcon />}
               onClick={handleGeneratePdf}
               disabled={isGenerating}
@@ -242,10 +262,25 @@ const PdfGenerator = dynamic(
             sx={{ 
               border: '1px solid #e0e0e0', 
               borderRadius: 1,
-              p: 2,
+              p: { xs: 1, sm: 2 }, // Mobilde padding azalt
               backgroundColor: '#f9f9f9',
               maxWidth: '100%',
               overflow: 'auto',
+              // PDF şablonlarının mobil görünümü için
+              '& .pdf-template': {
+                maxWidth: '100%',
+                '& img': {
+                  maxWidth: '100%',
+                  height: 'auto'
+                },
+                '& table': {
+                  maxWidth: '100%',
+                  tableLayout: 'fixed'
+                },
+                '& td, & th': {
+                  wordBreak: 'break-word'
+                }
+              }
             }}
           >
             {renderTemplate()}

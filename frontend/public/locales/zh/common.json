@@ -167,6 +167,7 @@
     "preview": "预览",
     "next": "继续",
     "previous": "返回",
+    "close": "关闭",
     "delete": "删除",
     "add": "添加",
     "search": "搜索",
@@ -195,7 +196,8 @@
       "serverError": "服务器错误",
       "unknown": "发生未知错误",
       "networkError": "网络连接错误",
-      "validationError": "请检查表单信息"
+      "validationError": "请检查表单信息",
+      "errorOccurred": "发生错误，请重试"
     },
     "uploadSuccess": "文件上传成功"
   },
@@ -593,33 +595,45 @@
       "webVersion": "网页版",
       "pdfVersion": "PDF版",
       "templates": {
-        "web-template1": {
+        "modernWeb": {
           "name": "现代网页模板",
-          "description": "现代和交互式网页设计"
+          "description": "干净专业的现代布局设计"
         },
-        "web-template2": {
-          "name": "经典网页模板",
-          "description": "经典和专业的网页设计"
+        "minimalWeb": {
+          "name": "极简网页模板",
+          "description": "简约优雅的内容为中心设计"
         },
-        "web-template3": {
-          "name": "多彩模板",
-          "description": "充满活力的现代模板，带有多彩的元素"
+        "colorfulWeb": {
+          "name": "多彩网页模板",
+          "description": "充满活力的带有色彩重点的醒目设计"
         },
-        "web-template4": {
-          "name": "专业模板",
-          "description": "适合企业形象的简洁专业模板"
+        "professionalWeb": {
+          "name": "专业网页模板",
+          "description": "结构化布局的企业风格"
         },
-        "web-template5": {
-          "name": "创意模板",
-          "description": "适合艺术类简历的独特创意设计"
+        "creativeWeb": {
+          "name": "创意网页模板",
+          "description": "为创意专业人士设计的独特模板"
         },
         "modernPdf": {
           "name": "现代PDF模板",
-          "description": "现代和专业的PDF设计"
+          "description": "清晰排版的现代设计"
         },
         "classicPdf": {
           "name": "经典PDF模板",
-          "description": "经典和优雅的PDF设计"
+          "description": "具有永恒魅力的传统简历排版"
+        },
+        "minimalPdf": {
+          "name": "极简PDF模板",
+          "description": "干净极简的设计"
+        },
+        "creativePdf": {
+          "name": "创意PDF模板",
+          "description": "为脱颖而出的大胆设计"
+        },
+        "professionalPdf": {
+          "name": "专业PDF模板",
+          "description": "具有现代元素的商业导向布局"
         }
       }
     },
@@ -637,7 +651,28 @@
       "languagesRequired": "请至少添加一种语言"
     },
     "editDisabled": "由于您没有有效订阅，您无法编辑您的简历。您处于查看模式。",
-    "editNotAllowed": "编辑简历需要有效订阅。"
+    "editNotAllowed": "编辑简历需要有效订阅。",
+    "preview": {
+      "title": "简历预览",
+      "templatePreview": "模板预览",
+      "selectTemplate": "请先选择一个模板",
+      "loadError": "加载简历数据时出错",
+      "noData": "没有数据可显示",
+      "templateNotFound": "未找到模板",
+      "downloadPdf": "下载PDF",
+      "generating": "生成中...",
+      "downloadFailed": "下载失败",
+      "templateSelection": "选择模板",
+      "standardTemplates": "标准模板",
+      "customTemplates": "自定义模板",
+      "customBuilderTab": "创建自定义模板",
+      "savedTemplates": "您保存的模板",
+      "noCustomTemplates": "您还没有自定义模板",
+      "createCustomTemplate": "创建您的第一个模板",
+      "pdfGenerating": "正在生成PDF...",
+      "pdfError": "生成PDF时发生错误",
+      "createExplanation": "此模板允许您自定义简历"
+    }
   },
   "validation": {
     "required": "此字段为必填项",
