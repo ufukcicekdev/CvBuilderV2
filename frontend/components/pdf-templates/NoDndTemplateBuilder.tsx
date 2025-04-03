@@ -42,6 +42,8 @@ import {
 } from '@mui/icons-material';
 import AtsOptimizationPanel from './AtsOptimizationPanel';
 import { toast } from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
+import { SelectChangeEvent } from '@mui/material';
 
 // Component interface
 interface TemplateBuilderProps {
@@ -76,6 +78,7 @@ export interface CustomTemplateData {
   name: string;
   createdAt: string;
   updatedAt: string;
+  type?: 'web' | 'pdf'; // Şablon tipi: web (editör görünümü) veya pdf (indirilen)
   globalSettings: {
     primaryColor: string;
     secondaryColor: string;
@@ -88,6 +91,7 @@ export interface CustomTemplateData {
     layout: 'single' | 'double' | 'sidebar-left' | 'sidebar-right' | 'three-column' | 'header-highlight';
     isAtsOptimized: boolean;
     textColor: string;
+    sidebarColor?: string;
   };
   sections: TemplateSection[];
 }
@@ -127,8 +131,8 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
   
   // Template state
   const [templateData, setTemplateData] = useState<CustomTemplateData>({
-    id: `template-${Date.now()}`,
-    name: 'New Custom Template',
+    id: uuidv4(),
+    name: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     globalSettings: {
@@ -139,10 +143,11 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
       backgroundColor: '#ffffff',
       showPhoto: true,
       photoStyle: 'circle',
-      photoSize: 80,
-      layout: 'single',
+      photoSize: 100,
+      layout: 'sidebar-left',
       isAtsOptimized: false,
-      textColor: '#333333'
+      textColor: '#333333',
+      sidebarColor: '#f5f5f5'
     },
     sections: [
       {
@@ -333,43 +338,110 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
     updateGlobalSettings({ isAtsOptimized: isOptimized });
   };
 
-  // Save template
-  const saveTemplate = async () => {
-    if (!templateName) {
-      toast.error(t('cv.template.nameRequired', 'Lütfen şablon için bir isim girin'));
-      return;
+  // Layout değişikliğini yönet
+  const handleLayoutChange = (event: SelectChangeEvent<string>) => {
+    const newLayout = event.target.value as GlobalSettings['layout'];
+    console.log('Layout değiştiriliyor:', newLayout);
+    
+    // Layout değişikliğiyle ilgili otomatik ayarlamaları yapalım
+    let updatedSections = [...templateData.sections];
+    let sidebarColor = templateData.globalSettings.sidebarColor;
+    
+    // Header bölümü varsa, layout'a göre stilini güncelle
+    if (updatedSections.find(s => s.id === 'header')) {
+      updatedSections = updatedSections.map(section => {
+        if (section.id === 'header') {
+          return {
+            ...section,
+            settings: {
+              ...section.settings,
+              // Header rengi için layout'a göre ayarla
+              backgroundColor: 
+                newLayout === 'header-highlight' || 
+                newLayout === 'sidebar-left' || 
+                newLayout === 'sidebar-right' 
+                  ? templateData.globalSettings.primaryColor 
+                  : section.settings.backgroundColor || '#ffffff',
+              textColor: 
+                newLayout === 'header-highlight' || 
+                newLayout === 'sidebar-left' || 
+                newLayout === 'sidebar-right' 
+                  ? '#ffffff' 
+                  : section.settings.textColor || templateData.globalSettings.textColor
+            }
+          };
+        }
+        return section;
+      });
     }
     
-    setIsSaving(true);
+    // Sidebar rengi için varsayılan değer
+    if (newLayout === 'sidebar-left' || newLayout === 'sidebar-right') {
+      sidebarColor = templateData.globalSettings.sidebarColor || '#f5f5f5';
+    }
     
-    try {
-      const templateToSave = {
-        ...templateData,
-        name: templateName
-      };
-      
-      console.log('Saving template data:', templateToSave);
-      
-      // Call the save function from props
-      if (onSaveTemplate) {
-        const savedTemplate = await onSaveTemplate(templateToSave);
-        
-        if (savedTemplate) {
-          // Show success notification
-          toast.success(t('cv.template.saveSuccess', 'Şablon başarıyla kaydedildi!'));
-        } else {
-          toast.error(t('cv.template.saveFailed', 'Şablon kaydedilemedi. Lütfen tekrar deneyin.'));
+    // Tüm template'i güncelle
+    setTemplateData({
+      ...templateData,
+      globalSettings: {
+        ...templateData.globalSettings,
+        layout: newLayout,
+        sidebarColor: sidebarColor
+      },
+      sections: updatedSections
+    });
+  };
+
+  // Save template
+  const saveTemplate = async () => {
+    if (!templateName || templateName.trim() === '') {
+      toast.error(t('cv.template.nameRequired', 'Şablon adı girmelisiniz.'));
+      return;
+    }
+
+    // Kaydedilecek template datasını hazırla
+    const templateToSave: CustomTemplateData = {
+      ...templateData,
+      name: templateName.trim(),
+      id: templateData.id || uuidv4(),
+      type: 'web', // Şablon tipi - CustomTemplateRenderer için gerekli
+      createdAt: templateData.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      globalSettings: {
+        ...templateData.globalSettings,
+        // Layout değerini güvenli şekilde al, varsayılan değer 'single'
+        layout: templateData.globalSettings.layout || 'single',
+        // Sidebar varsa, sidebar rengini de ayarlayalım
+        sidebarColor: 
+          templateData.globalSettings.layout === 'sidebar-left' || 
+          templateData.globalSettings.layout === 'sidebar-right' 
+            ? (templateData.globalSettings.sidebarColor || '#f5f5f5') 
+            : undefined
+      },
+      sections: templateData.sections.map(section => ({
+        ...section,
+        settings: {
+          ...section.settings,
+          // Header ayarları, layout tipine göre farklı olabilir
+          ...(section.id === 'header' && templateData.globalSettings.layout === 'header-highlight' && {
+            backgroundColor: templateData.globalSettings.primaryColor || '#2196f3',
+            textColor: '#ffffff'
+          })
         }
-      } else {
-        // Show error if there's no save function provided
-        toast.error(t('cv.template.saveFailed', 'Şablon kaydedilemedi: Kaydetme işlevi tanımlanmamış.'));
-        console.error('No save function (onSaveTemplate) provided to NoDndTemplateBuilder');
+      }))
+    };
+
+    setIsSaving(true);
+    try {
+      // Şablonu kaydet
+      if (onSaveTemplate) {
+        await onSaveTemplate(templateToSave);
+        toast.success(t('cv.template.saveSuccess', 'Şablon başarıyla kaydedildi.'));
+        setTemplateName(''); // Formu sıfırla
       }
     } catch (error) {
-      console.error('Error saving template:', error);
-      // Show error message
-      const errorMessage = error instanceof Error ? error.message : t('cv.template.saveFailed', 'Şablon kaydedilemedi. Lütfen tekrar deneyin.');
-      toast.error(errorMessage);
+      console.error('Şablon kaydedilirken hata oluştu:', error);
+      toast.error(t('cv.template.saveError', 'Şablon kaydedilirken bir hata oluştu.'));
     } finally {
       setIsSaving(false);
     }
@@ -591,6 +663,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
 
   // Render template preview based on current settings
   const renderPreview = () => {
+    console.log('Preview render ediliyor, layout:', templateData.globalSettings.layout);
     const sortedSections = [...templateData.sections]
       .filter(section => section.visible)
       .sort((a, b) => a.order - b.order);
@@ -649,30 +722,46 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                 {t('cv.template.editing', 'Düzenleniyor')}
               </div>
             )}
-            <h3 style={{ 
-              margin: '0 0 5px 0', 
-              color: templateData.globalSettings.isAtsOptimized ? '#000000' : templateData.globalSettings.primaryColor,
-              position: 'relative',
-              zIndex: 11,
-              ...(templateData.globalSettings.isAtsOptimized && {
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                borderBottom: '1px solid #000000',
-                paddingBottom: '4px'
-              })
-            }}>
-              {section.title}
-            </h3>
             <div style={{ 
-              minHeight: '30px', 
-              backgroundColor: templateData.globalSettings.isAtsOptimized ? '#ffffff' : '#f0f0f0', 
-              borderRadius: templateData.globalSettings.isAtsOptimized ? '0' : '3px',
+              display: 'flex',
+              alignItems: 'center',
               position: 'relative',
               zIndex: 11
             }}>
-              <p style={{ padding: '5px', margin: 0, fontSize: 'inherit' }}>
-                {t('cv.template.headerContent', 'Header içeriği')}
-              </p>
+              {templateData.globalSettings.showPhoto && (
+                <div style={{ 
+                  width: `${templateData.globalSettings.photoSize * 0.5}px`,
+                  height: `${templateData.globalSettings.photoSize * 0.5}px`,
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: templateData.globalSettings.photoStyle === 'circle' ? '50%' : 
+                              templateData.globalSettings.photoStyle === 'rounded' ? '10px' : '0',
+                  marginRight: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <Typography sx={{ color: '#9e9e9e', textAlign: 'center', fontSize: '10px' }}>
+                    {t('cv.template.photo', 'Fotoğraf')}
+                  </Typography>
+                </div>
+              )}
+              <div>
+                <Typography variant="h6" sx={{ 
+                  margin: 0, 
+                  fontWeight: 'bold',
+                  color: section.settings.textColor
+                }}>
+                  {t('cv.template.fullName', 'Tam Ad')}
+                </Typography>
+                <Typography variant="body2" sx={{ 
+                  margin: 0,
+                  color: section.settings.textColor,
+                  opacity: 0.9
+                }}>
+                  {t('cv.template.profession', 'Meslek / Pozisyon')}
+                </Typography>
+              </div>
             </div>
           </div>
         );
@@ -861,7 +950,9 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
             ...(templateData.globalSettings.layout === 'header-highlight' && {
               textAlign: 'center',
               borderBottom: `5px solid ${templateData.globalSettings.primaryColor}`,
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              color: '#ffffff',
+              padding: '25px 15px'
             }),
           }}>
             {isEditingHeader && (
@@ -886,7 +977,9 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
               flexDirection: templateData.globalSettings.layout === 'double' || 
                             templateData.globalSettings.layout === 'sidebar-left' || 
                             templateData.globalSettings.layout === 'sidebar-right' ? 'row' : 'column',
-              width: '100%'
+              width: '100%',
+              alignItems: templateData.globalSettings.layout === 'header-highlight' ? 'center' : 'flex-start',
+              justifyContent: templateData.globalSettings.layout === 'header-highlight' ? 'center' : 'flex-start'
             }}>
               {templateData.globalSettings.showPhoto && (
                 <div style={{ 
@@ -906,21 +999,26 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                   flexShrink: 0,
                   ...(templateData.globalSettings.layout === 'header-highlight' && {
                     margin: '0 auto 10px auto',
-                    border: `3px solid ${templateData.globalSettings.secondaryColor}`
+                    border: `3px solid ${templateData.globalSettings.secondaryColor || '#ffffff'}`
                   }),
                 }}>
                   {(!data || !data.personal_info?.photo) && <Typography sx={{ color: '#9e9e9e', textAlign: 'center', fontSize: '10px' }}>{t('cv.template.photo', 'Fotoğraf')}</Typography>}
                 </div>
               )}
-              <div style={{ flex: 1 }}>
+              <div style={{ 
+                flex: 1, 
+                textAlign: templateData.globalSettings.layout === 'header-highlight' ? 'center' : 'left'
+              }}>
                 <Typography variant="h5" sx={{ 
                   fontFamily: 'inherit', 
                   color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
                   mb: 1,
                   position: 'relative',
-                  zIndex: 12
+                  zIndex: 12,
+                  fontWeight: templateData.globalSettings.layout === 'header-highlight' ? 'bold' : 'normal',
+                  fontSize: templateData.globalSettings.layout === 'header-highlight' ? '1.5em' : 'inherit'
                 }}>
-                  {data && data.personal_info?.full_name || t('cv.template.fullName', 'Ad Soyad')}
+                  {data && data.personal_info?.full_name || t('cv.template.fullName', 'Tam Ad')}
                 </Typography>
                 <Typography variant="body1" sx={{ 
                   fontFamily: 'inherit', 
@@ -931,6 +1029,44 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                 }}>
                   {data && data.personal_info?.title || t('cv.template.profession', 'Meslek / Pozisyon')}
                 </Typography>
+                {data && data.personal_info && (data.personal_info.email || data.personal_info.phone) && (
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: templateData.globalSettings.layout === 'header-highlight' ? 'column' : 'row',
+                    gap: '8px',
+                    marginTop: '8px',
+                    justifyContent: templateData.globalSettings.layout === 'header-highlight' ? 'center' : 'flex-start',
+                    alignItems: templateData.globalSettings.layout === 'header-highlight' ? 'center' : 'flex-start',
+                    flexWrap: 'wrap'
+                  }}>
+                    {data && data.personal_info && data.personal_info.email && (
+                      <Typography variant="body2" sx={{ 
+                        fontFamily: 'inherit', 
+                        color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
+                        opacity: 0.8,
+                        fontSize: '0.9em',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}>
+                        <span>📧</span> {data.personal_info.email}
+                      </Typography>
+                    )}
+                    {data && data.personal_info && data.personal_info.phone && (
+                      <Typography variant="body2" sx={{ 
+                        fontFamily: 'inherit', 
+                        color: sortedSections.find(s => s.id === 'header')?.settings.textColor || '#fff',
+                        opacity: 0.8,
+                        fontSize: '0.9em',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}>
+                        <span>📱</span> {data.personal_info.phone}
+                      </Typography>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1173,7 +1309,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
                     <InputLabel>{t('cv.template.layout', 'Düzen')}</InputLabel>
                     <Select
                       value={templateData.globalSettings.layout}
-                      onChange={(e) => updateGlobalSettings({ layout: e.target.value as any })}
+                      onChange={handleLayoutChange}
                       label={t('cv.template.layout', 'Düzen')}
                     >
                       <MenuItem value="single">{t('cv.template.singleColumn', 'Tek Sütun')}</MenuItem>

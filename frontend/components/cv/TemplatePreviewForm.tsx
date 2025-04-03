@@ -45,6 +45,7 @@ import ReactDOM from 'react-dom/client';
 import { templateInfo, getTemplateById } from '../pdf-templates/index';
 import PdfGenerator from '../pdf-templates/PdfGenerator';
 import { templateService } from '../../services/templateService';
+import { pdfService } from '../../services/pdfService';
 // Dynamic imports for client-side only components
 import CustomTemplateRenderer from '../pdf-templates/CustomTemplateRenderer';
 import { GlobalSettings, CustomTemplateData as NoDndCustomTemplateData } from '../pdf-templates/NoDndTemplateBuilder';
@@ -461,49 +462,18 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
 
   // Şablon seçildiğinde şablon özelliklerini editöre yükle
   const loadTemplateToEditor = (template: any) => {
-    if (!template) return;
-    
     console.log('Loading template to editor:', template);
+    console.log('Template layout:', template.globalSettings?.layout);
     
-    // Template Builder şablonu
-    if (template.globalSettings) {
-      // Layout ayarlarını yükle (single, double, right-sidebar, left-sidebar)
-      if (template.globalSettings.layout) {
-        // Layout dropdown'ında gösterilecek değeri ayarla
-        // Bu değeri DOM'da ilgili dropdown'a yansıtma işlemi yapılmalı
-        console.log('Setting layout to:', template.globalSettings.layout);
-        
-        // Fotoğraf gösterme ayarını yükle
-        if (template.globalSettings.showPhoto !== undefined) {
-          console.log('Setting showPhoto to:', template.globalSettings.showPhoto);
-        }
-        
-        // Fotoğraf stili ayarını yükle
-        if (template.globalSettings.photoStyle) {
-          console.log('Setting photoStyle to:', template.globalSettings.photoStyle);
-        }
-        
-        // Fotoğraf boyutu ayarını yükle
-        if (template.globalSettings.photoSize !== undefined) {
-          console.log('Setting photoSize to:', template.globalSettings.photoSize);
-        }
-        
-        // ATS optimizasyon ayarını yükle
-        if ('isAtsOptimized' in template.globalSettings) {
-          console.log('Setting enableAtsOptimization to:', template.globalSettings.isAtsOptimized);
-        }
+    // Şablonu seçerken layout değerinin korunduğundan emin ol
+    setSelectedCustomTemplate({
+      ...template,
+      globalSettings: {
+        ...template.globalSettings,
+        // Layout değerini koruduğundan emin ol
+        layout: template.globalSettings?.layout || 'single',
       }
-    }
-    
-    // Bölüm görünürlük ayarlarını yükle
-    if (template.sectionSettings) {
-      console.log('Loading section settings:', template.sectionSettings);
-    }
-    
-    // Renk ayarlarını yükle
-    if (template.colorSettings) {
-      console.log('Loading color settings:', template.colorSettings);
-    }
+    });
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -856,67 +826,78 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       // Özel şablon veya standart şablon kontrolü
       const isCustomTemplate = previewTabIndex === 1 && selectedCustomTemplate;
       
-      // PDF işlemi detayını oluştur
-      let eventDetail: any = {
-        data: {
-          ...data,
-          personal_info: {
-            ...data.personal_info,
-            // Profil resmi 'photo' alanında
-            photo: data.personal_info?.photo || undefined
-          },
-          // Use complete translations object for the selected language
-          i18n: translations[previewSelectedLanguage] || translations.en
-        },
-        language: previewSelectedLanguage,
-        translations: translations[previewSelectedLanguage] || translations.en
-      };
+      // PDF işlemine başlandığını bildir
+      toast.success(t('cv.preview.pdfGenerating', 'PDF oluşturuluyor...'));
       
-      // Özel şablon ise şablon bilgilerini ekle
       if (isCustomTemplate && selectedCustomTemplate) {
         console.log('Using custom template for PDF generation:', selectedCustomTemplate.name);
-        eventDetail = {
-          ...eventDetail,
-          isCustomTemplate: true,
-          customTemplate: {
-            ...selectedCustomTemplate,
-            type: 'pdf',
-            globalSettings: {
-              ...selectedCustomTemplate.globalSettings,
-              textColor: selectedCustomTemplate.globalSettings.primaryColor || '#000000'
-            }
+        
+        // Özel şablonların render edildiği elementi bul
+        const element = document.querySelector('.custom-template') as HTMLElement;
+        if (!element) {
+          toast.error(t('cv.preview.pdfError', 'PDF oluşturma hatası: Element bulunamadı'));
+          return { success: false, error: 'Element not found' };
+        }
+        
+        try {
+          // PDF'i oluştur
+          const success = await pdfService.generatePdf({
+            element: element,
+            filename: `${selectedCustomTemplate.name || 'cv'}.pdf`,
+            margin: [20, 20, 20, 20],
+            orientation: 'portrait',
+            scale: 2,
+            singlePage: false
+          });
+          
+          if (success) {
+            toast.success(t('cv.preview.downloadSuccess', 'PDF başarıyla indirildi'));
+            return { success: true };
+          } else {
+            toast.error(t('cv.preview.pdfError', 'PDF oluşturulurken bir hata oluştu'));
+            return { success: false, error: 'PDF generation failed' };
           }
-        };
+        } catch (error) {
+          console.error('PDF generation error:', error);
+          toast.error(t('cv.preview.pdfError', 'PDF oluşturma hatası: ' + (error instanceof Error ? error.message : 'Bilinmeyen hata')));
+          return { success: false, error };
+        }
       } 
       // Standart şablon ise template ID'sini ekle
       else if (selectedTemplate) {
         const formattedTemplateId = mapTemplateIdToUrlFormat(selectedTemplate);
         console.log('Using standard template for PDF generation:', formattedTemplateId);
-        eventDetail = {
-          ...eventDetail,
-          templateId: formattedTemplateId
-        };
+        
+        // Event oluştur ve özel bir olay tetikle (standart şablonlar için)
+        const event = new CustomEvent('generate-pdf', {
+          detail: {
+            data: {
+              ...data,
+              personal_info: {
+                ...data.personal_info,
+                photo: data.personal_info?.photo || undefined
+              },
+              i18n: translations[previewSelectedLanguage] || translations.en
+            },
+            language: previewSelectedLanguage,
+            translations: translations[previewSelectedLanguage] || translations.en,
+            templateId: formattedTemplateId
+          }
+        });
+        
+        // PDF oluşturma eventini tetikle
+        console.log('Dispatching generate-pdf event');
+        document.dispatchEvent(event);
+        
+        return { success: true };
       }
       else {
-        throw new Error('No template selected');
+        toast.error(t('cv.preview.selectTemplate', 'Lütfen bir şablon seçin'));
+        return { success: false, error: 'No template selected' };
       }
-
-      // Event oluştur ve özel bir olay tetikle
-      const event = new CustomEvent('generate-pdf', {
-        detail: eventDetail
-      });
-      
-      // PDF oluşturma eventini tetikle
-      console.log('Dispatching generate-pdf event with detail:', eventDetail);
-      document.dispatchEvent(event);
-      
-      // Bilgilendirme mesajı göster
-      toast.success(t('cv.preview.pdfGenerating'));
-
-      return { success: true };
     } catch (error) {
       console.error('PDF generation error:', error);
-      toast.error(t('cv.preview.pdfError'));
+      toast.error(t('cv.preview.pdfError', 'PDF oluşturma hatası'));
       return { success: false, error };
     }
   };
@@ -1727,18 +1708,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                     <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
                       {t('cv.preview.savedTemplates')}
                     </Typography>
-                    {selectedCustomTemplate && previewData && (
-                      <Button 
-                        variant="contained" 
-                        color="primary"
-                        size="small"
-                        startIcon={<DownloadIcon />}
-                        onClick={() => generatePdfInFrontend(transformCVData(previewData))}
-                        sx={{ mt: { xs: 1, sm: 0 } }}
-                      >
-                        {t('cv.preview.downloadPdf')}
-                      </Button>
-                    )}
+                    {/* PDF indirme butonu kaldırıldı */}
                   </Box>
                   <Grid container spacing={{ xs: 1, sm: 2 }}>
                     {customTemplates.map((template) => (
@@ -1788,9 +1758,65 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                                 size="small" 
                                 color="primary"
                                 startIcon={<DownloadIcon />}
-                                onClick={(e) => {
+                                onClick={async (e) => {
                                   e.stopPropagation();
-                                  generatePdfInFrontend(transformCVData(previewData));
+                                  
+                                  // Yükleme toast'u göster
+                                  toast.dismiss(); // Önceki mesajları kaldır
+                                  const toastId = toast.loading('PDF oluşturuluyor...', { duration: 60000 }); // 60 saniye 
+                                  
+                                  try {
+                                    console.log('PDF indirme işlemi başlatılıyor...');
+                                    
+                                    // Elementin bekleme süresini artır
+                                    setTimeout(async () => {
+                                      try {
+                                        // CustomTemplateRenderer elementini bul
+                                        const customTemplateElement = document.querySelector('.custom-template');
+                                        
+                                        if (!customTemplateElement) {
+                                          console.error('Yazdırılacak element bulunamadı');
+                                          toast.dismiss(toastId);
+                                          toast.error('Şablon elementi bulunamadı.');
+                                          return;
+                                        }
+                                        
+                                        console.log('Şablon elementi bulundu:', customTemplateElement);
+                                        
+                                        // PDF dosya adı oluştur
+                                        const fileName = `${template.name || 'CV'}-${new Date().toISOString().substring(0, 10)}.pdf`;
+                                        
+                                        // PDF oluştur - tek sayfa olarak
+                                        const success = await pdfService.generatePdf({
+                                          element: customTemplateElement as HTMLElement,
+                                          filename: fileName,
+                                          margin: [3, 3, 3, 3],  // Kenar boşluklarını azalt
+                                          orientation: 'portrait',
+                                          scale: 3, // Daha yüksek çözünürlük için scale değeri artırıldı
+                                          singlePage: true // Her zaman tek sayfa olarak oluştur
+                                        });
+                                        
+                                        // Toast mesajını güncelle
+                                        toast.dismiss(toastId);
+                                        
+                                        if (success) {
+                                          console.log('PDF başarıyla oluşturuldu');
+                                          toast.success('PDF başarıyla indirildi');
+                                        } else {
+                                          console.error('PDF oluşturulamadı');
+                                          toast.error('PDF oluşturulurken bir hata oluştu');
+                                        }
+                                      } catch (innerError) {
+                                        console.error('PDF oluşturma iç hatası:', innerError);
+                                        toast.dismiss(toastId);
+                                        toast.error(`PDF oluşturma hatası: ${innerError instanceof Error ? innerError.message : 'Bilinmeyen hata'}`);
+                                      }
+                                    }, 1000); // Elementin tam olarak render edilmesi için 1 saniye bekle
+                                  } catch (error) {
+                                    console.error('PDF oluşturma hatası:', error);
+                                    toast.dismiss(toastId);
+                                    toast.error(`PDF oluşturma hatası: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
+                                  }
                                 }}
                                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
                               >
@@ -1820,21 +1846,26 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
               )}
               
               {selectedCustomTemplate && previewData && (
-                <Box sx={{ 
-                  mt: 4,
-                  overflow: 'auto',
-                  width: '100%'
-                }}>
+                <Box 
+                  sx={{ 
+                    mt: 4,
+                    overflow: 'auto',
+                    width: '100%'
+                  }}
+                  className="custom-template"
+                >
                   <CustomTemplateRenderer
                     data={transformCVData(previewData)}
                     language={previewSelectedLanguage}
                     translations={translations[previewSelectedLanguage] || translations.en}
                     templateData={{
                       ...selectedCustomTemplate,
-                      type: 'pdf', // Type değerini pdf olarak değiştiriyoruz
+                      type: 'pdf' as 'web' | 'pdf', // Type değerini union type olarak belirt
                       globalSettings: {
                         ...selectedCustomTemplate.globalSettings,
-                        textColor: selectedCustomTemplate.globalSettings.primaryColor || '#000000',
+                        // Layout bilgisini doğrudan kullan
+                        layout: selectedCustomTemplate.globalSettings.layout || 'sidebar-left',
+                        textColor: selectedCustomTemplate.globalSettings.textColor || selectedCustomTemplate.globalSettings.primaryColor || '#000000',
                         isAtsOptimized: false
                       }
                     }}
@@ -1877,12 +1908,6 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
     try {
       console.log('Saving NoDnd template data:', templateData);
       
-      // Kullanıcı kontrolünü kaldırıyoruz, backend tarafında zaten kimlik doğrulaması yapılıyor
-      // if (!user?.id) {
-      //   toast.error(t('common.errors.loginRequired', 'Şablon kaydetmek için giriş yapmalısınız.'));
-      //   return false;
-      // }
-      
       // Make sure templateData is properly structured
       const finalTemplateData = {
         ...templateData,
@@ -1890,10 +1915,16 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         // Ensure necessary fields are present
         globalSettings: {
           ...(templateData.globalSettings || {}),
-          layout: templateData.globalSettings?.layout || 'single',
+          // Layout değerini koruduğundan emin ol, varsayılan olarak sidebar-left
+          layout: templateData.globalSettings?.layout || 'sidebar-left',
           showPhoto: templateData.globalSettings?.showPhoto ?? true,
           photoStyle: templateData.globalSettings?.photoStyle || 'circle',
-          photoSize: templateData.globalSettings?.photoSize || 100
+          photoSize: templateData.globalSettings?.photoSize || 100,
+          // Sidebar rengi eklendi
+          sidebarColor: templateData.globalSettings?.layout === 'sidebar-left' || 
+                        templateData.globalSettings?.layout === 'sidebar-right' 
+                        ? (templateData.globalSettings?.sidebarColor || '#f5f5f5')
+                        : undefined
         }
       };
       
@@ -1906,6 +1937,13 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         console.log('Template saved successfully:', savedTemplate);
         // Şablonları yenile
         await refreshCustomTemplates();
+        
+        // Şablon kaydedildiğinde otomatik olarak özel şablonlar sekmesine geç
+        setPreviewTabIndex(1);
+        
+        // Yeni şablonu seç - Tip uyumsuzluğunu gidermek için as any kullan
+        setSelectedCustomTemplate(savedTemplate as any);
+        
         toast.success(t('cv.template.savedSuccess', 'Şablon başarıyla kaydedildi!'));
         return savedTemplate;
       } else {
@@ -1927,6 +1965,70 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       refreshCustomTemplates();
     }
   }, [open, previewTabIndex]);
+
+  // Custom template önizlemesini render et
+  const renderCustomTemplatePreview = () => {
+    // Seçili bir şablon yoksa uyarı göster
+    if (!selectedCustomTemplate) {
+      return (
+        <Box sx={{ p: 4, textAlign: 'center' }}>
+          <Typography variant="body1" color="text.secondary">
+            {t('cv.preview.selectTemplate', 'Lütfen bir şablon seçin')}
+          </Typography>
+        </Box>
+      );
+    }
+
+    console.log('Rendering custom template with layout:', selectedCustomTemplate.globalSettings.layout);
+    
+    // Şablonu PDF formatında oluşturmak için type'ı değiştiriyoruz
+    const templateWithPdfType = {
+      ...selectedCustomTemplate,
+      type: 'pdf' as const, // Type değerini 'pdf' literal olarak belirtiyoruz
+      globalSettings: {
+        ...selectedCustomTemplate.globalSettings,
+        // Layout değerini muhafaza et ve doğru şekilde aktar
+        layout: selectedCustomTemplate.globalSettings.layout || 'sidebar-left',
+        // Gereken diğer alanları da ayarla
+        textColor: selectedCustomTemplate.globalSettings.textColor || selectedCustomTemplate.globalSettings.primaryColor || '#000000',
+        sidebarColor: selectedCustomTemplate.globalSettings.sidebarColor || '#f5f5f5',
+        isAtsOptimized: false
+      }
+    };
+    
+    return (
+      <Box 
+        className="custom-template"
+        sx={{ 
+          width: '210mm', // A4 genişliği - 210mm
+          height: '297mm', // A4 yüksekliği - 297mm
+          margin: '0 auto',
+          position: 'relative',
+          bgcolor: 'background.paper',
+          boxShadow: 3,
+          overflow: 'hidden',
+          '@media print': {
+            boxShadow: 'none',
+            margin: 0
+          },
+          '& > div': { 
+            width: '100%',
+            height: '100%',
+            boxSizing: 'border-box'
+          }
+        }}
+      >
+        {previewData && (
+          <CustomTemplateRenderer
+            data={transformCVData(previewData)}
+            language={previewSelectedLanguage}
+            translations={translations[previewSelectedLanguage] || translations.en}
+            templateData={templateWithPdfType}
+          />
+        )}
+      </Box>
+    );
+  };
 
   return (
     <Box sx={{ p: 3 }}>
