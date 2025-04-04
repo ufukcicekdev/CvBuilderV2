@@ -325,6 +325,7 @@ export default function Pricing() {
   ];
 
   const price = plan.price_monthly;
+  const currency = plan.currency;
   const isCurrentPlan = currentSubscription && 
     currentSubscription?.plan?.plan_id === plan.plan_id && 
     currentSubscription.status === 'active';
@@ -371,7 +372,7 @@ export default function Pricing() {
               
               <Box sx={{ my: 3, textAlign: 'center' }}>
                 <Typography variant="h3" component="div" color="primary">
-                  ${price}
+                  {currency}{price}
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
                   {t('pricing.perMonth')}
