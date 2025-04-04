@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Typography, Box, Button, Paper, Divider } from '@mui/material';
 import { CheckCircle as CheckCircleIcon } from '@mui/icons-material';
@@ -12,13 +12,20 @@ export default function PaymentSuccess() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+  const [showLoginButton, setShowLoginButton] = useState(false);
 
-  // Eğer kullanıcı oturum açmamışsa login sayfasına yönlendir
+  // Oturum durumunu kontrol et, ancak hemen yönlendirme yapma
   useEffect(() => {
+    // Kullanıcının sayfayı görmesine izin ver
+    // Oturum açık değilse, 2 saniye sonra giriş butonunu göster
     if (!isAuthenticated) {
-      router.push('/login');
+      const timer = setTimeout(() => {
+        setShowLoginButton(true);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated]);
 
   const goToDashboard = () => {
     router.push('/dashboard');
@@ -26,6 +33,10 @@ export default function PaymentSuccess() {
 
   const goToProfile = () => {
     router.push('/profile');
+  };
+  
+  const goToLogin = () => {
+    router.push('/login');
   };
 
   return (
@@ -63,25 +74,41 @@ export default function PaymentSuccess() {
             gap: 2,
             mt: 4
           }}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              size="large"
-              onClick={goToDashboard}
-              sx={{ minWidth: 200 }}
-            >
-              {t('payment.success.goDashboard', 'Panele Git')}
-            </Button>
-            
-            <Button 
-              variant="outlined" 
-              color="primary" 
-              size="large"
-              onClick={goToProfile}
-              sx={{ minWidth: 200 }}
-            >
-              {t('payment.success.goProfile', 'Profilim')}
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  size="large"
+                  onClick={goToDashboard}
+                  sx={{ minWidth: 200 }}
+                >
+                  {t('payment.success.goDashboard', 'Panele Git')}
+                </Button>
+                
+                <Button 
+                  variant="outlined" 
+                  color="primary" 
+                  size="large"
+                  onClick={goToProfile}
+                  sx={{ minWidth: 200 }}
+                >
+                  {t('payment.success.goProfile', 'Profilim')}
+                </Button>
+              </>
+            ) : (
+              showLoginButton && (
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  size="large"
+                  onClick={goToLogin}
+                  sx={{ minWidth: 200 }}
+                >
+                  {t('login', 'Giriş Yap')}
+                </Button>
+              )
+            )}
           </Box>
         </Paper>
       </Container>

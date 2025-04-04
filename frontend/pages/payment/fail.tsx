@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Typography, Box, Button, Paper, Divider } from '@mui/material';
 import { Cancel as CancelIcon } from '@mui/icons-material';
@@ -12,13 +12,20 @@ export default function PaymentFail() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+  const [showLoginButton, setShowLoginButton] = useState(false);
 
-  // Eğer kullanıcı oturum açmamışsa login sayfasına yönlendir
+  // Oturum durumunu kontrol et, ancak hemen yönlendirme yapma
   useEffect(() => {
+    // Kullanıcının sayfayı görmesine izin ver
+    // Oturum açık değilse, 2 saniye sonra giriş butonunu göster
     if (!isAuthenticated) {
-      router.push('/login');
+      const timer = setTimeout(() => {
+        setShowLoginButton(true);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated]);
 
   const goToPricing = () => {
     router.push('/pricing');
@@ -26,6 +33,10 @@ export default function PaymentFail() {
 
   const goToSupport = () => {
     router.push('/contact');
+  };
+
+  const goToLogin = () => {
+    router.push('/login');
   };
 
   return (
@@ -76,25 +87,41 @@ export default function PaymentFail() {
             gap: 2,
             mt: 4
           }}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              size="large"
-              onClick={goToPricing}
-              sx={{ minWidth: 200 }}
-            >
-              {t('payment.fail.tryAgain', 'Tekrar Dene')}
-            </Button>
-            
-            <Button 
-              variant="outlined" 
-              color="primary" 
-              size="large"
-              onClick={goToSupport}
-              sx={{ minWidth: 200 }}
-            >
-              {t('payment.fail.contactSupport', 'Destek Ekibi')}
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  size="large"
+                  onClick={goToPricing}
+                  sx={{ minWidth: 200 }}
+                >
+                  {t('payment.fail.tryAgain', 'Tekrar Dene')}
+                </Button>
+                
+                <Button 
+                  variant="outlined" 
+                  color="primary" 
+                  size="large"
+                  onClick={goToSupport}
+                  sx={{ minWidth: 200 }}
+                >
+                  {t('payment.fail.contactSupport', 'Destek Ekibi')}
+                </Button>
+              </>
+            ) : (
+              showLoginButton && (
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  size="large"
+                  onClick={goToLogin}
+                  sx={{ minWidth: 200 }}
+                >
+                  {t('login', 'Giriş Yap')}
+                </Button>
+              )
+            )}
           </Box>
         </Paper>
       </Container>

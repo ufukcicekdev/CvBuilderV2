@@ -396,7 +396,10 @@
     "paddleNotLoaded": "No se pudo cargar el sistema de pago. Por favor inténtalo de nuevo.",
     "checkoutError": "Ocurrió un error al abrir la página de pago. Por favor inténtalo de nuevo.",
     "checkoutOpened": "Página de pago abierta.",
-    "processingCheckout": "Preparando pago..."
+    "processingCheckout": "Preparando pago...",
+    "selectPaymentMethod": "Seleccionar método de pago",
+    "selectPaymentProvider": "Por favor selecciona un proveedor de pago",
+    "missingUserInfo": "El pago con PayTR requiere información de dirección y teléfono. Por favor completa tu información en tu perfil."
   },
   "toast": {
     "success": "¡Éxito!",
@@ -1021,6 +1024,21 @@
       "title": "Contáctanos",
       "description": "Si tienes alguna pregunta sobre estos Términos, por favor contáctanos en:",
       "email": "Correo electrónico"
+    }
+  },
+  "payment": {
+    "success": {
+      "title": "Pago Exitoso",
+      "description": "Tu pago se ha completado con éxito. Tu suscripción ha sido activada.",
+      "goDashboard": "Ir al Panel",
+      "goProfile": "Mi Perfil"
+    },
+    "fail": {
+      "title": "Pago Fallido",
+      "description": "Hubo un problema durante el proceso de pago. Por favor, intenta de nuevo más tarde o contacta a nuestro equipo de soporte.",
+      "notice": "Si crees que tu cuenta ha sido cobrada, por favor contáctanos. Resolveremos el problema lo más pronto posible.",
+      "tryAgain": "Intentar de Nuevo",
+      "contactSupport": "Contactar Soporte"
     }
   }
 }

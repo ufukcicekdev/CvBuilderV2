@@ -37,7 +37,7 @@
     "userType": "Kullanıcı Türü",
     "birthDate": "Doğum Tarihi",
     "companyName": "Şirket Adı",
-    "companyWebsite": "Şirket Web Sitesi",
+    "companyWebsite": "Şirket Websitesi",
     "phone": "Telefon",
     "register": "Kayıt Ol",
     "alreadyHaveAccount": "Zaten hesabınız var mı?",
@@ -55,7 +55,7 @@
     "tokenRefreshed": "Oturumunuz yenilendi.",
     "logoutSuccess": "Başarıyla çıkış yaptınız.",
     "errors": {
-      "userNotFound": "Bu e-posta adresine kayıtlı kullanıcı bulunamadı",
+      "userNotFound": "Bu e-posta adresine sahip kullanıcı bulunamadı",
       "invalidPassword": "Geçersiz şifre",
       "invalidCredentials": "Geçersiz e-posta veya şifre",
       "emailExists": "Bu e-posta adresi zaten kullanımda",
@@ -68,7 +68,7 @@
       "googleLoginFailed": "Google girişi başarısız",
       "networkError": "Ağ hatası. Lütfen bağlantınızı kontrol edin.",
       "fedcmDisabled": "Tarayıcı kimlik doğrulama API'si devre dışı",
-      "googleScriptError": "Google giriş hizmeti yüklenemedi. Lütfen daha sonra tekrar deneyin",
+      "googleScriptError": "Google giriş hizmeti yüklenemedi. Lütfen daha sonra tekrar deneyin.",
       "loginCancelled": "Giriş işlemi iptal edildi",
       "invalidResponse": "Sunucudan geçersiz yanıt",
       "redirectFailed": "Yönlendirme başarısız. Alternatif yöntem deneniyor."
@@ -109,8 +109,6 @@
     "profession": "Meslek",
     "companyPosition": "Şirketteki Pozisyon",
     "companySize": "Şirket Büyüklüğü",
-    "address": "Adres",
-    "addressPlaceholder": "Adresinizi girin",
     "edit": "Düzenle",
     "save": "Kaydet",
     "cancel": "İptal",
@@ -216,7 +214,7 @@
       "toDashboard": "Panele Git"
     },
     "features": {
-      "title": "Neden CV Builder?",
+      "title": "Neden CV Oluşturucu?",
       "subtitle": "İş arama sürecinizi dönüştüren yenilikçi özellikler",
       "overline": "ÖZELLİKLER",
       "feature1": {
@@ -260,23 +258,23 @@
     },
     "howItWorks": {
       "title": "Nasıl Çalışır?",
-      "overline": "KULLANIM KILAVUZU",
+      "overline": "KULLANICI KILAVUZU",
       "steps": [
         {
           "title": "Profil Oluştur",
-          "description": "Temel bilgilerinizi girin ve profesyonel profilinizi oluşturun"
+          "description": "Temel bilgilerinizi girerek profesyonel profilinizi oluşturun"
         },
         {
           "title": "CV'nizi Özelleştirin",
-          "description": "Modern şablonlardan seçim yapın ve CV'nizi kişiselleştirin"
+          "description": "Modern şablonlar arasından seçim yaparak CV'nizi kişiselleştirin"
         },
         {
           "title": "Video Ekleyin",
-          "description": "Kendinizi kısa bir videoyla tanıtın ve öne çıkın"
+          "description": "Kısa bir videoyla kendinizi tanıtın ve öne çıkın"
         },
         {
           "title": "Başvurun",
-          "description": "İş ilanlarına tek tıkla başvurun ve kariyerinizde ilerleyin"
+          "description": "Tek tıkla iş ilanlarına başvurun ve kariyerinizde ilerleyin"
         }
       ]
     },
@@ -324,30 +322,84 @@
     "subjects": {
       "general": "Genel Soru",
       "technical": "Teknik Destek",
-      "billing": "Fatura Sorgusu",
+      "billing": "Fatura Sorusu",
       "feedback": "Geri Bildirim",
       "other": "Diğer"
     }
   },
   "pricing": {
     "title": "Fiyatlandırma",
-    "description": "CV Builder'ın premium özelliklerine erişmek için abonelik planımıza kaydolun",
-    "pageTitle": "Fiyatlandırma - CV Builder",
-    "pageDescription": "CV Builder premium planları ve fiyatlandırma detayları - Uygun fiyatlarla profesyonel özgeçmiş oluşturun",
-    "perMonth": "/ aylık",
-    "perYear": "/ yıllık",
-    "selectPlan": "Planı Seç",
-    "currentPlan": "Mevcut Planınız",
-    "alreadySubscribed": "Zaten Aboneliğiniz Var",
-    "processingCheckout": "Ödeme işleniyor...",
-    "checkoutError": "Ödeme işlemi sırasında bir hata oluştu",
-    "subscriptionSuccess": "Aboneliğiniz başarıyla oluşturuldu!",
-    "paddleNotLoaded": "Ödeme sistemi yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-    "paytrError": "PayTR ödemesi sırasında bir hata oluştu",
-    "errorFetchingData": "Abonelik planları yüklenirken bir hata oluştu",
+    "description": "İhtiyaçlarınıza uygun planı seçin",
+    "pageTitle": "Abonelik Planları - CV Oluşturucu",
+    "pageDescription": "İhtiyaçlarınıza uygun profesyonel CV oluşturma planını seçin ve kariyerinizde ilerleyin.",
+    "monthly": "Aylık",
+    "yearly": "Yıllık",
+    "free": {
+      "title": "Ücretsiz",
+      "description": "Başlamak için temel özellikler"
+    },
+    "premium": {
+      "title": "Premium Plan",
+      "description": "Profesyonel CV oluşturmak için ihtiyacınız olan tüm özellikler"
+    },
+    "currency": "USD",
+    "perMonth": "/ay",
+    "perYear": "/yıl",
+    "selectPlan": "Plan Seç",
+    "currentPlan": "Mevcut Plan",
+    "changePlan": "Planı Değiştir",
+    "alreadySubscribed": "Zaten Aktif Bir Aboneliğiniz Var",
+    "saveYearly": "Yıllık ödeme ile %15 tasarruf edin",
+    "features": {
+      "feature.basicCvTemplates": "Temel CV şablonları",
+      "feature.limitedCvCount": "En fazla 3 CV",
+      "feature.pdfDownload": "PDF olarak indir",
+      "feature.basicSupport": "Temel destek",
+      "feature.videoCV": "Video CV desteği",
+      "feature.aiAssistant": "Yapay Zeka Asistanı",
+      "feature.premiumTemplates": "Premium şablonlar",
+      "feature.prioritySupport": "Öncelikli destek",
+      "feature.unlimitedCvs": "Sınırsız CV"
+    },
+    "subscribe": "Abone Ol",
+    "upgradeNow": "Şimdi Yükselt",
+    "manageSubscription": "Aboneliği Yönet",
+    "cancelSubscription": "Aboneliği İptal Et",
+    "confirmCancel": "Aboneliğinizi iptal etmek istediğinizden emin misiniz?",
+    "paymentProcessing": "Ödeme işleniyor...",
+    "paymentSuccess": "Ödeme başarılı!",
+    "paymentError": "Ödeme başarısız. Lütfen tekrar deneyin.",
+    "subscriptionSuccess": "Abonelik başarıyla oluşturuldu!",
+    "subscriptionError": "Abonelik oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
+    "errorFetchingPlans": "Abonelik planları yüklenirken hata oluştu.",
+    "noSubscription": "Aktif Abonelik Yok",
+    "subscribePrompt": "Premium özelliklere erişmek için abone olun.",
+    "currentSubscription": "Mevcut Abonelik",
+    "period": "Fatura Dönemi",
+    "validUntil": "Geçerlilik Tarihi",
+    "confirmCancellation": "İptali Onayla",
+    "cancelSuccess": "Aboneliğiniz başarıyla iptal edildi.",
+    "cancelError": "Abonelik iptal edilirken hata oluştu. Lütfen tekrar deneyin.",
+    "periodUpdateSuccess": "Fatura dönemi başarıyla güncellendi.",
+    "periodUpdateError": "Fatura dönemi güncellenemedi.",
+    "switchToMonthly": "Aylık Faturalamaya Geç",
+    "switchToYearly": "Yıllık Faturalamaya Geç",
+    "resubscribe": "Yeniden Abone Ol",
+    "checkout": "Ödeme",
+    "checkoutDescription": "Lütfen siparişinizi gözden geçirin ve aboneliğinizi etkinleştirmek için ödemeyi tamamlayın.",
+    "orderSummary": "Sipariş Özeti",
+    "total": "Toplam",
+    "paymentDetails": "Ödeme Detayları",
+    "demoNotice": "Bu bir demo ödeme sayfasıdır. Gerçek bir uygulamada, ödeme bilgilerinizi buraya girerdiniz. Şimdilik, başarılı bir ödemeyi simüle etmek için aşağıdaki düğmeye tıklayabilirsiniz.",
+    "completePayment": "Ödemeyi Tamamla",
+    "customerPortal": "Müşteri Portalı",
+    "paddleNotLoaded": "Ödeme sistemi yüklenemedi. Lütfen tekrar deneyin.",
+    "checkoutError": "Ödeme sayfası açılırken bir hata oluştu. Lütfen tekrar deneyin.",
+    "checkoutOpened": "Ödeme sayfası açıldı.",
+    "processingCheckout": "Ödeme hazırlanıyor...",
     "selectPaymentMethod": "Ödeme Yöntemi Seçin",
-    "selectPaymentProvider": "Lütfen bir ödeme yöntemi seçin",
-    "missingUserInfo": "PayTR ödemesi için adres ve telefon bilgileriniz gereklidir. Lütfen profil sayfanızdan bu bilgileri doldurun."
+    "selectPaymentProvider": "Lütfen bir ödeme sağlayıcı seçin",
+    "missingUserInfo": "PayTR ödemesi için adres ve telefon bilgileriniz gereklidir. Lütfen profil bilgilerinizi doldurun."
   },
   "toast": {
     "success": "Başarılı!",
@@ -358,11 +410,11 @@
   "errors": {
     "404": {
       "title": "Sayfa Bulunamadı",
-      "description": "Aradığınız sayfa bulunamadı veya taşınmış olabilir."
+      "description": "Aradığınız sayfa mevcut değil veya taşınmış olabilir."
     },
     "500": {
       "title": "Sunucu Hatası",
-      "description": "Üzgünüz, bir şeyler yanlış gitti. Lütfen daha sonra tekrar deneyin."
+      "description": "Üzgünüz, bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
     },
     "backToHome": "Ana Sayfaya Dön",
     "tryAgain": "Tekrar Deneyin"
@@ -370,14 +422,14 @@
   "dashboard": {
     "title": "CV'lerim",
     "createNew": "Yeni CV Oluştur",
-    "fetchError": "CV'ler yüklenirken hata oluştu",
+    "fetchError": "CV'ler yüklenirken bir hata oluştu",
     "deleteSuccess": "CV başarıyla silindi",
-    "deleteError": "CV silinirken hata oluştu"
+    "deleteError": "CV silinirken bir hata oluştu"
   },
   "cv": {
     "create": "CV Oluştur",
     "createSuccess": "CV başarıyla oluşturuldu",
-    "createError": "CV oluşturulurken hata oluştu",
+    "createError": "CV oluşturulurken bir hata oluştu",
     "chooseTemplate": "Şablon Seç",
     "preview": "Önizleme",
     "steps": {
@@ -394,11 +446,11 @@
     "templates": {
       "modern": {
         "name": "Modern Şablon",
-        "description": "Modern ve etkileşimli bir web tasarımı"
+        "description": "Modern ve etkileşimli web tasarımı"
       },
       "minimal": {
         "name": "Minimal Şablon",
-        "description": "Temiz ve şık bir web tasarımı"
+        "description": "Temiz ve şık web tasarımı"
       },
       "colorful": {
         "name": "Renkli Şablon",
@@ -438,7 +490,7 @@
     },
     "languages": {
       "title": "Diller",
-      "subtitle": "Bildiğiniz dilleri ve yeterlilik seviyelerini ekleyin",
+      "subtitle": "Bildiğiniz dilleri ve seviyelerini ekleyin",
       "name": "Dil",
       "level": "Yeterlilik Seviyesi",
       "certificate": "Sertifika",
@@ -450,9 +502,9 @@
       "noLanguages": "Henüz dil eklenmedi",
       "languageItem": "Dil",
       "a1": "Temel - Başlangıç",
-      "a2": "Temel - Temel",
-      "b1": "Orta - Eşik",
-      "b2": "Orta - Üst",
+      "a2": "Temel - Temel Seviye",
+      "b1": "Orta - Eşik Seviyesi",
+      "b2": "Orta - İleri Seviye",
       "c1": "İleri - Yetkin",
       "c2": "İleri - Ustalık"
     },
@@ -475,29 +527,29 @@
     "lastUpdated": "Son Güncelleme",
     "saveAndExit": "Kaydet ve Çık",
     "saveSuccess": "İlerlemeniz kaydedildi",
-    "saveError": "Kaydedilirken hata oluştu",
-    "loadError": "CV yüklenirken hata oluştu",
+    "saveError": "Kaydedilirken bir hata oluştu",
+    "loadError": "CV yüklenirken bir hata oluştu",
     "errors": {
       "personalInfoRequired": "Lütfen tüm kişisel bilgileri doldurun",
       "experienceRequired": "En az bir deneyim girmelisiniz",
       "educationRequired": "En az bir eğitim girmelisiniz",
       "skillsRequired": "En az bir yetenek eklemelisiniz",
       "languagesRequired": "En az bir dil girmelisiniz",
-      "experienceFieldsRequired": "Lütfen şirket adı, pozisyon ve başlangıç tarihini girin",
+      "experienceFieldsRequired": "Lütfen deneyim için şirket adı, pozisyon ve başlangıç tarihini doldurun",
       "endDateRequired": "Şu anda çalışmıyorsanız, bitiş tarihi gereklidir",
-      "educationFieldsRequired": "Lütfen okul, derece, çalışma alanı ve başlangıç tarihini girin",
+      "educationFieldsRequired": "Lütfen okul, derece, çalışma alanı ve başlangıç tarihini doldurun",
       "endDateRequired": "Şu anda okumuyorsanız, bitiş tarihi gereklidir"
     },
     "currentStep": "Mevcut Adım",
     "deleteConfirmTitle": "CV'yi Sil",
     "deleteConfirmMessage": "Bu CV'yi silmek istediğinizden emin misiniz?",
     "deleteSuccess": "CV başarıyla silindi",
-    "deleteError": "CV silinirken hata oluştu",
+    "deleteError": "CV silinirken bir hata oluştu",
     "noCVs": "Henüz hiç CV oluşturmadınız",
     "createFirst": "İlk CV'nizi Oluşturun",
     "titleLabel": "CV Başlığı",
     "titlePlaceholder": "CV'niz için bir başlık girin",
-    "titleHelper": "Bu başlık CV'nizi tanımlamanıza yardımcı olur (örn. 'Yazılım Geliştirici CV')",
+    "titleHelper": "Bu başlık CV'nizi tanımlamanıza yardımcı olur (örn. 'Yazılım Geliştirici CV'si')",
     "startCreating": "CV Oluşturmaya Başla",
     "errors": {
       "titleRequired": "Lütfen CV için bir başlık girin"
@@ -538,20 +590,20 @@
       "uploadFile": "Sertifika Dosyası Yükle",
       "addMore": "Sertifika Ekle",
       "uploadSuccess": "Sertifika dosyası başarıyla yüklendi",
-      "uploadError": "Sertifika dosyası yüklenirken hata oluştu",
+      "uploadError": "Sertifika dosyası yüklenirken bir hata oluştu",
       "namePlaceholder": "Sertifika adını girin",
       "issuerPlaceholder": "Veren kuruluşu girin",
-      "credentialIdPlaceholder": "Varsa sertifika/kimlik numarasını girin",
-      "credentialIdHelper": "Sertifikanın referans veya kimlik numarası (İsteğe bağlı)",
+      "credentialIdPlaceholder": "Varsa sertifika/kimlik bilgisi ID'sini girin",
+      "credentialIdHelper": "Sertifikanın referans veya ID numarası (İsteğe bağlı)",
       "descriptionPlaceholder": "Sertifika hakkında kısa bir açıklama girin",
       "noCertificates": "Henüz sertifika eklenmedi"
     },
     "errors": {
-      "certificateFieldsRequired": "Lütfen sertifika adı, veren kuruluş ve veriliş tarihini girin"
+      "certificateFieldsRequired": "Lütfen sertifika adı, veren kuruluş ve veriliş tarihini doldurun"
     },
     "progress": "İlerleme",
     "template": {
-      "selectTitle": "CV Şablonu Seç",
+      "selectTitle": "CV Şablonu Seçin",
       "webVersion": "Web Versiyonu",
       "pdfVersion": "PDF Versiyonu",
       "preview": "Önizleme",
@@ -561,11 +613,11 @@
       "templates": {
         "modern": {
           "name": "Modern Şablon",
-          "description": "Modern ve etkileşimli bir web tasarımı"
+          "description": "Modern ve etkileşimli web tasarımı"
         },
         "minimal": {
           "name": "Minimal Şablon",
-          "description": "Temiz ve şık bir web tasarımı"
+          "description": "Temiz ve şık web tasarımı"
         },
         "colorful": {
           "name": "Renkli Şablon",
@@ -601,7 +653,7 @@
         },
         "modernWeb": {
           "name": "Modern Web Şablonu",
-          "description": "Modern düzenle temiz ve profesyonel tasarım"
+          "description": "Modern düzen ile temiz ve profesyonel tasarım"
         },
         "minimalWeb": {
           "name": "Minimal Web Şablonu",
@@ -613,7 +665,7 @@
         },
         "professionalWeb": {
           "name": "Profesyonel Web Şablonu",
-          "description": "Yapılandırılmış düzenle kurumsal stil"
+          "description": "Yapılandırılmış düzen ile kurumsal stil"
         },
         "creativeWeb": {
           "name": "Yaratıcı Web Şablonu",
@@ -689,7 +741,7 @@
       "maxSize": "Maksimum dosya boyutu: 50MB",
       "selectVideo": "Video Seç",
       "deleteSuccess": "Video başarıyla silindi",
-      "deleteError": "Video silinirken hata oluştu",
+      "deleteError": "Video silinirken bir hata oluştu",
       "confirmDelete": "Videoyu silmek istediğinizden emin misiniz?"
     },
     "errors": {
@@ -700,7 +752,7 @@
       "web": {
         "modern": {
           "name": "Modern Web Şablonu",
-          "description": "Modern düzenle temiz ve profesyonel tasarım"
+          "description": "Modern düzen ile temiz ve profesyonel tasarım"
         },
         "minimal": {
           "name": "Minimal Web Şablonu",
@@ -712,7 +764,7 @@
         },
         "professional": {
           "name": "Profesyonel Web Şablonu",
-          "description": "Yapılandırılmış düzenle kurumsal stil"
+          "description": "Yapılandırılmış düzen ile kurumsal stil"
         },
         "creative": {
           "name": "Yaratıcı Web Şablonu",
@@ -746,8 +798,8 @@
       "title": "CV Önizleme",
       "templatePreview": "Şablon Önizleme",
       "selectTemplate": "Lütfen önce bir şablon seçin",
-      "loadError": "CV verisi yüklenirken hata",
-      "noData": "Gösterilecek veri yok",
+      "loadError": "CV verileri yüklenirken hata oluştu",
+      "noData": "Görüntülenecek veri yok",
       "templateNotFound": "Şablon bulunamadı",
       "downloadPdf": "PDF İndir",
       "generating": "Oluşturuluyor...",
@@ -818,34 +870,34 @@
     "noPayments": "Ödeme kaydı bulunamadı",
     "paymentDate": "Tarih",
     "amount": "Tutar",
-    "paymentId": "Ödeme Kimliği",
+    "paymentId": "Ödeme ID",
     "errorFetchingPayments": "Ödeme geçmişi alınırken hata oluştu",
     "currentSubscription": "Mevcut Abonelik",
-    "period": "Faturalandırma Dönemi",
+    "period": "Fatura Dönemi",
     "validUntil": "Geçerlilik Tarihi",
-    "switchToMonthly": "Aylık Faturalandırmaya Geç",
-    "switchToYearly": "Yıllık Faturalandırmaya Geç",
+    "switchToMonthly": "Aylık Faturalamaya Geç",
+    "switchToYearly": "Yıllık Faturalamaya Geç",
     "cancelSubscription": "Aboneliği İptal Et",
     "customerPortal": "Müşteri Portalı"
   },
   "privacy": {
-    "pageTitle": "Gizlilik Politikası - CV Builder",
-    "pageDescription": "CV Builder'da kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu öğrenin",
+    "pageTitle": "Gizlilik Politikası - CV Oluşturucu",
+    "pageDescription": "CV Oluşturucu'da kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu öğrenin",
     "title": "Gizlilik Politikası",
     "lastUpdated": "Son Güncelleme",
     "lastUpdatedDate": "29 Mart 2023",
-    "introduction": "Bu Gizlilik Politikası, CV Builder'ın ('biz', 'bizim' veya 'bize') hizmetimizi kullandığınızda kişisel bilgilerinizi nasıl topladığını, kullandığını ve açıkladığını açıklar. Web sitemizde ve hizmetlerimizi kullanırken gizliliğinizi korumaya ve olumlu bir deneyim yaşamanızı sağlamaya kararlıyız.",
+    "introduction": "Bu Gizlilik Politikası, CV Oluşturucu'nun ('biz', 'bizim' veya 'bize') hizmetimizi kullandığınızda kişisel bilgilerinizi nasıl topladığını, kullandığını ve açıkladığını açıklar. Gizliliğinizi korumaya ve web sitemizi ve hizmetlerimizi kullanırken olumlu bir deneyim yaşamanızı sağlamaya kararlıyız.",
     "dataCollection": {
       "title": "Topladığımız Bilgiler",
-      "description": "Hizmetimizin kullanıcılarından birkaç tür bilgi toplayabiliriz, bunlar şunları içerir:",
+      "description": "Hizmetimizin kullanıcılarından ve hakkında çeşitli türlerde bilgiler toplayabiliriz, bunlar şunları içerir:",
       "personalInfo": "Kişisel kimlik bilgileri (adınız, e-posta adresiniz ve telefon numaranız gibi)",
       "profileInfo": "Profil bilgileri (profesyonel geçmişiniz, eğitiminiz, yetenekleriniz ve diğer kariyerle ilgili bilgiler gibi)",
-      "resumeData": "Hizmetimizi kullanarak oluşturduğunuz özgeçmişlerde ve CV'lerde yer alan bilgiler",
+      "resumeData": "Hizmetimizi kullanarak oluşturduğunuz özgeçmişler ve CV'lerde yer alan bilgiler",
       "usageInfo": "Kullanım detayları (hizmetimizle nasıl etkileşim kurduğunuz, erişim zamanlarınız ve görüntülenen sayfalar gibi)"
     },
     "dataUsage": {
       "title": "Bilgilerinizi Nasıl Kullanıyoruz?",
-      "description": "Topladığımız bilgileri veya bize sağladığınız bilgileri çeşitli amaçlarla kullanıyoruz, bunlar şunları içerir:",
+      "description": "Sizin hakkınızda topladığımız veya bize sağladığınız bilgileri çeşitli amaçlarla kullanıyoruz, bunlar şunları içerir:",
       "providingService": "Hizmetlerimizi sağlamak, sürdürmek ve iyileştirmek",
       "improving": "Hizmetimizi nasıl kullandığınızı anlamak ve analiz etmek ve yeni ürünler, hizmetler, özellikler ve işlevsellik geliştirmek",
       "personalizing": "Deneyiminizi kişiselleştirmek ve ilgi alanlarınıza uygun içerik sunmak",
@@ -860,36 +912,36 @@
     },
     "dataSecurity": {
       "title": "Veri Güvenliği",
-      "description": "Kişisel bilgilerinizi yetkisiz erişim, değişiklik, ifşa veya imhadan korumak için uygun güvenlik önlemlerini uygularız. Ancak, internet üzerinden iletişim veya elektronik depolama yöntemlerinin %100 güvenli olmadığını unutmayın, bu nedenle mutlak güvenliğini garanti edemeyiz."
+      "description": "Kişisel bilgilerinizi yetkisiz erişim, değişiklik, ifşa veya imhadan korumak için uygun güvenlik önlemlerini uyguluyoruz. Ancak, internet üzerinden iletişim veya elektronik depolama yöntemlerinin %100 güvenli olmadığını unutmayın, bu nedenle mutlak güvenliğini garanti edemeyiz."
     },
     "dataRetention": {
       "title": "Veri Saklama",
-      "description": "Bu Gizlilik Politikasında belirtilen amaçları yerine getirmek için kişisel bilgilerinizi gerektiği sürece saklarız, yasaların daha uzun bir saklama süresi gerektirmediği veya izin vermediği durumlar hariç."
+      "description": "Bu Gizlilik Politikasında belirtilen amaçları yerine getirmek için kişisel bilgilerinizi, yasa tarafından daha uzun bir saklama süresi gerekli veya izin verilmediği sürece saklarız."
     },
     "userRights": {
       "title": "Haklarınız",
       "description": "Konumunuza bağlı olarak, kişisel bilgilerinizle ilgili belirli haklara sahip olabilirsiniz, bunlar şunları içerir:",
-      "access": "Hakkınızda topladığımız kişisel bilgileri görüntüleme ve inceleme hakkı",
+      "access": "Sizin hakkınızda topladığımız kişisel bilgileri görüntüleme ve inceleme hakkı",
       "correction": "Yanlış veya eksik bilgileri düzeltme hakkı",
       "deletion": "Kişisel bilgilerinizin silinmesini talep etme hakkı",
       "objection": "Kişisel bilgilerinizin işlenmesine itiraz etme hakkı",
-      "withdrawal": "Bilgilerinizin işlenmesi için rızanızı istediğiniz zaman geri çekme hakkı"
+      "withdrawal": "Bilgilerinizi işlemek için rızanıza dayandığımız durumlarda, rızanızı istediğiniz zaman geri çekme hakkı"
     },
     "cookies": {
       "title": "Çerezler ve İzleme Teknolojileri",
-      "description": "Hizmetimizdeki etkinliği izlemek ve belirli bilgileri tutmak için çerezler ve benzer izleme teknolojileri kullanıyoruz. Çerezler, anonim bir benzersiz tanımlayıcı içerebilen küçük miktarda veri içeren dosyalardır. Tarayıcınıza tüm çerezleri reddetmesini veya bir çerez gönderildiğinde size bildirmesini talimat verebilirsiniz."
+      "description": "Hizmetimizdeki etkinliği izlemek ve belirli bilgileri tutmak için çerezler ve benzer izleme teknolojileri kullanıyoruz. Çerezler, anonim bir benzersiz tanımlayıcı içerebilen küçük miktarda veri içeren dosyalardır. Tarayıcınıza tüm çerezleri reddetmesini veya bir çerez gönderildiğinde belirtmesini söyleyebilirsiniz."
     },
     "thirdParty": {
       "title": "Üçüncü Taraf Hizmetler",
-      "description": "Hizmetimiz, bizim tarafımızdan işletilmeyen diğer web sitelerine veya hizmetlere bağlantılar içerebilir. Bir üçüncü taraf bağlantısına tıklarsanız, o üçüncü tarafın sitesine yönlendirileceksiniz. Ziyaret ettiğiniz her sitenin Gizlilik Politikasını gözden geçirmenizi şiddetle tavsiye ederiz. Üçüncü taraf sitelerin veya hizmetlerin içeriği, gizlilik politikaları veya uygulamaları üzerinde hiçbir kontrolümüz veya sorumluluğumuz yoktur."
+      "description": "Hizmetimiz, bizim tarafımızdan işletilmeyen diğer web sitelerine veya hizmetlere bağlantılar içerebilir. Bir üçüncü taraf bağlantısına tıklarsanız, o üçüncü tarafın sitesine yönlendirileceksiniz. Ziyaret ettiğiniz her sitenin Gizlilik Politikasını gözden geçirmenizi şiddetle tavsiye ederiz. Üçüncü taraf sitelerin veya hizmetlerin içeriği, gizlilik politikaları veya uygulamaları üzerinde hiçbir kontrolümüz yoktur ve sorumluluk kabul etmeyiz."
     },
     "children": {
       "title": "Çocukların Gizliliği",
-      "description": "Hizmetimiz 16 yaşın altındaki çocukların kullanımına yönelik değildir. 16 yaşın altındaki çocuklardan bilerek kişisel bilgi toplamayız. Ebeveyn veya veli iseniz ve çocuğunuzun bize kişisel bilgiler sağladığını biliyorsanız, lütfen gerekli önlemleri alabilmemiz için bizimle iletişime geçin."
+      "description": "Hizmetimiz 16 yaşın altındaki çocukların kullanımına yönelik değildir. 16 yaşın altındaki çocuklardan bilerek kişisel bilgi toplamayız. Bir ebeveyn veya vasisiyseniz ve çocuğunuzun bize kişisel bilgiler sağladığının farkındaysanız, lütfen gerekli önlemleri alabilmemiz için bizimle iletişime geçin."
     },
     "changes": {
       "title": "Bu Gizlilik Politikasındaki Değişiklikler",
-      "description": "Gizlilik Politikamızı zaman zaman güncelleyebiliriz. Yeni politikayı bu sayfada yayınlayarak ve 'Son Güncelleme' tarihini güncelleyerek herhangi bir değişiklik hakkında sizi bilgilendireceğiz. Herhangi bir değişiklik için bu Gizlilik Politikasını periyodik olarak gözden geçirmeniz önerilir."
+      "description": "Gizlilik Politikamızı zaman zaman güncelleyebiliriz. Yeni Gizlilik Politikasını bu sayfada yayınlayarak ve 'Son Güncelleme' tarihini güncelleyerek size bildireceğiz. Herhangi bir değişiklik için bu Gizlilik Politikasını periyodik olarak gözden geçirmeniz önerilir."
     },
     "contact": {
       "title": "Bize Ulaşın",
@@ -898,75 +950,75 @@
     }
   },
   "terms": {
-    "pageTitle": "Kullanım Şartları - CV Builder",
-    "pageDescription": "CV Builder hizmetlerini kullanma şartlarını okuyun",
-    "title": "Kullanım Şartları",
+    "pageTitle": "Hizmet Şartları - CV Oluşturucu",
+    "pageDescription": "CV Oluşturucu hizmetlerini kullanma şartlarını ve koşullarını okuyun",
+    "title": "Hizmet Şartları",
     "lastUpdated": "Son Güncelleme",
     "lastUpdatedDate": "29 Mart 2023",
-    "introduction": "Bu Kullanım Şartları ('Şartlar'), CV Builder'ın web sitesine, hizmetlerine ve uygulamalarına ('Hizmet') erişiminizi ve kullanımınızı yönetir. Hizmete erişerek veya kullanarak, bu Şartları kabul etmiş olursunuz. Şartların herhangi bir bölümüne katılmıyorsanız, Hizmete erişemezsiniz.",
+    "introduction": "Bu Hizmet Şartları ('Şartlar'), CV Oluşturucu'nun web sitesine, hizmetlerine ve uygulamalarına (topluca 'Hizmet') erişiminizi ve kullanımınızı yönetir. Hizmete erişerek veya kullanarak, bu Şartlarla bağlı olmayı kabul edersiniz. Şartların herhangi bir bölümüne katılmıyorsanız, Hizmete erişemezsiniz.",
     "acceptance": {
       "title": "Şartların Kabulü",
-      "description": "Bir hesap oluşturarak veya Hizmetimizi kullanarak, bu Şartları okuduğunuzu, anladığınızı ve bunlara bağlı kalmayı kabul ettiğinizi onaylarsınız. Hizmeti bir organizasyon adına kullanıyorsanız, bu Şartları o organizasyon adına kabul ediyorsunuz."
+      "description": "Bir hesap oluşturarak veya Hizmetimizi kullanarak, bu Şartları okuduğunuzu, anladığınızı ve bunlara bağlı kalmayı kabul ettiğinizi onaylarsınız. Hizmeti bir organizasyon adına kullanıyorsanız, bu Şartları o organizasyon adına kabul etmektesiniz."
     },
     "accountRegistration": {
       "title": "Hesap Kaydı ve Güvenlik",
       "description": "Hizmetimizin belirli özelliklerini kullanmak için bir hesap oluşturmanız gerekebilir. Hesap oluştururken şunları kabul edersiniz:",
       "accurate": "Kendiniz hakkında doğru, güncel ve eksiksiz bilgi sağlamak",
-      "oneAccount": "Açıkça izin verilmedikçe, yalnızca bir hesap tutmak",
+      "oneAccount": "Açıkça izin verilmedikçe yalnızca bir hesap tutmak",
       "security": "Şifrenizi koruyarak ve hesabınıza erişimi kısıtlayarak hesabınızın güvenliğini sağlamak",
-      "prohibited": "Başkalarının hesabınızı kullanmasına veya hesabınızı başka bir kişi veya kuruluşa devretmesine izin vermemek"
+      "prohibited": "Başkalarının hesabınızı kullanmasına izin vermemek veya hesabınızı başka bir kişi veya kuruluşa devretmemek"
     },
     "userContent": {
       "title": "Kullanıcı İçeriği",
       "description": "Hizmetimiz, özgeçmişler, CV'ler ve profil bilgileri gibi içerikler oluşturmanıza, saklamanıza ve paylaşmanıza olanak tanır ('Kullanıcı İçeriği'). Kullanıcı İçeriği ile ilgili olarak şunları kabul edersiniz:",
-      "ownership": "Kullanıcı İçeriğinde sahip olduğunuz herhangi bir fikri mülkiyet hakkını elinizde tutarsınız",
-      "license": "CV Builder'a, Hizmeti sağlamak ve iyileştirmek için Kullanıcı İçeriğini kullanma, çoğaltma, değiştirme, dağıtma ve görüntüleme hakkı için dünya çapında, telifsiz bir lisans verirsiniz",
-      "prohibited": "Bu Şartları veya herhangi bir uygulanabilir yasayı veya düzenlemeyi ihlal eden herhangi bir içerik yüklemeyecek, paylaşmayacak veya oluşturmayacaksınız"
+      "ownership": "Kullanıcı İçeriğinde sahip olduğunuz herhangi bir fikri mülkiyet hakkını elinde tutarsınız",
+      "license": "CV Oluşturucu'ya, Hizmeti sağlamak ve iyileştirmek için Kullanıcı İçeriğini kullanma, çoğaltma, değiştirme, dağıtma ve görüntüleme hakkında dünya çapında, telifsiz bir lisans verirsiniz",
+      "prohibited": "Bu Şartları veya herhangi bir uygulanabilir yasa veya düzenlemeyi ihlal eden herhangi bir içerik yüklemeyecek, paylaşmayacak veya oluşturmayacaksınız"
     },
     "subscriptions": {
       "title": "Abonelikler ve Ödemeler",
-      "description": "Hizmetimiz için ücretsiz ve ücretli abonelik planları sunuyoruz. Ücretli bir plana abone olarak aşağıdaki şartları kabul edersiniz:",
+      "description": "Hizmetimiz için ücretsiz ve ücretli abonelik planları sunuyoruz. Ücretli bir plana abone olarak, aşağıdaki şartları kabul edersiniz:",
       "payment": "Abonelik planınızla ilişkili tüm ücretleri ödemeyi kabul edersiniz",
-      "renewal": "Abonelikler, yenileme tarihinden önce iptal edilmedikçe her faturalandırma dönemi sonunda otomatik olarak yenilenir",
-      "cancellation": "Aboneliğinizi hesap ayarlarınız üzerinden veya bizimle iletişime geçerek istediğiniz zaman iptal edebilirsiniz",
-      "refunds": "İadeler, iade politikamıza ve uygulanabilir yasalara uygun olarak sağlanır"
+      "renewal": "Abonelikler, yenileme tarihinden önce iptal edilmediği sürece her fatura dönemi sonunda otomatik olarak yenilenir",
+      "cancellation": "Hesap ayarlarınız üzerinden veya bizimle iletişime geçerek aboneliğinizi istediğiniz zaman iptal edebilirsiniz",
+      "refunds": "İade politikamıza ve uygulanabilir yasalara uygun olarak iadeler sağlanır"
     },
     "intellectualProperty": {
       "title": "Fikri Mülkiyet Hakları",
-      "description": "Hizmet ve orijinal içeriği, özellikleri ve işlevselliği, CV Builder ve lisans verenlerinin mülkiyetinde olacaktır ve öyle kalacaktır. Hizmet, ikamet ettiğiniz ülkenin ve yabancı ülkelerin telif hakkı, ticari marka ve diğer yasalarıyla korunmaktadır. Ticari markalarımız ve ticari görünümümüz, CV Builder'ın önceden yazılı izni olmadan herhangi bir ürün veya hizmetle bağlantılı olarak kullanılamaz."
+      "description": "Hizmet ve orijinal içeriği, özellikleri ve işlevselliği, CV Oluşturucu ve lisans verenlerinin mülkiyetinde olacaktır ve kalacaktır. Hizmet, ikamet ettiğiniz ülkenin ve yabancı ülkelerin telif hakkı, ticari marka ve diğer yasalarıyla korunmaktadır. Ticari markalarımız ve ticari görünümümüz, CV Oluşturucu'nun önceden yazılı izni olmadan herhangi bir ürün veya hizmetle bağlantılı olarak kullanılamaz."
     },
     "prohibition": {
       "title": "Yasaklanan Kullanımlar",
-      "description": "Hizmeti aşağıdaki şekillerde kullanmayacağınızı kabul edersiniz:",
+      "description": "Hizmeti aşağıdaki şekillerde kullanmayı kabul etmezsiniz:",
       "illegal": "Herhangi bir uygulanabilir yasa veya düzenlemeyi ihlal eden",
       "harmful": "Zararlı, tehdit edici, taciz edici, iftira niteliğinde veya başka şekilde rahatsız edici",
       "impersonation": "Herhangi bir kişi veya kuruluşu taklit etmeyi veya bir kişi veya kuruluşla bağlantınız hakkında yanlış beyanda bulunmayı içeren",
-      "data": "Diğer kullanıcılar hakkında bilgilerini bilgileri ve açık rızaları olmadan toplamaya veya depolamaya çalışmak",
-      "interference": "Hizmetin veya bileşenlerinin bütünlüğünü veya performansını bozmak veya engellemek"
+      "data": "Diğer kullanıcılar hakkında bilgilerini bilgileri ve açık rızaları olmadan toplamaya veya depolamaya çalışan",
+      "interference": "Hizmetin veya bileşenlerinin bütünlüğünü veya performansını bozan veya kesintiye uğratan"
     },
     "termination": {
       "title": "Fesih",
-      "description": "Hesabınızı ve Hizmete erişiminizi, herhangi bir nedenle, önceden bildirimde bulunmaksızın ve herhangi bir sorumluluk olmaksızın derhal askıya alabilir veya sonlandırabiliriz. Fesih üzerine, Hizmeti kullanma hakkınız derhal sona erecektir. Hesabınızı sonlandırmak istiyorsanız, Hizmeti kullanmayı basitçe durdurabilir veya hesap ayarlarınız üzerinden hesabınızı silebilirsiniz."
+      "description": "Hesabınızı ve Hizmete erişiminizi, önceden haber vermeksizin ve herhangi bir sorumluluk kabul etmeksizin, Şartların ihlali de dahil olmak üzere herhangi bir nedenle derhal askıya alabilir veya sonlandırabiliriz. Fesih üzerine, Hizmeti kullanma hakkınız derhal sona erecektir. Hesabınızı sonlandırmak istiyorsanız, Hizmeti kullanmayı basitçe durdurabilir veya hesap ayarları üzerinden hesabınızı silebilirsiniz."
     },
     "disclaimer": {
       "title": "Garanti Reddi",
-      "description": "Hizmet 'olduğu gibi' ve 'mevcut olduğu şekliyle' sağlanır ve herhangi bir türde, açık veya zımni, garanti olmaksızın, ticari satılabilirlik, belirli bir amaca uygunluk veya ihlal etmeme garantileri dahil ancak bunlarla sınırlı olmamak üzere. Hizmetin kesintisiz, zamanında, güvenli veya hatasız olacağını garanti etmiyoruz."
+      "description": "Hizmet 'olduğu gibi' ve 'mevcut olduğu şekilde' sunulmaktadır ve ticari satılabilirlik, belirli bir amaca uygunluk veya ihlal edilmeme dahil ancak bunlarla sınırlı olmamak üzere herhangi bir garanti, açık veya zımni, vermeden sunulmaktadır. Hizmetin kesintisiz, zamanında, güvenli veya hatasız olacağını garanti etmiyoruz."
     },
     "limitation": {
       "title": "Sorumluluk Sınırlaması",
-      "description": "Yasaların izin verdiği maksimum ölçüde, hiçbir durumda CV Builder, yöneticileri, çalışanları, ortakları, temsilcileri, tedarikçileri veya bağlı kuruluşları, kar kaybı, veri, kullanım, itibar veya diğer maddi olmayan kayıplar dahil ancak bunlarla sınırlı olmamak üzere, dolaylı, özel, arızi, sonuçsal veya cezai zararlardan sorumlu tutulamaz."
+      "description": "Yasa tarafından izin verilen maksimum ölçüde, hiçbir durumda CV Oluşturucu, yöneticileri, çalışanları, ortakları, temsilcileri, tedarikçileri veya bağlı kuruluşları, kâr kaybı, veri, kullanım, itibar veya diğer maddi olmayan kayıplar dahil ancak bunlarla sınırlı olmamak üzere dolaylı, özel, arızi, sonuçsal veya cezai zararlardan sorumlu tutulamaz."
     },
     "indemnification": {
       "title": "Tazminat",
-      "description": "Bu Şartları ihlal etmenizden veya Hizmeti kullanımınızdan kaynaklanan herhangi bir talep, yükümlülük, zarar, hüküm, kayıp, maliyet, masraf veya ücret (makul avukatlık ücretleri dahil) için CV Builder ve lisans verenlerini, hizmet sağlayıcılarını, çalışanlarını, temsilcilerini, yöneticilerini ve direktörlerini savunmayı, tazmin etmeyi ve onları zarardan korumayı kabul edersiniz."
+      "description": "Bu Şartların ihlalinizden veya Hizmeti kullanımınızdan kaynaklanan her türlü talep, sorumluluk, zarar, karar, ödül, kayıp, maliyet, masraf veya ücretten (makul avukatlık ücretleri dahil) CV Oluşturucu'yu ve lisans verenlerini, hizmet sağlayıcılarını, çalışanlarını, temsilcilerini, yöneticilerini ve yönetim kurulu üyelerini savunmayı, tazmin etmeyi ve zarar görmemelerini sağlamayı kabul edersiniz."
     },
     "governing": {
       "title": "Uygulanabilir Hukuk",
-      "description": "Bu Şartlar, CV Builder'ın kurulduğu ülkenin yasalarına göre yorumlanacak ve uygulanacaktır, çatışma hukuku hükümleri hariç. Bu Şartların herhangi bir hakkını veya hükmünü uygulamadaki başarısızlığımız, bu hak veya hükmün feragati olarak değerlendirilmeyecektir."
+      "description": "Bu Şartlar, CV Oluşturucu'nun kurulduğu ülkenin yasalarına uygun olarak yorumlanacak ve uygulanacaktır, çatışan hukuk hükümlerine bakılmaksızın. Bu Şartların herhangi bir hakkının veya hükmünün uygulanmaması, bu hakların veya hükümlerin feragati olarak değerlendirilmeyecektir."
     },
     "changes": {
       "title": "Şartlardaki Değişiklikler",
-      "description": "Bu Şartları istediğimiz zaman değiştirme veya değiştirme hakkını saklı tutarız. Bir revizyon önemliyse, yeni şartların yürürlüğe girmesinden en az 30 gün önce bildirimde bulunacağız. Önemli bir değişikliğin ne oluşturduğuna tek taraflı olarak karar vereceğiz. Değişiklikler yürürlüğe girdikten sonra Hizmete erişmeye veya kullanmaya devam ederek, revize edilmiş şartları kabul etmiş olursunuz."
+      "description": "Bu Şartları zaman zaman değiştirme veya değiştirme hakkını saklı tutarız. Değişiklik önemliyse, yeni şartların yürürlüğe girmesinden en az 30 gün önce bildirimde bulunacağız. Önemli bir değişikliğin ne oluşturduğuna yalnızca biz karar veririz. Değişiklikler yürürlüğe girdikten sonra Hizmete erişmeye veya kullanmaya devam ederek, değiştirilmiş şartları kabul etmiş olursunuz."
     },
     "contact": {
       "title": "Bize Ulaşın",
@@ -977,16 +1029,16 @@
   "payment": {
     "success": {
       "title": "Ödeme Başarılı",
-      "description": "Ödemeniz başarıyla tamamlandı. Aboneliğiniz aktif hale getirildi.",
+      "description": "Ödemeniz başarıyla tamamlandı. Aboneliğiniz etkinleştirildi.",
       "goDashboard": "Panele Git",
       "goProfile": "Profilim"
     },
     "fail": {
       "title": "Ödeme Başarısız",
       "description": "Ödeme işlemi sırasında bir sorun oluştu. Lütfen daha sonra tekrar deneyin veya destek ekibimizle iletişime geçin.",
-      "notice": "Eğer hesabınızdan para çekildiğini düşünüyorsanız lütfen bizimle iletişime geçin. En kısa sürede sorunu çözeceğiz.",
-      "tryAgain": "Tekrar Dene",
-      "contactSupport": "Destek Ekibi"
+      "notice": "Hesabınızın ücretlendirildiğini düşünüyorsanız, lütfen bizimle iletişime geçin. Sorunu en kısa sürede çözeceğiz.",
+      "tryAgain": "Tekrar Deneyin",
+      "contactSupport": "Destekle İletişime Geçin"
     }
   }
 }

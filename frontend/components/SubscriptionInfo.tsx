@@ -246,7 +246,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
           )}
           
           <Box sx={{ mt: 3, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            {isActive && (
+            {isActive && subscription?.payment_provider === 'paddle' && (
               <Button
                 variant="contained"
                 color="info"

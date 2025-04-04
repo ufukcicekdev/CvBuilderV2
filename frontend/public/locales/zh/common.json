@@ -396,7 +396,10 @@
     "paddleNotLoaded": "无法加载支付系统，请重试",
     "checkoutError": "打开结算页面时出错，请重试",
     "checkoutOpened": "结算页面已打开",
-    "processingCheckout": "准备付款中..."
+    "processingCheckout": "准备付款中...",
+    "selectPaymentMethod": "选择支付方式",
+    "selectPaymentProvider": "请选择支付提供商",
+    "missingUserInfo": "PayTR 支付需要您的地址和电话信息。请在您的个人资料中填写此信息。"
   },
   "toast": {
     "success": "成功！",
@@ -1021,6 +1024,21 @@
       "title": "联系我们",
       "description": "如果您对这些条款有任何疑问，请联系我们：",
       "email": "电子邮件"
+    }
+  },
+  "payment": {
+    "success": {
+      "title": "支付成功",
+      "description": "您的支付已成功完成。您的订阅已激活。",
+      "goDashboard": "前往仪表板",
+      "goProfile": "我的个人资料"
+    },
+    "fail": {
+      "title": "支付失败",
+      "description": "支付过程中出现问题。请稍后再试或联系我们的支持团队。",
+      "notice": "如果您认为您的账户已被扣款，请与我们联系。我们将尽快解决此问题。",
+      "tryAgain": "重试",
+      "contactSupport": "联系支持"
     }
   }
 }

@@ -396,7 +396,10 @@
     "paddleNotLoaded": "Payment system could not be loaded. Please try again.",
     "checkoutError": "An error occurred while opening the checkout page. Please try again.",
     "checkoutOpened": "Checkout page opened.",
-    "processingCheckout": "Preparing payment..."
+    "processingCheckout": "Preparing payment...",
+    "selectPaymentMethod": "Select Payment Method",
+    "selectPaymentProvider": "Please select a payment provider",
+    "missingUserInfo": "PayTR payment requires your address and phone number information. Please fill in your profile information."
   },
   "toast": {
     "success": "Success!",
@@ -1021,6 +1024,21 @@
       "title": "Contact Us",
       "description": "If you have any questions about these Terms, please contact us at:",
       "email": "Email"
+    }
+  },
+  "payment": {
+    "success": {
+      "title": "Payment Successful",
+      "description": "Your payment has been successfully completed. Your subscription has been activated.",
+      "goDashboard": "Go to Dashboard",
+      "goProfile": "My Profile"
+    },
+    "fail": {
+      "title": "Payment Failed",
+      "description": "There was a problem during the payment process. Please try again later or contact our support team.",
+      "notice": "If you believe your account has been charged, please contact us. We will resolve the issue as soon as possible.",
+      "tryAgain": "Try Again",
+      "contactSupport": "Contact Support"
     }
   }
 }

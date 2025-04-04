@@ -469,7 +469,7 @@ export default function Pricing() {
               onClick={handleGatewaySelect}
               disabled={!selectedGateway}
             >
-              {t('common.continue')}
+              {t('common.next')}
             </Button>
           </DialogActions>
         </Dialog>
