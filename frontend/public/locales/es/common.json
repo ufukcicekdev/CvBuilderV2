@@ -117,11 +117,13 @@
     "firstName": "Nombre",
     "lastName": "Apellido",
     "phone": "Teléfono",
+    "address": "Dirección",
     "birthDate": "Fecha de nacimiento",
     "firstNamePlaceholder": "Ingresa tu nombre",
     "lastNamePlaceholder": "Ingresa tu apellido",
-    "phonePlaceholder": "Ingresa tu número de teléfono",
-    "birthDatePlaceholder": "Selecciona tu fecha de nacimiento",
+    "phonePlaceholder": "Ingrese su número de teléfono",
+    "addressPlaceholder": "Ingrese su dirección",
+    "birthDatePlaceholder": "Seleccione su fecha de nacimiento",
     "professionPlaceholder": "Ingresa tu profesión",
     "companyNamePlaceholder": "Ingresa el nombre de la empresa",
     "companyWebsitePlaceholder": "Ingresa el sitio web de la empresa",
@@ -148,17 +150,17 @@
     "deadline": "Fecha límite de aplicación"
   },
   "footer": {
-    "quickLinks": "Enlaces rápidos",
+    "quickLinks": "Enlaces Rápidos",
     "home": "Inicio",
-    "about": "Acerca de",
+    "about": "Sobre Nosotros",
     "contact": "Contacto",
-    "privacy": "Política de privacidad",
-    "terms": "Términos de uso",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Uso",
     "followUs": "Síguenos",
     "copyright": "Todos los derechos reservados",
     "address": "Dirección",
     "phone": "Teléfono",
-    "email": "Correo electrónico"
+    "email": "Correo Electrónico"
   },
   "common": {
     "save": "Guardar",

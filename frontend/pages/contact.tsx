@@ -8,7 +8,8 @@ import {
   Box,
   Paper,
   MenuItem,
-  CircularProgress
+  CircularProgress,
+  Divider
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -16,6 +17,8 @@ import { useForm } from 'react-hook-form';
 import axiosInstance from '../services/axios';
 import { showToast } from '../utils/toast';
 import SEO from '../components/SEO';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 interface ContactForm {
   name: string;
@@ -65,6 +68,37 @@ export default function Contact() {
           <Typography variant="subtitle1" gutterBottom align="center" color="text.secondary">
             {t('contact.description')}
           </Typography>
+
+          <Box sx={{ mt: 4, mb: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-around' }}>
+            <Box sx={{ textAlign: 'center', mb: { xs: 3, md: 0 }, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <LocationOnIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
+              <Typography variant="h6" gutterBottom>
+                {t('footer.address')}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                CV Builder Headquarters<br />
+                Emek Mahallesi<br />
+                Fatih Caddesi Ihlamur Sokak No:1<br />
+                34785 Sancaktepe/İstanbul<br />
+                Türkiye
+              </Typography>
+            </Box>
+            
+            <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', md: 'block' } }} />
+            
+            <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <PhoneIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
+              <Typography variant="h6" gutterBottom>
+                {t('footer.phone')}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                +90 (549) 517 06 19<br />
+        
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider sx={{ my: 4 }} />
 
           <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 4 }}>
             <TextField

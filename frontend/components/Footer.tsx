@@ -59,7 +59,7 @@ export default function Footer() {
               {/* </IconButton> */}
             {/* </Box> */}
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-              {t('footer.contact')}: info@cvbuilder.com
+              {t('footer.contact')}: info@cvbuilder.tech
             </Typography>
           </Grid>
         </Grid>
