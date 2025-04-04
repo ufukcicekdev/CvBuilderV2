@@ -45,6 +45,7 @@ interface UserProfile {
   company_size?: string;
   first_name?: string;
   last_name?: string;
+  address?: string;
 }
 
 interface FormErrors {
@@ -57,6 +58,7 @@ interface FormErrors {
   company_website?: string;
   company_position?: string;
   company_size?: string;
+  address?: string;
 }
 
 function Profile() {
@@ -152,6 +154,12 @@ function Profile() {
     // Telefon alanı kontrolü
     if (!editedProfile?.phone) {
       newErrors.phone = t('common.required');
+      isValid = false;
+    }
+    
+    // Adres alanı kontrolü
+    if (!editedProfile?.address) {
+      newErrors.address = t('common.required');
       isValid = false;
     }
 
@@ -629,6 +637,25 @@ function Profile() {
                           sx={{ mt: { xs: 1, sm: 2 } }}
                         />
                       </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.address')}
+                          name="address"
+                          value={isEditing ? (editedProfile?.address || '') : (profile?.address || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.addressPlaceholder')}
+                          error={!!errors.address}
+                          helperText={errors.address}
+                          required
+                          size="medium"
+                          margin="normal"
+                          multiline
+                          rows={3}
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
                     </>
                   ) : (
                     // İşveren Profili
@@ -729,6 +756,25 @@ function Profile() {
                           helperText={errors.company_size}
                           size="medium"
                           margin="normal"
+                          sx={{ mt: { xs: 1, sm: 2 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label={t('profile.address')}
+                          name="address"
+                          value={isEditing ? (editedProfile?.address || '') : (profile?.address || '')}
+                          onChange={handleChange}
+                          disabled={!isEditing}
+                          placeholder={t('profile.addressPlaceholder')}
+                          error={!!errors.address}
+                          helperText={errors.address}
+                          required
+                          size="medium"
+                          margin="normal"
+                          multiline
+                          rows={3}
                           sx={{ mt: { xs: 1, sm: 2 } }}
                         />
                       </Grid>

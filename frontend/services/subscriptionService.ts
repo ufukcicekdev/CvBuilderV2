@@ -33,6 +33,15 @@ export interface UserSubscription {
   updated_at: string;
 }
 
+export interface PaymentGateway {
+  id: number;
+  name: string;
+  gateway_type: 'paddle' | 'paytr';
+  is_active: boolean;
+  is_default: boolean;
+  position: number;
+}
+
 // Default subscription plan for when API fails
 export const DEFAULT_SUBSCRIPTION_PLAN: SubscriptionPlan = {
   id: '1',
@@ -87,30 +96,29 @@ const subscriptionService = {
     }
   },
 
-  // Create a subscription with Paddle
-  createSubscription: async (planId: string, isYearly: boolean) => {
+  // Create a subscription with Paddle or PayTR
+  createSubscription: async (options: {
+    plan_id: string;
+    period: 'monthly' | 'yearly';
+    payment_provider: string;
+  }) => {
     try {
       // Get the selected language from localStorage
       const selectedLanguage = localStorage.getItem('selectedLanguage') || 'en';
       
       // Call our backend to start the subscription process
       const response = await api.post('/api/subscriptions/subscriptions/create_subscription/', {
-        plan_id: planId,
-        period: isYearly ? 'yearly' : 'monthly',
+        plan_id: options.plan_id,
+        period: options.period,
+        payment_provider: options.payment_provider
       }, {
         headers: {
           'Accept-Language': selectedLanguage
         }
       });
       
-      // Return the checkout URL and subscription data
-      return {
-        checkout_url: response.data.checkout_url,
-        subscription_id: response.data.subscription_id,
-        passthrough: response.data.passthrough,
-        checkout_id: response.data.checkout_id,
-        price_id: response.data.price_id,
-      };
+      // Return the full response so we can access response.data
+      return response;
     } catch (error) {
       console.error('Error creating subscription:', error);
       throw error;
@@ -219,6 +227,31 @@ const subscriptionService = {
     } catch (error) {
       console.error('Error getting update payment URL:', error);
       throw error;
+    }
+  },
+
+  // Get active payment gateways
+  getPaymentGateways: async (): Promise<PaymentGateway[]> => {
+    try {
+      console.log('Fetching payment gateways...');
+      const response = await api.get('/api/subscriptions/payment-gateways/');
+      console.log('Payment gateways response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching payment gateways:', error);
+      // Return default gateways if API fails
+      const defaultGateways: PaymentGateway[] = [
+        {
+          id: 1,
+          name: 'Paddle',
+          gateway_type: 'paddle' as 'paddle',
+          is_active: true,
+          is_default: true,
+          position: 1
+        }
+      ];
+      console.log('Returning default gateways:', defaultGateways);
+      return defaultGateways;
     }
   }
 };
