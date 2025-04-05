@@ -63,8 +63,15 @@ export const DEFAULT_SUBSCRIPTION_PLAN: SubscriptionPlan = {
   paddle_price_id: 'pri_01jpfcexy9qjyv2m7p040x1hye'
 };
 
-// Call initialization on import - this will be handled by the usePaddle hook in components
-// that need Paddle functionality
+// Önbellek için tiplemeler
+interface CachedData {
+  data: any;
+  timestamp: number;
+}
+
+// Abonelik verilerini önbelleğe alma
+let subscriptionCache: CachedData | null = null;
+const CACHE_DURATION = 30000; // 30 saniye önbellek süresi
 
 // Subscription service functions
 const subscriptionService = {
@@ -155,6 +162,13 @@ const subscriptionService = {
 
   // Get user's current subscription
   getCurrentSubscription: async (): Promise<UserSubscription | null | any> => {
+    // Önbellekte güncel veri var mı kontrol et
+    const now = Date.now();
+    if (subscriptionCache && (now - subscriptionCache.timestamp < CACHE_DURATION)) {
+      console.log('Using cached subscription data');
+      return subscriptionCache.data;
+    }
+    
     try {
       // Get the selected language from localStorage
       const selectedLanguage = localStorage.getItem('selectedLanguage') || 'en';
@@ -165,11 +179,22 @@ const subscriptionService = {
         }
       });
       
+      // Cevabı önbelleğe al
+      subscriptionCache = {
+        data: response.data,
+        timestamp: now
+      };
+      
       // Return the data as is, even if it has status: 'no_subscription'
       return response.data;
     } catch (error: any) {
       // If it's a 404 error, return null to indicate no subscription
       if (error.response && error.response.status === 404) {
+        // Kullanıcının aboneliği yok, null olarak önbelleğe al
+        subscriptionCache = {
+          data: null,
+          timestamp: now
+        };
         return null;
       }
       console.error('Error fetching current subscription:', error);
@@ -212,6 +237,8 @@ const subscriptionService = {
   cancelSubscription: async () => {
     try {
       const response = await api.post('/api/subscriptions/subscriptions/cancel_subscription/', {});
+      // Önbelleği temizle
+      subscriptionCache = null;
       return response.data;
     } catch (error) {
       console.error('Error cancelling subscription:', error);
@@ -253,6 +280,11 @@ const subscriptionService = {
       console.log('Returning default gateways:', defaultGateways);
       return defaultGateways;
     }
+  },
+
+  // Önbelleği manuel olarak temizleme fonksiyonu
+  clearCache() {
+    subscriptionCache = null;
   }
 };
 

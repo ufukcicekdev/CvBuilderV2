@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { withAuth } from '../../components/withAuth';
 import Layout from '../../components/Layout';
 import { Container, Paper, Alert, CircularProgress, Box, Typography, Button } from '@mui/material';
@@ -10,6 +10,10 @@ import CVFormContent from '../../components/cv/CVFormContent';
 import { GetServerSideProps } from 'next';
 import subscriptionService from '../../services/subscriptionService';
 import Link from 'next/link';
+import SubscriptionWarningDialog from '../../components/ui/SubscriptionWarningDialog';
+import { cvService } from '../../services/cvService';
+import axios from 'axios';
+import { showToast } from '../../utils/toast';
 
 function CreateCV() {
   const router = useRouter();
@@ -18,6 +22,14 @@ function CreateCV() {
   const [activeStep, setActiveStep] = useState(0);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [checkingSubscription, setCheckingSubscription] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState('');
+  const [trialDaysLeft, setTrialDaysLeft] = useState(0);
+  const [showTrialWarning, setShowTrialWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [cv, setCV] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   // URL parametrelerini izle ve değiştiğinde state'i güncelle
   useEffect(() => {
@@ -30,30 +42,91 @@ function CreateCV() {
   }, [router.isReady, step]);
 
   // Abonelik durumunu kontrol et
-  useEffect(() => {
-    const checkSubscription = async () => {
-      try {
-        setLoading(true);
-        const subscription = await subscriptionService.getCurrentSubscription();
-        const isActive = subscription && subscription.status === 'active';
-        setHasActiveSubscription(isActive);
+  const checkSubscription = useCallback(async () => {
+    if (checkingSubscription) return;
+    
+    try {
+      setCheckingSubscription(true);
+      const subscription = await subscriptionService.getCurrentSubscription();
+      
+      // Abonelik durumunu kaydet
+      const isActive = subscription && subscription.status === 'active';
+      setHasActiveSubscription(isActive);
+      
+      const status = subscription?.status || '';
+      setSubscriptionStatus(status);
+      
+      const trialDays = subscription?.trial_days_left || 0;
+      setTrialDaysLeft(trialDays);
+      
+      // Deneme kullanıcısı için CV sayısı kontrolü
+      if (status === 'trial' && !id) {
+        // Kullanıcının mevcut CV sayısını kontrol et
+        const response = await cvService.listCVs();
+        const existingCVs = response.data;
         
-        // Aktif abonelik yoksa ve doğrudan URL ile erişiliyorsa, pricing sayfasına yönlendir
-        if (!isActive && !id) {
-          setTimeout(() => {
-            router.push('/pricing');
-          }, 2000); // 2 saniye beklet, kullanıcı uyarıyı görsün
+        // Eğer kullanıcının zaten bir CV'si varsa ve yeni bir CV oluşturmaya çalışıyorsa uyarı göster
+        if (existingCVs.length >= 1) {
+          setWarningMessage(t('subscription.trialLimit'));
+          setShowTrialWarning(true);
+          router.push('/dashboard'); // Kullanıcıyı dashboard'a yönlendir
+          return;
         }
+      }
+    } catch (error) {
+      console.error('Error checking subscription status:', error);
+      setHasActiveSubscription(false);
+      setSubscriptionStatus('');
+      setTrialDaysLeft(0);
+    } finally {
+      setCheckingSubscription(false);
+    }
+  }, [id, t, router, checkingSubscription]);
+
+  // CV'yi yükle
+  const loadCV = useCallback(async () => {
+    if (!id) return;
+    
+    try {
+      const response = await axios.get(`/api/cvs/${id}/`);
+      setCV(response.data);
+      
+      if (response.data.current_step !== undefined) {
+        const step = parseInt(response.data.current_step);
+        setCurrentStep(step);
+      }
+    } catch (error) {
+      console.error('Error loading CV:', error);
+      showToast.error(t('cv.loadError'));
+    }
+  }, [id, t]);
+
+  // Verileri yükle - sadece bir kez
+  useEffect(() => {
+    // Eğer veri zaten yüklendiyse işlem yapma
+    if (dataLoaded) return;
+    
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        await checkSubscription();
+        
+        if (id) {
+          await loadCV();
+        }
+        
+        setDataLoaded(true);
       } catch (error) {
-        console.error('Error checking subscription status:', error);
-        setHasActiveSubscription(false);
+        console.error('Error loading data:', error);
       } finally {
         setLoading(false);
       }
     };
-
-    checkSubscription();
-  }, [router, id]);
+    
+    if (router.isReady) {
+      loadData();
+    }
+  }, [router.isReady, checkSubscription, loadCV, id, dataLoaded]);
 
   const handleCVCreated = (newCvId: number) => {
     router.push({
@@ -82,10 +155,16 @@ function CreateCV() {
     );
   }
 
-  if (!hasActiveSubscription && !id) {
-    return (
-      <Layout>
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+  return (
+    <Layout>
+      <SubscriptionWarningDialog 
+        open={showTrialWarning} 
+        onClose={() => setShowTrialWarning(false)}
+        message={warningMessage}
+      />
+
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        {!hasActiveSubscription && subscriptionStatus !== 'trial' && (
           <Alert 
             severity="warning" 
             sx={{ mb: 3 }}
@@ -102,34 +181,11 @@ function CreateCV() {
           >
             {t('pricing.subscribePrompt')}
           </Alert>
-          <Box sx={{ textAlign: 'center', my: 8 }}>
-            <Typography variant="h5" gutterBottom>
-              {t('pricing.noSubscription')}
-            </Typography>
-            <Typography variant="body1" color="textSecondary" paragraph>
-              {t('pricing.subscribePrompt')}
-            </Typography>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              component={Link} 
-              href="/pricing"
-              sx={{ mt: 2 }}
-            >
-              {t('pricing.upgradeNow')}
-            </Button>
-          </Box>
-        </Container>
-      </Layout>
-    );
-  }
-
-  return (
-    <Layout>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        {!hasActiveSubscription && id && (
+        )}
+        
+        {subscriptionStatus === 'trial' && (
           <Alert 
-            severity="warning" 
+            severity="info" 
             sx={{ mb: 3 }}
             action={
               <Button 
@@ -142,21 +198,36 @@ function CreateCV() {
               </Button>
             }
           >
-            {t('cv.editDisabled')}
+            {trialDaysLeft > 0 
+              ? t('subscription.trialActive', { days: trialDaysLeft })
+              : t('subscription.trialExpired')
+            }
           </Alert>
         )}
-        <Paper sx={{ p: { xs: 2, md: 4 } }}>
-          {!id ? (
-            <CreateCVForm onSuccess={handleCVCreated} />
-          ) : (
-            <CVFormContent
-              activeStep={activeStep}
-              cvId={Number(id)}
-              onStepChange={handleStepChange}
-              isReadOnly={!hasActiveSubscription}
-            />
-          )}
-        </Paper>
+        
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Paper sx={{ p: 3 }}>
+            {id ? (
+              <CVFormContent
+                activeStep={activeStep}
+                cvId={Number(id)}
+                onStepChange={handleStepChange}
+                subscriptionStatus={subscriptionStatus}
+                isReadOnly={!hasActiveSubscription && subscriptionStatus !== 'trial'}
+              />
+            ) : (
+              <CreateCVForm 
+                onSuccess={handleCVCreated} 
+                subscriptionStatus={subscriptionStatus}
+                trialDaysLeft={trialDaysLeft}
+              />
+            )}
+          </Paper>
+        )}
       </Container>
     </Layout>
   );

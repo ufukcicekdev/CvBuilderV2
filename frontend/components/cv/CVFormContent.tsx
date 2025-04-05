@@ -33,9 +33,10 @@ interface CVFormContentProps {
   cvId: number;
   onStepChange: (step: number) => void;
   isReadOnly?: boolean;
+  subscriptionStatus?: string;
 }
 
-export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOnly = false }: CVFormContentProps) {
+export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOnly = false, subscriptionStatus = '' }: CVFormContentProps) {
   const { t } = useTranslation('common');
   const [cvData, setCvData] = useState<CV | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,39 +54,65 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
     'Template'
   ], [t]);
 
-  const fetchCVData = useCallback(async () => {
-    try {
-      const response = await cvAPI.getOne(cvId);
-      setCvData(response.data);
-    } catch (error) {
-      console.error('Error fetching CV data:', error);
-      toast.error(t('cv.loadError'));
-    }
-  }, [cvId, t]);
-
+  // İlk yükleme ve cvId değiştiğinde veriyi çek
   useEffect(() => {
-    fetchCVData();
-  }, [fetchCVData]);
+    let isMounted = true;
+    
+    const loadData = async () => {
+      try {
+        const response = await cvAPI.getOne(cvId);
+        if (isMounted) {
+          setCvData(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching CV data:', error);
+        if (isMounted) {
+          toast.error(t('cv.loadError'));
+        }
+      }
+    };
+    
+    loadData();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [cvId, t]);
 
   // Dil değişikliğini dinle
   useEffect(() => {
+    let isMounted = true;
+    
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'selectedLanguage') {
-        fetchCVData();
+      if (e.key === 'selectedLanguage' && isMounted) {
+        // Dil değiştiğinde verileri yeniden yükle
+        const loadData = async () => {
+          try {
+            const response = await cvAPI.getOne(cvId);
+            if (isMounted) {
+              setCvData(response.data);
+            }
+          } catch (error) {
+            console.error('Error fetching CV data after language change:', error);
+          }
+        };
+        
+        loadData();
       }
     };
 
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
+      isMounted = false;
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [fetchCVData]);
+  }, [cvId]);
 
   const handleStepComplete = useCallback(async (data: any) => {
     try {
-      // Eğer salt okunur modda ise, düzenlemeye izin verme
-      if (isReadOnly) {
+      // Eğer salt okunur modda ise ve trial kullanıcısı değilse, düzenlemeye izin verme
+      if (isReadOnly && subscriptionStatus !== 'trial') {
         toast.error(t('cv.editNotAllowed'));
         
         // Görüntüleme modunda da adımlar arası geçişe izin ver
@@ -109,7 +136,7 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
     } finally {
       setIsLoading(false);
     }
-  }, [activeStep, cvId, onStepChange, t, isReadOnly, steps.length]);
+  }, [activeStep, cvId, onStepChange, t, isReadOnly, steps.length, subscriptionStatus]);
 
   const renderStepContent = useCallback(() => {
     if (!cvData) return null;
@@ -203,8 +230,8 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
         return null;
     }
 
-    // Eğer salt okunur modda ise ve Template Preview sayfasında değilse
-    if (isReadOnly && activeStep !== 7) {
+    // Eğer salt okunur modda ise, trial kullanıcısı değilse ve Template Preview sayfasında değilse
+    if (isReadOnly && subscriptionStatus !== 'trial' && activeStep !== 7) {
       return (
         <Stack spacing={2}>
           {/* Uyarı mesajı */}
@@ -280,7 +307,7 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
     }
 
     return formContent;
-  }, [activeStep, cvData, cvId, handleStepComplete, onStepChange, isReadOnly, t, steps.length]);
+  }, [activeStep, cvData, cvId, handleStepComplete, onStepChange, isReadOnly, t, steps.length, subscriptionStatus]);
 
   const renderStepper = useCallback(() => {
     if (isMobile) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { withAuth } from '../../components/withAuth';
 import Layout from '../../components/Layout';
 import {
@@ -17,6 +17,7 @@ import {
   DialogContentText,
   Alert,
   Tooltip,
+  CircularProgress,
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useTranslation } from 'next-i18next';
@@ -48,13 +49,18 @@ function Dashboard() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCvId, setSelectedCvId] = useState<number | null>(null);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
-  const [checkingSubscription, setCheckingSubscription] = useState(true);
+  const [checkingSubscription, setCheckingSubscription] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState('');
+  const [canCreateMoreCVs, setCanCreateMoreCVs] = useState(false);
+  const [trialDaysLeft, setTrialDaysLeft] = useState(0);
+  
+  // Sonsuz döngüleri önlemek için ref kullanıyoruz
+  const isSubscriptionCheckedRef = useRef(false);
 
   const fetchCVs = useCallback(async () => {
     try {
       setLoading(true);
       const response = await cvAPI.getAll();
-      // console.log('CV Response:', response.data);
       setCvs(response.data as CV[]);
     } catch (error) {
       console.error('Error fetching CVs:', error);
@@ -64,35 +70,113 @@ function Dashboard() {
     }
   }, [t]);
 
-  // Abonelik durumunu kontrol et
-  const checkSubscription = useCallback(async () => {
+  // Abonelik durumunu ve CV sayısını kontrol eden fonksiyon
+  const checkSubscriptionAndCVCount = useCallback(async () => {
+    if (checkingSubscription || isSubscriptionCheckedRef.current) {
+      return; // Zaten kontrol ediliyor veya edildi, tekrar çağırmıyoruz
+    }
+    
     try {
       setCheckingSubscription(true);
       const subscription = await subscriptionService.getCurrentSubscription();
       const isActive = subscription && subscription.status === 'active';
-      setHasActiveSubscription(isActive);
-      console.log('Subscription status:', isActive ? 'Active' : 'Not active');
+      const isTrial = subscription && subscription.status === 'trial';
+      
+      // Subscription durumunu kaydet
+      setSubscriptionStatus(subscription?.status || '');
+      
+      // Trial için kalan gün sayısını kaydet
+      if (isTrial && subscription.trial_days_left !== undefined) {
+        setTrialDaysLeft(subscription.trial_days_left);
+      }
+      
+      // CV oluşturma iznini belirleyelim
+      if (isActive) {
+        // Premium kullanıcılar sınırsız CV oluşturabilir
+        setHasActiveSubscription(true);
+        setCanCreateMoreCVs(true);
+      } else if (isTrial) {
+        // Trial kullanıcıları için CV sayısını kontrol et
+        setHasActiveSubscription(true);
+        
+        // CV sayısını mevcut verilerden kontrol ediyoruz
+        const canCreate = cvs.length === 0;
+        setCanCreateMoreCVs(canCreate);
+        
+        console.log('Trial user has', cvs.length, 'CVs, can create more:', canCreate);
+      } else {
+        // Ücretsiz kullanıcılar CV oluşturamaz
+        setHasActiveSubscription(false);
+        setCanCreateMoreCVs(false);
+      }
+      
+      // Debug log
+      console.log('Subscription status:', 
+        isActive ? 'Active' : 
+        isTrial ? 'Trial' : 
+        'No subscription');
+        
+      isSubscriptionCheckedRef.current = true;
     } catch (error) {
       console.error('Error checking subscription status:', error);
       setHasActiveSubscription(false);
+      setCanCreateMoreCVs(false);
     } finally {
       setCheckingSubscription(false);
     }
-  }, []);
+  }, [cvs.length]);
 
-  // Dil değişikliğini izle (router ve özel event için)
+  // useEffect içindeki sonsuz döngüyü düzeltelim
   useEffect(() => {
-    fetchCVs();
-    checkSubscription();
-
+    let isMounted = true;
+    
+    const fetchData = async () => {
+      if (!isMounted) return;
+      
+      try {
+        // İlk önce CV'leri yükle
+        await fetchCVs();
+        
+        // Sonra abonelik durumunu kontrol et
+        if (isMounted && !isSubscriptionCheckedRef.current) {
+          await checkSubscriptionAndCVCount();
+        }
+      } catch (error) {
+        console.error('Error in dashboard initialization:', error);
+      }
+    };
+    
+    fetchData();
+    
     // Dil değişikliklerini dinle
     const handleLanguageChange = () => {
-      fetchCVs();
+      if (isMounted) {
+        fetchCVs();
+      }
     };
-
+    
     window.addEventListener('languageChange', handleLanguageChange);
-    return () => window.removeEventListener('languageChange', handleLanguageChange);
-  }, [router.locale, fetchCVs, checkSubscription]);
+    
+    return () => {
+      isMounted = false;
+      window.removeEventListener('languageChange', handleLanguageChange);
+    };
+    
+    // checkSubscriptionAndCVCount bu listede olmamalı
+  }, [router.locale, fetchCVs]);
+
+  // CV listesi değiştiğinde trial kullanıcıları için kontrol tekrar et
+  useEffect(() => {
+    if (subscriptionStatus === 'trial') {
+      // Deneme süresi bitmişse (0 gün kaldıysa) CV oluşturulamaz
+      if (trialDaysLeft <= 0) {
+        setCanCreateMoreCVs(false);
+      } else {
+        // Deneme süresi devam ediyorsa ve henüz CV yoksa oluşturulabilir
+        setCanCreateMoreCVs(cvs.length === 0);
+      }
+    }
+  }, [cvs, subscriptionStatus, trialDaysLeft]);
 
   const handleDeleteClick = (cvId: number) => {
     setSelectedCvId(cvId);
@@ -105,6 +189,12 @@ function Dashboard() {
         await cvAPI.delete(selectedCvId);
         showToast.success(t('cv.deleteSuccess'));
         fetchCVs(); // Listeyi yenile
+        
+        // CV silindikten sonra trial kullanıcısının yeni CV oluşturma izni olabilir
+        if (subscriptionStatus === 'trial') {
+          setCanCreateMoreCVs(true);
+          isSubscriptionCheckedRef.current = false; // Yeniden kontrol için flag'i sıfırla
+        }
       } catch (error) {
         console.error('Error deleting CV:', error);
         showToast.error(t('cv.deleteError'));
@@ -135,33 +225,43 @@ function Dashboard() {
               <Typography variant="h4" component="h1">
                 {t('nav.dashboard')}
               </Typography>
-              {!checkingSubscription && (
-                hasActiveSubscription ? (
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    component={NextLink}
-                    href="/dashboard/create-cv"
-                  >
-                    {t('dashboard.createNew')}
-                  </Button>
-                ) : (
-                  <Tooltip title={t('pricing.subscribePrompt')}>
-                    <span>
-                      <Button
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        disabled
-                      >
-                        {t('dashboard.createNew')}
-                      </Button>
-                    </span>
-                  </Tooltip>
-                )
-              )}
+              {hasActiveSubscription && canCreateMoreCVs ? (
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  component={NextLink}
+                  href="/dashboard/create-cv"
+                >
+                  {t('dashboard.createNew')}
+                </Button>
+              ) : hasActiveSubscription && subscriptionStatus === 'trial' && !canCreateMoreCVs ? (
+                <Tooltip title={t('subscription.trialLimit')}>
+                  <span>
+                    <Button
+                      variant="contained"
+                      startIcon={<AddIcon />}
+                      disabled
+                    >
+                      {t('dashboard.createNew')}
+                    </Button>
+                  </span>
+                </Tooltip>
+              ) : !hasActiveSubscription ? (
+                <Tooltip title={t('pricing.subscribePrompt')}>
+                  <span>
+                    <Button
+                      variant="contained" 
+                      startIcon={<AddIcon />}
+                      disabled
+                    >
+                      {t('dashboard.createNew')}
+                    </Button>
+                  </span>
+                </Tooltip>
+              ) : null}
             </Box>
             
-            {!checkingSubscription && !hasActiveSubscription && (
+            {!hasActiveSubscription && (
               <Alert 
                 severity="warning" 
                 sx={{ mb: 3 }}
@@ -179,13 +279,34 @@ function Dashboard() {
                 {t('pricing.subscribePrompt')}
               </Alert>
             )}
+
+            {subscriptionStatus === 'trial' && (
+              <Alert 
+                severity="info" 
+                sx={{ mb: 3 }}
+                action={
+                  <Button 
+                    color="inherit" 
+                    size="small" 
+                    component={NextLink}
+                    href="/pricing"
+                  >
+                    {t('pricing.upgradeNow')}
+                  </Button>
+                }
+              >
+                {canCreateMoreCVs 
+                  ? t('subscription.trialActive', { days: trialDaysLeft })
+                  : t('subscription.trialLimitWithDays', { days: trialDaysLeft })}
+              </Alert>
+            )}
           </Grid>
 
           {/* CVs List */}
           {loading ? (
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
-                <Typography>{t('common.loading')}</Typography>
+                <CircularProgress />
               </Box>
             </Grid>
           ) : cvs.length === 0 ? (
@@ -194,7 +315,7 @@ function Dashboard() {
                 <Typography color="textSecondary">
                   {t('cv.noCVs')}
                 </Typography>
-                {hasActiveSubscription ? (
+                {hasActiveSubscription && (subscriptionStatus !== 'trial' || canCreateMoreCVs) ? (
                   <Button
                     variant="contained"
                     startIcon={<AddIcon />}

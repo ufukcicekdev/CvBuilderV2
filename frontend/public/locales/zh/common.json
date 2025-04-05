@@ -859,8 +859,20 @@
     "status.active": "活跃",
     "status.canceled": "已取消",
     "status.expired": "已过期",
-    "status.trial": "试用",
+    "status.trial": "试用期",
     "status.pending": "待处理",
+    "status.past_due": "逾期未付",
+    "status.paused": "已暂停",
+    "trialLimit": "试用用户只能创建一份简历。请升级以创建更多。",
+    "trialLimitWithDays": "您的试用期将在 {{days}} 天内到期。试用用户只能创建一份简历。",
+    "trialDaysLeft": "您的试用期还剩 {{days}} 天",
+    "trialExpired": "您的试用期已过期",
+    "upgrade": "立即升级",
+    "freeTrialText": "开始 7 天免费试用",
+    "freeTrialDescription": "在做决定之前先试用 7 天所有高级功能",
+    "warningTitle": "已达到订阅限制",
+    "upgradeToCreate": "升级您的订阅以创建更多简历",
+    "goToPricing": "查看定价方案",
     "paymentStatus": {
       "success": "成功",
       "failed": "失败",
@@ -879,7 +891,8 @@
     "switchToMonthly": "切换到月度计费",
     "switchToYearly": "切换到年度计费",
     "cancelSubscription": "取消订阅",
-    "customerPortal": "客户门户"
+    "customerPortal": "客户门户",
+    "trialActive": "您的试用期将在 {{days}} 天内到期。"
   },
   "privacy": {
     "pageTitle": "隐私政策 - 简历生成器",

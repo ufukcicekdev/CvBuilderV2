@@ -208,6 +208,47 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
   const endDate = new Date(subscription.end_date);
   const formattedEndDate = endDate.toLocaleDateString();
 
+  // Trial durumunu gösterelim
+  if (subscription && subscription.status === 'trial') {
+    const trialDaysLeft = subscription.trial_days_left || 0;
+    
+    return (
+      <Card>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              {t('subscription.trialActive', { days: trialDaysLeft })}
+            </Typography>
+            <Chip 
+              label={t('subscription.trial')}
+              color="info" 
+              size="small"
+            />
+          </Box>
+          
+          <Divider sx={{ my: 2 }} />
+          
+          <Typography variant="body2" paragraph>
+            {t('subscription.freeTrialDescription')}
+          </Typography>
+          
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            • {t('subscription.trialLimit')}
+          </Typography>
+          
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleUpgrade}
+            fullWidth
+          >
+            {t('subscription.upgrade')}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <>
       <Card>
@@ -217,7 +258,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
               {t('pricing.currentSubscription')}
             </Typography>
             <Chip 
-              label={t(`subscription.status.${subscription.status}`)} 
+              label={t(`subscription.${subscription.status}`)} 
               color={isActive ? 'success' : 'default'} 
               size="small" 
             />

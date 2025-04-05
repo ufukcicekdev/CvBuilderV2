@@ -302,11 +302,12 @@ export default function Home() {
                     {t('home.hero.feature2')}
                   </Typography>
                 </Box>
-               
-               
-               
-               
-               
+                <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+  <CheckCircleIcon color="success" fontSize="small" />
+  <Typography variant="body2" color="text.secondary">
+    {t('home.hero.feature3')}
+  </Typography>
+</Box>
                
               </Box>
             </Grid>
