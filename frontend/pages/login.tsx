@@ -62,18 +62,18 @@ export default function LoginPage() {
   const handleLogin = async (data: LoginFormData) => {
     try {
       setIsSubmitting(true);
-      console.log('Attempting login with:', { email: data.email });
+      //console.log('Attempting login with:', { email: data.email });
       await login(data.email, data.password);
-      console.log('Login successful');
+      //console.log('Login successful');
       toast.success(t('auth.loginSuccess'));
     } catch (error) {
-      console.error('Login error in component:', error);
+      //console.error('Login error in component:', error);
       
       // Hata işleme
       const errorData = error as any;
       
       if (errorData) {
-        console.log('Error data:', errorData);
+        //console.log('Error data:', errorData);
         
         if (errorData.email?.[0]) {
           const errorCode = errorData.email[0];
@@ -126,10 +126,10 @@ export default function LoginPage() {
 
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
-      console.log('Google login success:', credentialResponse);
+      //console.log('Google login success:', credentialResponse);
       
       if (!credentialResponse.credential) {
-        console.error('Google login failed: No credential received');
+        //console.error('Google login failed: No credential received');
         toast.error(t('auth.errors.googleLoginFailed'));
         return;
       }
@@ -140,7 +140,7 @@ export default function LoginPage() {
       });
       
       const data = response.data;
-      console.log('Backend response:', data);
+      //console.log('Backend response:', data);
       
       if (!data.access || !data.refresh || !data.user) {
         console.error('Invalid response format from backend:', data);
@@ -150,17 +150,17 @@ export default function LoginPage() {
       
       // AuthContext üzerinden login işlemini gerçekleştir
       try {
-        console.log('Logging in with tokens and user data:', { 
-          access: data.access.substring(0, 10) + '...', 
-          user: data.user 
-        });
+        //console.log('Logging in with tokens and user data:', { 
+        //  access: data.access.substring(0, 10) + '...', 
+        //  user: data.user 
+        //});
         
         await loginWithTokens(data.access, data.refresh, data.user);
         
         toast.success(t('auth.loginSuccess'));
         
         // Yönlendirme işlemini setTimeout ile geciktir
-        console.log('Redirecting based on user type:', data.user.user_type);
+        //console.log('Redirecting based on user type:', data.user.user_type);
         setTimeout(() => {
           const redirectUrl = data.user.user_type === 'jobseeker' 
             ? '/dashboard/create-cv' 
@@ -168,11 +168,11 @@ export default function LoginPage() {
               ? '/dashboard/employer' 
               : '/dashboard';
           
-          console.log('Redirecting to:', redirectUrl);
+          //console.log('Redirecting to:', redirectUrl);
           router.push(redirectUrl);
         }, 500);
       } catch (error) {
-        console.error('Login with tokens error:', error);
+        //console.error('Login with tokens error:', error);
         if (error instanceof Error) {
           toast.error(`${t('auth.errors.googleLoginFailed')}: ${error.message}`);
         } else {
@@ -180,7 +180,7 @@ export default function LoginPage() {
         }
       }
     } catch (error: unknown) {
-      console.error('Google login error:', error);
+      //console.error('Google login error:', error);
       
       if (error instanceof Error) {
         if (error.message.includes('Failed to fetch')) {
