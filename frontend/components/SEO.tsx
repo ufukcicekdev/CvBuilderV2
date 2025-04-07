@@ -32,7 +32,7 @@ export default function SEO({
   noIndex = false,
 }: SEOProps) {
   const router = useRouter();
-  const fullUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cvbuilder.com';
+  const fullUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cvbuilder.tech';
   const currentPath = router.asPath;
   const currentUrl = `${fullUrl}${currentPath}`;
   const canonical = canonicalUrl || currentUrl;

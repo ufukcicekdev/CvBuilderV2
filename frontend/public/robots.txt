@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://cvbuilder.com/sitemap.xml
+Sitemap: https://cvbuilder.tech/sitemap.xml
 
 # Disallow specific paths
 Disallow: /api/
