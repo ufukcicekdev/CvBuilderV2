@@ -478,13 +478,13 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
         };
 
         ws.onclose = (event) => {
-          console.log('WebSocket connection closed:', {
-            code: event.code,
-            reason: event.reason,
-            wasClean: event.wasClean,
-            url: wsUrl,
-            readyState: ws?.readyState
-          });
+          // console.log('WebSocket connection closed:', {
+          //   code: event.code,
+          //   reason: event.reason,
+          //   wasClean: event.wasClean,
+          //   url: wsUrl,
+          //   readyState: ws?.readyState
+          // });
 
           if (connectionTimeout) {
             clearTimeout(connectionTimeout);

@@ -3,7 +3,7 @@ import { getSession, signOut } from 'next-auth/react';
 
 // API URL'yi doğrudan .env dosyasından alıyoruz
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-console.log('Axios using API URL:', API_URL); // Debug için
+// console.log('Axios using API URL:', API_URL); // Debug için
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
@@ -44,7 +44,7 @@ if (typeof window !== 'undefined') {
     axiosInstance.interceptors.request.use(
         async (config) => {
             // Debug için URL'yi loglayalım
-            console.log(`Request to: ${config.url}`);
+            // console.log(`Request to: ${config.url}`);
             
             // Clear any existing Authorization header
             delete config.headers.Authorization;
@@ -53,21 +53,21 @@ if (typeof window !== 'undefined') {
             const token = localStorage.getItem('accessToken');
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
-                console.log('Using token from localStorage');
+                // console.log('Using token from localStorage');
             } else {
                 // If no token in localStorage, try to get from session
                 const session = await getSession();
                 if (session?.accessToken) {
                     config.headers.Authorization = `Bearer ${session.accessToken}`;
-                    console.log('Using token from NextAuth session');
+                    // console.log('Using token from NextAuth session');
                 } else {
-                    console.log('No token found in localStorage or session');
+                    // console.log('No token found in localStorage or session');
                 }
             }
             
             // Debug için header'ları loglayalım
-            console.log('Request headers:', JSON.stringify(config.headers));
-            console.log('Request data:', config.data);
+            // console.log('Request headers:', JSON.stringify(config.headers));
+            // console.log('Request data:', config.data);
             
             return config;
         },
@@ -102,7 +102,7 @@ if (typeof window !== 'undefined') {
                     // Try to get new token from localStorage first
                     const refreshToken = localStorage.getItem('refreshToken');
                     if (refreshToken) {
-                        console.log('Refreshing token with localStorage refreshToken');
+                        // console.log('Refreshing token with localStorage refreshToken');
                         // Burada axios yerine axiosInstance kullanmıyoruz çünkü
                         // axiosInstance kullanırsak sonsuz döngüye girebiliriz
                         const response = await axios.post(`${API_URL}/api/users/token/refresh/`, {
@@ -111,7 +111,7 @@ if (typeof window !== 'undefined') {
                         const { access } = response.data;
                         localStorage.setItem('accessToken', access);
                         originalRequest.headers.Authorization = `Bearer ${access}`;
-                        console.log('Token refreshed successfully');
+                        // console.log('Token refreshed successfully');
                         processQueue(null, access);
                         return axiosInstance(originalRequest);
                     }
@@ -119,7 +119,7 @@ if (typeof window !== 'undefined') {
                     // If no refresh token in localStorage, try session
                     const session = await getSession();
                     if (session?.accessToken) {
-                        console.log('Using token from NextAuth session after refresh attempt');
+                        // console.log('Using token from NextAuth session after refresh attempt');
                         originalRequest.headers.Authorization = `Bearer ${session.accessToken}`;
                         processQueue(null, session.accessToken);
                         return axiosInstance(originalRequest);

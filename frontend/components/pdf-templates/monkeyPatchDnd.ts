@@ -19,7 +19,7 @@ export async function monkeyPatchDnd() {
     // Only run in the browser
     if (typeof window === 'undefined') return;
     
-    console.log('Applying monkeypatch to @hello-pangea/dnd...');
+    // console.log('Applying monkeypatch to @hello-pangea/dnd...');
     
     // Import the module we need to patch
     const dndModule = await import('@hello-pangea/dnd');
@@ -34,14 +34,14 @@ export async function monkeyPatchDnd() {
         return originalDragDropContext(props);
       } catch (error) {
         // If it fails with a useId error, we'll monkey patch the library's internal functions
-        console.log('DragDropContext failed, applying emergency patch');
+        // console.log('DragDropContext failed, applying emergency patch');
         
         // If we get here, the error is already happening, so now we apply a more invasive patch
         // This directly patches the internal function that calls useId
         if (dndModule.DragDropContext.toString().includes('useUniqueContextId')) {
           // @ts-ignore - We need to modify the internal function for emergencies only
           dndModule.useUniqueContextId = () => generateSafeId();
-          console.log('Emergency patch applied to useUniqueContextId');
+          // console.log('Emergency patch applied to useUniqueContextId');
         }
         
         // Try again with the patched function
@@ -64,11 +64,11 @@ export async function monkeyPatchDnd() {
           const cachedModule = require.cache[modulePath];
           if (cachedModule.exports) {
             cachedModule.exports.DragDropContext = SafeDragDropContext;
-            console.log('Patched module in require cache');
+            // console.log('Patched module in require cache');
           }
         }
       } catch (e) {
-        console.error('Failed to patch module in require cache:', e);
+        // console.error('Failed to patch module in require cache:', e);
       }
     }
     
@@ -76,13 +76,13 @@ export async function monkeyPatchDnd() {
     if (window.React && !window.React.useId) {
       // @ts-ignore - Adding useId to global React
       window.React.useId = generateSafeId;
-      console.log('Patched global React.useId');
+      // console.log('Patched global React.useId');
     }
     
     isPatchApplied = true;
-    console.log('Monkeypatch applied successfully');
+    // console.log('Monkeypatch applied successfully');
   } catch (error) {
-    console.error('Failed to apply monkeypatch:', error);
+    // console.error('Failed to apply monkeypatch:', error);
   }
 }
 
@@ -96,7 +96,7 @@ export function ensureReactUseId() {
       if (!window.React.useId) {
         // @ts-ignore - Adding useId to global React
         window.React.useId = () => generateSafeId();
-        console.log('Added missing useId to global React');
+        // console.log('Added missing useId to global React');
       }
     }
     
@@ -104,10 +104,10 @@ export function ensureReactUseId() {
     if (!React.useId) {
       // @ts-ignore - Adding useId to React
       React.useId = () => generateSafeId();
-      console.log('Added missing useId to React');
+      // console.log('Added missing useId to React');
     }
   } catch (error) {
-    console.error('Failed to ensure React.useId:', error);
+    // console.error('Failed to ensure React.useId:', error);
   }
 }
 
@@ -131,17 +131,17 @@ export async function fixDragDropContext() {
           // Try the original render
           return originalRender.apply(this, args);
         } catch (error) {
-          console.error('Error in DragDropContext render, using fallback:', error);
+          // console.error('Error in DragDropContext render, using fallback:', error);
           
           // Provide a fallback that just renders children
           return this.props.children;
         }
       };
       
-      console.log('Fixed DragDropContext render method');
+      // console.log('Fixed DragDropContext render method');
     }
   } catch (error) {
-    console.error('Failed to fix DragDropContext:', error);
+    // console.error('Failed to fix DragDropContext:', error);
   }
 }
 

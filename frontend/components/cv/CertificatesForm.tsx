@@ -108,7 +108,6 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
         
         // Upload the file
         const response = await cvAPI.uploadCertificate(Number(cvId), formData);
-        console.log('Backend cevabı:', response.data);
         
         // Store the document URL and update form data
         if (response.data.certificates?.length > 0) {
@@ -122,8 +121,6 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
             return;
           }
           
-          console.log('Yüklenen belge bilgileri:', latestCertificate);
-          
           // Update form values for the current index
           setValue(`certificates.${index}.documentUrl`, documentUrl);
           setValue(`certificates.${index}.document_url`, documentUrl);
@@ -133,7 +130,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
           setPreviewUrl(documentUrl);
           setOpenPreview(true);
           
-          console.log('Dosya yüklendi, URL:', documentUrl);
+          // console.log('Dosya yüklendi, URL:', documentUrl);
         }
         showToast.success(t('cv.certificates.uploadSuccess'));
       } catch (error) {
@@ -147,7 +144,6 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
 
   const handlePreview = (index: number) => {
     const certificate = watch(`certificates.${index}`);
-    console.log('Preview için sertifika verisi:', certificate);
     
     // Typescript'in objeden değer almak için any kullanıyoruz
     const anyObj = certificate as any;
@@ -183,11 +179,11 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
     }
     
     if (url) {
-      console.log('Açılacak URL:', url);
+      // console.log('Açılacak URL:', url);
       setPreviewUrl(url);
       setOpenPreview(true);
     } else {
-      console.log('Döküman URL bulunamadı');
+      // console.log('Döküman URL bulunamadı');
       showToast.error(t('common.errors.unknown'));
     }
   };
@@ -201,7 +197,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
       try {
         const response = await cvAPI.getOne(Number(cvId));
         if (response.data.certificates && response.data.certificates.length > 0) {
-          console.log('Backend\'den gelen sertifikalar:', response.data.certificates);
+          // console.log('Backend\'den gelen sertifikalar:', response.data.certificates);
           
           const formattedCertificates = response.data.certificates.map(cert => {
             // URL'i almak için her iki property'yi de kontrol et
@@ -221,7 +217,7 @@ const CertificatesForm = ({ cvId, onPrev, onStepComplete, initialData }: Certifi
           });
           
           reset({ certificates: formattedCertificates });
-          console.log('Formatlanmış sertifikalar:', formattedCertificates);
+          // console.log('Formatlanmış sertifikalar:', formattedCertificates);
         }
         // İlk yükleme tamamlandı olarak işaretliyoruz
         initialLoadDone.current = true;

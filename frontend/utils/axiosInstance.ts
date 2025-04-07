@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(
         if (!token) {
           token = localStorage.getItem('accessToken');
           if (token) {
-            console.log('Using accessToken as fallback since auth_token was not found');
+            // console.log('Using accessToken as fallback since auth_token was not found');
           }
         }
         
@@ -37,13 +37,13 @@ axiosInstance.interceptors.request.use(
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         } else {
-          console.warn('No authentication token found in localStorage');
+          // console.warn('No authentication token found in localStorage');
         }
       } catch (error) {
         console.error('Token alınırken hata:', error);
       }
     } else {
-      console.log('Running in server environment - skipping token addition');
+      // console.log('Running in server environment - skipping token addition');
     }
     
     return config;
@@ -62,8 +62,8 @@ axiosInstance.interceptors.response.use(
       try {
         const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
         if (response.config.url?.includes('/templates/')) {
-          console.log('Successful API response to templates endpoint with token present:', !!token);
-          console.log('API operation type:', response.config.method);
+          // console.log('Successful API response to templates endpoint with token present:', !!token);
+          // console.log('API operation type:', response.config.method);
         }
       } catch (error) {
         // Token kontrol hatalarını yoksay
@@ -77,17 +77,17 @@ axiosInstance.interceptors.response.use(
     
     // Template operasyonları sırasında kimlik doğrulama hataları için ek bilgi logla
     if (error.config?.url?.includes('/templates/')) {
-      console.log('Template operation failed with config:', {
-        url: error.config.url,
-        method: error.config.method,
-        hasAuthHeader: !!error.config.headers?.Authorization,
-        status: error.response?.status
-      });
+      // console.log('Template operation failed with config:', {
+      //   url: error.config.url,
+      //   method: error.config.method,
+      //   hasAuthHeader: !!error.config.headers?.Authorization,
+      //   status: error.response?.status
+      // });
     }
     
     // DELETE isteklerinde ek kontrol - Özellikle şablon silme işlemleri için
     if (error.config?.method === 'delete' && error.config?.url?.includes('/templates/')) {
-      console.warn('Error during DELETE operation on template:', error.response?.status);
+      // console.warn('Error during DELETE operation on template:', error.response?.status);
       
       // 401 veya 403 hataları için daha açıklayıcı mesaj göster
       if (error.response?.status === 401 || error.response?.status === 403) {
@@ -97,11 +97,11 @@ axiosInstance.interceptors.response.use(
     
     // 401 Unauthorized hatası (token süresi dolmuş, geçersiz token vb.)
     if (error.response && error.response.status === 401) {
-      console.log('Authentication error (401) received');
+      // console.log('Authentication error (401) received');
       
       // Template endpoint'leri için otomatik yönlendirme yapmayalım
       if (error.config?.url?.includes('/templates/')) {
-        console.warn('Authentication error during template operation - NOT redirecting to login');
+        // console.warn('Authentication error during template operation - NOT redirecting to login');
         
         // POST, PUT ve DELETE işlemleri için farklı mesajlar
         if (error.config.method === 'post') {

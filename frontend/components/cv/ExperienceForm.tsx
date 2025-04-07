@@ -81,7 +81,7 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     
     const loadExperience = async () => {
       try {
-        console.log('İlk veri yükleniyor...');
+        // console.log('İlk veri yükleniyor...');
         const response = await cvAPI.getOne(Number(cvId));
         
         if (response.data.experience && response.data.experience.length > 0) {

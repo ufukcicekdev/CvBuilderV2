@@ -433,7 +433,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         setLoadingTemplates(true);
         // user?.id parametresini artık geçmiyoruz - API'nin mevcut kullanıcıyı belirleyeceğine güveniyoruz
         const templates = await templateService.getCustomTemplates();
-        console.log('Fetched custom templates:', templates);
+        // console.log('Fetched custom templates:', templates);
         setCustomTemplates(templates as any); // any tipine cast ediyoruz
       } catch (error) {
         console.error('Error fetching custom templates:', error);
@@ -462,8 +462,8 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
 
   // Şablon seçildiğinde şablon özelliklerini editöre yükle
   const loadTemplateToEditor = (template: any) => {
-    console.log('Loading template to editor:', template);
-    console.log('Template layout:', template.globalSettings?.layout);
+    // console.log('Loading template to editor:', template);
+    // console.log('Template layout:', template.globalSettings?.layout);
     
     // Şablonu seçerken layout değerinin korunduğundan emin ol
     setSelectedCustomTemplate({
@@ -821,7 +821,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         return { success: false, error: 'This function can only be run in the browser' };
       }
 
-      console.log('Generating PDF with data:', data);
+      // console.log('Generating PDF with data:', data);
       
       // Özel şablon veya standart şablon kontrolü
       const isCustomTemplate = previewTabIndex === 1 && selectedCustomTemplate;
@@ -830,7 +830,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       toast.success(t('cv.preview.pdfGenerating', 'PDF oluşturuluyor...'));
       
       if (isCustomTemplate && selectedCustomTemplate) {
-        console.log('Using custom template for PDF generation:', selectedCustomTemplate.name);
+        // console.log('Using custom template for PDF generation:', selectedCustomTemplate.name);
         
         // Özel şablonların render edildiği elementi bul
         const element = document.querySelector('.custom-template') as HTMLElement;
@@ -866,7 +866,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       // Standart şablon ise template ID'sini ekle
       else if (selectedTemplate) {
         const formattedTemplateId = mapTemplateIdToUrlFormat(selectedTemplate);
-        console.log('Using standard template for PDF generation:', formattedTemplateId);
+        // console.log('Using standard template for PDF generation:', formattedTemplateId);
         
         // Event oluştur ve özel bir olay tetikle (standart şablonlar için)
         const event = new CustomEvent('generate-pdf', {
@@ -886,7 +886,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         });
         
         // PDF oluşturma eventini tetikle
-        console.log('Dispatching generate-pdf event');
+        // console.log('Dispatching generate-pdf event');
         document.dispatchEvent(event);
         
         return { success: true };
@@ -1366,7 +1366,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   // Özel şablonu kaydet
   const handleSaveTemplate = async (templateData: TemplateBuilderCustomTemplateData | NoDndCustomTemplateData) => {
     try {
-      console.log('Saving template data:', templateData);
+      // console.log('Saving template data:', templateData);
       
       // İşlemi gerçekleştirmeden önce tür kontrolü yapalım ve gerekli dönüşümleri uygulayalım
       let adaptedTemplateData: TemplateBuilderCustomTemplateData;
@@ -1407,7 +1407,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         }
       };
       
-      console.log('Final template data to save:', finalTemplateData);
+      // console.log('Final template data to save:', finalTemplateData);
       
       if (!user?.id) {
         toast.error(t('common.errors.loginRequired', 'Şablon kaydetmek için giriş yapmalısınız.'));
@@ -1441,8 +1441,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   // Özel şablonu sil
   const handleDeleteTemplate = async (templateId: string) => {
     try {
-      // Daha detaylı loglama
-      console.log(`Deleting template with ID (TemplatePreviewForm): "${templateId}"`, typeof templateId);
+      // console.log(`Deleting template with ID (TemplatePreviewForm): "${templateId}"`, typeof templateId);
       
       // Template ID kontrolü - daha kapsamlı
       if (!templateId) {
@@ -1451,12 +1450,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       }
       
       // template ID'nin zaten doğru formatta olduğundan emin ol - bu tam olarak db'deki ID
-      console.log(`Using template ID directly from database: "${templateId}" (before deletion call)`);
-      console.log('All custom templates before deletion:', customTemplates.map(t => ({ id: t.id, name: t.name })));
+      // console.log(`Using template ID directly from database: "${templateId}" (before deletion call)`);
+      // console.log('All custom templates before deletion:', customTemplates.map(t => ({ id: t.id, name: t.name })));
       
       // Bulduğumuz template'ı konsolda gösterelim
-      const foundTemplate = customTemplates.find(t => t.id === templateId);
-      console.log('Found template for deletion:', foundTemplate);
+      // const foundTemplate = customTemplates.find(t => t.id === templateId);
+      // console.log('Found template for deletion:', foundTemplate);
       
       // Silme işlemi başlatıldı bildirimi - componentte göstermeyelim, serviste gösteriliyor
       // toast.loading(t('cv.template.deleting', 'Şablon siliniyor...'));
@@ -1465,7 +1464,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       const success = await templateService.deleteCustomTemplate(templateId);
       
       if (success) {
-        console.log(`Template with ID: "${templateId}" successfully deleted, updating UI`);
+        // console.log(`Template with ID: "${templateId}" successfully deleted, updating UI`);
         
         // Şablonları güncelle - silinen şablonu listeden kaldır
         setCustomTemplates(prev => prev.filter(t => t.id !== templateId));
@@ -1500,7 +1499,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   const handlePreviewTabChange = (event: React.SyntheticEvent, newValue: number) => {
     // Özel şablonlar sekmesine geçilince API isteği yap
     if (newValue === 1) {
-      console.log('Switching to custom templates tab, refreshing templates...');
+      // console.log('Switching to custom templates tab, refreshing templates...');
       refreshCustomTemplates();
     }
     
@@ -1766,7 +1765,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                                   const toastId = toast.loading('PDF oluşturuluyor...', { duration: 60000 }); // 60 saniye 
                                   
                                   try {
-                                    console.log('PDF indirme işlemi başlatılıyor...');
+                                    // console.log('PDF indirme işlemi başlatılıyor...');
                                     
                                     // Elementin bekleme süresini artır
                                     setTimeout(async () => {
@@ -1781,7 +1780,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                                           return;
                                         }
                                         
-                                        console.log('Şablon elementi bulundu:', customTemplateElement);
+                                        // console.log('Şablon elementi bulundu:', customTemplateElement);
                                         
                                         // PDF dosya adı oluştur
                                         const fileName = `${template.name || 'CV'}-${new Date().toISOString().substring(0, 10)}.pdf`;
@@ -1800,7 +1799,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                                         toast.dismiss(toastId);
                                         
                                         if (success) {
-                                          console.log('PDF başarıyla oluşturuldu');
+                                          // console.log('PDF başarıyla oluşturuldu');
                                           toast.success('PDF başarıyla indirildi');
                                         } else {
                                           console.error('PDF oluşturulamadı');
@@ -1906,7 +1905,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   // NoSSR template builder kullanımı
   const handleNoDndSaveTemplate = async (templateData: NoDndCustomTemplateData): Promise<any> => {
     try {
-      console.log('Saving NoDnd template data:', templateData);
+      // console.log('Saving NoDnd template data:', templateData);
       
       // Make sure templateData is properly structured
       const finalTemplateData = {
@@ -1928,13 +1927,13 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         }
       };
       
-      console.log('Sending finalized template data to API:', finalTemplateData);
+      // console.log('Sending finalized template data to API:', finalTemplateData);
       
       // API'ye doğrudan gönder
       const savedTemplate = await templateService.saveCustomTemplate(finalTemplateData);
       
       if (savedTemplate) {
-        console.log('Template saved successfully:', savedTemplate);
+        // console.log('Template saved successfully:', savedTemplate);
         // Şablonları yenile
         await refreshCustomTemplates();
         
@@ -1961,7 +1960,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
   useEffect(() => {
     // Dialog açıldığında ve özel şablonlar sekmesi seçiliyse şablonları yükle
     if (open && previewTabIndex === 1) {
-      console.log('Dialog opened with custom templates tab, loading templates...');
+      // console.log('Dialog opened with custom templates tab, loading templates...');
       refreshCustomTemplates();
     }
   }, [open, previewTabIndex]);
@@ -1979,7 +1978,7 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       );
     }
 
-    console.log('Rendering custom template with layout:', selectedCustomTemplate.globalSettings.layout);
+    // console.log('Rendering custom template with layout:', selectedCustomTemplate.globalSettings.layout);
     
     // Şablonu PDF formatında oluşturmak için type'ı değiştiriyoruz
     const templateWithPdfType = {

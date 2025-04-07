@@ -57,8 +57,6 @@ export default function Pricing() {
       try {
         setLoading(true);
         
-        console.log('Fetching data...');
-        
         // Fetch data in parallel
         const [plansData, subscriptionData, gatewaysData] = await Promise.all([
           subscriptionService.getPlans(),
@@ -66,44 +64,32 @@ export default function Pricing() {
           subscriptionService.getPaymentGateways()
         ]);
         
-        console.log('Fetched plans:', plansData);
-        console.log('Fetched subscription:', subscriptionData);
-        console.log('Fetched payment gateways:', gatewaysData);
-        
         if (plansData && plansData.length > 0) {
           setPlan(plansData[0]); // Just take the first plan
         }
         
         // Set gateways and select default gateway
         if (gatewaysData && gatewaysData.length > 0) {
-          console.log('Setting payment gateways:', gatewaysData);
           setPaymentGateways(gatewaysData);
           
           // Select default gateway if available
           const defaultGateway = gatewaysData.find(g => g.is_default);
           if (defaultGateway) {
-            console.log('Selected default gateway:', defaultGateway);
             setSelectedGateway(defaultGateway.gateway_type);
           } else {
-            console.log('No default gateway found, using first one:', gatewaysData[0]);
             setSelectedGateway(gatewaysData[0].gateway_type);
           }
-        } else {
-          console.log('No payment gateways found!');
         }
         
         if (isAuthenticated) {
           // Check if subscription exists and has a valid structure
           if (subscriptionData && subscriptionData.status !== 'no_subscription') {
-            console.log("User has a subscription:", subscriptionData);
             setCurrentSubscription(subscriptionData);
           } else {
-            console.log("User has no active subscription");
             setCurrentSubscription(null);
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
         toast.error(t('pricing.errorFetchingData') || 'Error fetching data');
       } finally {
         setLoading(false);
@@ -123,17 +109,14 @@ export default function Pricing() {
       
       // Script yüklendikten sonra
       script.onload = () => {
-        console.log("Paddle script loaded");
-        
         // Paddle ortamını ayarla
         if ((window as any).Paddle && (window as any).Paddle.Environment) {
           // Use the environment variable instead of hardcoding
           const isSandbox = process.env.NEXT_PUBLIC_PADDLE_SANDBOX === 'true';
           if (isSandbox) {
             (window as any).Paddle.Environment.set("sandbox");
-            console.log("Paddle environment set to sandbox");
           } else {
-            console.log("Paddle environment set to production");
+            // console.log("Paddle environment set to production");
           }
           
           // Paddle'ı initialize et
@@ -147,9 +130,6 @@ export default function Pricing() {
             eventCallback: function(eventData: any) {
               // Checkout tamamlandı olayını dinle (başarılı ödeme)
               if (eventData.name === 'checkout.completed') {
-                console.log('Ödeme başarıyla tamamlandı!', eventData);
-                
-                // Başarılı mesajı göster
                 toast.success(t('pricing.subscriptionSuccess') || 'Aboneliğiniz başarıyla oluşturuldu!', { id: 'paddle-success-toast' });
                 
                 // Dashboard'a yönlendir
@@ -157,18 +137,16 @@ export default function Pricing() {
               } 
               // Checkout kapatıldı olayı (kullanıcı pencereyi kapattığında)
               else if (eventData.name === 'checkout.closed') {
-                console.log('Checkout penceresi kapatıldı', eventData);
                 toast.dismiss('paddle-toast');
               }
               // Checkout yüklendi olayı
               else if (eventData.name === 'checkout.loaded') {
-                console.log('Checkout yüklendi', eventData);
                 toast.dismiss('paddle-toast');
               }
             }
           });
           
-          console.log("Paddle initialized");
+          // console.log("Paddle initialized");
         }
       };
       
@@ -178,8 +156,6 @@ export default function Pricing() {
 
   // Ödeme yöntemlerinin değişimini takip et
   useEffect(() => {
-    console.log('Payment Gateways updated:', paymentGateways);
-    console.log('Selected Gateway:', selectedGateway);
   }, [paymentGateways, selectedGateway]);
 
   // Planı seçme ve ödeme sağlayıcılarını gösterme
@@ -204,23 +180,23 @@ export default function Pricing() {
     try {
       // Sadece PayTR seçilmişse adres ve telefon bilgilerini kontrol et
       if (selectedGateway === 'paytr') {
-        console.log("PayTR selected, checking user profile...");
+        // console.log("PayTR selected, checking user profile...");
         
         // API'dan güncel kullanıcı bilgilerini getir
         try {
           const userProfileResponse = await axiosInstance.get('/api/users/me/');
-          console.log("Current user profile:", userProfileResponse.data);
+          // console.log("Current user profile:", userProfileResponse.data);
           
           // API'dan gelen verilere göre kontrol et
           const userProfile = userProfileResponse.data;
           if (!userProfile.address || !userProfile.phone) {
-            console.log("Missing address or phone:", { address: userProfile.address, phone: userProfile.phone });
+            // console.log("Missing address or phone:", { address: userProfile.address, phone: userProfile.phone });
             toast.error(t('pricing.missingUserInfo', 'PayTR ödemesi için adres ve telefon bilgileriniz gereklidir. Lütfen profil sayfanızdan bu bilgileri doldurun.'));
             router.push('/profile');
             return;
           }
         } catch (profileError) {
-          console.error("Error fetching user profile:", profileError);
+          // console.error("Error fetching user profile:", profileError);
           toast.error(t('common.errors.profileFetchError', 'Kullanıcı bilgileri alınamadı. Lütfen tekrar deneyin.'));
           return;
         }
@@ -239,7 +215,7 @@ export default function Pricing() {
       // Dialog'u kapat
       setShowGatewayDialog(false);
       
-      console.log('Create subscription response:', response);
+      // console.log('Create subscription response:', response);
       
       // Seçilen ödeme sağlayıcısına göre işlem yap
       if (selectedGateway === 'paddle') {
@@ -254,7 +230,7 @@ export default function Pricing() {
             (window as any).Paddle && 
             (window as any).Paddle.Checkout) {
           
-          console.log("Paddle is ready, opening checkout...");
+          // console.log("Paddle is ready, opening checkout...");
           
           // Checkout'u aç
           try {
@@ -273,19 +249,19 @@ export default function Pricing() {
             });
             toast.dismiss('payment-toast');
           } catch (checkoutError) {
-            console.error("Error opening Paddle checkout:", checkoutError);
+            // console.error("Error opening Paddle checkout:", checkoutError);
             toast.error(t('pricing.checkoutError'), { id: 'payment-toast' });
           }
         } else {
-          console.error("Paddle is not loaded properly");
+          // console.error("Paddle is not loaded properly");
           toast.error(t('pricing.paddleNotLoaded'), { id: 'payment-toast' });
         }
       } else if (selectedGateway === 'paytr') {
         // PayTR için
-        console.log('Full PayTR response:', response);
+        // console.log('Full PayTR response:', response);
         
         if (response.data?.iframe_url) {
-          console.log('PayTR iframe URL:', response.data.iframe_url);
+          // console.log('PayTR iframe URL:', response.data.iframe_url);
           
           // Dialog'ı kapat
           setShowGatewayDialog(false);
@@ -296,12 +272,12 @@ export default function Pricing() {
           
           toast.dismiss('payment-toast');
         } else {
-          console.error('PayTR iframe URL not found in response:', response.data);
+          // console.error('PayTR iframe URL not found in response:', response.data);
           toast.error(t('pricing.paytrError') || 'Error with PayTR payment.', { id: 'payment-toast' });
         }
       }
     } catch (error) {
-      console.error('Error:', error);
+      // console.error('Error:', error);
       toast.error(t('pricing.checkoutError'), { id: 'payment-toast' });
     }
   };

@@ -83,7 +83,7 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
   const isRTL = language === 'ar';
   
   // Log to debug template data
-  console.log('Rendering template with data:', templateData);
+  // console.log('Rendering template with data:', templateData);
   
   // Görünür ve sıralanmış bölümleri al
   const visibleSections = templateData.sections
@@ -130,7 +130,7 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
   const getMainLayoutStyle = () => {
     // Seçilen layout değeri için tutarlı bir yaklaşım
     const layout = templateData.globalSettings.layout || 'single';
-    console.log('CustomTemplateRenderer: Uygulanan layout değeri:', layout);
+    // console.log('CustomTemplateRenderer: Uygulanan layout değeri:', layout);
     
     // Temele stil özellikleri
     const baseStyles = {
@@ -145,7 +145,7 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
     
     // PDF için özel stiller
     if (templateData.type === 'pdf') {
-      console.log('PDF için tam sayfa stil uygulanıyor, layout:', layout);
+      // console.log('PDF için tam sayfa stil uygulanıyor, layout:', layout);
       
       // Tüm layout tipleri için stiller
       if (layout === 'single') {
@@ -350,7 +350,7 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
         ? templateData.globalSettings.primaryColor 
         : '#ffffff');
     
-    console.log('Header rendering with background color:', headerBackgroundColor, 'Layout:', templateData.globalSettings.layout);
+    // console.log('Header rendering with background color:', headerBackgroundColor, 'Layout:', templateData.globalSettings.layout);
     
     return (
       <div className={`cv-section cv-header ${templateData.globalSettings.layout === 'header-highlight' ? 'header-highlight' : ''}`} 

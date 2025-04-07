@@ -60,11 +60,11 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
       const response = await subscriptionService.getCustomerPortalUrl();
       
       // Detaylı konsol günlüğü ekleyin
-      console.log('Portal URL response:', response);
+      // console.log('Portal URL response:', response);
       
       // Check if response contains sandbox_mode flag
       if (response && typeof response === 'object' && 'sandbox_mode' in response) {
-        console.log('Sandbox mode detected in response');
+        // console.log('Sandbox mode detected in response');
         setIsSandboxMode(true);
         setCustomerPortalUrl(response.portal_url);
         
@@ -78,11 +78,11 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
         }
       } else if (response) {
         // String response for production mode
-        console.log('Production mode portal URL received');
+        // console.log('Production mode portal URL received');
         setCustomerPortalUrl(typeof response === 'string' ? response : response.portal_url);
         setIsSandboxMode(false);
       } else {
-        console.log('No portal URL received');
+        // console.log('No portal URL received');
         setPortalError(t('subscription.portalError', 'Could not retrieve customer portal URL'));
       }
     } catch (error: any) {
@@ -91,7 +91,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
       // Hata yanıtını kontrol et
       const errorResponse = error.response?.data;
       if (errorResponse?.sandbox_mode && errorResponse?.portal_url) {
-        console.log('Sandbox mode error with portal URL');
+        // console.log('Sandbox mode error with portal URL');
         setIsSandboxMode(true);
         setCustomerPortalUrl(errorResponse.portal_url);
         setPortalError(errorResponse.error || t('subscription.portalError'));
@@ -117,7 +117,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
     }
 
     if (isSandboxMode) {
-      console.log('Opening portal URL in sandbox mode:', customerPortalUrl);
+      // console.log('Opening portal URL in sandbox mode:', customerPortalUrl);
       
       // Sondbox URL'si Paddle domain'i ile başlıyorsa
       if (customerPortalUrl.includes('sandbox-customer-portal.paddle.com')) {
@@ -137,7 +137,7 @@ const SubscriptionInfo: React.FC<SubscriptionInfoProps> = ({ onSubscriptionChang
       }
     } else {
       // Production modunda normal olarak aç
-      console.log('Opening portal URL in production mode:', customerPortalUrl);
+      // console.log('Opening portal URL in production mode:', customerPortalUrl);
       window.open(customerPortalUrl, '_blank');
     }
   };
