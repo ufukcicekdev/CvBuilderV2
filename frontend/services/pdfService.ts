@@ -19,7 +19,7 @@ export const pdfService = {
    */
   generatePdf: async (options: GeneratePdfOptions): Promise<boolean> => {
     try {
-      console.log('PDF oluşturma başladı...');
+      // console.log('PDF oluşturma başladı...');
       
       const {
         element,
@@ -32,7 +32,7 @@ export const pdfService = {
 
       // Element kontrolü
       if (!element) {
-        console.error('PDF oluşturma hatası: Element bulunamadı');
+        // console.error('PDF oluşturma hatası: Element bulunamadı');
         return false;
       }
 
@@ -81,7 +81,7 @@ export const pdfService = {
         tempContainer.removeChild(clone);
         document.body.removeChild(tempContainer);
         
-        console.log(`Canvas oluşturuldu, boyutlar: ${canvas.width}x${canvas.height}px`);
+        // console.log(`Canvas oluşturuldu, boyutlar: ${canvas.width}x${canvas.height}px`);
         
         // PDF dökümanı oluştur - marjinsiz tam sayfa olarak
         const pdf = new jsPDF({
@@ -170,7 +170,7 @@ export const pdfService = {
         
         // PDF'i indir
         pdf.save(filename);
-        console.log('PDF indirme işlemi tamamlandı');
+        // console.log('PDF indirme işlemi tamamlandı');
         
         return true;
         

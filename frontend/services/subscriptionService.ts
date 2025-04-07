@@ -165,7 +165,7 @@ const subscriptionService = {
     // Önbellekte güncel veri var mı kontrol et
     const now = Date.now();
     if (subscriptionCache && (now - subscriptionCache.timestamp < CACHE_DURATION)) {
-      console.log('Using cached subscription data');
+      // console.log('Using cached subscription data');
       return subscriptionCache.data;
     }
     
@@ -260,9 +260,9 @@ const subscriptionService = {
   // Get active payment gateways
   getPaymentGateways: async (): Promise<PaymentGateway[]> => {
     try {
-      console.log('Fetching payment gateways...');
+      // console.log('Fetching payment gateways...');
       const response = await api.get('/api/subscriptions/payment-gateways/');
-      console.log('Payment gateways response:', response.data);
+      // console.log('Payment gateways response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching payment gateways:', error);
@@ -277,7 +277,7 @@ const subscriptionService = {
           position: 1
         }
       ];
-      console.log('Returning default gateways:', defaultGateways);
+      // console.log('Returning default gateways:', defaultGateways);
       return defaultGateways;
     }
   },

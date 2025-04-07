@@ -103,18 +103,14 @@ function Dashboard() {
         const canCreate = cvs.length === 0;
         setCanCreateMoreCVs(canCreate);
         
-        console.log('Trial user has', cvs.length, 'CVs, can create more:', canCreate);
+        // console.log('Trial user has', cvs.length, 'CVs, can create more:', canCreate);
       } else {
         // Ücretsiz kullanıcılar CV oluşturamaz
         setHasActiveSubscription(false);
         setCanCreateMoreCVs(false);
       }
       
-      // Debug log
-      console.log('Subscription status:', 
-        isActive ? 'Active' : 
-        isTrial ? 'Trial' : 
-        'No subscription');
+      // console.log('Subscription status:', subscription);
         
       isSubscriptionCheckedRef.current = true;
     } catch (error) {

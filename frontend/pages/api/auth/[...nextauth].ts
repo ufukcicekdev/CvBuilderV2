@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           // API URL'yi doğrudan .env dosyasından alıyoruz
-          console.log('Using API URL:', process.env.NEXT_PUBLIC_API_URL);
+          // console.log('Using API URL:', process.env.NEXT_PUBLIC_API_URL);
           const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
           const response = await fetch(`${apiUrl}/api/auth/login/`, {
             method: 'POST',

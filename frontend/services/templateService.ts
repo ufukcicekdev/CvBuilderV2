@@ -46,10 +46,10 @@ export const templateService = {
   getCustomTemplates: async (): Promise<CustomTemplateData[]> => {
     try {
       // Mevcut kullanıcı için özel endpoint kullanıyoruz
-      console.log('Calling API to get templates for current user');
+      // console.log('Calling API to get templates for current user');
       // Django REST framework viewset action URL yapısı: /viewset-path/action-name/
       const response = await axiosInstance.get('/api/templates/templates/for_current_user/');
-      console.log('API response for templates:', response.data);
+      // console.log('API response for templates:', response.data);
       return response.data;
     } catch (error) {
       console.error('Özel şablonlar getirilirken hata oluştu:', error);
@@ -70,25 +70,25 @@ export const templateService = {
     }
     
     try {
-      console.log('Sending template data to API:', JSON.stringify(templateData));
+      // console.log('Sending template data to API:', JSON.stringify(templateData));
       
       // API yanıt vermeden önce işlemin başladığını bildir
       toast.loading('Şablon kaydediliyor...', { id: 'saving-template' });
       
       // Django REST framework viewset endpoint yapısı
       const endpoint = '/api/templates/templates/';
-      console.log(`Using endpoint: ${endpoint} for template save`);
+      // console.log(`Using endpoint: ${endpoint} for template save`);
       
       // Kimlik doğrulama token'ını kontrol et ve logla
       const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
       if (!token) {
         console.warn('No authentication token found. This request might fail due to authentication issues.');
       } else {
-        console.log('Authentication token is present, proceeding with API request.');
+        // console.log('Authentication token is present, proceeding with API request.');
       }
       
       const response = await axiosInstance.post(endpoint, templateData);
-      console.log('Template save response:', response.data);
+      // console.log('Template save response:', response.data);
       
       // Başarılı kaydetme bildirimi
       toast.success('Şablon başarıyla kaydedildi!', { id: 'saving-template' });
@@ -174,8 +174,8 @@ export const templateService = {
       // Direkt olarak veritabanından gelen ID'yi kullanarak deleteUrl oluştur
       // ID formatı: "template-1743450745896" şeklinde olmalı
       const deleteUrl = `/api/templates/templates/${templateId}/`;
-      console.log(`Delete URL: ${deleteUrl}`);
-      console.log(`Attempting to delete template with ID: "${templateId}" (type: ${typeof templateId})`);
+      // console.log(`Delete URL: ${deleteUrl}`);
+      // console.log(`Attempting to delete template with ID: "${templateId}" (type: ${typeof templateId})`);
       
       // Kimlik doğrulama token'ını kontrol et ve logla
       const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
@@ -184,12 +184,12 @@ export const templateService = {
         toast.error('Oturum bilgisi bulunamadı. Lütfen tekrar giriş yapın.', { id: toastId });
         return false;
       } else {
-        console.log('Authentication token is present, proceeding with delete request.');
+        // console.log('Authentication token is present, proceeding with delete request.');
       }
       
       // API isteğini gönder ve yanıtı logla - responseType: 'text' ekleyerek ham yanıtı görelim
       const response = await axiosInstance.delete(deleteUrl, { responseType: 'text' });
-      console.log('Delete template response:', response.status, response.data);
+      // console.log('Delete template response:', response.status, response.data);
       
       // Başarılı silme bildirimi
       toast.success('Şablon başarıyla silindi!', { id: toastId });

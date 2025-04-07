@@ -208,9 +208,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
   }, [lang, id, translation_key]);
 
   // CV state'i değiştiğinde log ekleyelim
-  useEffect(() => {
-    console.log('CV state updated:', cv);
-  }, [cv]);
+  // console.log('CV state updated:', cv);
 
   // WebSocket connection for real-time updates
   useEffect(() => {
@@ -227,7 +225,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
     let connectionCheckInterval: NodeJS.Timeout | null = null;
 
     const connectWebSocket = () => {
-      console.log('Attempting to connect to WebSocket with params:', { id, translation_key, lang });
+      // console.log('Attempting to connect to WebSocket with params:', { id, translation_key, lang });
       
       // Close existing connection if any
       if (ws) {
@@ -273,24 +271,24 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
       // 3. Translation Key
       // 4. Language
       const wsUrl = `${wsProtocol}://${apiHost}/ws/cv/${templateId}/${id}/${translation_key}/${lang}/`;
-      console.log('WebSocket URL with correct parameters:', wsUrl);
+      // console.log('WebSocket URL with correct parameters:', wsUrl);
       
       // Grup adını backend'in beklediği formatta oluştur
       const groupName = `cv_${templateId}_${id}_${translation_key}_${lang}`;
-      console.log('WebSocket group name:', groupName);
+      // console.log('WebSocket group name:', groupName);
       
       try {
         // WebSocket bağlantısını oluştur
         ws = new WebSocket(wsUrl);
-        console.log('WebSocket instance created, readyState:', ws.readyState);
+        // console.log('WebSocket instance created, readyState:', ws.readyState);
         
         // Bağlantı durumunu kontrol et
-        console.log('WebSocket connection state:', {
-          CONNECTING: ws.readyState === WebSocket.CONNECTING,
-          OPEN: ws.readyState === WebSocket.OPEN,
-          CLOSING: ws.readyState === WebSocket.CLOSING,
-          CLOSED: ws.readyState === WebSocket.CLOSED
-        });
+        // console.log('WebSocket connection state:', {
+        //   CONNECTING: ws.readyState === WebSocket.CONNECTING,
+        //   OPEN: ws.readyState === WebSocket.OPEN,
+        //   CLOSING: ws.readyState === WebSocket.CLOSING,
+        //   CLOSED: ws.readyState === WebSocket.CLOSED
+        // });
 
         // Bağlantı zaman aşımı - 15 saniye
         connectionTimeout = setTimeout(() => {
@@ -300,14 +298,14 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
             
             if (reconnectAttempts < maxReconnectAttempts) {
               reconnectAttempts++;
-              console.log(`Connection timeout. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+              // console.log(`Connection timeout. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
               reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
             }
           }
         }, 15000);
 
         ws.onopen = () => {
-          console.log('WebSocket connection established successfully, readyState:', ws?.readyState);
+          // console.log('WebSocket connection established successfully, readyState:', ws?.readyState);
           lastMessageTime = Date.now();
           
           if (connectionTimeout) {
@@ -320,7 +318,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
           // Bağlantıyı canlı tutmak için her 20 saniyede bir ping gönder
           pingInterval = setInterval(() => {
             if (ws && ws.readyState === WebSocket.OPEN) {
-              console.log('Sending ping to keep connection alive');
+              // console.log('Sending ping to keep connection alive');
               try {
                 ws.send(JSON.stringify({ action: 'ping', timestamp: Date.now() }));
                 lastMessageTime = Date.now();
@@ -337,7 +335,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
             const now = Date.now();
             const timeSinceLastMessage = now - lastMessageTime;
             
-            console.log('Connection check - Time since last message:', timeSinceLastMessage / 1000, 'seconds');
+            // console.log('Connection check - Time since last message:', timeSinceLastMessage / 1000, 'seconds');
             
             // 60 saniyeden fazla mesaj alınmadıysa bağlantıyı yeniden kur
             if (timeSinceLastMessage > 60000) {
@@ -352,7 +350,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
           
           // Bağlantı kurulduğunda bir başlangıç mesajı gönder
           try {
-            console.log('Sending init message to server');
+            // console.log('Sending init message to server');
             if (ws && ws.readyState === WebSocket.OPEN) {
               // Bağlantı bilgilerini gönder
               ws.send(JSON.stringify({ 
@@ -366,7 +364,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
               }));
               
               // CV verisini talep et
-              console.log('Requesting CV data from server');
+              // console.log('Requesting CV data from server');
               ws.send(JSON.stringify({ 
                 action: 'get_cv_data', 
                 template_id: templateId,
@@ -383,17 +381,17 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
         };
 
         ws.onmessage = (event) => {
-          console.log('Received WebSocket message:', event.data);
+          // console.log('Received WebSocket message:', event.data);
           lastMessageTime = Date.now();
           
           // Ham mesajı loglayalım
-          console.log('Raw message type:', typeof event.data);
-          console.log('Raw message length:', event.data.length);
+          // console.log('Raw message type:', typeof event.data);
+          // console.log('Raw message length:', event.data.length);
           
           // Düz metin ping/pong mesajlarını kontrol et
           if (typeof event.data === 'string') {
             if (event.data === 'ping' || event.data === 'pong') {
-              console.log('Received plain text ping/pong from server');
+              // console.log('Received plain text ping/pong from server');
               // Ping mesajına pong ile yanıt ver
               if (event.data === 'ping' && ws && ws.readyState === WebSocket.OPEN) {
                 ws.send('pong');
@@ -402,22 +400,22 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
             }
             
             // Mesaj içeriğini kontrol et
-            console.log('Message content first 100 chars:', event.data.substring(0, 100));
+            // console.log('Message content first 100 chars:', event.data.substring(0, 100));
           }
           
           try {
             // Mesajı JSON olarak parse et
             const parsedData = JSON.parse(event.data);
-            console.log('Parsed WebSocket message:', parsedData);
+            // console.log('Parsed WebSocket message:', parsedData);
             
             // Mesaj tipine göre işlem yap (type veya action alanını kontrol et)
             if (parsedData.type === 'pong' || parsedData.action === 'pong') {
-              console.log('Received JSON pong from server');
+              // console.log('Received JSON pong from server');
               return;
             }
             
             if (parsedData.type === 'ping' || parsedData.action === 'ping') {
-              console.log('Received JSON ping from server');
+              // console.log('Received JSON ping from server');
               // Ping mesajına pong ile yanıt ver
               if (ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({ action: 'pong', timestamp: Date.now() }));
@@ -426,22 +424,22 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
             }
             
             // Gelen mesaj içeriğini console'a detaylıca yazdır
-            console.log('CV data update received. Checking format...');
-            console.log('Message has "message" field:', parsedData.hasOwnProperty('message'));
-            console.log('Message has "id" field:', parsedData.hasOwnProperty('id') || (parsedData.message && parsedData.message.hasOwnProperty('id')));
+            // console.log('CV data update received. Checking format...');
+            // console.log('Message has "message" field:', parsedData.hasOwnProperty('message'));
+            // console.log('Message has "id" field:', parsedData.hasOwnProperty('id') || (parsedData.message && parsedData.message.hasOwnProperty('id')));
             
             // Veri format kontrolü
             let cvData: any = null;
             
             // Durum 1: Direkt CV verisi geldi
             if (parsedData.id && (parsedData.personal_info || parsedData.education || parsedData.experience)) {
-              console.log('Direct CV data format detected');
+              // console.log('Direct CV data format detected');
               cvData = parsedData;
             }
             // Durum 2: Mesaj içinde CV verisi var (message alanı içinde)
             else if (parsedData.message && typeof parsedData.message === 'object' && 
                      parsedData.message.id && (parsedData.message.personal_info || parsedData.message.education || parsedData.message.experience)) {
-              console.log('CV data inside message field detected');
+              // console.log('CV data inside message field detected');
               cvData = parsedData.message;
             }
             // Durum 3: Mesaj içinde string olarak JSON data var
@@ -449,21 +447,21 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
               try {
                 const innerData = JSON.parse(parsedData.message);
                 if (innerData.id && (innerData.personal_info || innerData.education || innerData.experience)) {
-                  console.log('CV data as string inside message field detected');
+                  // console.log('CV data as string inside message field detected');
                   cvData = innerData;
                 }
               } catch (err) {
-                console.log('Message contains string but not valid JSON CV data');
+                // console.log('Message contains string but not valid JSON CV data');
               }
             }
             
             // CV verisi varsa state'i güncelle
             if (cvData) {
-              console.log('Valid CV data found, updating state:', cvData);
+              // console.log('Valid CV data found, updating state:', cvData);
               
               // Preserve video_info if it's missing in the new data but exists in the ref
               if (!cvData.video_info?.video_url && videoInfoRef.current?.video_url) {
-                console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
+                // console.log('Preserving video_info from ref in WebSocket update:', videoInfoRef.current);
                 cvData.video_info = videoInfoRef.current;
               }
               
@@ -482,16 +480,16 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                   certificates: cvData.certificates || prevCv?.certificates || []
                 };
                 
-                console.log('State updated with merged data');
+                // console.log('State updated with merged data');
                 return mergedData;
               });
             } else {
-              console.log('No valid CV data found in the message, ignoring');
+              // console.log('No valid CV data found in the message, ignoring');
             }
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);
             // JSON parse hatası olduğunda mesajı loglayalım
-            console.error('Raw message that failed to parse:', event.data);
+            // console.error('Raw message that failed to parse:', event.data);
           }
         };
 
@@ -507,7 +505,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
           
           if (reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
-            console.log(`WebSocket error. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            // console.log(`WebSocket error. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
             reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
           } else {
             console.error('Max reconnection attempts reached');
@@ -540,7 +538,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
 
           if (!event.wasClean && reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
-            console.log(`Connection closed. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            // console.log(`Connection closed. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
             reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
           }
         };
@@ -549,7 +547,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
         
         if (reconnectAttempts < maxReconnectAttempts) {
           reconnectAttempts++;
-          console.log(`Error creating WebSocket. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+          // console.log(`Error creating WebSocket. Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
           reconnectTimeout = setTimeout(connectWebSocket, reconnectDelay);
         }
       }

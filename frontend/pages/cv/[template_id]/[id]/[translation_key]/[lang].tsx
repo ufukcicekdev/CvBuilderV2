@@ -21,7 +21,7 @@ const CVPage = () => {
       if (!id || !translation_key || !lang) return;
 
       try {
-        console.log(`Fetching CV with ID: ${id}, translation key: ${translation_key}, lang: ${lang}`);
+        // console.log(`Fetching CV with ID: ${id}, translation key: ${translation_key}, lang: ${lang}`);
         const response = await axiosInstance.get(`/cvs/${id}/${translation_key}/${lang}/`);
         setCV(response.data);
       } catch (err) {

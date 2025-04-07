@@ -179,7 +179,7 @@ export default function Register() {
           }
         } else if (networkError.request) {
           // İstek yapıldı ama yanıt alınamadı - muhtemelen kayıt başarılı oldu
-          console.log('Request was made but no response received - assuming registration was successful');
+          // console.log('Request was made but no response received - assuming registration was successful');
           
           // Başarılı kayıt mesajlarını göster
           localStorage.setItem('registrationEmail', data.email);

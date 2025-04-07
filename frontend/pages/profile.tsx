@@ -82,7 +82,7 @@ function Profile() {
       prevLanguageRef.current = currentLanguage;
       
       // Dil değiştiğinde sadece bir kez log yazdır
-      console.log('Language changed to:', currentLanguage);
+      // console.log('Language changed to:', currentLanguage);
       
       // Profil verisi varsa ve düzenleme modunda değilse, formu yeniden yükle
       if (profile && !isEditing) {
@@ -114,7 +114,7 @@ function Profile() {
   }, []);
 
   const handleEdit = () => {
-    console.log('Edit mode activated');
+    // console.log('Edit mode activated');
     setIsEditing(true);
     // editedProfile'ı profile ile eşleştir (null değerleri boş string yap)
     if (profile) {
@@ -130,7 +130,7 @@ function Profile() {
   };
 
   const handleCancel = () => {
-    console.log('Edit mode cancelled');
+    // console.log('Edit mode cancelled');
     setIsEditing(false);
     setEditedProfile(profile);
   };
@@ -181,8 +181,8 @@ function Profile() {
 
   const handleSave = async () => {
     try {
-      console.log('Saving profile changes...');
-      console.log('Current editedProfile:', editedProfile);
+      // console.log('Saving profile changes...');
+      // console.log('Current editedProfile:', editedProfile);
       
       // Form doğrulama
       if (!validateForm()) {
@@ -196,7 +196,7 @@ function Profile() {
         ...editableFields 
       } = editedProfile || {};
       
-      console.log('Fields to be updated:', editableFields);
+      // console.log('Fields to be updated:', editableFields);
       
       // JSON formatında veri gönder
       const response = await axiosInstance.patch('/api/users/me/', editableFields, {
@@ -205,7 +205,7 @@ function Profile() {
         },
       });
       
-      console.log('Server response:', response.data);
+      // console.log('Server response:', response.data);
       
       setProfile(response.data);
       setEditedProfile(response.data);
@@ -221,14 +221,14 @@ function Profile() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(`Field changed: ${name} = "${value}"`);
+    // console.log(`Field changed: ${name} = "${value}"`);
     
     // Boş string değerlerini de kabul et
     setEditedProfile(prev => {
       if (!prev) return null;
       
       const updated = { ...prev, [name]: value };
-      console.log('Updated profile:', updated);
+      // console.log('Updated profile:', updated);
       return updated;
     });
     
@@ -297,7 +297,7 @@ function Profile() {
         showToast.success(t('profile.pictureUpdateSuccess'));
         
         // Debug için
-        console.log('Yeni profil resmi URL:', response.data.profile_picture_url);
+        // console.log('Yeni profil resmi URL:', response.data.profile_picture_url);
       }
     } catch (error: any) {
       console.error('Profile picture upload error:', error);
