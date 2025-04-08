@@ -278,7 +278,7 @@ function Dashboard() {
 
             {subscriptionStatus === 'trial' && (
               <Alert 
-                severity="info" 
+                severity={trialDaysLeft > 0 ? "info" : "warning"} 
                 sx={{ mb: 3 }}
                 action={
                   <Button 
@@ -291,9 +291,9 @@ function Dashboard() {
                   </Button>
                 }
               >
-                {canCreateMoreCVs 
+                {trialDaysLeft > 0 
                   ? t('subscription.trialActive', { days: trialDaysLeft })
-                  : t('subscription.trialLimitWithDays', { days: trialDaysLeft })}
+                  : t('subscription.trialExpired')}
               </Alert>
             )}
           </Grid>

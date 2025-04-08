@@ -111,9 +111,12 @@ function CreateCV() {
       try {
         await checkSubscription();
         
-        if (id) {
-          await loadCV();
-        }
+        
+        
+        
+        
+       
+       
         
         setDataLoaded(true);
       } catch (error) {
@@ -185,7 +188,7 @@ function CreateCV() {
         
         {subscriptionStatus === 'trial' && (
           <Alert 
-            severity="info" 
+            severity={trialDaysLeft > 0 ? "info" : "warning"} 
             sx={{ mb: 3 }}
             action={
               <Button 
@@ -217,7 +220,7 @@ function CreateCV() {
                 cvId={Number(id)}
                 onStepChange={handleStepChange}
                 subscriptionStatus={subscriptionStatus}
-                isReadOnly={!hasActiveSubscription && subscriptionStatus !== 'trial'}
+                isReadOnly={subscriptionStatus === 'trial' && trialDaysLeft <= 0}
               />
             ) : (
               <CreateCVForm 

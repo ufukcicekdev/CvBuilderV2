@@ -111,9 +111,14 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
 
   const handleStepComplete = useCallback(async (data: any) => {
     try {
-      // Eğer salt okunur modda ise ve trial kullanıcısı değilse, düzenlemeye izin verme
-      if (isReadOnly && subscriptionStatus !== 'trial') {
-        toast.error(t('cv.editNotAllowed'));
+      // Eğer salt okunur modda ise, düzenlemeye izin verme
+      if (isReadOnly) {
+        // Eğer deneme süresi bittiyse farklı bir mesaj göster
+        if (subscriptionStatus === 'trial') {
+          toast.error(t('subscription.trialExpired'));
+        } else {
+          toast.error(t('cv.editNotAllowed'));
+        }
         
         // Görüntüleme modunda da adımlar arası geçişe izin ver
         if (activeStep < steps.length - 1) {
@@ -230,8 +235,8 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
         return null;
     }
 
-    // Eğer salt okunur modda ise, trial kullanıcısı değilse ve Template Preview sayfasında değilse
-    if (isReadOnly && subscriptionStatus !== 'trial' && activeStep !== 7) {
+    // Eğer salt okunur modda ise ve Template Preview sayfasında değilse
+    if (isReadOnly && activeStep !== 7) {
       return (
         <Stack spacing={2}>
           {/* Uyarı mesajı */}
@@ -249,24 +254,25 @@ export default function CVFormContent({ activeStep, cvId, onStepChange, isReadOn
               </Button>
             }
           >
-            {t('cv.editDisabled')}
+            {subscriptionStatus === 'trial' 
+              ? t('subscription.trialExpired') 
+              : t('cv.editDisabled')}
           </Alert>
           
           {/* Form içeriği (salt okunur) */}
           <Box sx={{ 
-            opacity: 0.8,
+            opacity: 0.7,
+            pointerEvents: 'none',
             '& input, & textarea, & select': { 
               pointerEvents: 'none !important',
-              backgroundColor: '#f9f9f9 !important'
+              backgroundColor: '#f5f5f5 !important',
+              borderColor: '#ddd !important'
             },
             '& .MuiOutlinedInput-root, & .MuiTextField-root, & .MuiSelect-select, & .MuiAutocomplete-root, & .MuiCheckbox-root, & .MuiRadio-root': {
               pointerEvents: 'none !important'
             },
-            '& button, & .MuiButton-root, & .MuiIconButton-root': {
+            '& button:not(.custom-nav-button), & .MuiButton-root:not(.custom-nav-button), & .MuiIconButton-root:not(.custom-nav-button)': {
               display: 'none !important'
-            },
-            '& .custom-nav-button': {
-              display: 'inline-flex !important'
             }
           }}>
             {formContent}
