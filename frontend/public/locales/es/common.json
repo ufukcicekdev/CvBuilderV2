@@ -529,7 +529,8 @@
       "endDate": "Fecha de Finalización",
       "current": "Actualmente estudio aquí",
       "description": "Descripción (Opcional)",
-      "addMore": "Agregar Educación"
+      "addMore": "Agregar Educación",
+      "noEducation": "No se ha agregado educación aún"
     },
     "draft": "Borrador",
     "continue": "Continuar",
@@ -551,7 +552,8 @@
       "endDateRequired": "Fecha de finalización es requerida si no estás estudiando actualmente",
       "titleRequired": "Por favor ingresa un título para el CV",
       "skillNameRequired": "Por favor ingresa nombre de habilidad",
-      "certificateFieldsRequired": "Por favor completa nombre del certificado, organización emisora y fecha de emisión"
+      "certificateFieldsRequired": "Por favor completa nombre del certificado, organización emisora y fecha de emisión",
+      "noSkills": "Aún no se han añadido habilidades"
     },
     "currentStep": "Paso Actual",
     "deleteConfirmTitle": "Eliminar CV",

@@ -529,7 +529,8 @@
       "endDate": "结束日期",
       "current": "目前在此学习",
       "description": "描述(可选)",
-      "addMore": "添加教育经历"
+      "addMore": "添加教育经历",
+      "noEducation": "尚未添加教育经历"
     },
     "draft": "草稿",
     "continue": "继续",
@@ -551,7 +552,8 @@
   "endDateRequired": "如果您目前没有在学习，必须填写结束日期",
   "titleRequired": "请为简历输入一个标题",
   "skillNameRequired": "请输入技能名称",
-  "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
+  "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期",
+  "noSkills": "尚未添加任何技能"
 },
     "currentStep": "当前步骤",
     "deleteConfirmTitle": "删除简历",

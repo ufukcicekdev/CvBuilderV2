@@ -529,7 +529,8 @@
       "endDate": "End Date",
       "current": "I currently study here",
       "description": "Description (Optional)",
-      "addMore": "Add Education"
+      "addMore": "Add Education",
+      "noEducation": "No education added yet"
     },
     "draft": "Draft",
     "continue": "Continue",
@@ -551,7 +552,8 @@
       "endDateRequired": "End date is required if you're not currently studying",
       "titleRequired": "Please enter a title for the CV",
       "skillNameRequired": "Please enter skill name",
-      "certificateFieldsRequired": "Please fill in certificate name, issuing organization and issue date"
+      "certificateFieldsRequired": "Please fill in certificate name, issuing organization and issue date",
+      "noSkills": "No skills added yet"
     },
     "currentStep": "Current Step",
     "deleteConfirmTitle": "Delete CV",

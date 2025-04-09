@@ -529,7 +529,8 @@
       "endDate": "تاريخ الانتهاء",
       "current": "أدرس حاليًا هنا",
       "description": "الوصف (اختياري)",
-      "addMore": "إضافة تعليم"
+      "addMore": "إضافة تعليم",
+      "noEducation": "لم تتم إضافة أي تعليم بعد"
     },
     "draft": "مسودة",
     "continue": "متابعة",
@@ -551,7 +552,8 @@
       "endDateRequired": "تاريخ الانتهاء مطلوب إذا كنت لا تدرس حاليًا",
       "titleRequired": "يرجى إدخال عنوان للسيرة الذاتية",
       "skillNameRequired": "يرجى إدخال اسم المهارة",
-      "certificateFieldsRequired": "يرجى ملء اسم الشهادة والجهة المانحة وتاريخ الإصدار"
+      "certificateFieldsRequired": "يرجى ملء اسم الشهادة والجهة المانحة وتاريخ الإصدار",
+      "noSkills": "لم تتم إضافة أي مهارات بعد"
     },
     "currentStep": "الخطوة الحالية",
     "deleteConfirmTitle": "حذف السيرة الذاتية",

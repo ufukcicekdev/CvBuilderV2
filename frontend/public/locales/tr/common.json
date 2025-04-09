@@ -529,7 +529,8 @@
       "endDate": "Bitiş Tarihi",
       "current": "Şu anda burada okuyorum",
       "description": "Açıklama (İsteğe bağlı)",
-      "addMore": "Eğitim Ekle"
+      "addMore": "Eğitim Ekle",
+      "noEducation": "Henüz eğitim eklenmedi"
     },
     "draft": "Taslak",
     "continue": "Devam Et",
@@ -580,7 +581,8 @@
       "intermediate": "Orta",
       "advanced": "İleri",
       "expert": "Uzman",
-      "skillItem": "Yetenek"
+      "skillItem": "Yetenek",
+      "noSkills": "Henüz yetenek eklenmedi"
     },
     "certificates": {
       "title": "Sertifikalar",
