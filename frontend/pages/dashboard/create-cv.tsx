@@ -111,10 +111,10 @@ function CreateCV() {
       try {
         await checkSubscription();
         
-        
-        
-        
-        
+        if (subscriptionStatus === 'trial' && trialDaysLeft <= 0) {
+          router.push('/dashboard');
+          return;
+        }
        
        
         
@@ -188,7 +188,7 @@ function CreateCV() {
         
         {subscriptionStatus === 'trial' && (
           <Alert 
-            severity={trialDaysLeft > 0 ? "info" : "warning"} 
+            severity="info" 
             sx={{ mb: 3 }}
             action={
               <Button 
@@ -220,7 +220,7 @@ function CreateCV() {
                 cvId={Number(id)}
                 onStepChange={handleStepChange}
                 subscriptionStatus={subscriptionStatus}
-                isReadOnly={subscriptionStatus === 'trial' && trialDaysLeft <= 0}
+                isReadOnly={!hasActiveSubscription || (subscriptionStatus === 'trial' && trialDaysLeft <= 0)}
               />
             ) : (
               <CreateCVForm 

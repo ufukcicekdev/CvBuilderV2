@@ -177,7 +177,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
           </Box>
           
           <Typography variant="body2" sx={{ mb: 4, color: 'text.secondary' }}>
-            {t('cv.personalInfo.subtitle')}
+            {t('cv.personalInfo.title')}
           </Typography>
           
           {isDataLoading ? (
@@ -193,7 +193,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
                   {...register('fullName', { required: true })}
                   error={!!errors.fullName}
                   helperText={errors.fullName && t('common.required')}
-                  placeholder={t('cv.personalInfo.fullNamePlaceholder')}
+                  placeholder={t('cv.personalInfo.fullName')}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -239,7 +239,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
                   {...register('phone', { required: true })}
                   error={!!errors.phone}
                   helperText={errors.phone && t('common.required')}
-                  placeholder={t('cv.personalInfo.phonePlaceholder')}
+                  placeholder={t('cv.personalInfo.phone')}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -258,7 +258,7 @@ const PersonalInfoForm = forwardRef<PersonalInfoFormRef, PersonalInfoFormProps>(
                   {...register('location', { required: true })}
                   error={!!errors.location}
                   helperText={errors.location && t('common.required')}
-                  placeholder={t('cv.personalInfo.locationPlaceholder')}
+                  placeholder={t('cv.personalInfo.location')}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
