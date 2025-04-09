@@ -410,17 +410,28 @@
     "info": "信息"
   },
   "errors": {
-    "404": {
-      "title": "页面未找到",
-      "description": "您寻找的页面不存在或已被移动"
-    },
-    "500": {
-      "title": "服务器错误",
-      "description": "抱歉，出错了。请稍后再试"
-    },
-    "backToHome": "返回首页",
-    "tryAgain": "重试"
+  "404": {
+    "title": "页面未找到",
+    "description": "您访问的页面不存在或已被移动。"
   },
+  "500": {
+    "title": "服务器错误",
+    "description": "很抱歉，发生了错误。请稍后再试。"
+  },
+  "backToHome": "返回首页",
+  "tryAgain": "再试一次",
+  "usernameExists": "该用户名已被使用",
+  "emailExists": "该电子邮件地址已被使用",
+  "invalidUsername": "无效的用户名",
+  "invalidEmail": "无效的电子邮件地址",
+  "weakPassword": "密码太弱",
+  "passwordMismatch": "密码不匹配",
+  "unknown": "发生未知错误",
+  "formErrors": "请修正表单中的错误",
+  "registrationFailed": "注册失败。请重试",
+  "pleaseFixErrors": "请修正以下错误",
+  "present": "当前"
+},
   "dashboard": {
     "title": "我的简历",
     "createNew": "创建新简历",
@@ -433,7 +444,6 @@
     "createSuccess": "简历创建成功",
     "createError": "创建简历时出错",
     "chooseTemplate": "选择模板",
-    "preview": "预览",
     "steps": {
       "personalInfo": "个人信息",
       "experience": "工作经验",
@@ -500,7 +510,6 @@
       "addMore": "添加语言",
       "namePlaceholder": "输入语言名称",
       "certificatePlaceholder": "输入证书信息(如：托福、雅思)",
-      "certificateHelper": "如有语言证书请注明(可选)",
       "noLanguages": "尚未添加语言",
       "languageItem": "语言",
       "a1": "初级-入门",
@@ -532,16 +541,18 @@
     "saveError": "保存时出错",
     "loadError": "加载简历时出错",
     "errors": {
-      "personalInfoRequired": "请填写所有个人信息",
-      "experienceRequired": "必须输入至少一项经历",
-      "educationRequired": "必须输入至少一项教育背景",
-      "skillsRequired": "必须添加至少一项技能",
-      "languagesRequired": "必须输入至少一种语言",
-      "experienceFieldsRequired": "请填写公司名称、职位和开始日期",
-      "endDateRequired": "如非当前工作，需填写结束日期",
-      "educationFieldsRequired": "请填写学校、学位、专业和开始日期",
-      "endDateRequired": "如非当前学习，需填写结束日期"
-    },
+  "personalInfoRequired": "请填写所有个人信息",
+  "experienceRequired": "您必须输入至少一项工作经验",
+  "educationRequired": "您必须输入至少一项教育经历",
+  "skillsRequired": "您必须添加至少一个技能",
+  "languagesRequired": "您必须输入至少一种语言",
+  "experienceFieldsRequired": "请填写公司名称、职位和开始日期",
+  "educationFieldsRequired": "请填写学校、学位、专业领域和开始日期",
+  "endDateRequired": "如果您目前没有在学习，必须填写结束日期",
+  "titleRequired": "请为简历输入一个标题",
+  "skillNameRequired": "请输入技能名称",
+  "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
+},
     "currentStep": "当前步骤",
     "deleteConfirmTitle": "删除简历",
     "deleteConfirmMessage": "确定要删除此简历吗？",
@@ -553,9 +564,6 @@
     "titlePlaceholder": "为您的简历输入标题",
     "titleHelper": "此标题帮助您识别简历(如'软件开发简历')",
     "startCreating": "开始创建简历",
-    "errors": {
-      "titleRequired": "请输入简历标题"
-    },
     "loadSuccess": "简历加载成功",
     "skills": {
       "title": "技能",
@@ -563,7 +571,6 @@
       "name": "技能",
       "level": "熟练程度",
       "description": "描述",
-      "descriptionHelper": "添加此技能的简要描述(可选)",
       "addMore": "添加技能",
       "namePlaceholder": "输入技能名称",
       "levelPlaceholder": "选择您的熟练程度",
@@ -574,9 +581,6 @@
       "advanced": "高级",
       "expert": "专家",
       "skillItem": "技能"
-    },
-    "errors": {
-      "skillNameRequired": "请输入技能名称"
     },
     "certificates": {
       "title": "证书",
@@ -596,19 +600,14 @@
       "namePlaceholder": "输入证书名称",
       "issuerPlaceholder": "输入颁发组织",
       "credentialIdPlaceholder": "输入证书/凭证ID(如适用)",
-      "credentialIdHelper": "证书的参考或ID号(可选)",
       "descriptionPlaceholder": "输入证书的简要描述",
       "noCertificates": "尚未添加证书"
-    },
-    "errors": {
-      "certificateFieldsRequired": "请填写证书名称、颁发机构和颁发日期"
     },
     "progress": "进度",
     "template": {
       "selectTitle": "选择简历模板",
       "webVersion": "网页版",
       "pdfVersion": "PDF版",
-      "preview": "预览",
       "generateWeb": "生成网页简历",
       "generatePDF": "生成PDF简历",
       "pdfButton": "生成PDF简历",
@@ -746,56 +745,6 @@
       "deleteError": "删除视频时出错",
       "confirmDelete": "确定要删除视频吗？"
     },
-    "errors": {
-      "skillsRequired": "请添加至少一项技能",
-      "languagesRequired": "请添加至少一种语言"
-    },
-    "templates": {
-      "web": {
-        "modern": {
-          "name": "现代网页模板",
-          "description": "现代布局的干净专业设计"
-        },
-        "minimal": {
-          "name": "极简网页模板",
-          "description": "注重内容的简单优雅设计"
-        },
-        "colorful": {
-          "name": "多彩网页模板",
-          "description": "色彩点缀的生动醒目设计"
-        },
-        "professional": {
-          "name": "专业网页模板",
-          "description": "结构化布局的企业风格"
-        },
-        "creative": {
-          "name": "创意网页模板",
-          "description": "创意专业人士的独特设计"
-        }
-      },
-      "pdf": {
-        "modern": {
-          "name": "现代PDF模板",
-          "description": "干净排版的现代设计"
-        },
-        "classic": {
-          "name": "经典PDF模板",
-          "description": "传统简历布局，永恒魅力"
-        },
-        "minimal": {
-          "name": "极简PDF模板",
-          "description": "干净简约的设计"
-        },
-        "creative": {
-          "name": "创意PDF模板",
-          "description": "脱颖而出的醒目设计"
-        },
-        "professional": {
-          "name": "专业PDF模板",
-          "description": "商务风格布局，现代元素"
-        }
-      }
-    },
     "preview": {
       "title": "简历预览",
       "templatePreview": "模板预览",
@@ -824,11 +773,6 @@
     "editDisabled": "您无法编辑简历，因为没有活跃订阅。您处于查看模式。",
     "editNotAllowed": "简历编辑需要活跃订阅。",
     "professionalSummary": "专业概述",
-    "experience": "工作经验",
-    "education": "教育背景",
-    "skills": "技能",
-    "languages": "语言能力",
-    "certificates": "证书",
     "present": "至今"
   },
   "validation": {
@@ -842,59 +786,45 @@
     "passwordMatch": "密码不匹配",
     "invalidUserType": "请选择有效的用户类型"
   },
-  "errors": {
-    "usernameExists": "该用户名已被占用",
-    "emailExists": "该电子邮件已被使用",
-    "invalidUsername": "用户名无效",
-    "invalidEmail": "电子邮件地址无效",
-    "weakPassword": "密码太弱",
-    "passwordMismatch": "密码不匹配",
-    "unknown": "发生未知错误",
-    "formErrors": "请修复表单错误",
-    "registrationFailed": "注册失败，请重试",
-    "pleaseFixErrors": "请修复以下错误",
-    "present": "至今"
-  },
   "subscription": {
-    "status": "状态",
-    "status.active": "活跃",
-    "status.canceled": "已取消",
-    "status.expired": "已过期",
-    "status.trial": "试用期",
-    "status.pending": "待处理",
-    "status.past_due": "逾期未付",
-    "status.paused": "已暂停",
-    "trialLimit": "试用用户只能创建一份简历。请升级以创建更多。",
-    "trialLimitWithDays": "您的试用期将在 {{days}} 天内到期。试用用户只能创建一份简历。",
-    "trialDaysLeft": "您的试用期还剩 {{days}} 天",
-    "trialExpired": "您的试用期已过期",
-    "upgrade": "立即升级",
-    "freeTrialText": "开始 7 天免费试用",
-    "freeTrialDescription": "在做决定之前先试用 7 天所有高级功能",
-    "warningTitle": "已达到订阅限制",
-    "upgradeToCreate": "升级您的订阅以创建更多简历",
-    "goToPricing": "查看定价方案",
-    "paymentStatus": {
-      "success": "成功",
-      "failed": "失败",
-      "pending": "待处理"
-    },
-    "membership": "会员资格",
-    "paymentHistory": "支付历史",
-    "noPayments": "未找到支付记录",
-    "paymentDate": "日期",
-    "amount": "金额",
-    "paymentId": "支付ID",
-    "errorFetchingPayments": "获取支付历史出错",
-    "currentSubscription": "当前订阅",
-    "period": "计费周期",
-    "validUntil": "有效期至",
-    "switchToMonthly": "切换到月度计费",
-    "switchToYearly": "切换到年度计费",
-    "cancelSubscription": "取消订阅",
-    "customerPortal": "客户门户",
-    "trialActive": "您的试用期将在 {{days}} 天内到期。"
-  },
+  "title": "我的订阅",
+  "noSubscription": "您当前没有有效的订阅",
+  "activeSubscription": "您的有效订阅",
+  "details": "订阅详情",
+  "plan": "计划",
+  "status": "状态",
+  "period": "周期",
+  "startDate": "开始日期",
+  "endDate": "结束日期",
+  "price": "价格",
+  "actions": "操作",
+  "cancel": "取消订阅",
+  "update": "更新订阅",
+  "cancelConfirm": "您确定要取消订阅吗？",
+  "cancelSuccess": "您的订阅已成功取消",
+  "cancelError": "取消订阅时发生错误",
+  "updateCard": "更新付款方式",
+  "updateCardSuccess": "您的付款方式已成功更新",
+  "updateCardError": "更新付款方式时发生错误",
+  "active": "有效",
+  "canceled": "已取消",
+  "expired": "已过期",
+  "monthly": "每月",
+  "yearly": "每年",
+  "trial": "试用",
+  "paymentHistory": "付款历史",
+  "warningTitle": "订阅提醒",
+  "upgradeToCreate": "升级您的订阅以创建更多简历。",
+  "goToPricing": "查看计划",
+  "trialLimit": "试用用户只能创建一个简历。如需更多，请升级订阅。",
+  "trialLimitWithDays": "您的试用将在 {{days}} 天内结束。试用用户只能创建一个简历。",
+  "trialActive": "您的试用将在 {{days}} 天内结束。",
+  "trialDaysLeft": "您的试用期还剩 {{days}} 天",
+  "trialExpired": "您的试用期已结束",
+  "upgrade": "立即升级",
+  "freeTrialText": "开始享受 7 天免费试用",
+  "freeTrialDescription": "在做出决定之前，免费体验 7 天所有高级功能"
+},
   "privacy": {
     "pageTitle": "隐私政策 - 简历生成器",
     "pageDescription": "了解我们如何在简历生成器收集、使用和保护您的个人信息",

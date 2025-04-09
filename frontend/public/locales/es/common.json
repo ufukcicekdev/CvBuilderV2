@@ -1,16 +1,16 @@
 {
   "app": {
-    "name": "CV Builder",
-    "tagline": "Crea tu CV profesional y da un paso adelante en tu carrera",
+    "name": "Constructor de CV",
+    "tagline": "Crea tu CV profesional y avanza en tu carrera",
     "description": "Simplifica tu búsqueda de empleo y encuentra el trabajo de tus sueños"
   },
   "nav": {
     "dashboard": "Panel",
-    "jobs": "Ofertas de empleo",
-    "profile": "Mi perfil",
-    "login": "Iniciar sesión",
+    "jobs": "Ofertas de Trabajo",
+    "profile": "Mi Perfil",
+    "login": "Iniciar Sesión",
     "register": "Registrarse",
-    "logout": "Cerrar sesión",
+    "logout": "Cerrar Sesión",
     "search": "Buscar",
     "notifications": "Notificaciones",
     "settings": "Configuración",
@@ -19,32 +19,32 @@
     "language": "Idioma"
   },
   "auth": {
-    "jobseeker": "Buscador de empleo",
-    "username": "Nombre de usuario",
+    "jobseeker": "Buscador de Empleo",
+    "username": "Nombre de Usuario",
     "employer": "Empleador",
-    "email": "Correo electrónico",
+    "email": "Correo Electrónico",
     "password": "Contraseña",
-    "login": "Iniciar sesión",
-    "confirmPassword": "Confirmar contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "login": "Iniciar Sesión",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu Contraseña?",
     "rememberMe": "Recordarme",
     "loginSuccess": "¡Inicio de sesión exitoso!",
-    "loginError": "Error al iniciar sesión. Por favor verifica tu información.",
+    "loginError": "Inicio de sesión fallido. Por favor verifica tus datos.",
     "registerSuccess": "¡Registro exitoso! Por favor verifica tu correo electrónico.",
-    "registerError": "Error en el registro. Por favor verifica tu información.",
+    "registerError": "Registro fallido. Por favor verifica tus datos.",
     "orLoginWith": "o inicia sesión con",
-    "googleLogin": "Iniciar sesión con Google",
-    "userType": "Tipo de usuario",
-    "birthDate": "Fecha de nacimiento",
-    "companyName": "Nombre de la empresa",
-    "companyWebsite": "Sitio web de la empresa",
+    "googleLogin": "Iniciar Sesión con Google",
+    "userType": "Tipo de Usuario",
+    "birthDate": "Fecha de Nacimiento",
+    "companyName": "Nombre de la Empresa",
+    "companyWebsite": "Sitio Web de la Empresa",
     "phone": "Teléfono",
     "register": "Registrarse",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "dontHaveAccount": "¿No tienes una cuenta?",
-    "resendVerificationEmail": "Reenviar correo de verificación",
-    "verificationEmailSent": "Se ha enviado el correo de verificación. Por favor revisa tu bandeja de entrada.",
-    "verificationEmailFailed": "Error al enviar el correo de verificación.",
+    "resendVerificationEmail": "Reenviar Correo de Verificación",
+    "verificationEmailSent": "Correo de verificación enviado. Por favor revisa tu bandeja de entrada.",
+    "verificationEmailFailed": "Error al enviar correo de verificación.",
     "passwordRequirements": {
       "minLength": "Mínimo 8 caracteres",
       "number": "Al menos un número",
@@ -53,109 +53,109 @@
     },
     "sessionExpired": "Tu sesión ha expirado. Por favor inicia sesión nuevamente.",
     "tokenRefreshed": "Tu sesión ha sido actualizada.",
-    "logoutSuccess": "Has cerrado sesión correctamente.",
+    "logoutSuccess": "Has cerrado sesión exitosamente.",
     "errors": {
       "userNotFound": "No se encontró usuario con este correo electrónico",
       "invalidPassword": "Contraseña inválida",
       "invalidCredentials": "Correo electrónico o contraseña inválidos",
       "emailExists": "Este correo electrónico ya está en uso",
-      "weakPassword": "La contraseña es muy débil",
+      "weakPassword": "Contraseña muy débil",
       "emailNotVerified": "Por favor verifica tu correo electrónico",
-      "accountInactive": "Tu cuenta está inactiva",
+      "accountInactive": "Tu cuenta no está activa",
       "generalError": "Ocurrió un error, por favor inténtalo de nuevo",
-      "emailRequired": "El correo electrónico es requerido",
-      "passwordRequired": "La contraseña es requerida",
+      "emailRequired": "Correo electrónico es requerido",
+      "passwordRequired": "Contraseña es requerida",
       "googleLoginFailed": "Error al iniciar sesión con Google",
       "networkError": "Error de red. Por favor verifica tu conexión.",
-      "fedcmDisabled": "La API de autenticación del navegador está deshabilitada",
-      "googleScriptError": "No se pudo cargar el servicio de inicio de sesión de Google. Por favor inténtalo más tarde.",
-      "loginCancelled": "El proceso de inicio de sesión fue cancelado",
+      "fedcmDisabled": "API de autenticación del navegador deshabilitada",
+      "googleScriptError": "Error al cargar servicio de inicio de sesión de Google. Por favor inténtalo más tarde.",
+      "loginCancelled": "Inicio de sesión cancelado",
       "invalidResponse": "Respuesta inválida del servidor",
       "redirectFailed": "Redirección fallida. Intentando método alternativo."
     },
     "checkEmail": "Por favor revisa tu bandeja de entrada y haz clic en el enlace de verificación",
     "forgotPasswordInstructions": "Ingresa tu correo electrónico registrado para restablecer tu contraseña.",
-    "forgotPasswordSuccess": "Se ha enviado un enlace para restablecer la contraseña a tu correo electrónico.",
-    "forgotPasswordError": "Ocurrió un error durante el proceso de restablecimiento de contraseña.",
-    "sendResetLink": "Enviar enlace de restablecimiento",
-    "backToLogin": "Volver a iniciar sesión",
-    "resetPassword": "Restablecer contraseña",
+    "forgotPasswordSuccess": "Enlace para restablecer contraseña enviado a tu correo electrónico.",
+    "forgotPasswordError": "Error al restablecer contraseña.",
+    "sendResetLink": "Enviar Enlace de Restablecimiento",
+    "backToLogin": "Volver a Iniciar Sesión",
+    "resetPassword": "Restablecer Contraseña",
     "resetPasswordInstructions": "Por favor ingresa tu nueva contraseña.",
-    "resetPasswordSuccess": "Tu contraseña se ha restablecido correctamente. Ahora puedes iniciar sesión.",
-    "resetPasswordError": "Ocurrió un error durante el proceso de restablecimiento de contraseña.",
-    "newPassword": "Nueva contraseña",
-    "confirmNewPassword": "Confirmar nueva contraseña",
-    "resetPasswordButton": "Restablecer mi contraseña",
-    "invalidResetToken": "Enlace de restablecimiento de contraseña inválido o expirado.",
-    "passwordResetExpired": "El enlace para restablecer la contraseña ha expirado. Por favor solicita uno nuevo.",
+    "resetPasswordSuccess": "Tu contraseña ha sido restablecida exitosamente. Ahora puedes iniciar sesión.",
+    "resetPasswordError": "Error al restablecer contraseña.",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "resetPasswordButton": "Restablecer mi Contraseña",
+    "invalidResetToken": "Enlace para restablecer contraseña inválido o expirado.",
+    "passwordResetExpired": "El enlace para restablecer contraseña ha expirado. Por favor solicita uno nuevo.",
     "emailNotFound": "Correo electrónico no encontrado.",
-    "emailVerification": "Verificación de correo electrónico",
+    "emailVerification": "Verificación de Correo Electrónico",
     "verifyingEmail": "Verificando tu correo electrónico...",
-    "emailVerifiedSuccess": "¡Tu correo electrónico ha sido verificado con éxito!",
+    "emailVerifiedSuccess": "¡Tu correo electrónico ha sido verificado exitosamente!",
     "canLoginNow": "Ahora puedes iniciar sesión.",
     "verificationLinkExpired": "El enlace de verificación puede haber expirado.",
-    "emailSendingFailed": "Error al enviar el correo electrónico."
+    "emailSendingFailed": "Error al enviar correo electrónico."
   },
   "profile": {
-    "personalInfo": "Información personal",
+    "personalInfo": "Información Personal",
     "experience": "Experiencia",
     "education": "Educación",
     "skills": "Habilidades",
     "languages": "Idiomas",
     "certificates": "Certificados",
-    "about": "Sobre mí",
-    "updateSuccess": "Perfil actualizado correctamente",
-    "updateError": "Ocurrió un error al actualizar el perfil",
+    "about": "Sobre Mí",
+    "updateSuccess": "Perfil actualizado exitosamente",
+    "updateError": "Error al actualizar perfil",
     "profession": "Profesión",
-    "companyPosition": "Cargo en la empresa",
-    "companySize": "Tamaño de la empresa",
+    "companyPosition": "Cargo en la Empresa",
+    "companySize": "Tamaño de la Empresa",
     "edit": "Editar",
     "save": "Guardar",
     "cancel": "Cancelar",
-    "pictureUpdateSuccess": "Foto de perfil actualizada correctamente",
-    "pictureUpdateError": "Ocurrió un error al actualizar la foto de perfil",
+    "pictureUpdateSuccess": "Foto de perfil actualizada exitosamente",
+    "pictureUpdateError": "Error al actualizar foto de perfil",
     "firstName": "Nombre",
     "lastName": "Apellido",
     "phone": "Teléfono",
     "address": "Dirección",
-    "birthDate": "Fecha de nacimiento",
+    "birthDate": "Fecha de Nacimiento",
     "firstNamePlaceholder": "Ingresa tu nombre",
     "lastNamePlaceholder": "Ingresa tu apellido",
-    "phonePlaceholder": "Ingrese su número de teléfono",
-    "addressPlaceholder": "Ingrese su dirección",
-    "birthDatePlaceholder": "Seleccione su fecha de nacimiento",
+    "phonePlaceholder": "Ingresa tu número de teléfono",
+    "addressPlaceholder": "Ingresa tu dirección",
+    "birthDatePlaceholder": "Selecciona tu fecha de nacimiento",
     "professionPlaceholder": "Ingresa tu profesión",
-    "companyNamePlaceholder": "Ingresa el nombre de la empresa",
-    "companyWebsitePlaceholder": "Ingresa el sitio web de la empresa",
+    "companyNamePlaceholder": "Ingresa nombre de la empresa",
+    "companyWebsitePlaceholder": "Ingresa sitio web de la empresa",
     "companyPositionPlaceholder": "Ingresa tu cargo en la empresa",
-    "companySizePlaceholder": "Ingresa el tamaño de la empresa",
+    "companySizePlaceholder": "Ingresa tamaño de la empresa",
     "loading": "Cargando perfil...",
     "tryAgain": "Por favor inténtalo de nuevo.",
     "errors": {
-      "fileTooLarge": "El archivo es demasiado grande (máximo 5MB)",
-      "invalidFileType": "Tipo de archivo inválido. Por favor selecciona un archivo de imagen",
-      "uploadFailed": "Error al cargar la imagen",
+      "fileTooLarge": "Archivo demasiado grande (máximo 5MB)",
+      "invalidFileType": "Tipo de archivo inválido. Por favor selecciona una imagen",
+      "uploadFailed": "Error al cargar imagen",
       "noFile": "Por favor selecciona un archivo de imagen"
     }
   },
   "jobs": {
-    "title": "Ofertas de empleo",
-    "search": "Buscar empleos",
+    "title": "Ofertas de Trabajo",
+    "search": "Buscar Trabajos",
     "location": "Ubicación",
     "category": "Categoría",
-    "type": "Tipo de empleo",
+    "type": "Tipo de Trabajo",
     "salary": "Salario",
     "apply": "Aplicar",
-    "posted": "Fecha de publicación",
-    "deadline": "Fecha límite de aplicación"
+    "posted": "Fecha de Publicación",
+    "deadline": "Fecha Límite"
   },
   "footer": {
     "quickLinks": "Enlaces Rápidos",
     "home": "Inicio",
-    "about": "Sobre Nosotros",
+    "about": "Acerca de",
     "contact": "Contacto",
     "privacy": "Política de Privacidad",
-    "terms": "Términos de Uso",
+    "terms": "Términos de Servicio",
     "followUs": "Síguenos",
     "copyright": "Todos los derechos reservados",
     "address": "Dirección",
@@ -167,7 +167,7 @@
     "cancel": "Cancelar",
     "edit": "Editar",
     "close": "Cerrar",
-    "preview": "Vista previa",
+    "preview": "Vista Previa",
     "next": "Siguiente",
     "previous": "Anterior",
     "delete": "Eliminar",
@@ -183,162 +183,162 @@
     "invalidEmail": "Correo electrónico inválido",
     "passwordMismatch": "Las contraseñas no coinciden",
     "submitting": "Enviando...",
-    "openInNewTab": "Abrir en nueva pestaña",
+    "openInNewTab": "Abrir en Nueva Pestaña",
     "languages": "Idiomas",
     "skills": "Habilidades",
     "certificates": "Certificados",
-    "workExperience": "Experiencia laboral",
+    "workExperience": "Experiencia Laboral",
     "education": "Educación",
-    "professionalSummary": "Resumen profesional",
+    "professionalSummary": "Resumen Profesional",
     "errors": {
       "badRequest": "Solicitud inválida",
       "unauthorized": "Por favor inicia sesión",
       "forbidden": "No tienes permiso para esta operación",
       "notFound": "Solicitud no encontrada",
-      "serverError": "Ocurrió un error en el servidor",
-      "unknown": "Ocurrió un error desconocido",
-      "networkError": "Error de conexión de red",
+      "serverError": "Error del servidor",
+      "unknown": "Error desconocido",
+      "networkError": "Error de conexión",
       "validationError": "Por favor verifica la información del formulario",
       "errorOccurred": "Ocurrió un error, por favor inténtalo de nuevo"
     },
-    "uploadSuccess": "Archivo subido correctamente",
+    "uploadSuccess": "Archivo subido exitosamente",
     "confirm": "Confirmar"
   },
   "home": {
     "hero": {
-      "title": "Plataforma de creación de CV de próxima generación",
-      "subtitle": "Crea CV con IA, dinámicos e interactivos",
+      "title": "Plataforma de Creación de CV de Nueva Generación",
+      "subtitle": "Crea CVs con IA, dinámicos e interactivos",
       "cta": "Comenzar",
-      "badge": "Nuevas funciones",
-      "feature1": "Período de prueba gratuito de 7 días",
+      "badge": "Nuevas Funciones",
+      "feature1": "Prueba gratuita de 7 días",
       "feature2": "Plantillas modernas y profesionales",
-      "feature3": "CV en formatos web y PDF",
-      "toDashboard": "Ir al panel"
+      "feature3": "CVs en formatos web y PDF",
+      "toDashboard": "Ir al Panel"
     },
     "features": {
-      "title": "¿Por qué Creador de CV?",
+      "title": "¿Por qué Constructor de CV?",
       "subtitle": "Funciones innovadoras que transforman tu búsqueda de empleo",
       "overline": "CARACTERÍSTICAS",
       "feature1": {
-        "title": "Plantillas profesionales",
-        "description": "Plantillas de CV modernas y profesionales que llaman la atención de los reclutadores"
+        "title": "Plantillas Profesionales",
+        "description": "Plantillas de CV modernas y profesionales que captan la atención de empleadores"
       },
       "feature2": {
-        "title": "Edición fácil",
-        "description": "Personaliza y edita tu CV fácilmente con una interfaz de arrastrar y soltar"
+        "title": "Edición Fácil",
+        "description": "Personaliza y edita tu CV fácilmente con interfaz de arrastrar y soltar"
       },
       "feature3": {
-        "title": "Desarrollo profesional",
+        "title": "Desarrollo Profesional",
         "description": "Herramientas y recomendaciones para ayudarte a alcanzar tus metas profesionales"
       },
       "feature4": {
-        "title": "Creación rápida",
-        "description": "Crea un CV profesional en minutos y comienza a postularte de inmediato"
+        "title": "Creación Rápida",
+        "description": "Crea un CV profesional en minutos y comienza a aplicar a trabajos inmediatamente"
       },
       "realtime": {
-        "title": "Actualizaciones en tiempo real",
-        "description": "Actualiza tu CV en tiempo real. ¿Obtuviste un nuevo certificado? Agrégalo inmediatamente y usa tu CV actualizado para postulaciones."
+        "title": "Actualizaciones en Tiempo Real",
+        "description": "Actualiza tu CV en tiempo real. ¿Obtuviste un nuevo certificado? Agrégalo inmediatamente y usa tu CV actualizado en aplicaciones."
       },
       "video": {
-        "title": "Soporte para video CV",
-        "description": "Preséntate con un video. Muestra tu personalidad y habilidades de manera más efectiva. La forma moderna de conectarte con empleadores."
+        "title": "Soporte para Video CV",
+        "description": "Preséntate con un video. Muestra tu personalidad y habilidades de manera más efectiva. La forma moderna de conectar con empleadores."
       },
       "aiAssistant": {
         "title": "Asistente de IA",
-        "description": "Obtén sugerencias con IA para optimizar tu CV. Personaliza tu CV para ofertas de trabajo específicas y aumenta tus posibilidades de aceptación."
+        "description": "Recibe sugerencias con IA para optimizar tu CV. Adapta tu CV a ofertas de trabajo específicas y aumenta tus posibilidades de aceptación."
       },
       "analytics": {
         "title": "Analíticas de CV",
-        "description": "Seguimiento del rendimiento de tu CV. ¿Qué empleadores vieron tu perfil? ¿Cuántas veces se vio tu CV? Todas las estadísticas a tu alcance."
+        "description": "Monitorea el desempeño de tu CV. ¿Qué empleadores vieron tu perfil? ¿Cuántas veces se vio tu CV? Todas las estadísticas a tu alcance."
       }
     },
     "templates": {
-      "title": "Plantillas de CV profesionales",
-      "subtitle": "Plantillas modernas e impresionantes que llaman la atención de los reclutadores",
+      "title": "Plantillas de CV Profesionales",
+      "subtitle": "Plantillas modernas e impactantes que captan la atención de empleadores",
       "overline": "PLANTILLAS",
-      "cta": "Explorar plantillas"
+      "cta": "Explorar Plantillas"
     },
     "howItWorks": {
-      "title": "¿Cómo funciona?",
+      "title": "¿Cómo Funciona?",
       "overline": "GUÍA DEL USUARIO",
       "steps": [
         {
-          "title": "Crear perfil",
-          "description": "Ingresa tu información básica y crea tu perfil profesional"
+          "title": "Crea tu Perfil",
+          "description": "Crea tu perfil profesional ingresando información básica"
         },
         {
           "title": "Personaliza tu CV",
-          "description": "Elige entre plantillas modernas y personaliza tu CV"
+          "description": "Personaliza tu CV seleccionando entre plantillas modernas"
         },
         {
-          "title": "Agrega video",
+          "title": "Agrega Video",
           "description": "Preséntate con un video corto y destácate"
         },
         {
-          "title": "Postúlate",
-          "description": "Postúlate a empleos con un clic y avanza en tu carrera"
+          "title": "Aplica",
+          "description": "Aplica a ofertas de trabajo con un clic y avanza en tu carrera"
         }
       ]
     },
     "testimonials": {
-      "title": "Experiencias de usuarios",
+      "title": "Experiencias de Usuarios",
       "subtitle": "Historias de éxito y reseñas de usuarios",
-      "overline": "RESEÑAS"
+      "overline": "TESTIMONIOS"
     },
     "trustedBy": {
-      "title": "Confiable por empresas líderes"
+      "title": "Confiado por Empresas Líderes"
     },
     "stats": {
-      "users": "Usuarios activos",
-      "companies": "Empresas asociadas",
-      "cvs": "CVs creados",
+      "users": "Usuarios Activos",
+      "companies": "Empresas Socias",
+      "cvs": "CVs Creados",
       "hires": "Contrataciones"
     },
     "cta": {
-      "title": "Da un paso adelante en tu carrera",
+      "title": "Avanza en tu Carrera",
       "subtitle": "Crea tu CV profesional y encuentra el trabajo de tus sueños",
-      "button": "Empieza gratis"
+      "button": "Comenzar Gratis"
     }
   },
   "blog": {
     "title": "Blog",
-    "description": "Los últimos artículos sobre carrera y preparación de CV",
-    "searchPlaceholder": "Buscar artículos del blog...",
+    "description": "Artículos recientes sobre carrera profesional y creación de CV",
+    "searchPlaceholder": "Buscar en artículos del blog...",
     "categories": "Categorías",
-    "readMore": "Leer más",
+    "readMore": "Leer Más",
     "comments": "Comentarios",
-    "leaveComment": "Dejar un comentario",
+    "leaveComment": "Dejar Comentario",
     "noComments": "Aún no hay comentarios",
-    "relatedPosts": "Artículos relacionados"
+    "relatedPosts": "Artículos Relacionados"
   },
   "contact": {
     "title": "Contacto",
     "description": "Contáctanos. Nos pondremos en contacto contigo lo antes posible.",
-    "name": "Tu nombre",
-    "email": "Tu dirección de correo electrónico",
+    "name": "Tu Nombre",
+    "email": "Tu Correo Electrónico",
     "subject": "Asunto",
-    "message": "Tu mensaje",
+    "message": "Tu Mensaje",
     "send": "Enviar",
-    "successMessage": "Tu mensaje ha sido enviado con éxito. Nos pondremos en contacto contigo lo antes posible.",
+    "successMessage": "Tu mensaje ha sido enviado exitosamente. Nos pondremos en contacto contigo lo antes posible.",
     "errorMessage": "No se pudo enviar tu mensaje. Por favor inténtalo de nuevo más tarde.",
     "subjects": {
-      "general": "Pregunta general",
-      "technical": "Soporte técnico",
-      "billing": "Consulta de facturación",
+      "general": "Pregunta General",
+      "technical": "Soporte Técnico",
+      "billing": "Pregunta de Facturación",
       "feedback": "Retroalimentación",
       "other": "Otro"
     }
   },
   "pricing": {
     "title": "Precios",
-    "description": "Elige el plan que se adapte a tus necesidades",
-    "pageTitle": "Planes de suscripción - Creador de CV",
-    "pageDescription": "Elige un plan de creación de CV profesional que se adapte a tus necesidades y avanza en tu carrera.",
+    "description": "Elige el plan que se ajuste a tus necesidades",
+    "pageTitle": "Planes de Suscripción - Constructor de CV",
+    "pageDescription": "Elige el plan de creación de CV profesional que se ajuste a tus necesidades y avanza en tu carrera.",
     "monthly": "Mensual",
     "yearly": "Anual",
     "free": {
       "title": "Gratis",
-      "description": "Funciones básicas para empezar"
+      "description": "Funciones básicas para comenzar"
     },
     "premium": {
       "title": "Plan Premium",
@@ -347,61 +347,61 @@
     "currency": "USD",
     "perMonth": "/mes",
     "perYear": "/año",
-    "selectPlan": "Seleccionar plan",
-    "currentPlan": "Plan actual",
-    "changePlan": "Cambiar plan",
-    "alreadySubscribed": "Ya tienes una suscripción activa",
+    "selectPlan": "Seleccionar Plan",
+    "currentPlan": "Plan Actual",
+    "changePlan": "Cambiar Plan",
+    "alreadySubscribed": "Ya Tienes una Suscripción Activa",
     "saveYearly": "Ahorra 15% con pago anual",
     "features": {
       "feature.basicCvTemplates": "Plantillas básicas de CV",
       "feature.limitedCvCount": "Hasta 3 CVs",
       "feature.pdfDownload": "Descargar como PDF",
       "feature.basicSupport": "Soporte básico",
-      "feature.videoCV": "Soporte para video CV",
+      "feature.videoCV": "Soporte para Video CV",
       "feature.aiAssistant": "Asistente de IA",
       "feature.premiumTemplates": "Plantillas premium",
       "feature.prioritySupport": "Soporte prioritario",
       "feature.unlimitedCvs": "CVs ilimitados"
     },
     "subscribe": "Suscribirse",
-    "upgradeNow": "Actualizar ahora",
-    "manageSubscription": "Administrar suscripción",
-    "cancelSubscription": "Cancelar suscripción",
+    "upgradeNow": "Actualizar Ahora",
+    "manageSubscription": "Administrar Suscripción",
+    "cancelSubscription": "Cancelar Suscripción",
     "confirmCancel": "¿Estás seguro de que quieres cancelar tu suscripción?",
     "paymentProcessing": "Procesando pago...",
     "paymentSuccess": "¡Pago exitoso!",
-    "paymentError": "Error en el pago. Por favor inténtalo de nuevo.",
-    "subscriptionSuccess": "¡Suscripción creada con éxito!",
-    "subscriptionError": "Error al crear la suscripción. Por favor inténtalo de nuevo.",
-    "errorFetchingPlans": "Error al cargar los planes de suscripción.",
-    "noSubscription": "Sin suscripción activa",
+    "paymentError": "Pago fallido. Por favor inténtalo de nuevo.",
+    "subscriptionSuccess": "¡Suscripción creada exitosamente!",
+    "subscriptionError": "Error al crear suscripción. Por favor inténtalo de nuevo.",
+    "errorFetchingPlans": "Error al cargar planes de suscripción.",
+    "noSubscription": "No hay suscripción activa",
     "subscribePrompt": "Suscríbete para acceder a funciones premium.",
-    "currentSubscription": "Suscripción actual",
-    "period": "Período de facturación",
-    "validUntil": "Válido hasta",
-    "confirmCancellation": "Confirmar cancelación",
-    "cancelSuccess": "Tu suscripción ha sido cancelada con éxito.",
-    "cancelError": "Error al cancelar la suscripción. Por favor inténtalo de nuevo.",
-    "periodUpdateSuccess": "Período de facturación actualizado con éxito.",
-    "periodUpdateError": "Error al actualizar el período de facturación.",
-    "switchToMonthly": "Cambiar a facturación mensual",
-    "switchToYearly": "Cambiar a facturación anual",
-    "resubscribe": "Volver a suscribirse",
-    "checkout": "Pagar",
+    "currentSubscription": "Suscripción Actual",
+    "period": "Período de Facturación",
+    "validUntil": "Válido Hasta",
+    "confirmCancellation": "Confirmar Cancelación",
+    "cancelSuccess": "Tu suscripción ha sido cancelada exitosamente.",
+    "cancelError": "Error al cancelar suscripción. Por favor inténtalo de nuevo.",
+    "periodUpdateSuccess": "Período de facturación actualizado exitosamente.",
+    "periodUpdateError": "Error al actualizar período de facturación.",
+    "switchToMonthly": "Cambiar a Facturación Mensual",
+    "switchToYearly": "Cambiar a Facturación Anual",
+    "resubscribe": "Re-suscribirse",
+    "checkout": "Pago",
     "checkoutDescription": "Por favor revisa tu pedido y completa el pago para activar tu suscripción.",
-    "orderSummary": "Resumen del pedido",
+    "orderSummary": "Resumen del Pedido",
     "total": "Total",
-    "paymentDetails": "Detalles del pago",
-    "demoNotice": "Esta es una página de pago de demostración. En una implementación real, ingresarías tu información de pago aquí. Por ahora, puedes hacer clic en el botón de abajo para simular un pago exitoso.",
-    "completePayment": "Completar pago",
-    "customerPortal": "Portal del cliente",
+    "paymentDetails": "Detalles del Pago",
+    "demoNotice": "Esta es una página de pago de demostración. En una aplicación real, ingresarías tus detalles de pago aquí. Por ahora, puedes hacer clic en el botón de abajo para simular un pago exitoso.",
+    "completePayment": "Completar Pago",
+    "customerPortal": "Portal del Cliente",
     "paddleNotLoaded": "No se pudo cargar el sistema de pago. Por favor inténtalo de nuevo.",
-    "checkoutError": "Ocurrió un error al abrir la página de pago. Por favor inténtalo de nuevo.",
+    "checkoutError": "Error al abrir página de pago. Por favor inténtalo de nuevo.",
     "checkoutOpened": "Página de pago abierta.",
     "processingCheckout": "Preparando pago...",
-    "selectPaymentMethod": "Seleccionar método de pago",
-    "selectPaymentProvider": "Por favor selecciona un proveedor de pago",
-    "missingUserInfo": "El pago con PayTR requiere información de dirección y teléfono. Por favor completa tu información en tu perfil."
+    "selectPaymentMethod": "Seleccionar Método de Pago",
+    "selectPaymentProvider": "Por favor selecciona un proveedor de pagos",
+    "missingUserInfo": "Se requiere información de dirección y teléfono para pago con PayTR. Por favor completa tu información de perfil."
   },
   "toast": {
     "success": "¡Éxito!",
@@ -411,31 +411,41 @@
   },
   "errors": {
     "404": {
-      "title": "Página no encontrada",
-      "description": "La página que buscas no existe o ha sido movida."
+      "title": "Página No Encontrada",
+      "description": "La página que buscas no existe o puede haber sido movida."
     },
     "500": {
-      "title": "Error del servidor",
+      "title": "Error del Servidor",
       "description": "Lo sentimos, algo salió mal. Por favor inténtalo de nuevo más tarde."
     },
-    "backToHome": "Volver al inicio",
-    "tryAgain": "Intentar de nuevo"
+    "backToHome": "Volver al Inicio",
+    "tryAgain": "Intentar de Nuevo",
+    "usernameExists": "Este nombre de usuario ya está tomado",
+    "emailExists": "Este correo electrónico ya está en uso",
+    "invalidUsername": "Nombre de usuario inválido",
+    "invalidEmail": "Correo electrónico inválido",
+    "weakPassword": "Contraseña muy débil",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "unknown": "Ocurrió un error desconocido",
+    "formErrors": "Por favor corrige los errores del formulario",
+    "registrationFailed": "Registro fallido. Por favor inténtalo de nuevo",
+    "pleaseFixErrors": "Por favor corrige los siguientes errores",
+    "present": "Presente"
   },
   "dashboard": {
     "title": "Mis CVs",
-    "createNew": "Crear nuevo CV",
-    "fetchError": "Ocurrió un error al cargar los CVs",
-    "deleteSuccess": "CV eliminado con éxito",
-    "deleteError": "Ocurrió un error al eliminar el CV"
+    "createNew": "Crear Nuevo CV",
+    "fetchError": "Error al cargar CVs",
+    "deleteSuccess": "CV eliminado exitosamente",
+    "deleteError": "Error al eliminar CV"
   },
   "cv": {
     "create": "Crear CV",
-    "createSuccess": "CV creado con éxito",
-    "createError": "Ocurrió un error al crear el CV",
-    "chooseTemplate": "Elegir plantilla",
-    "preview": "Vista previa",
+    "createSuccess": "CV creado exitosamente",
+    "createError": "Error al crear CV",
+    "chooseTemplate": "Seleccionar Plantilla",
     "steps": {
-      "personalInfo": "Información personal",
+      "personalInfo": "Información Personal",
       "experience": "Experiencia",
       "education": "Educación",
       "skills": "Habilidades",
@@ -447,61 +457,60 @@
     },
     "templates": {
       "modern": {
-        "name": "Plantilla moderna",
-        "description": "Un diseño web moderno e interactivo"
+        "name": "Plantilla Moderna",
+        "description": "Diseño web moderno e interactivo"
       },
       "minimal": {
-        "name": "Plantilla minimalista",
-        "description": "Un diseño web limpio y elegante"
+        "name": "Plantilla Minimalista",
+        "description": "Diseño web limpio y elegante"
       },
       "colorful": {
-        "name": "Plantilla colorida",
-        "description": "Una plantilla vibrante y moderna con acentos de color"
+        "name": "Plantilla Colorida",
+        "description": "Plantilla vibrante y moderna con acentos coloridos"
       },
       "professional": {
-        "name": "Plantilla profesional",
-        "description": "Una plantilla limpia y profesional para perfiles corporativos"
+        "name": "Plantilla Profesional",
+        "description": "Plantilla limpia y profesional para perfiles corporativos"
       },
       "creative": {
-        "name": "Plantilla creativa",
-        "description": "Una plantilla única y creativa para perfiles artísticos"
+        "name": "Plantilla Creativa",
+        "description": "Plantilla única y creativa para perfiles artísticos"
       }
     },
     "personalInfo": {
-      "title": "Información personal",
-      "fullName": "Nombre completo",
-      "jobTitle": "Título profesional",
+      "title": "Información Personal",
+      "fullName": "Nombre Completo",
+      "jobTitle": "Título Profesional",
       "summary": "Resumen",
       "phone": "Teléfono",
       "location": "Ubicación",
       "summaryPlaceholder": "Describe brevemente tu experiencia profesional y objetivos de carrera",
-      "socialLinks": "Enlaces sociales"
+      "socialLinks": "Enlaces Sociales"
     },
     "experience": {
-      "title": "Experiencia laboral",
-      "subtitle": "Agrega tu historial laboral comenzando por el más reciente",
-      "company": "Nombre de la empresa",
+      "title": "Experiencia Laboral",
+      "subtitle": "Agrega tu historial laboral comenzando por tu posición más reciente",
+      "company": "Nombre de la Empresa",
       "position": "Cargo",
-      "startDate": "Fecha de inicio",
-      "endDate": "Fecha de finalización",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Finalización",
       "current": "Actualmente trabajo aquí",
-      "description": "Descripción del trabajo y responsabilidades",
-      "addMore": "Agregar experiencia",
-      "noExperience": "Aún no se ha agregado experiencia laboral",
+      "description": "Descripción del Trabajo y Responsabilidades",
+      "addMore": "Agregar Experiencia",
+      "noExperience": "No se ha agregado experiencia laboral aún",
       "experienceItem": "Experiencia"
     },
     "languages": {
       "title": "Idiomas",
       "subtitle": "Agrega los idiomas que conoces y sus niveles de competencia",
       "name": "Idioma",
-      "level": "Nivel de competencia",
+      "level": "Nivel de Competencia",
       "certificate": "Certificado",
-      "certificateHelper": "Si aplica, especifica tu certificado de idioma (Opcional)",
-      "addMore": "Agregar idioma",
-      "namePlaceholder": "Ingresa el nombre del idioma",
+      "addMore": "Agregar Idioma",
+      "namePlaceholder": "Ingresa nombre del idioma",
       "certificatePlaceholder": "Ingresa información del certificado (ej. TOEFL, IELTS)",
-      "certificateHelper": "Especifica tu certificado de idioma si tienes uno (Opcional)",
-      "noLanguages": "Aún no se han agregado idiomas",
+      "certificateHelper": "Especifica tu certificado de idioma si está disponible (Opcional)",
+      "noLanguages": "No se han agregado idiomas aún",
       "languageItem": "Idioma",
       "a1": "Básico - Principiante",
       "a2": "Básico - Elemental",
@@ -512,60 +521,58 @@
     },
     "education": {
       "title": "Educación",
-      "subtitle": "Agrega tu formación académica comenzando por la más reciente",
-      "school": "Institución",
+      "subtitle": "Agrega tu historial educativo comenzando por tu educación más reciente",
+      "school": "Institución Educativa",
       "degree": "Título",
-      "field": "Área de estudio",
-      "startDate": "Fecha de inicio",
-      "endDate": "Fecha de finalización",
+      "field": "Campo de Estudio",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Finalización",
       "current": "Actualmente estudio aquí",
       "description": "Descripción (Opcional)",
-      "addMore": "Agregar educación"
+      "addMore": "Agregar Educación"
     },
     "draft": "Borrador",
     "continue": "Continuar",
     "edit": "Editar",
-    "untitled": "CV sin título",
-    "lastUpdated": "Última actualización",
-    "saveAndExit": "Guardar y salir",
+    "untitled": "CV sin Título",
+    "lastUpdated": "Última Actualización",
+    "saveAndExit": "Guardar y Salir",
     "saveSuccess": "Tu progreso ha sido guardado",
-    "saveError": "Ocurrió un error al guardar",
-    "loadError": "Ocurrió un error al cargar el CV",
+    "saveError": "Error al guardar",
+    "loadError": "Error al cargar CV",
     "errors": {
       "personalInfoRequired": "Por favor completa toda la información personal",
       "experienceRequired": "Debes ingresar al menos una experiencia",
-      "educationRequired": "Debes ingresar al menos una formación académica",
+      "educationRequired": "Debes ingresar al menos una educación",
       "skillsRequired": "Debes agregar al menos una habilidad",
       "languagesRequired": "Debes ingresar al menos un idioma",
-      "experienceFieldsRequired": "Por favor completa el nombre de la empresa, cargo y fecha de inicio para la experiencia",
-      "endDateRequired": "Si no estás trabajando actualmente, se requiere fecha de finalización",
-      "educationFieldsRequired": "Por favor completa la institución, título, área de estudio y fecha de inicio",
-      "endDateRequired": "Si no estás estudiando actualmente, se requiere fecha de finalización"
+      "experienceFieldsRequired": "Por favor completa nombre de empresa, cargo y fecha de inicio para la experiencia",
+      "educationFieldsRequired": "Por favor completa institución, título, campo de estudio y fecha de inicio",
+      "endDateRequired": "Fecha de finalización es requerida si no estás estudiando actualmente",
+      "titleRequired": "Por favor ingresa un título para el CV",
+      "skillNameRequired": "Por favor ingresa nombre de habilidad",
+      "certificateFieldsRequired": "Por favor completa nombre del certificado, organización emisora y fecha de emisión"
     },
-    "currentStep": "Paso actual",
+    "currentStep": "Paso Actual",
     "deleteConfirmTitle": "Eliminar CV",
     "deleteConfirmMessage": "¿Estás seguro de que quieres eliminar este CV?",
-    "deleteSuccess": "CV eliminado con éxito",
-    "deleteError": "Ocurrió un error al eliminar el CV",
-    "noCVs": "Aún no has creado ningún CV",
-    "createFirst": "Crea tu primer CV",
+    "deleteSuccess": "CV eliminado exitosamente",
+    "deleteError": "Error al eliminar CV",
+    "noCVs": "No has creado ningún CV aún",
+    "createFirst": "Crea tu Primer CV",
     "titleLabel": "Título del CV",
     "titlePlaceholder": "Ingresa un título para tu CV",
-    "titleHelper": "Este título te ayuda a identificar tu CV (ej. 'CV de desarrollador de software')",
-    "startCreating": "Comenzar a crear CV",
-    "errors": {
-      "titleRequired": "Por favor ingresa un título para el CV"
-    },
-    "loadSuccess": "CV cargado con éxito",
+    "titleHelper": "Este título te ayuda a identificar tu CV (ej. 'CV de Desarrollador de Software')",
+    "startCreating": "Comenzar a Crear CV",
+    "loadSuccess": "CV cargado exitosamente",
     "skills": {
       "title": "Habilidades",
       "subtitle": "Agrega tus habilidades técnicas y personales",
       "name": "Habilidad",
-      "level": "Nivel de competencia",
+      "level": "Nivel de Competencia",
       "description": "Descripción",
-      "descriptionHelper": "Agrega una breve descripción de esta habilidad (Opcional)",
-      "addMore": "Agregar habilidad",
-      "namePlaceholder": "Ingresa el nombre de la habilidad",
+      "addMore": "Agregar Habilidad",
+      "namePlaceholder": "Ingresa nombre de habilidad",
       "levelPlaceholder": "Selecciona tu nivel de competencia",
       "descriptionPlaceholder": "Describe brevemente tu experiencia con esta habilidad",
       "descriptionHelper": "Agrega una breve descripción sobre esta habilidad (Opcional)",
@@ -575,260 +582,197 @@
       "expert": "Experto",
       "skillItem": "Habilidad"
     },
-    "errors": {
-      "skillNameRequired": "Por favor ingresa el nombre de la habilidad"
-    },
     "certificates": {
       "title": "Certificados",
-      "subtitle": "Agrega los certificados y documentos que posees",
-      "name": "Nombre del certificado",
-      "issuer": "Organización emisora",
-      "issueDate": "Fecha de emisión",
-      "expiryDate": "Fecha de vencimiento",
-      "expiryDateHelper": "Si aplica, fecha de vencimiento del certificado",
-      "credentialId": "Número de certificado/documento",
-      "credentialIdHelper": "Si aplica, número del certificado o documento",
+      "subtitle": "Agrega certificados y documentos que poseas",
+      "name": "Nombre del Certificado",
+      "issuer": "Organización Emisora",
+      "issueDate": "Fecha de Emisión",
+      "expiryDate": "Fecha de Expiración",
+      "expiryDateHelper": "Fecha de expiración del certificado si aplica",
+      "credentialId": "Número de Certificado/Documento",
       "description": "Descripción",
-      "uploadFile": "Subir archivo del certificado",
-      "addMore": "Agregar certificado",
-      "uploadSuccess": "Archivo del certificado subido con éxito",
-      "uploadError": "Ocurrió un error al subir el archivo del certificado",
-      "namePlaceholder": "Ingresa el nombre del certificado",
-      "issuerPlaceholder": "Ingresa la organización emisora",
-      "credentialIdPlaceholder": "Ingresa el ID/número del certificado si está disponible",
+      "uploadFile": "Subir Archivo de Certificado",
+      "addMore": "Agregar Certificado",
+      "uploadSuccess": "Archivo de certificado subido exitosamente",
+      "uploadError": "Error al subir archivo de certificado",
+      "namePlaceholder": "Ingresa nombre del certificado",
+      "issuerPlaceholder": "Ingresa organización emisora",
+      "credentialIdPlaceholder": "Ingresa ID de credencial si aplica",
       "credentialIdHelper": "Número de referencia o ID del certificado (Opcional)",
-      "descriptionPlaceholder": "Ingresa una breve descripción del certificado",
-      "noCertificates": "Aún no se han agregado certificados"
-    },
-    "errors": {
-      "certificateFieldsRequired": "Por favor completa el nombre del certificado, organización emisora y fecha de emisión"
+      "descriptionPlaceholder": "Ingresa breve descripción sobre el certificado",
+      "noCertificates": "No se han agregado certificados aún"
     },
     "progress": "Progreso",
     "template": {
-      "selectTitle": "Seleccionar plantilla de CV",
-      "webVersion": "Versión web",
+      "selectTitle": "Seleccionar Plantilla de CV",
+      "webVersion": "Versión Web",
       "pdfVersion": "Versión PDF",
-      "preview": "Vista previa",
-      "generateWeb": "Generar CV web",
+      "preview": "Vista Previa",
+      "generateWeb": "Generar CV Web",
       "generatePDF": "Generar CV PDF",
       "pdfButton": "Generar CV PDF",
       "templates": {
         "modern": {
-          "name": "Plantilla moderna",
-          "description": "Un diseño web moderno e interactivo"
+          "name": "Plantilla Moderna",
+          "description": "Diseño web moderno e interactivo"
         },
         "minimal": {
-          "name": "Plantilla minimalista",
-          "description": "Un diseño web limpio y elegante"
+          "name": "Plantilla Minimalista",
+          "description": "Diseño web limpio y elegante"
         },
         "colorful": {
-          "name": "Plantilla colorida",
-          "description": "Una plantilla vibrante y moderna con acentos de color"
+          "name": "Plantilla Colorida",
+          "description": "Plantilla vibrante y moderna con acentos coloridos"
         },
         "professional": {
-          "name": "Plantilla profesional",
-          "description": "Una plantilla limpia y profesional para perfiles corporativos"
+          "name": "Plantilla Profesional",
+          "description": "Plantilla limpia y profesional para perfiles corporativos"
         },
         "creative": {
-          "name": "Plantilla creativa",
-          "description": "Una plantilla única y creativa para perfiles artísticos"
+          "name": "Plantilla Creativa",
+          "description": "Plantilla única y creativa para perfiles artísticos"
         },
         "modernPdf": {
-          "name": "Plantilla PDF moderna",
+          "name": "Plantilla PDF Moderna",
           "description": "Diseño contemporáneo con tipografía limpia"
         },
         "classicPdf": {
-          "name": "Plantilla PDF clásica",
-          "description": "Diseño de currículum tradicional con atractivo atemporal"
+          "name": "Plantilla PDF Clásica",
+          "description": "Diseño tradicional de currículum con atractivo atemporal"
         },
         "minimalPdf": {
-          "name": "Plantilla PDF minimalista",
+          "name": "Plantilla PDF Minimalista",
           "description": "Diseño limpio y minimalista"
         },
         "creativePdf": {
-          "name": "Plantilla PDF creativa",
+          "name": "Plantilla PDF Creativa",
           "description": "Diseño audaz para destacar"
         },
         "professionalPdf": {
-          "name": "Plantilla PDF profesional",
-          "description": "Diseño enfocado en negocios con elementos modernos"
+          "name": "Plantilla PDF Profesional",
+          "description": "Diseño orientado a negocios con elementos modernos"
         },
         "modernWeb": {
-          "name": "Plantilla web moderna",
+          "name": "Plantilla Web Moderna",
           "description": "Diseño limpio y profesional con diseño moderno"
         },
         "minimalWeb": {
-          "name": "Plantilla web minimalista",
-          "description": "Diseño simple y elegante centrado en el contenido"
+          "name": "Plantilla Web Minimalista",
+          "description": "Diseño simple y elegante centrado en contenido"
         },
         "colorfulWeb": {
-          "name": "Plantilla web colorida",
-          "description": "Diseño vibrante y llamativo con acentos de color"
+          "name": "Plantilla Web Colorida",
+          "description": "Diseño vibrante y llamativo con acentos coloridos"
         },
         "professionalWeb": {
-          "name": "Plantilla web profesional",
+          "name": "Plantilla Web Profesional",
           "description": "Estilo corporativo con diseño estructurado"
         },
         "creativeWeb": {
-          "name": "Plantilla web creativa",
+          "name": "Plantilla Web Creativa",
           "description": "Diseño único para profesionales creativos"
         }
       },
-      "customBuilder": "Creador de plantillas personalizadas",
-      "templateName": "Nombre de la plantilla",
-      "saveTemplate": "Guardar plantilla",
+      "customBuilder": "Constructor de Plantillas Personalizadas",
+      "templateName": "Nombre de Plantilla",
+      "saveTemplate": "Guardar Plantilla",
       "nameRequired": "Por favor ingresa un nombre para la plantilla",
       "layout": "Diseño",
       "colors": "Colores",
       "typography": "Tipografía",
-      "layoutSettings": "Configuración de diseño",
-      "singleColumn": "Columna única",
-      "doubleColumn": "Doble columna",
-      "sidebarLeft": "Barra lateral izquierda",
-      "sidebarRight": "Barra lateral derecha",
-      "threeColumn": "Tres columnas",
-      "headerHighlight": "Resaltado de encabezado",
-      "primaryColor": "Color primario",
-      "secondaryColor": "Color secundario",
-      "backgroundColor": "Color de fondo",
-      "textColor": "Color de texto",
-      "fontSize": "Tamaño de fuente",
-      "fontFamily": "Familia tipográfica",
-      "showPhoto": "Mostrar foto",
-      "photoStyle": "Estilo de foto",
-      "photoSize": "Tamaño de foto",
+      "layoutSettings": "Configuraciones de Diseño",
+      "singleColumn": "Columna Única",
+      "doubleColumn": "Doble Columna",
+      "sidebarLeft": "Barra Lateral Izquierda",
+      "sidebarRight": "Barra Lateral Derecha",
+      "threeColumn": "Tres Columnas",
+      "headerHighlight": "Resaltado de Encabezado",
+      "primaryColor": "Color Primario",
+      "secondaryColor": "Color Secundario",
+      "backgroundColor": "Color de Fondo",
+      "textColor": "Color de Texto",
+      "fontSize": "Tamaño de Fuente",
+      "fontFamily": "Familia de Fuente",
+      "showPhoto": "Mostrar Foto",
+      "photoStyle": "Estilo de Foto",
+      "photoSize": "Tamaño de Foto",
       "circle": "Círculo",
       "square": "Cuadrado",
-      "rounded": "Redondeado",
+      "rounded": "Esquinas Redondeadas",
       "sections": "Secciones",
-      "moveUp": "Mover arriba",
-      "moveDown": "Mover abajo",
+      "moveUp": "Mover Arriba",
+      "moveDown": "Mover Abajo",
       "hide": "Ocultar",
       "show": "Mostrar",
       "edit": "Editar",
-      "colorSettings": "Configuración de colores",
-      "sectionColors": "Colores de sección",
-      "typographySettings": "Configuración tipográfica",
-      "sectionTypography": "Tipografía de sección",
-      "useGlobal": "Usar configuración global",
-      "preview": "Vista previa",
-      "savedSuccess": "Plantilla guardada con éxito",
-      "savedError": "Error al guardar la plantilla",
-      "deleteSuccess": "Plantilla eliminada con éxito",
-      "deleteError": "Error al eliminar la plantilla",
+      "colorSettings": "Configuraciones de Color",
+      "sectionColors": "Colores de Sección",
+      "typographySettings": "Configuraciones de Tipografía",
+      "sectionTypography": "Tipografía de Sección",
+      "useGlobal": "Usar Configuraciones Globales",
+      "savedSuccess": "Plantilla guardada exitosamente",
+      "savedError": "Error al guardar plantilla",
+      "deleteSuccess": "Plantilla eliminada exitosamente",
+      "deleteError": "Error al eliminar plantilla",
       "header": "Encabezado",
-      "editSection": "Editar sección",
+      "editSection": "Editar Sección",
       "editing": "Editando",
       "photo": "Foto",
-      "fullName": "Nombre completo",
+      "fullName": "Nombre Completo",
       "profession": "Profesión / Cargo",
-      "sectionVisibility": "Visibilidad de sección",
+      "sectionVisibility": "Visibilidad de Sección",
       "headerEditWarning": "Las ediciones del encabezado pueden no mostrarse correctamente en la vista previa. Se mostrarán correctamente después de guardar.",
       "atsOptimized": "Optimización ATS",
-      "atsOptimizedLabel": "Habilitar optimización ATS",
+      "atsOptimizedLabel": "Habilitar Optimización ATS",
       "atsDescription": "Optimiza tu CV para un mejor escaneo por Sistemas de Seguimiento de Candidatos (ATS)",
       "atsTips": "Consejos ATS",
-      "atsKeywords": "Palabras clave",
+      "atsKeywords": "Palabras Clave",
       "atsKeywordsLabel": "Palabras clave de la oferta de trabajo",
-      "atsKeywordsPlaceholder": "Ingresa palabras clave clave de la oferta de trabajo",
-      "atsCompatibilityScore": "Puntuación de compatibilidad ATS",
+      "atsKeywordsPlaceholder": "Ingresa palabras clave de la oferta de trabajo",
+      "atsCompatibilityScore": "Puntuación de Compatibilidad ATS",
       "atsCompatible": "Compatible con ATS",
       "atsSuggestions": "Sugerencias ATS",
-      "viewCertificate": "Ver certificado",
+      "viewCertificate": "Ver Certificado",
       "close": "Cerrar"
     },
     "video": {
-      "title": "Presentación en video",
+      "title": "Video de Presentación",
       "dragDrop": "Arrastra y suelta tu archivo de video aquí o haz clic para buscar",
       "maxSize": "Tamaño máximo de archivo: 50MB",
-      "selectVideo": "Seleccionar video",
-      "deleteSuccess": "Video eliminado con éxito",
-      "deleteError": "Ocurrió un error al eliminar el video",
+      "selectVideo": "Seleccionar Video",
+      "deleteSuccess": "Video eliminado exitosamente",
+      "deleteError": "Error al eliminar video",
       "confirmDelete": "¿Estás seguro de que quieres eliminar el video?"
     },
-    "errors": {
-      "skillsRequired": "Por favor agrega al menos una habilidad",
-      "languagesRequired": "Por favor agrega al menos un idioma"
-    },
-    "templates": {
-      "web": {
-        "modern": {
-          "name": "Plantilla web moderna",
-          "description": "Diseño limpio y profesional con diseño moderno"
-        },
-        "minimal": {
-          "name": "Plantilla web minimalista",
-          "description": "Diseño simple y elegante centrado en el contenido"
-        },
-        "colorful": {
-          "name": "Plantilla web colorida",
-          "description": "Diseño vibrante y llamativo con acentos de color"
-        },
-        "professional": {
-          "name": "Plantilla web profesional",
-          "description": "Estilo corporativo con diseño estructurado"
-        },
-        "creative": {
-          "name": "Plantilla web creativa",
-          "description": "Diseño único para profesionales creativos"
-        }
-      },
-      "pdf": {
-        "modern": {
-          "name": "Plantilla PDF moderna",
-          "description": "Diseño contemporáneo con tipografía limpia"
-        },
-        "classic": {
-          "name": "Plantilla PDF clásica",
-          "description": "Diseño de currículum tradicional con atractivo atemporal"
-        },
-        "minimal": {
-          "name": "Plantilla PDF minimalista",
-          "description": "Diseño limpio y minimalista"
-        },
-        "creative": {
-          "name": "Plantilla PDF creativa",
-          "description": "Diseño audaz para destacar"
-        },
-        "professional": {
-          "name": "Plantilla PDF profesional",
-          "description": "Diseño enfocado en negocios con elementos modernos"
-        }
-      }
-    },
     "preview": {
-      "title": "Vista previa del CV",
-      "templatePreview": "Vista previa de la plantilla",
+      "title": "Vista Previa de CV",
+      "templatePreview": "Vista Previa de Plantilla",
       "selectTemplate": "Por favor selecciona una plantilla primero",
-      "loadError": "Error al cargar los datos del CV",
+      "loadError": "Error al cargar datos del CV",
       "noData": "No hay datos para mostrar",
       "templateNotFound": "Plantilla no encontrada",
       "downloadPdf": "Descargar PDF",
       "generating": "Generando...",
       "downloadFailed": "Error al descargar",
-      "templateSelection": "Selección de plantilla",
-      "standardTemplates": "Plantillas estándar",
-      "customTemplates": "Plantillas personalizadas",
-      "customBuilderTab": "Creador de plantillas personalizadas",
-      "savedTemplates": "Tus plantillas guardadas",
+      "templateSelection": "Selección de Plantilla",
+      "standardTemplates": "Plantillas Estándar",
+      "customTemplates": "Plantillas Personalizadas",
+      "customBuilderTab": "Constructor de Plantillas Personalizadas",
+      "savedTemplates": "Tus Plantillas Guardadas",
       "noCustomTemplates": "Aún no tienes plantillas personalizadas",
-      "createCustomTemplate": "Crea tu primera plantilla",
-      "ready": "Vista previa del CV lista",
-      "createSuccess": "CV creado con éxito",
+      "createCustomTemplate": "Crea tu Primera Plantilla",
+      "ready": "Vista previa de CV lista",
+      "createSuccess": "CV creado exitosamente",
       "close": "Cerrar",
       "openCv": "Abrir CV",
       "pdfGenerating": "Generando PDF...",
-      "pdfError": "Se produjo un error al generar el PDF",
-      "createExplanation": "Esta plantilla le permite personalizar su currículum"
+      "pdfError": "Error al generar PDF",
+      "createExplanation": "Esta plantilla te permite personalizar tu currículum"
     },
     "editDisabled": "No puedes editar tu CV porque no tienes una suscripción activa. Estás en modo de vista.",
-    "editNotAllowed": "Se requiere suscripción activa para editar el CV.",
-    "professionalSummary": "Resumen profesional",
-    "experience": "Experiencia",
-    "education": "Educación",
-    "skills": "Habilidades",
-    "languages": "Idiomas",
-    "certificates": "Certificados",
+    "editNotAllowed": "Se requiere suscripción activa para editar CV.",
+    "professionalSummary": "Resumen Profesional",
     "present": "Presente"
   },
   "validation": {
@@ -842,216 +786,202 @@
     "passwordMatch": "Las contraseñas no coinciden",
     "invalidUserType": "Por favor selecciona un tipo de usuario válido"
   },
-  "errors": {
-    "usernameExists": "Este nombre de usuario ya está tomado",
-    "emailExists": "Este correo electrónico ya está en uso",
-    "invalidUsername": "Nombre de usuario inválido",
-    "invalidEmail": "Correo electrónico inválido",
-    "weakPassword": "La contraseña es muy débil",
-    "passwordMismatch": "Las contraseñas no coinciden",
-    "unknown": "Ocurrió un error desconocido",
-    "formErrors": "Por favor corrige los errores del formulario",
-    "registrationFailed": "Error en el registro. Por favor inténtalo de nuevo.",
-    "pleaseFixErrors": "Por favor corrige los siguientes errores",
-    "present": "Presente"
-  },
   "subscription": {
+    "title": "Mis Suscripciones",
+    "noSubscription": "No tienes una suscripción activa",
+    "activeSubscription": "Tu suscripción activa",
+    "details": "Detalles de Suscripción",
+    "plan": "Plan",
     "status": "Estado",
-    "status.active": "Activo",
-    "status.canceled": "Cancelado",
-    "status.expired": "Expirado",
-    "status.trial": "Prueba",
-    "status.pending": "Pendiente",
-    "status.past_due": "Pago atrasado",
-    "status.paused": "Pausado",
-    "trialActive": "Su período de prueba expira en {{days}} días.",
-    "trialLimit": "Los usuarios de prueba solo pueden crear un CV. Actualice para crear más.",
-    "trialLimitWithDays": "Su prueba expira en {{days}} días. Los usuarios de prueba solo pueden crear un CV.",
-    "trialDaysLeft": "{{days}} días restantes en su prueba",
-    "trialExpired": "Su período de prueba ha expirado",
-    "upgrade": "Actualizar ahora",
-    "freeTrialText": "Comience con una prueba gratuita de 7 días",
-    "freeTrialDescription": "Pruebe todas las funciones premium durante 7 días antes de tomar una decisión",
-    "warningTitle": "Límite de suscripción alcanzado",
-    "upgradeToCreate": "Actualice su suscripción para crear más CVs",
-    "goToPricing": "Ver planes de precios",
-    "paymentStatus": {
-      "success": "Exitoso",
-      "failed": "Fallido",
-      "pending": "Pendiente"
-    },
-    "membership": "Membresía",
-    "paymentHistory": "Historial de pagos",
-    "noPayments": "No se encontraron registros de pago",
-    "paymentDate": "Fecha",
-    "amount": "Monto",
-    "paymentId": "ID de pago",
-    "errorFetchingPayments": "Error al obtener el historial de pagos",
-    "currentSubscription": "Suscripción actual",
-    "period": "Período de facturación",
-    "validUntil": "Válido hasta",
-    "switchToMonthly": "Cambiar a facturación mensual",
-    "switchToYearly": "Cambiar a facturación anual",
-    "cancelSubscription": "Cancelar suscripción",
-    "customerPortal": "Portal del cliente"
+    "period": "Período",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Finalización",
+    "price": "Precio",
+    "actions": "Acciones",
+    "cancel": "Cancelar Suscripción",
+    "update": "Actualizar Suscripción",
+    "cancelConfirm": "¿Estás seguro de que quieres cancelar tu suscripción?",
+    "cancelSuccess": "Tu suscripción ha sido cancelada exitosamente",
+    "cancelError": "Error al cancelar suscripción",
+    "updateCard": "Actualizar Método de Pago",
+    "updateCardSuccess": "Tu método de pago ha sido actualizado exitosamente",
+    "updateCardError": "Error al actualizar método de pago",
+    "active": "Activo",
+    "canceled": "Cancelado",
+    "expired": "Expirado",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "trial": "Prueba",
+    "paymentHistory": "Historial de Pagos",
+    "warningTitle": "Advertencia de Suscripción",
+    "upgradeToCreate": "Actualiza tu suscripción para crear más CVs.",
+    "goToPricing": "Ver Planes",
+    "trialLimit": "Los usuarios de prueba solo pueden crear un CV. Por favor actualiza para más.",
+    "trialLimitWithDays": "Tu prueba expirará en {{days}} días. Los usuarios de prueba solo pueden crear un CV.",
+    "trialActive": "Tu prueba expirará en {{days}} días.",
+    "trialDaysLeft": "Te quedan {{days}} días en tu prueba",
+    "trialExpired": "Tu prueba ha expirado",
+    "upgrade": "Actualizar Ahora",
+    "freeTrialText": "Comienza con una prueba gratuita de 7 días",
+    "freeTrialDescription": "Prueba todas las funciones premium durante 7 días antes de decidir"
   },
   "privacy": {
-    "pageTitle": "Política de privacidad - Creador de CV",
-    "pageDescription": "Aprende cómo recopilamos, usamos y protegemos tu información personal en Creador de CV",
-    "title": "Política de privacidad",
-    "lastUpdated": "Última actualización",
+    "pageTitle": "Política de Privacidad - Constructor de CV",
+    "pageDescription": "Aprende cómo recopilamos, usamos y protegemos tu información personal en Constructor de CV",
+    "title": "Política de Privacidad",
+    "lastUpdated": "Última Actualización",
     "lastUpdatedDate": "29 de marzo de 2023",
-    "introduction": "Esta Política de Privacidad describe cómo Creador de CV ('nosotros', 'nuestro' o 'nos') recopila, usa y divulga tu información personal cuando usas nuestro servicio. Estamos comprometidos a proteger tu privacidad y asegurar que tengas una experiencia positiva en nuestro sitio web y al usar nuestros servicios.",
+    "introduction": "Esta Política de Privacidad describe cómo Constructor de CV ('nosotros', 'nuestro' o 'nos') recopila, usa y divulga tu información personal cuando utilizas nuestro servicio. Estamos comprometidos a proteger tu privacidad y garantizar que tengas una experiencia positiva al usar nuestro sitio web y servicios.",
     "dataCollection": {
-      "title": "Información que recopilamos",
-      "description": "Podemos recopilar varios tipos de información de y sobre los usuarios de nuestro servicio, incluyendo:",
+      "title": "Información que Recopilamos",
+      "description": "Podemos recopilar varios tipos de información de y sobre los usuarios de nuestro Servicio, incluyendo:",
       "personalInfo": "Información de identificación personal (como tu nombre, dirección de correo electrónico y número de teléfono)",
-      "profileInfo": "Información del perfil (como tu historial profesional, educación, habilidades y otra información relacionada con tu carrera)",
-      "resumeData": "Información contenida en los currículums y CV que creas usando nuestro servicio",
-      "usageInfo": "Detalles de uso (como cómo interactúas con nuestro servicio, horarios de acceso y páginas vistas)"
+      "profileInfo": "Información de perfil (como tu historial profesional, educación, habilidades y otra información relacionada con la carrera)",
+      "resumeData": "Información contenida en los currículums y CVs que creas usando nuestro Servicio",
+      "usageInfo": "Detalles de uso (como cómo interactúas con nuestro Servicio, tus horarios de acceso y páginas vistas)"
     },
     "dataUsage": {
-      "title": "Cómo usamos tu información",
+      "title": "Cómo Usamos tu Información",
       "description": "Usamos la información que recopilamos sobre ti o que nos proporcionas para varios propósitos, incluyendo:",
-      "providingService": "Para proporcionar, mantener y mejorar nuestros servicios",
-      "improving": "Para entender y analizar cómo usas nuestro servicio y desarrollar nuevos productos, servicios, características y funcionalidades",
-      "personalizing": "Para personalizar tu experiencia y entregar contenido relevante para tus intereses",
-      "communications": "Para comunicarnos contigo sobre nuestro servicio, incluyendo el envío de notificaciones relacionadas con el servicio y mensajes promocionales"
+      "providingService": "Para proporcionar, mantener y mejorar nuestros Servicios",
+      "improving": "Para entender y analizar cómo usas nuestro Servicio y desarrollar nuevos productos, servicios, características y funcionalidades",
+      "personalizing": "Para personalizar tu experiencia y ofrecer contenido relevante para tus intereses",
+      "communications": "Para comunicarnos contigo sobre nuestro Servicio, incluyendo notificaciones relacionadas con el servicio y mensajes promocionales"
     },
     "dataSharing": {
-      "title": "Cómo compartimos tu información",
+      "title": "Cómo Compartimos tu Información",
       "description": "Podemos divulgar tu información personal en las siguientes circunstancias:",
       "serviceProviders": "Con proveedores de servicios que trabajan en nuestro nombre y necesitan acceso a tu información para realizar sus servicios",
-      "legal": "Cuando lo requiera la ley o para proteger nuestros derechos, privacidad, seguridad o propiedad, o la de nuestros usuarios u otros",
-      "business": "En conexión con una transacción comercial, como una fusión, venta de activos o bancarrota"
+      "legal": "Según lo requiera la ley o para proteger nuestros derechos, privacidad, seguridad o propiedad, o la de nuestros usuarios u otros",
+      "business": "En relación con una transacción, como una fusión, venta de activos o bancarrota"
     },
     "dataSecurity": {
-      "title": "Seguridad de datos",
-      "description": "Implementamos medidas de seguridad apropiadas para proteger tu información personal contra acceso no autorizado, alteración, divulgación o destrucción. Sin embargo, ningún método de transmisión por Internet o almacenamiento electrónico es 100% seguro, por lo que no podemos garantizar su seguridad absoluta."
+      "title": "Seguridad de Datos",
+      "description": "Implementamos medidas de seguridad apropiadas para proteger tu información personal contra acceso, alteración, divulgación o destrucción no autorizados. Sin embargo, ten en cuenta que ningún método de transmisión por Internet o método de almacenamiento electrónico es 100% seguro, por lo que no podemos garantizar su seguridad absoluta."
     },
     "dataRetention": {
-      "title": "Retención de datos",
-      "description": "Retenemos tu información personal durante el tiempo necesario para cumplir con los propósitos descritos en esta Política de Privacidad, a menos que un período de retención más largo sea requerido o permitido por la ley."
+      "title": "Retención de Datos",
+      "description": "Retenemos tu información personal durante el tiempo necesario para cumplir con los propósitos descritos en esta Política de Privacidad a menos que se requiera o permita un período de retención más largo por ley."
     },
     "userRights": {
-      "title": "Tus derechos",
+      "title": "Tus Derechos",
       "description": "Dependiendo de tu ubicación, puedes tener ciertos derechos con respecto a tu información personal, incluyendo:",
-      "access": "El derecho a acceder y revisar la información personal que hemos recopilado sobre ti",
+      "access": "El derecho a acceder y revisar la información personal que recopilamos sobre ti",
       "correction": "El derecho a corregir información inexacta o incompleta",
       "deletion": "El derecho a solicitar la eliminación de tu información personal",
-      "objection": "El derecho a objetar nuestro procesamiento de tu información personal",
-      "withdrawal": "El derecho a retirar tu consentimiento en cualquier momento, donde dependamos del consentimiento para procesar tu información"
+      "objection": "El derecho a oponerte al procesamiento de tu información personal",
+      "withdrawal": "El derecho a retirar tu consentimiento en cualquier momento cuando nos basemos en tu consentimiento para procesar tu información"
     },
     "cookies": {
-      "title": "Cookies y tecnologías de seguimiento",
-      "description": "Usamos cookies y tecnologías de seguimiento similares para rastrear la actividad en nuestro servicio y almacenar cierta información. Las cookies son archivos con una pequeña cantidad de datos que pueden incluir un identificador único anónimo. Puedes instruir a tu navegador para que rechace todas las cookies o para que indique cuándo se envía una cookie."
+      "title": "Cookies y Tecnologías de Rastreo",
+      "description": "Usamos cookies y tecnologías de rastreo similares para rastrear la actividad en nuestro Servicio y retener cierta información. Las cookies son archivos con una pequeña cantidad de datos que pueden incluir un identificador único anónimo. Puedes instruir a tu navegador para que rechace todas las cookies o para que indique cuándo se envía una cookie."
     },
     "thirdParty": {
-      "title": "Servicios de terceros",
-      "description": "Nuestro servicio puede contener enlaces a otros sitios web o servicios que no son operados por nosotros. Si haces clic en un enlace de terceros, serás dirigido al sitio de ese tercero. Te recomendamos encarecidamente que revises la Política de Privacidad de cada sitio que visites. No tenemos control ni asumimos responsabilidad por el contenido, las políticas de privacidad o las prácticas de los sitios o servicios de terceros."
+      "title": "Servicios de Terceros",
+      "description": "Nuestro Servicio puede contener enlaces a otros sitios web o servicios que no son operados por nosotros. Si haces clic en un enlace de terceros, serás dirigido al sitio de ese tercero. Te recomendamos encarecidamente que revises la Política de Privacidad de cada sitio que visites. No tenemos control ni asumimos responsabilidad por el contenido, políticas de privacidad o prácticas de sitios o servicios de terceros."
     },
     "children": {
-      "title": "Privacidad de los niños",
-      "description": "Nuestro servicio no está destinado a ser utilizado por niños menores de 16 años. No recopilamos a sabiendas información personal de niños menores de 16 años. Si eres un padre/madre o tutor y sabes que tu hijo nos ha proporcionado información personal, por favor contáctanos para que podamos tomar las medidas necesarias."
+      "title": "Privacidad de los Niños",
+      "description": "Nuestro Servicio no está destinado a ser utilizado por ninguna persona menor de 16 años. No recopilamos a sabiendas información personal de ninguna persona menor de 16 años. Si eres padre/madre o tutor y sabes que tu hijo nos ha proporcionado información personal, por favor contáctanos para que podamos tomar las medidas necesarias."
     },
     "changes": {
       "title": "Cambios a esta Política de Privacidad",
-      "description": "Podemos actualizar nuestra Política de Privacidad ocasionalmente. Te notificaremos sobre cualquier cambio publicando la nueva Política de Privacidad en esta página y actualizando la fecha de 'Última actualización'. Se te recomienda revisar esta Política de Privacidad periódicamente para cualquier cambio."
+      "description": "Podemos actualizar nuestra Política de Privacidad de vez en cuando. Te notificaremos de cualquier cambio publicando la nueva Política de Privacidad en esta página y actualizando la fecha de 'Última actualización'. Te recomendamos que revises esta Política de Privacidad periódicamente para cualquier cambio."
     },
     "contact": {
       "title": "Contáctanos",
-      "description": "Si tienes alguna pregunta sobre esta Política de Privacidad, por favor contáctanos en:",
-      "email": "Correo electrónico"
+      "description": "Si tienes alguna pregunta sobre esta Política de Privacidad, por favor contáctanos:",
+      "email": "Correo Electrónico"
     }
   },
   "terms": {
-    "pageTitle": "Términos de servicio - Creador de CV",
-    "pageDescription": "Lee nuestros términos y condiciones para usar los servicios de Creador de CV",
-    "title": "Términos de servicio",
-    "lastUpdated": "Última actualización",
+    "pageTitle": "Términos de Servicio - Constructor de CV",
+    "pageDescription": "Lee los términos y condiciones para usar los servicios de Constructor de CV",
+    "title": "Términos de Servicio",
+    "lastUpdated": "Última Actualización",
     "lastUpdatedDate": "29 de marzo de 2023",
-    "introduction": "Estos Términos de servicio ('Términos') rigen tu acceso y uso del sitio web, servicios y aplicaciones de Creador de CV (colectivamente, el 'Servicio'). Al acceder o usar el Servicio, aceptas estar obligado por estos Términos. Si no estás de acuerdo con alguna parte de los Términos, no puedes acceder al Servicio.",
+    "introduction": "Estos Términos de Servicio ('Términos') rigen tu acceso y uso del sitio web, servicios y aplicaciones de Constructor de CV (colectivamente 'Servicio'). Al acceder o usar el Servicio, aceptas estar obligado por estos Términos. Si no estás de acuerdo con alguna parte de los términos, no podrás acceder al Servicio.",
     "acceptance": {
-      "title": "Aceptación de los términos",
-      "description": "Al crear una cuenta o usar nuestro Servicio, reconoces que has leído, entendido y aceptado estar obligado por estos Términos. Si estás usando el Servicio en nombre de una organización, estás aceptando estos Términos en nombre de esa organización."
+      "title": "Aceptación de los Términos",
+      "description": "Al crear una cuenta o usar nuestro Servicio, confirmas que has leído, entendido y aceptado estar obligado por estos Términos. Si estás usando el Servicio en nombre de una organización, estás aceptando estos Términos para esa organización."
     },
     "accountRegistration": {
-      "title": "Registro de cuenta y seguridad",
-      "description": "Para usar ciertas características de nuestro Servicio, puede que necesites crear una cuenta. Al registrarte para una cuenta, aceptas:",
-      "accurate": "Proporcionar información verdadera, precisa, actual y completa sobre ti mismo",
-      "oneAccount": "Mantener solo una cuenta, a menos que se permita explícitamente crear múltiples cuentas",
-      "security": "Mantener la seguridad de tu cuenta protegiendo tu contraseña y restringiendo el acceso a tu cuenta",
-      "prohibited": "No permitir que otros usen tu cuenta o transferir tu cuenta a otra persona o entidad"
+      "title": "Registro de Cuenta y Seguridad",
+      "description": "Puede que necesites crear una cuenta para usar ciertas características de nuestro Servicio. Al crear una cuenta, aceptas:",
+      "accurate": "Proporcionar información precisa, actual y completa sobre ti mismo",
+      "oneAccount": "Mantener solo una cuenta a menos que se te permita expresamente lo contrario",
+      "security": "Mantener la seguridad de tu cuenta protegiendo tu contraseña y restringiendo el acceso",
+      "prohibited": "No permitir que otros usen tu cuenta ni transferir tu cuenta a otra persona o entidad"
     },
     "userContent": {
-      "title": "Contenido del usuario",
-      "description": "Nuestro Servicio te permite crear, almacenar y compartir contenido como currículums, CVs e información de perfil ('Contenido del usuario'). Con respecto al Contenido del usuario, reconoces que:",
-      "ownership": "Mantienes la propiedad de cualquier derecho de propiedad intelectual que tengas en el Contenido del usuario",
-      "license": "Concedes a Creador de CV una licencia mundial, libre de regalías para usar, reproducir, modificar, distribuir y mostrar el Contenido del usuario para proporcionar y mejorar el Servicio",
-      "prohibited": "No subirás, compartirás o crearás ningún contenido que viole estos Términos o cualquier ley o regulación aplicable"
+      "title": "Contenido del Usuario",
+      "description": "Nuestro Servicio te permite crear, almacenar y compartir contenido como currículums, CVs e información de perfil ('Contenido del Usuario'). Con respecto al Contenido del Usuario, aceptas que:",
+      "ownership": "Mantienes cualquier derecho de propiedad intelectual que tengas en el Contenido del Usuario",
+      "license": "Concedes a Constructor de CV una licencia mundial, libre de regalías para usar, reproducir, modificar, distribuir y mostrar el Contenido del Usuario para proporcionar y mejorar el Servicio",
+      "prohibited": "No cargarás, compartirás ni crearás ningún contenido que viole estos Términos o cualquier ley o regulación aplicable"
     },
     "subscriptions": {
-      "title": "Suscripciones y pagos",
+      "title": "Suscripciones y Pagos",
       "description": "Ofrecemos planes de suscripción gratuitos y de pago para nuestro Servicio. Al suscribirte a un plan de pago, aceptas los siguientes términos:",
       "payment": "Aceptas pagar todas las tarifas asociadas con tu plan de suscripción",
       "renewal": "Las suscripciones se renuevan automáticamente al final de cada período de facturación a menos que se cancelen antes de la fecha de renovación",
       "cancellation": "Puedes cancelar tu suscripción en cualquier momento a través de la configuración de tu cuenta o contactándonos",
-      "refunds": "Los reembolsos se proporcionan de acuerdo con nuestra política de reembolsos y la ley aplicable"
+      "refunds": "Se proporcionan reembolsos de acuerdo con nuestra política de reembolsos y las leyes aplicables"
     },
     "intellectualProperty": {
-      "title": "Derechos de propiedad intelectual",
-      "description": "El Servicio y su contenido original, características y funcionalidad son y seguirán siendo propiedad exclusiva de Creador de CV y sus licenciantes. El Servicio está protegido por derechos de autor, marcas comerciales y otras leyes tanto del país en el que resides como de países extranjeros. Nuestras marcas comerciales y nuestra imagen comercial no pueden usarse en relación con ningún producto o servicio sin el consentimiento previo por escrito de Creador de CV."
+      "title": "Derechos de Propiedad Intelectual",
+      "description": "El Servicio y su contenido original, características y funcionalidad serán y permanecerán propiedad exclusiva de Constructor de CV y sus licenciantes. El Servicio está protegido por derechos de autor, marcas comerciales y otras leyes de tu país y países extranjeros. Nuestras marcas comerciales y imagen comercial no pueden usarse en conexión con ningún producto o servicio sin nuestro consentimiento previo por escrito."
     },
     "prohibition": {
-      "title": "Usos prohibidos",
-      "description": "Aceptas no usar el Servicio de ninguna manera que:",
-      "illegal": "Viole cualquier ley o regulación aplicable",
-      "harmful": "Sea dañina, amenazante, abusiva, difamatoria o de otra manera objetable",
-      "impersonation": "Implique hacerse pasar por cualquier persona o entidad o declarar falsamente o tergiversar tu afiliación con una persona o entidad",
-      "data": "Intente recopilar o almacenar datos personales sobre otros usuarios sin su conocimiento y consentimiento expreso",
-      "interference": "Interfiera o interrumpa la integridad o el rendimiento del Servicio o sus componentes"
+      "title": "Usos Prohibidos",
+      "description": "Aceptas no usar el Servicio de las siguientes maneras:",
+      "illegal": "En violación de cualquier ley o regulación aplicable",
+      "harmful": "Dañino, amenazante, abusivo, difamatorio o de otra manera objetable",
+      "impersonation": "Que implique suplantación de cualquier persona o entidad o tergiversación de tu afiliación",
+      "data": "Intentando recopilar información sobre otros usuarios sin su conocimiento o consentimiento",
+      "interference": "Interfiriendo o interrumpiendo la integridad o rendimiento del Servicio"
     },
     "termination": {
       "title": "Terminación",
-      "description": "Podemos terminar o suspender tu cuenta y el acceso al Servicio de inmediato, sin previo aviso ni responsabilidad, por cualquier motivo, incluyendo pero no limitado a una violación de los Términos. Al terminar, tu derecho a usar el Servicio cesará inmediatamente. Si deseas terminar tu cuenta, simplemente puedes dejar de usar el Servicio o eliminar tu cuenta a través de la configuración de la cuenta."
+      "description": "Podemos suspender o terminar tu cuenta y acceso al Servicio inmediatamente, sin previo aviso ni responsabilidad, por cualquier motivo, incluido el incumplimiento de estos Términos. Al terminar, tu derecho a usar el Servicio cesará inmediatamente. Si deseas terminar tu cuenta, simplemente puedes dejar de usar el Servicio o eliminar tu cuenta a través de la configuración de la cuenta."
     },
     "disclaimer": {
-      "title": "Renuncia de garantías",
-      "description": "El Servicio se proporciona 'tal cual' y 'según disponibilidad' sin garantías de ningún tipo, expresas o implícitas, incluyendo pero no limitado a, las garantías implícitas de comerciabilidad, idoneidad para un propósito particular o no infracción. No garantizamos que el Servicio sea ininterrumpido, oportuno, seguro o libre de errores."
+      "title": "Renuncia de Garantías",
+      "description": "El Servicio se proporciona 'tal cual' y 'según disponibilidad' sin garantías de ningún tipo, expresas o implícitas, incluyendo pero no limitado a garantías de comerciabilidad, idoneidad para un propósito particular y no infracción. No garantizamos que el Servicio sea ininterrumpido, oportuno, seguro o libre de errores."
     },
     "limitation": {
-      "title": "Limitación de responsabilidad",
-      "description": "En la máxima medida permitida por la ley, en ningún caso Creador de CV, sus directores, empleados, socios, agentes, proveedores o afiliados serán responsables por cualquier daño indirecto, especial, incidental, consecuente o punitivo, incluyendo sin limitación, pérdida de beneficios, datos, uso, buena voluntad u otras pérdidas intangibles."
+      "title": "Limitación de Responsabilidad",
+      "description": "En la máxima medida permitida por la ley, en ningún caso Constructor de CV, sus directores, empleados, socios, agentes, proveedores o afiliados serán responsables por daños indirectos, incidentales, especiales, consecuentes o punitivos, incluyendo sin limitación pérdida de beneficios, datos, uso, buena voluntad u otras pérdidas intangibles."
     },
     "indemnification": {
       "title": "Indemnización",
-      "description": "Aceptas defender, indemnizar y mantener indemne a Creador de CV y sus licenciantes, proveedores de servicios, empleados, agentes, funcionarios y directores de y contra cualquier reclamo, responsabilidad, daño, juicio, premio, pérdida, costo, gasto o tarifa (incluyendo honorarios razonables de abogados) que surjan de o estén relacionados con tu violación de estos Términos o tu uso del Servicio."
+      "description": "Aceptas indemnizar y eximir de responsabilidad a Constructor de CV y sus licenciantes, proveedores de servicios, empleados, agentes, funcionarios y directores de y contra cualquier reclamo, responsabilidad, daño, juicio, premio, pérdida, costo, gasto o tarifa (incluyendo honorarios razonables de abogados) que surjan de o estén relacionados con tu violación de estos Términos o tu uso del Servicio."
     },
     "governing": {
-      "title": "Ley aplicable",
-      "description": "Estos Términos se regirán e interpretarán de acuerdo con las leyes del país en el que se estableció Creador de CV, sin tener en cuenta sus disposiciones sobre conflicto de leyes. Nuestro fracaso en hacer cumplir cualquier derecho o disposición de estos Términos no se considerará una renuncia a esos derechos."
+      "title": "Ley Aplicable",
+      "description": "Estos Términos se interpretarán y regirán de acuerdo con las leyes del país donde se estableció Constructor de CV, sin tener en cuenta sus disposiciones sobre conflicto de leyes. Nuestro fracaso en hacer cumplir cualquier derecho o disposición de estos Términos no se considerará una renuncia a esos derechos."
     },
     "changes": {
-      "title": "Cambios en los términos",
-      "description": "Nos reservamos el derecho de modificar o reemplazar estos Términos en cualquier momento. Si una revisión es material, proporcionaremos al menos 30 días de aviso antes de que los nuevos términos entren en vigencia. Lo que constituye un cambio material se determinará a nuestra sola discreción. Al continuar accediendo o usando nuestro Servicio después de que esas revisiones entren en vigencia, aceptas estar obligado por los términos revisados."
+      "title": "Cambios a los Términos",
+      "description": "Nos reservamos el derecho de modificar o reemplazar estos Términos en cualquier momento. Si un cambio es material, te notificaremos al menos 30 días antes de que los nuevos términos entren en vigencia. Lo que constituye un cambio material será determinado a nuestra sola discreción. Al continuar accediendo o usando nuestro Servicio después de que los cambios entren en vigencia, aceptas estar obligado por los términos modificados."
     },
     "contact": {
       "title": "Contáctanos",
-      "description": "Si tienes alguna pregunta sobre estos Términos, por favor contáctanos en:",
-      "email": "Correo electrónico"
+      "description": "Si tienes alguna pregunta sobre estos Términos, por favor contáctanos:",
+      "email": "Correo Electrónico"
     }
   },
   "payment": {
     "success": {
       "title": "Pago Exitoso",
-      "description": "Tu pago se ha completado con éxito. Tu suscripción ha sido activada.",
+      "description": "Tu pago se ha completado exitosamente. Tu suscripción ha sido activada.",
       "goDashboard": "Ir al Panel",
       "goProfile": "Mi Perfil"
     },
     "fail": {
       "title": "Pago Fallido",
-      "description": "Hubo un problema durante el proceso de pago. Por favor, intenta de nuevo más tarde o contacta a nuestro equipo de soporte.",
-      "notice": "Si crees que tu cuenta ha sido cobrada, por favor contáctanos. Resolveremos el problema lo más pronto posible.",
+      "description": "Hubo un problema durante el proceso de pago. Por favor inténtalo de nuevo más tarde o contacta a nuestro equipo de soporte.",
+      "notice": "Si crees que se ha cobrado a tu cuenta, por favor contáctanos. Resolveremos el problema lo antes posible.",
       "tryAgain": "Intentar de Nuevo",
       "contactSupport": "Contactar Soporte"
     }

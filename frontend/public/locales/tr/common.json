@@ -419,7 +419,18 @@
       "description": "Üzgünüz, bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
     },
     "backToHome": "Ana Sayfaya Dön",
-    "tryAgain": "Tekrar Deneyin"
+    "tryAgain": "Tekrar Deneyin",
+    "usernameExists": "Bu kullanıcı adı zaten alınmış",
+    "emailExists": "Bu e-posta adresi zaten kullanımda",
+    "invalidUsername": "Geçersiz kullanıcı adı",
+    "invalidEmail": "Geçersiz e-posta adresi",
+    "weakPassword": "Şifre çok zayıf",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "unknown": "Bilinmeyen bir hata oluştu",
+    "formErrors": "Lütfen form hatalarını düzeltin",
+    "registrationFailed": "Kayıt başarısız. Lütfen tekrar deneyin",
+    "pleaseFixErrors": "Lütfen aşağıdaki hataları düzeltin",
+    "present": "Şu anda"
   },
   "dashboard": {
     "title": "CV'lerim",
@@ -433,7 +444,6 @@
     "createSuccess": "CV başarıyla oluşturuldu",
     "createError": "CV oluşturulurken bir hata oluştu",
     "chooseTemplate": "Şablon Seç",
-    "preview": "Önizleme",
     "steps": {
       "personalInfo": "Kişisel Bilgiler",
       "experience": "Deneyim",
@@ -496,7 +506,6 @@
       "name": "Dil",
       "level": "Yeterlilik Seviyesi",
       "certificate": "Sertifika",
-      "certificateHelper": "Varsa, dil sertifikanızı belirtin (İsteğe bağlı)",
       "addMore": "Dil Ekle",
       "namePlaceholder": "Dil adını girin",
       "certificatePlaceholder": "Sertifika bilgilerini girin (örn. TOEFL, IELTS)",
@@ -532,16 +541,18 @@
     "saveError": "Kaydedilirken bir hata oluştu",
     "loadError": "CV yüklenirken bir hata oluştu",
     "errors": {
-      "personalInfoRequired": "Lütfen tüm kişisel bilgileri doldurun",
-      "experienceRequired": "En az bir deneyim girmelisiniz",
-      "educationRequired": "En az bir eğitim girmelisiniz",
-      "skillsRequired": "En az bir yetenek eklemelisiniz",
-      "languagesRequired": "En az bir dil girmelisiniz",
-      "experienceFieldsRequired": "Lütfen deneyim için şirket adı, pozisyon ve başlangıç tarihini doldurun",
-      "endDateRequired": "Şu anda çalışmıyorsanız, bitiş tarihi gereklidir",
-      "educationFieldsRequired": "Lütfen okul, derece, çalışma alanı ve başlangıç tarihini doldurun",
-      "endDateRequired": "Şu anda okumuyorsanız, bitiş tarihi gereklidir"
-    },
+     "personalInfoRequired": "Lütfen tüm kişisel bilgileri doldurun",
+     "experienceRequired": "En az bir deneyim girmelisiniz",
+     "educationRequired": "En az bir eğitim girmelisiniz",
+     "skillsRequired": "En az bir yetenek eklemelisiniz",
+     "languagesRequired": "En az bir dil girmelisiniz",
+     "experienceFieldsRequired": "Lütfen deneyim için şirket adı, pozisyon ve başlangıç tarihini doldurun",
+     "educationFieldsRequired": "Lütfen okul, derece, çalışma alanı ve başlangıç tarihini doldurun",
+     "endDateRequired": "Şu anda okumuyorsanız, bitiş tarihi gereklidir",
+     "titleRequired": "Lütfen CV için bir başlık girin",
+     "skillNameRequired": "Lütfen yetenek adını girin",
+     "certificateFieldsRequired": "Lütfen sertifika adı, veren kuruluş ve veriliş tarihini doldurun"
+   },
     "currentStep": "Mevcut Adım",
     "deleteConfirmTitle": "CV'yi Sil",
     "deleteConfirmMessage": "Bu CV'yi silmek istediğinizden emin misiniz?",
@@ -553,9 +564,6 @@
     "titlePlaceholder": "CV'niz için bir başlık girin",
     "titleHelper": "Bu başlık CV'nizi tanımlamanıza yardımcı olur (örn. 'Yazılım Geliştirici CV'si')",
     "startCreating": "CV Oluşturmaya Başla",
-    "errors": {
-      "titleRequired": "Lütfen CV için bir başlık girin"
-    },
     "loadSuccess": "CV başarıyla yüklendi",
     "skills": {
       "title": "Yetenekler",
@@ -563,7 +571,6 @@
       "name": "Yetenek",
       "level": "Yeterlilik Seviyesi",
       "description": "Açıklama",
-      "descriptionHelper": "Bu yetenek hakkında kısa bir açıklama ekleyin (İsteğe bağlı)",
       "addMore": "Yetenek Ekle",
       "namePlaceholder": "Yetenek adını girin",
       "levelPlaceholder": "Yeterlilik seviyenizi seçin",
@@ -575,9 +582,6 @@
       "expert": "Uzman",
       "skillItem": "Yetenek"
     },
-    "errors": {
-      "skillNameRequired": "Lütfen yetenek adını girin"
-    },
     "certificates": {
       "title": "Sertifikalar",
       "subtitle": "Sahip olduğunuz sertifikaları ve belgeleri ekleyin",
@@ -587,7 +591,6 @@
       "expiryDate": "Son Kullanma Tarihi",
       "expiryDateHelper": "Varsa, sertifikanın son kullanma tarihi",
       "credentialId": "Sertifika/Belge No.",
-      "credentialIdHelper": "Varsa, sertifika veya belge numarası",
       "description": "Açıklama",
       "uploadFile": "Sertifika Dosyası Yükle",
       "addMore": "Sertifika Ekle",
@@ -599,9 +602,6 @@
       "credentialIdHelper": "Sertifikanın referans veya ID numarası (İsteğe bağlı)",
       "descriptionPlaceholder": "Sertifika hakkında kısa bir açıklama girin",
       "noCertificates": "Henüz sertifika eklenmedi"
-    },
-    "errors": {
-      "certificateFieldsRequired": "Lütfen sertifika adı, veren kuruluş ve veriliş tarihini doldurun"
     },
     "progress": "İlerleme",
     "template": {
@@ -711,7 +711,6 @@
       "typographySettings": "Tipografi Ayarları",
       "sectionTypography": "Bölüm Tipografisi",
       "useGlobal": "Genel Ayarları Kullan",
-      "preview": "Önizleme",
       "savedSuccess": "Şablon başarıyla kaydedildi",
       "savedError": "Şablon kaydedilirken hata oluştu",
       "deleteSuccess": "Şablon başarıyla silindi",
@@ -746,56 +745,6 @@
       "deleteError": "Video silinirken bir hata oluştu",
       "confirmDelete": "Videoyu silmek istediğinizden emin misiniz?"
     },
-    "errors": {
-      "skillsRequired": "Lütfen en az bir yetenek ekleyin",
-      "languagesRequired": "Lütfen en az bir dil ekleyin"
-    },
-    "templates": {
-      "web": {
-        "modern": {
-          "name": "Modern Web Şablonu",
-          "description": "Modern düzen ile temiz ve profesyonel tasarım"
-        },
-        "minimal": {
-          "name": "Minimal Web Şablonu",
-          "description": "İçeriğe odaklanan basit ve şık tasarım"
-        },
-        "colorful": {
-          "name": "Renkli Web Şablonu",
-          "description": "Renkli vurgulara sahip canlı ve dikkat çekici tasarım"
-        },
-        "professional": {
-          "name": "Profesyonel Web Şablonu",
-          "description": "Yapılandırılmış düzen ile kurumsal stil"
-        },
-        "creative": {
-          "name": "Yaratıcı Web Şablonu",
-          "description": "Yaratıcı profesyoneller için benzersiz tasarım"
-        }
-      },
-      "pdf": {
-        "modern": {
-          "name": "Modern PDF Şablonu",
-          "description": "Temiz tipografi ile çağdaş tasarım"
-        },
-        "classic": {
-          "name": "Klasik PDF Şablonu",
-          "description": "Zamansız çekiciliğe sahip geleneksel özgeçmiş düzeni"
-        },
-        "minimal": {
-          "name": "Minimal PDF Şablonu",
-          "description": "Temiz ve minimalist tasarım"
-        },
-        "creative": {
-          "name": "Yaratıcı PDF Şablonu",
-          "description": "Öne çıkmak için cesur tasarım"
-        },
-        "professional": {
-          "name": "Profesyonel PDF Şablonu",
-          "description": "Modern unsurlara sahip iş odaklı düzen"
-        }
-      }
-    },
     "preview": {
       "title": "CV Önizleme",
       "templatePreview": "Şablon Önizleme",
@@ -824,11 +773,6 @@
     "editDisabled": "Aktif bir aboneliğiniz olmadığı için CV'nizi düzenleyemezsiniz. Görüntüleme modundasınız.",
     "editNotAllowed": "CV düzenleme için aktif abonelik gereklidir.",
     "professionalSummary": "Profesyonel Özet",
-    "experience": "Deneyim",
-    "education": "Eğitim",
-    "skills": "Yetenekler",
-    "languages": "Diller",
-    "certificates": "Sertifikalar",
     "present": "Şu anda"
   },
   "validation": {
@@ -841,19 +785,6 @@
     "passwordUppercase": "Şifre en az bir büyük harf içermelidir",
     "passwordMatch": "Şifreler eşleşmiyor",
     "invalidUserType": "Lütfen geçerli bir kullanıcı türü seçin"
-  },
-  "errors": {
-    "usernameExists": "Bu kullanıcı adı zaten alınmış",
-    "emailExists": "Bu e-posta adresi zaten kullanımda",
-    "invalidUsername": "Geçersiz kullanıcı adı",
-    "invalidEmail": "Geçersiz e-posta adresi",
-    "weakPassword": "Şifre çok zayıf",
-    "passwordMismatch": "Şifreler eşleşmiyor",
-    "unknown": "Bilinmeyen bir hata oluştu",
-    "formErrors": "Lütfen form hatalarını düzeltin",
-    "registrationFailed": "Kayıt başarısız. Lütfen tekrar deneyin",
-    "pleaseFixErrors": "Lütfen aşağıdaki hataları düzeltin",
-    "present": "Şu anda"
   },
   "subscription": {
     "title": "Aboneliklerim",

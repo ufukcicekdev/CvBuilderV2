@@ -232,7 +232,7 @@ const CVPreviewTemplates = ({
       {selectedTemplate && cv && (
         <Box sx={{ mt: 2, position: 'relative' }}>
           <Typography variant="h6" gutterBottom>
-            {t('cv.preview', 'Preview')}
+            {t('cv.preview.title', 'Preview')}
           </Typography>
           <Box
             sx={{

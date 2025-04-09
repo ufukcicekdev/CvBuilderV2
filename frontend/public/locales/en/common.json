@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "CV Builder",
-    "tagline": "Create your professional CV and take a step forward in your career",
+    "tagline": "Create your professional CV and get ahead in your career",
     "description": "Simplify your job search process and find your dream job"
   },
   "nav": {
@@ -33,7 +33,7 @@
     "registerSuccess": "Registration successful! Please verify your email address.",
     "registerError": "Registration failed. Please check your information.",
     "orLoginWith": "or login with",
-    "googleLogin": "Sign in with Google",
+    "googleLogin": "Login with Google",
     "userType": "User Type",
     "birthDate": "Birth Date",
     "companyName": "Company Name",
@@ -43,7 +43,7 @@
     "alreadyHaveAccount": "Already have an account?",
     "dontHaveAccount": "Don't have an account?",
     "resendVerificationEmail": "Resend Verification Email",
-    "verificationEmailSent": "Verification email has been sent. Please check your inbox.",
+    "verificationEmailSent": "Verification email sent. Please check your inbox.",
     "verificationEmailFailed": "Failed to send verification email.",
     "passwordRequirements": {
       "minLength": "At least 8 characters",
@@ -53,7 +53,7 @@
     },
     "sessionExpired": "Your session has expired. Please login again.",
     "tokenRefreshed": "Your session has been refreshed.",
-    "logoutSuccess": "You have been successfully logged out.",
+    "logoutSuccess": "You have successfully logged out.",
     "errors": {
       "userNotFound": "No user found with this email address",
       "invalidPassword": "Invalid password",
@@ -61,28 +61,28 @@
       "emailExists": "This email address is already in use",
       "weakPassword": "Password is too weak",
       "emailNotVerified": "Please verify your email address",
-      "accountInactive": "Your account is inactive",
+      "accountInactive": "Your account is not active",
       "generalError": "An error occurred, please try again",
       "emailRequired": "Email is required",
       "passwordRequired": "Password is required",
       "googleLoginFailed": "Google login failed",
       "networkError": "Network error. Please check your connection.",
       "fedcmDisabled": "Browser authentication API is disabled",
-      "googleScriptError": "Google sign-in service could not be loaded. Please try again later",
-      "loginCancelled": "Login process was cancelled",
+      "googleScriptError": "Failed to load Google login service. Please try again later.",
+      "loginCancelled": "Login cancelled",
       "invalidResponse": "Invalid response from server",
       "redirectFailed": "Redirect failed. Trying alternative method."
     },
-    "checkEmail": "Please check your email inbox and click on the verification link",
+    "checkEmail": "Please check your email inbox and click the verification link",
     "forgotPasswordInstructions": "Enter your registered email address to reset your password.",
     "forgotPasswordSuccess": "Password reset link has been sent to your email address.",
-    "forgotPasswordError": "An error occurred during the password reset process.",
+    "forgotPasswordError": "An error occurred during password reset.",
     "sendResetLink": "Send Reset Link",
     "backToLogin": "Back to Login",
     "resetPassword": "Reset Password",
     "resetPasswordInstructions": "Please enter your new password.",
     "resetPasswordSuccess": "Your password has been successfully reset. You can now login.",
-    "resetPasswordError": "An error occurred during the password reset process.",
+    "resetPasswordError": "An error occurred during password reset.",
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "resetPasswordButton": "Reset My Password",
@@ -92,8 +92,8 @@
     "emailVerification": "Email Verification",
     "verifyingEmail": "Verifying your email...",
     "emailVerifiedSuccess": "Your email has been successfully verified!",
-    "canLoginNow": "You can now log in.",
-    "verificationLinkExpired": "The verification link may have expired.",
+    "canLoginNow": "You can now login.",
+    "verificationLinkExpired": "Verification link may have expired.",
     "emailSendingFailed": "Failed to send email."
   },
   "profile": {
@@ -105,7 +105,7 @@
     "certificates": "Certificates",
     "about": "About Me",
     "updateSuccess": "Profile updated successfully",
-    "updateError": "An error occurred while updating the profile",
+    "updateError": "An error occurred while updating profile",
     "profession": "Profession",
     "companyPosition": "Company Position",
     "companySize": "Company Size",
@@ -113,7 +113,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "pictureUpdateSuccess": "Profile picture updated successfully",
-    "pictureUpdateError": "An error occurred while updating the profile picture",
+    "pictureUpdateError": "An error occurred while updating profile picture",
     "firstName": "First Name",
     "lastName": "Last Name",
     "phone": "Phone",
@@ -155,7 +155,7 @@
     "about": "About Us",
     "contact": "Contact",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Use",
+    "terms": "Terms of Service",
     "followUs": "Follow Us",
     "copyright": "All rights reserved",
     "address": "Address",
@@ -181,7 +181,7 @@
     "success": "Operation successful",
     "required": "This field is required",
     "invalidEmail": "Invalid email address",
-    "passwordMismatch": "Passwords do not match",
+    "passwordMismatch": "Passwords don't match",
     "submitting": "Submitting...",
     "openInNewTab": "Open in New Tab",
     "languages": "Languages",
@@ -192,10 +192,10 @@
     "professionalSummary": "Professional Summary",
     "errors": {
       "badRequest": "Invalid request",
-      "unauthorized": "Please log in",
-      "forbidden": "You do not have permission for this operation",
+      "unauthorized": "Please login",
+      "forbidden": "You don't have permission for this operation",
       "notFound": "Request not found",
-      "serverError": "A server error occurred",
+      "serverError": "Server error occurred",
       "unknown": "An unknown error occurred",
       "networkError": "Network connection error",
       "validationError": "Please check the form information",
@@ -206,13 +206,13 @@
   },
   "home": {
     "hero": {
-      "title": "Next-Generation CV Creation Platform",
-      "subtitle": "Create AI-powered, dynamic, and interactive CVs",
+      "title": "Next Generation CV Creation Platform",
+      "subtitle": "Create AI-powered, dynamic and interactive CVs",
       "cta": "Get Started",
       "badge": "New Features",
-      "feature1": "Completely free 7-day trial period",
+      "feature1": "Completely free 7-day trial",
       "feature2": "Modern and professional templates",
-      "feature3": "CVs in both web and PDF formats",
+      "feature3": "CVs in web and PDF formats",
       "toDashboard": "Go to Dashboard"
     },
     "features": {
@@ -221,15 +221,15 @@
       "overline": "FEATURES",
       "feature1": {
         "title": "Professional Templates",
-        "description": "Modern and professional CV templates that catch the attention of recruiters"
+        "description": "Modern and professional CV templates that catch employers' attention"
       },
       "feature2": {
         "title": "Easy Editing",
-        "description": "Easily customize and edit your CV with a drag-and-drop interface"
+        "description": "Easily customize and edit your CV with drag and drop interface"
       },
       "feature3": {
         "title": "Career Development",
-        "description": "Tools and recommendations to help you achieve your career goals"
+        "description": "Tools and recommendations to help you reach your career goals"
       },
       "feature4": {
         "title": "Quick Creation",
@@ -237,7 +237,7 @@
       },
       "realtime": {
         "title": "Real-Time Updates",
-        "description": "Update your CV in real-time. Got a new certificate? Add it immediately and use your updated CV for applications."
+        "description": "Update your CV in real time. Got a new certificate? Add it immediately and use your updated CV in applications."
       },
       "video": {
         "title": "Video CV Support",
@@ -245,7 +245,7 @@
       },
       "aiAssistant": {
         "title": "AI Assistant",
-        "description": "Get AI-powered suggestions to optimize your CV. Tailor your CV for specific job postings and increase your chances of acceptance."
+        "description": "Get AI-powered suggestions to optimize your CV. Tailor your CV to specific job postings and increase your acceptance chances."
       },
       "analytics": {
         "title": "CV Analytics",
@@ -254,7 +254,7 @@
     },
     "templates": {
       "title": "Professional CV Templates",
-      "subtitle": "Modern and impressive templates that catch the attention of recruiters",
+      "subtitle": "Modern and impressive templates that catch employers' attention",
       "overline": "TEMPLATES",
       "cta": "Explore Templates"
     },
@@ -264,11 +264,11 @@
       "steps": [
         {
           "title": "Create Profile",
-          "description": "Enter your basic information and create your professional profile"
+          "description": "Create your professional profile by entering basic information"
         },
         {
           "title": "Customize Your CV",
-          "description": "Choose from modern templates and personalize your CV"
+          "description": "Personalize your CV by choosing from modern templates"
         },
         {
           "title": "Add Video",
@@ -276,14 +276,14 @@
         },
         {
           "title": "Apply",
-          "description": "Apply to job postings with a single click and advance your career"
+          "description": "Apply to job listings with one click and advance your career"
         }
       ]
     },
     "testimonials": {
       "title": "User Experiences",
       "subtitle": "Success stories and user reviews",
-      "overline": "REVIEWS"
+      "overline": "TESTIMONIALS"
     },
     "trustedBy": {
       "title": "Trusted by Leading Companies"
@@ -295,14 +295,14 @@
       "hires": "Hires"
     },
     "cta": {
-      "title": "Take a Step Ahead in Your Career",
+      "title": "Get Ahead in Your Career",
       "subtitle": "Create your professional CV and find your dream job",
-      "button": "Start for Free"
+      "button": "Start Free"
     }
   },
   "blog": {
     "title": "Blog",
-    "description": "The latest articles on career and CV preparation",
+    "description": "Latest articles about career and CV preparation",
     "searchPlaceholder": "Search blog posts...",
     "categories": "Categories",
     "readMore": "Read More",
@@ -313,36 +313,36 @@
   },
   "contact": {
     "title": "Contact",
-    "description": "Get in touch with us. We will get back to you as soon as possible.",
+    "description": "Contact us. We'll get back to you as soon as possible.",
     "name": "Your Name",
     "email": "Your Email Address",
     "subject": "Subject",
     "message": "Your Message",
     "send": "Send",
-    "successMessage": "Your message has been sent successfully. We will get back to you as soon as possible.",
+    "successMessage": "Your message has been sent successfully. We'll get back to you as soon as possible.",
     "errorMessage": "Your message could not be sent. Please try again later.",
     "subjects": {
       "general": "General Question",
       "technical": "Technical Support",
-      "billing": "Billing Inquiry",
+      "billing": "Billing Question",
       "feedback": "Feedback",
       "other": "Other"
     }
   },
   "pricing": {
     "title": "Pricing",
-    "description": "Choose the plan that suits your needs",
+    "description": "Choose the plan that fits your needs",
     "pageTitle": "Subscription Plans - CV Builder",
-    "pageDescription": "Choose a professional CV creation plan that suits your needs and advance in your career.",
+    "pageDescription": "Choose the professional CV creation plan that fits your needs and advance your career.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "free": {
       "title": "Free",
-      "description": "Basic features for getting started"
+      "description": "Basic features to get started"
     },
     "premium": {
       "title": "Premium Plan",
-      "description": "All the features you need for professional CV creation"
+      "description": "All the features you need to create a professional CV"
     },
     "currency": "USD",
     "perMonth": "/month",
@@ -351,7 +351,7 @@
     "currentPlan": "Current Plan",
     "changePlan": "Change Plan",
     "alreadySubscribed": "You Already Have an Active Subscription",
-    "saveYearly": "Save 15% with yearly payment",
+    "saveYearly": "Save 15% with annual payment",
     "features": {
       "feature.basicCvTemplates": "Basic CV templates",
       "feature.limitedCvCount": "Up to 3 CVs",
@@ -380,7 +380,7 @@
     "period": "Billing Period",
     "validUntil": "Valid Until",
     "confirmCancellation": "Confirm Cancellation",
-    "cancelSuccess": "Your subscription has been cancelled successfully.",
+    "cancelSuccess": "Your subscription has been successfully cancelled.",
     "cancelError": "Error cancelling subscription. Please try again.",
     "periodUpdateSuccess": "Billing period updated successfully.",
     "periodUpdateError": "Failed to update billing period.",
@@ -388,20 +388,20 @@
     "switchToYearly": "Switch to Yearly Billing",
     "resubscribe": "Resubscribe",
     "checkout": "Checkout",
-    "checkoutDescription": "Please review your order and complete the payment to activate your subscription.",
+    "checkoutDescription": "Please review your order and complete payment to activate your subscription.",
     "orderSummary": "Order Summary",
     "total": "Total",
     "paymentDetails": "Payment Details",
-    "demoNotice": "This is a demo checkout page. In a real implementation, you would enter your payment information here. For now, you can just click the button below to simulate a successful payment.",
+    "demoNotice": "This is a demo payment page. In a real application, you would enter your payment details here. For now, you can click the button below to simulate a successful payment.",
     "completePayment": "Complete Payment",
     "customerPortal": "Customer Portal",
     "paddleNotLoaded": "Payment system could not be loaded. Please try again.",
-    "checkoutError": "An error occurred while opening the checkout page. Please try again.",
+    "checkoutError": "An error occurred while opening checkout page. Please try again.",
     "checkoutOpened": "Checkout page opened.",
-    "processingCheckout": "Preparing payment...",
+    "processingCheckout": "Preparing checkout...",
     "selectPaymentMethod": "Select Payment Method",
     "selectPaymentProvider": "Please select a payment provider",
-    "missingUserInfo": "PayTR payment requires your address and phone number information. Please fill in your profile information."
+    "missingUserInfo": "Address and phone information is required for PayTR payment. Please fill in your profile information."
   },
   "toast": {
     "success": "Success!",
@@ -412,28 +412,38 @@
   "errors": {
     "404": {
       "title": "Page Not Found",
-      "description": "The page you are looking for does not exist or has been moved."
+      "description": "The page you're looking for doesn't exist or may have been moved."
     },
     "500": {
       "title": "Server Error",
       "description": "Sorry, something went wrong. Please try again later."
     },
     "backToHome": "Back to Home",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "usernameExists": "This username is already taken",
+    "emailExists": "This email address is already in use",
+    "invalidUsername": "Invalid username",
+    "invalidEmail": "Invalid email address",
+    "weakPassword": "Password is too weak",
+    "passwordMismatch": "Passwords don't match",
+    "unknown": "An unknown error occurred",
+    "formErrors": "Please fix form errors",
+    "registrationFailed": "Registration failed. Please try again",
+    "pleaseFixErrors": "Please fix the following errors",
+    "present": "Present"
   },
   "dashboard": {
     "title": "My CVs",
     "createNew": "Create New CV",
     "fetchError": "An error occurred while loading CVs",
     "deleteSuccess": "CV deleted successfully",
-    "deleteError": "An error occurred while deleting the CV"
+    "deleteError": "An error occurred while deleting CV"
   },
   "cv": {
     "create": "Create CV",
     "createSuccess": "CV created successfully",
-    "createError": "An error occurred while creating the CV",
-    "chooseTemplate": "Choose Template",
-    "preview": "Preview",
+    "createError": "An error occurred while creating CV",
+    "chooseTemplate": "Select Template",
     "steps": {
       "personalInfo": "Personal Information",
       "experience": "Experience",
@@ -448,23 +458,23 @@
     "templates": {
       "modern": {
         "name": "Modern Template",
-        "description": "A modern and interactive web design"
+        "description": "Modern and interactive web design"
       },
       "minimal": {
         "name": "Minimal Template",
-        "description": "A clean and elegant web design"
+        "description": "Clean and elegant web design"
       },
       "colorful": {
         "name": "Colorful Template",
-        "description": "A vibrant and modern template with colorful accents"
+        "description": "Vibrant and modern template with colorful accents"
       },
       "professional": {
         "name": "Professional Template",
-        "description": "A clean and professional template for corporate profiles"
+        "description": "Clean and professional template for corporate profiles"
       },
       "creative": {
         "name": "Creative Template",
-        "description": "A unique and creative template for artistic profiles"
+        "description": "Unique and creative template for artistic profiles"
       }
     },
     "personalInfo": {
@@ -479,12 +489,12 @@
     },
     "experience": {
       "title": "Work Experience",
-      "subtitle": "Add your work history starting with the most recent",
+      "subtitle": "Add your work history starting with your most recent position",
       "company": "Company Name",
       "position": "Position",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "current": "Currently working here",
+      "current": "I currently work here",
       "description": "Job Description and Responsibilities",
       "addMore": "Add Experience",
       "noExperience": "No work experience added yet",
@@ -492,33 +502,32 @@
     },
     "languages": {
       "title": "Languages",
-      "subtitle": "Add the languages you know and their proficiency levels",
+      "subtitle": "Add languages you know and their proficiency levels",
       "name": "Language",
       "level": "Proficiency Level",
       "certificate": "Certificate",
-      "certificateHelper": "If applicable, specify your language certificate (Optional)",
       "addMore": "Add Language",
       "namePlaceholder": "Enter language name",
-      "certificatePlaceholder": "Enter certificate information (e.g., TOEFL, IELTS)",
-      "certificateHelper": "Specify your language certificate if you have one (Optional)",
+      "certificatePlaceholder": "Enter certificate information (e.g. TOEFL, IELTS)",
+      "certificateHelper": "Specify your language certificate if available (Optional)",
       "noLanguages": "No languages added yet",
       "languageItem": "Language",
       "a1": "Basic - Beginner",
       "a2": "Basic - Elementary",
       "b1": "Intermediate - Threshold",
-      "b2": "Intermediate - Vantage",
+      "b2": "Intermediate - Advanced",
       "c1": "Advanced - Proficient",
       "c2": "Advanced - Mastery"
     },
     "education": {
       "title": "Education",
-      "subtitle": "Add your educational background starting with the most recent",
+      "subtitle": "Add your education history starting with your most recent education",
       "school": "School",
       "degree": "Degree",
       "field": "Field of Study",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "current": "Currently studying here",
+      "current": "I currently study here",
       "description": "Description (Optional)",
       "addMore": "Add Education"
     },
@@ -530,32 +539,31 @@
     "saveAndExit": "Save and Exit",
     "saveSuccess": "Your progress has been saved",
     "saveError": "An error occurred while saving",
-    "loadError": "An error occurred while loading the CV",
+    "loadError": "An error occurred while loading CV",
     "errors": {
       "personalInfoRequired": "Please fill in all personal information",
       "experienceRequired": "You must enter at least one experience",
       "educationRequired": "You must enter at least one education",
       "skillsRequired": "You must add at least one skill",
       "languagesRequired": "You must enter at least one language",
-      "experienceFieldsRequired": "Please fill in the company name, position, and start date for the experience",
-      "endDateRequired": "If you are not currently working, an end date is required",
-      "educationFieldsRequired": "Please fill in the school, degree, field of study, and start date",
-      "endDateRequired": "If you are not currently studying, an end date is required"
+      "experienceFieldsRequired": "Please fill in company name, position and start date for experience",
+      "educationFieldsRequired": "Please fill in school, degree, field of study and start date",
+      "endDateRequired": "End date is required if you're not currently studying",
+      "titleRequired": "Please enter a title for the CV",
+      "skillNameRequired": "Please enter skill name",
+      "certificateFieldsRequired": "Please fill in certificate name, issuing organization and issue date"
     },
     "currentStep": "Current Step",
     "deleteConfirmTitle": "Delete CV",
     "deleteConfirmMessage": "Are you sure you want to delete this CV?",
     "deleteSuccess": "CV deleted successfully",
-    "deleteError": "An error occurred while deleting the CV",
-    "noCVs": "You have not created any CVs yet",
+    "deleteError": "An error occurred while deleting CV",
+    "noCVs": "You haven't created any CVs yet",
     "createFirst": "Create Your First CV",
     "titleLabel": "CV Title",
     "titlePlaceholder": "Enter a title for your CV",
-    "titleHelper": "This title helps you identify your CV (e.g., 'Software Developer CV')",
+    "titleHelper": "This title helps you identify your CV (e.g. 'Software Developer CV')",
     "startCreating": "Start Creating CV",
-    "errors": {
-      "titleRequired": "Please enter a title for the CV"
-    },
     "loadSuccess": "CV loaded successfully",
     "skills": {
       "title": "Skills",
@@ -563,45 +571,37 @@
       "name": "Skill",
       "level": "Proficiency Level",
       "description": "Description",
-      "descriptionHelper": "Add a brief description of this skill (Optional)",
       "addMore": "Add Skill",
       "namePlaceholder": "Enter skill name",
       "levelPlaceholder": "Select your proficiency level",
       "descriptionPlaceholder": "Briefly describe your experience with this skill",
-      "descriptionHelper": "Add a short description about this skill (Optional)",
+      "descriptionHelper": "Add a brief description about this skill (Optional)",
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced",
       "expert": "Expert",
       "skillItem": "Skill"
     },
-    "errors": {
-      "skillNameRequired": "Please enter the skill name"
-    },
     "certificates": {
       "title": "Certificates",
-      "subtitle": "Add the certificates and documents you have",
+      "subtitle": "Add certificates and documents you have",
       "name": "Certificate Name",
-      "issuer": "Issuing Authority",
+      "issuer": "Issuing Organization",
       "issueDate": "Issue Date",
       "expiryDate": "Expiry Date",
-      "expiryDateHelper": "If applicable, the certificate's expiration date",
+      "expiryDateHelper": "Certificate expiry date if available",
       "credentialId": "Certificate/Document No.",
-      "credentialIdHelper": "If applicable, the certificate or document number",
       "description": "Description",
       "uploadFile": "Upload Certificate File",
       "addMore": "Add Certificate",
       "uploadSuccess": "Certificate file uploaded successfully",
-      "uploadError": "An error occurred while uploading the certificate file",
+      "uploadError": "An error occurred while uploading certificate file",
       "namePlaceholder": "Enter certificate name",
       "issuerPlaceholder": "Enter issuing organization",
       "credentialIdPlaceholder": "Enter certificate/credential ID if available",
-      "credentialIdHelper": "Reference or ID number of the certificate (Optional)",
-      "descriptionPlaceholder": "Enter a brief description of the certificate",
+      "credentialIdHelper": "Certificate reference or ID number (Optional)",
+      "descriptionPlaceholder": "Enter a brief description about the certificate",
       "noCertificates": "No certificates added yet"
-    },
-    "errors": {
-      "certificateFieldsRequired": "Please fill in the certificate name, issuing authority, and issue date"
     },
     "progress": "Progress",
     "template": {
@@ -615,23 +615,23 @@
       "templates": {
         "modern": {
           "name": "Modern Template",
-          "description": "A modern and interactive web design"
+          "description": "Modern and interactive web design"
         },
         "minimal": {
           "name": "Minimal Template",
-          "description": "A clean and elegant web design"
+          "description": "Clean and elegant web design"
         },
         "colorful": {
           "name": "Colorful Template",
-          "description": "A vibrant and modern template with colorful accents"
+          "description": "Vibrant and modern with colorful accents"
         },
         "professional": {
           "name": "Professional Template",
-          "description": "A clean and professional template for corporate profiles"
+          "description": "Clean and professional for corporate profiles"
         },
         "creative": {
           "name": "Creative Template",
-          "description": "A unique and creative template for artistic profiles"
+          "description": "Unique and creative template"
         },
         "modernPdf": {
           "name": "Modern PDF Template",
@@ -647,7 +647,7 @@
         },
         "creativePdf": {
           "name": "Creative PDF Template",
-          "description": "Bold design for standing out"
+          "description": "Bold design to stand out"
         },
         "professionalPdf": {
           "name": "Professional PDF Template",
@@ -659,11 +659,11 @@
         },
         "minimalWeb": {
           "name": "Minimal Web Template",
-          "description": "Simple and elegant design focusing on content"
+          "description": "Simple and elegant design focused on content"
         },
         "colorfulWeb": {
           "name": "Colorful Web Template",
-          "description": "Vibrant and eye-catching design with color accents"
+          "description": "Vibrant and eye-catching design with colorful accents"
         },
         "professionalWeb": {
           "name": "Professional Web Template",
@@ -686,7 +686,7 @@
       "doubleColumn": "Double Column",
       "sidebarLeft": "Left Sidebar",
       "sidebarRight": "Right Sidebar",
-      "threeColumn": "Three Columns",
+      "threeColumn": "Three Column",
       "headerHighlight": "Header Highlight",
       "primaryColor": "Primary Color",
       "secondaryColor": "Secondary Color",
@@ -711,7 +711,6 @@
       "typographySettings": "Typography Settings",
       "sectionTypography": "Section Typography",
       "useGlobal": "Use Global Settings",
-      "preview": "Preview",
       "savedSuccess": "Template saved successfully",
       "savedError": "Error saving template",
       "deleteSuccess": "Template deleted successfully",
@@ -723,14 +722,14 @@
       "fullName": "Full Name",
       "profession": "Profession / Position",
       "sectionVisibility": "Section Visibility",
-      "headerEditWarning": "Header edits may not appear correctly in the preview. They will be displayed correctly after saving.",
+      "headerEditWarning": "Header edits may not appear correctly in preview. They will display properly after saving.",
       "atsOptimized": "ATS Optimization",
       "atsOptimizedLabel": "Enable ATS Optimization",
       "atsDescription": "Optimizes your CV for better scanning by ATS (Applicant Tracking Systems)",
       "atsTips": "ATS Tips",
       "atsKeywords": "Keywords",
       "atsKeywordsLabel": "Job posting keywords",
-      "atsKeywordsPlaceholder": "Enter key keywords from the job posting",
+      "atsKeywordsPlaceholder": "Enter keywords from job posting",
       "atsCompatibilityScore": "ATS Compatibility Score",
       "atsCompatible": "ATS Compatible",
       "atsSuggestions": "ATS Suggestions",
@@ -743,58 +742,8 @@
       "maxSize": "Maximum file size: 50MB",
       "selectVideo": "Select Video",
       "deleteSuccess": "Video deleted successfully",
-      "deleteError": "An error occurred while deleting the video",
+      "deleteError": "An error occurred while deleting video",
       "confirmDelete": "Are you sure you want to delete the video?"
-    },
-    "errors": {
-      "skillsRequired": "Please add at least one skill",
-      "languagesRequired": "Please add at least one language"
-    },
-    "templates": {
-      "web": {
-        "modern": {
-          "name": "Modern Web Template",
-          "description": "Clean and professional design with modern layout"
-        },
-        "minimal": {
-          "name": "Minimal Web Template",
-          "description": "Simple and elegant design focusing on content"
-        },
-        "colorful": {
-          "name": "Colorful Web Template",
-          "description": "Vibrant and eye-catching design with color accents"
-        },
-        "professional": {
-          "name": "Professional Web Template",
-          "description": "Corporate style with structured layout"
-        },
-        "creative": {
-          "name": "Creative Web Template",
-          "description": "Unique design for creative professionals"
-        }
-      },
-      "pdf": {
-        "modern": {
-          "name": "Modern PDF Template",
-          "description": "Contemporary design with clean typography"
-        },
-        "classic": {
-          "name": "Classic PDF Template",
-          "description": "Traditional resume layout with timeless appeal"
-        },
-        "minimal": {
-          "name": "Minimal PDF Template",
-          "description": "Clean and minimalist design"
-        },
-        "creative": {
-          "name": "Creative PDF Template",
-          "description": "Bold design for standing out"
-        },
-        "professional": {
-          "name": "Professional PDF Template",
-          "description": "Business-focused layout with modern elements"
-        }
-      }
     },
     "preview": {
       "title": "CV Preview",
@@ -818,17 +767,12 @@
       "close": "Close",
       "openCv": "Open CV",
       "pdfGenerating": "Generating PDF...",
-      "pdfError": "An error occurred while generating the PDF",
+      "pdfError": "An error occurred while generating PDF",
       "createExplanation": "This template allows you to customize your resume"
     },
     "editDisabled": "You cannot edit your CV because you don't have an active subscription. You are in view mode.",
     "editNotAllowed": "Active subscription required for CV editing.",
     "professionalSummary": "Professional Summary",
-    "experience": "Experience",
-    "education": "Education",
-    "skills": "Skills",
-    "languages": "Languages",
-    "certificates": "Certificates",
     "present": "Present"
   },
   "validation": {
@@ -839,26 +783,13 @@
     "passwordNumber": "Password must contain at least one number",
     "passwordLowercase": "Password must contain at least one lowercase letter",
     "passwordUppercase": "Password must contain at least one uppercase letter",
-    "passwordMatch": "Passwords do not match",
+    "passwordMatch": "Passwords don't match",
     "invalidUserType": "Please select a valid user type"
-  },
-  "errors": {
-    "usernameExists": "This username is already taken",
-    "emailExists": "This email address is already in use",
-    "invalidUsername": "Invalid username",
-    "invalidEmail": "Invalid email address",
-    "weakPassword": "Password is too weak",
-    "passwordMismatch": "Passwords do not match",
-    "unknown": "An unknown error occurred",
-    "formErrors": "Please fix the form errors",
-    "registrationFailed": "Registration failed. Please try again",
-    "pleaseFixErrors": "Please fix the following errors",
-    "present": "Present"
   },
   "subscription": {
     "title": "My Subscriptions",
     "noSubscription": "You don't have an active subscription",
-    "activeSubscription": "Your Active Subscription",
+    "activeSubscription": "Your active subscription",
     "details": "Subscription Details",
     "plan": "Plan",
     "status": "Status",
@@ -870,11 +801,11 @@
     "cancel": "Cancel Subscription",
     "update": "Update Subscription",
     "cancelConfirm": "Are you sure you want to cancel your subscription?",
-    "cancelSuccess": "Your subscription has been successfully canceled",
-    "cancelError": "An error occurred while canceling your subscription",
+    "cancelSuccess": "Your subscription has been successfully cancelled",
+    "cancelError": "An error occurred while cancelling subscription",
     "updateCard": "Update Payment Method",
-    "updateCardSuccess": "Your payment method has been updated successfully",
-    "updateCardError": "An error occurred while updating your payment method",
+    "updateCardSuccess": "Your payment method has been successfully updated",
+    "updateCardError": "An error occurred while updating payment method",
     "active": "Active",
     "canceled": "Canceled",
     "expired": "Expired",
@@ -882,76 +813,76 @@
     "yearly": "Yearly",
     "trial": "Trial",
     "paymentHistory": "Payment History",
-    "warningTitle": "Subscription Alert",
+    "warningTitle": "Subscription Warning",
     "upgradeToCreate": "Upgrade your subscription to create more CVs.",
     "goToPricing": "View Plans",
-    "trialLimit": "Trial users can only create one CV.",
-    "trialLimitWithDays": "Your trial period expires in {{days}} days. Trial users can only create one CV.",
-    "trialActive": "Your trial period expires in {{days}} days. Upgrade your subscription for full access.",
-    "trialDaysLeft": "{{days}} days left",
-    "trialExpired": "Your trial period has expired",
-    "upgrade": "Upgrade Your Subscription",
-    "freeTrialText": "Completely free 7-day trial period",
-    "freeTrialDescription": "Free access to all features for 7 days"
+    "trialLimit": "Trial users can only create one CV. Please upgrade for more.",
+    "trialLimitWithDays": "Your trial will expire in {{days}} days. Trial users can only create one CV.",
+    "trialActive": "Your trial will expire in {{days}} days.",
+    "trialDaysLeft": "You have {{days}} days left in your trial",
+    "trialExpired": "Your trial has expired",
+    "upgrade": "Upgrade Now",
+    "freeTrialText": "Start with a 7-day completely free trial",
+    "freeTrialDescription": "Try all premium features for 7 days before you decide"
   },
   "privacy": {
     "pageTitle": "Privacy Policy - CV Builder",
-    "pageDescription": "Learn how we collect, use, and protect your personal information at CV Builder",
+    "pageDescription": "Learn how we collect, use and protect your personal information at CV Builder",
     "title": "Privacy Policy",
     "lastUpdated": "Last Updated",
     "lastUpdatedDate": "March 29, 2023",
-    "introduction": "This Privacy Policy describes how CV Builder ('we', 'our', or 'us') collects, uses, and discloses your personal information when you use our service. We are committed to protecting your privacy and ensuring you have a positive experience on our website and when using our services.",
+    "introduction": "This Privacy Policy describes how CV Builder ('we', 'our' or 'us') collects, uses and discloses your personal information when you use our service. We are committed to protecting your privacy and ensuring you have a positive experience when using our website and services.",
     "dataCollection": {
       "title": "Information We Collect",
-      "description": "We may collect several types of information from and about users of our service, including:",
-      "personalInfo": "Personal identification information (such as your name, email address, and phone number)",
-      "profileInfo": "Profile information (such as your professional background, education, skills, and other career-related information)",
-      "resumeData": "Information contained in the resumes and CVs you create using our service",
-      "usageInfo": "Usage details (such as how you interact with our service, access times, and pages viewed)"
+      "description": "We may collect various types of information from and about users of our Service, including:",
+      "personalInfo": "Personal identification information (such as your name, email address and phone number)",
+      "profileInfo": "Profile information (such as your professional background, education, skills and other career-related information)",
+      "resumeData": "Information contained in resumes and CVs you create using our Service",
+      "usageInfo": "Usage details (such as how you interact with our Service, your access times and pages viewed)"
     },
     "dataUsage": {
-      "title": "How We Use Your Information",
-      "description": "We use the information we collect about you or that you provide to us for various purposes, including:",
-      "providingService": "To provide, maintain, and improve our services",
-      "improving": "To understand and analyze how you use our service and to develop new products, services, features, and functionality",
+      "title": "How We Use Your Information?",
+      "description": "We use information we collect about you or that you provide to us for various purposes, including:",
+      "providingService": "To provide, maintain and improve our Services",
+      "improving": "To understand and analyze how you use our Service and to develop new products, services, features and functionality",
       "personalizing": "To personalize your experience and to deliver content relevant to your interests",
-      "communications": "To communicate with you about our service, including sending service-related notices and promotional messages"
+      "communications": "To communicate with you about our Service, including service-related notices and promotional messages"
     },
     "dataSharing": {
-      "title": "How We Share Your Information",
+      "title": "How We Share Your Information?",
       "description": "We may disclose your personal information in the following circumstances:",
       "serviceProviders": "With service providers who work on our behalf and need access to your information to perform their services",
-      "legal": "When required by law or to protect our rights, privacy, safety, or property, or that of our users or others",
-      "business": "In connection with a business transaction, such as a merger, sale of assets, or bankruptcy"
+      "legal": "As required by law or to protect our rights, privacy, safety or property, or that of our users or others",
+      "business": "In connection with a transaction, such as a merger, sale of assets or bankruptcy"
     },
     "dataSecurity": {
       "title": "Data Security",
-      "description": "We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, so we cannot guarantee its absolute security."
+      "description": "We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure or destruction. However, please note that no method of transmission over the internet or method of electronic storage is 100% secure, so we cannot guarantee its absolute security."
     },
     "dataRetention": {
       "title": "Data Retention",
-      "description": "We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law."
+      "description": "We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy unless a longer retention period is required or permitted by law."
     },
     "userRights": {
       "title": "Your Rights",
       "description": "Depending on your location, you may have certain rights regarding your personal information, including:",
-      "access": "The right to access and review the personal information we have collected about you",
+      "access": "The right to access and review personal information we collect about you",
       "correction": "The right to correct inaccurate or incomplete information",
       "deletion": "The right to request deletion of your personal information",
-      "objection": "The right to object to our processing of your personal information",
-      "withdrawal": "The right to withdraw your consent at any time, where we rely on consent to process your information"
+      "objection": "The right to object to processing of your personal information",
+      "withdrawal": "The right to withdraw your consent at any time where we rely on your consent to process your information"
     },
     "cookies": {
       "title": "Cookies and Tracking Technologies",
-      "description": "We use cookies and similar tracking technologies to track activity on our service and hold certain information. Cookies are files with a small amount of data that may include an anonymous unique identifier. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent."
+      "description": "We use cookies and similar tracking technologies to track activity on our Service and hold certain information. Cookies are files with small amount of data which may include an anonymous unique identifier. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent."
     },
     "thirdParty": {
-      "title": "Third-Party Services",
-      "description": "Our service may contain links to other websites or services that are not operated by us. If you click on a third-party link, you will be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services."
+      "title": "Third Party Services",
+      "description": "Our Service may contain links to other websites or services that are not operated by us. If you click on a third party link, you will be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit. We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services."
     },
     "children": {
       "title": "Children's Privacy",
-      "description": "Our service is not intended for use by children under the age of 16. We do not knowingly collect personal information from children under 16. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us so that we can take necessary actions."
+      "description": "Our Service is not intended for use by children under 16. We do not knowingly collect personal information from children under 16. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us so we can take necessary actions."
     },
     "changes": {
       "title": "Changes to This Privacy Policy",
@@ -959,98 +890,98 @@
     },
     "contact": {
       "title": "Contact Us",
-      "description": "If you have any questions about this Privacy Policy, please contact us at:",
+      "description": "If you have any questions about this Privacy Policy, please contact us:",
       "email": "Email"
     }
   },
   "terms": {
     "pageTitle": "Terms of Service - CV Builder",
-    "pageDescription": "Read our terms and conditions for using CV Builder services",
+    "pageDescription": "Read the terms and conditions for using CV Builder services",
     "title": "Terms of Service",
     "lastUpdated": "Last Updated",
     "lastUpdatedDate": "March 29, 2023",
-    "introduction": "These Terms of Service ('Terms') govern your access to and use of CV Builder's website, services, and applications (collectively, the 'Service'). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you may not access the Service.",
+    "introduction": "These Terms of Service ('Terms') govern your access to and use of CV Builder's website, services and applications (collectively 'Service'). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access the Service.",
     "acceptance": {
       "title": "Acceptance of Terms",
-      "description": "By creating an account or by using our Service, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you are using the Service on behalf of an organization, you are agreeing to these Terms on behalf of that organization."
+      "description": "By creating an account or using our Service, you confirm that you have read, understood and agree to be bound by these Terms. If you are using the Service on behalf of an organization, you are agreeing to these Terms for that organization."
     },
     "accountRegistration": {
       "title": "Account Registration and Security",
-      "description": "To use certain features of our Service, you may need to create an account. When registering for an account, you agree to:",
-      "accurate": "Provide true, accurate, current, and complete information about yourself",
-      "oneAccount": "Maintain only one account, unless explicitly permitted to create multiple accounts",
-      "security": "Maintain the security of your account by protecting your password and restricting access to your account",
-      "prohibited": "Not allow others to use your account or transfer your account to another person or entity"
+      "description": "You may need to create an account to use certain features of our Service. When creating an account, you agree to:",
+      "accurate": "Provide accurate, current and complete information about yourself",
+      "oneAccount": "Maintain only one account unless expressly permitted",
+      "security": "Maintain the security of your account by protecting your password and restricting access",
+      "prohibited": "Not permit others to use your account or transfer your account to another person or entity"
     },
     "userContent": {
       "title": "User Content",
-      "description": "Our Service allows you to create, store, and share content such as resumes, CVs, and profile information ('User Content'). Regarding User Content, you acknowledge that:",
-      "ownership": "You retain ownership of any intellectual property rights you hold in the User Content",
-      "license": "You grant CV Builder a worldwide, royalty-free license to use, reproduce, modify, distribute, and display the User Content to provide and improve the Service",
-      "prohibited": "You will not upload, share, or create any content that violates these Terms or any applicable laws or regulations"
+      "description": "Our Service allows you to create, store and share content such as resumes, CVs and profile information ('User Content'). With respect to User Content, you agree that:",
+      "ownership": "You retain any intellectual property rights you hold in the User Content",
+      "license": "You grant CV Builder a worldwide, royalty-free license to use, reproduce, modify, distribute and display the User Content to provide and improve the Service",
+      "prohibited": "You will not upload, share or create any content that violates these Terms or any applicable law or regulation"
     },
     "subscriptions": {
       "title": "Subscriptions and Payments",
       "description": "We offer free and paid subscription plans for our Service. By subscribing to a paid plan, you agree to the following terms:",
       "payment": "You agree to pay all fees associated with your subscription plan",
-      "renewal": "Subscriptions automatically renew at the end of each billing period unless cancelled before the renewal date",
+      "renewal": "Subscriptions automatically renew at the end of each billing period unless cancelled before renewal date",
       "cancellation": "You may cancel your subscription at any time through your account settings or by contacting us",
-      "refunds": "Refunds are provided in accordance with our refund policy and applicable law"
+      "refunds": "Refunds are provided in accordance with our refund policy and applicable laws"
     },
     "intellectualProperty": {
       "title": "Intellectual Property Rights",
-      "description": "The Service and its original content, features, and functionality are and will remain the exclusive property of CV Builder and its licensors. The Service is protected by copyright, trademark, and other laws of both the country where you reside and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of CV Builder."
+      "description": "The Service and its original content, features and functionality will remain the exclusive property of CV Builder and its licensors. The Service is protected by copyright, trademark and other laws of both your country and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent."
     },
     "prohibition": {
       "title": "Prohibited Uses",
-      "description": "You agree not to use the Service in any way that:",
-      "illegal": "Violates any applicable laws or regulations",
-      "harmful": "Is harmful, threatening, abusive, harassing, defamatory, or otherwise objectionable",
-      "impersonation": "Involves impersonating any person or entity or falsely stating or misrepresenting your affiliation with a person or entity",
-      "data": "Attempts to collect or store personal data about other users without their knowledge and express consent",
-      "interference": "Interferes with or disrupts the integrity or performance of the Service or its components"
+      "description": "You agree not to use the Service in the following ways:",
+      "illegal": "In violation of any applicable law or regulation",
+      "harmful": "Harmful, threatening, abusive, defamatory or otherwise objectionable",
+      "impersonation": "Involving impersonation of any person or entity or misrepresentation of your affiliation",
+      "data": "Attempting to collect information about other users without their knowledge or consent",
+      "interference": "Interfering with or disrupting the integrity or performance of the Service"
     },
     "termination": {
       "title": "Termination",
-      "description": "We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including but not limited to a breach of the Terms. Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service or delete your account through the account settings."
+      "description": "We may suspend or terminate your account and access to the Service immediately, without notice or liability, for any reason including violation of these Terms. Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service or delete your account through account settings."
     },
     "disclaimer": {
       "title": "Disclaimer of Warranties",
-      "description": "The Service is provided 'as is' and 'as available' without any warranties of any kind, either express or implied, including but not limited to, the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not warrant that the Service will be uninterrupted, timely, secure, or error-free."
+      "description": "The Service is provided 'as is' and 'as available' without warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose or non-infringement. We do not warrant that the Service will be uninterrupted, timely, secure or error-free."
     },
     "limitation": {
       "title": "Limitation of Liability",
-      "description": "To the maximum extent permitted by law, in no event shall CV Builder, its directors, employees, partners, agents, suppliers, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of or inability to use the Service."
+      "description": "To the maximum extent permitted by law, in no event shall CV Builder, its directors, employees, partners, agents, suppliers or affiliates be liable for any indirect, incidental, special, consequential or punitive damages including without limitation loss of profits, data, use, goodwill or other intangible losses."
     },
     "indemnification": {
       "title": "Indemnification",
-      "description": "You agree to defend, indemnify, and hold harmless CV Builder and its licensors, service providers, employees, agents, officers, and directors from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms or your use of the Service."
+      "description": "You agree to defend, indemnify and hold harmless CV Builder and its licensors, service providers, employees, agents, officers and directors from any claims, liabilities, damages, judgments, awards, losses, costs, expenses or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms or use of the Service."
     },
     "governing": {
       "title": "Governing Law",
-      "description": "These Terms shall be governed by and construed in accordance with the laws of the country where CV Builder is established, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights."
+      "description": "These Terms shall be governed and construed in accordance with the laws of the country where CV Builder is established, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights."
     },
     "changes": {
       "title": "Changes to Terms",
-      "description": "We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms."
+      "description": "We reserve the right to modify or replace these Terms at any time. If a change is material, we will provide at least 30 days' notice prior to new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Service after changes become effective, you agree to be bound by the revised terms."
     },
     "contact": {
       "title": "Contact Us",
-      "description": "If you have any questions about these Terms, please contact us at:",
+      "description": "If you have any questions about these Terms, please contact us:",
       "email": "Email"
     }
   },
   "payment": {
     "success": {
       "title": "Payment Successful",
-      "description": "Your payment has been successfully completed. Your subscription has been activated.",
+      "description": "Your payment has been completed successfully. Your subscription has been activated.",
       "goDashboard": "Go to Dashboard",
       "goProfile": "My Profile"
     },
     "fail": {
       "title": "Payment Failed",
       "description": "There was a problem during the payment process. Please try again later or contact our support team.",
-      "notice": "If you believe your account has been charged, please contact us. We will resolve the issue as soon as possible.",
+      "notice": "If you believe your account has been charged, please contact us. We'll resolve the issue as soon as possible.",
       "tryAgain": "Try Again",
       "contactSupport": "Contact Support"
     }
