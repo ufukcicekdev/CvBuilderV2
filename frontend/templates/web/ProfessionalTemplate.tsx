@@ -48,7 +48,8 @@ const LANGUAGES = [
   { code: 'es', name: 'Español', flag: 'ES' },
   { code: 'zh', name: '中文', flag: 'CN' },
   { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' }
+  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
+  { code: 'de', name: 'Deutsch', flag: 'DE' }
 ];
 
 interface ProfessionalTemplateProps {
@@ -70,6 +71,21 @@ const translations = {
     videoIntroduction: "Video Tanıtım",
     contactInfo: "İletişim Bilgileri",
     viewCertificate: "Sertifikayı Görüntüle"
+  },
+  de: {
+    languages: "Sprachen",
+    skills: "Fähigkeiten",
+    certificates: "Zertifikate",
+    professionalSummary: "Berufliche Zusammenfassung",
+    workExperience: "Berufserfahrung",
+    education: "Ausbildung",
+    present: "Aktuell",
+    changeLanguage: "Sprache ändern",
+    loading: "Laden...",
+    error: "Ein Fehler ist aufgetreten",
+    videoIntroduction: "Video-Vorstellung",
+    contactInfo: "Kontaktinformationen",
+    viewCertificate: "Zertifikat anzeigen"
   },
   en: {
     languages: "Languages",

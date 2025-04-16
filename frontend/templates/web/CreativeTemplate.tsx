@@ -51,7 +51,8 @@ const LANGUAGES = [
   { code: 'es', name: 'Español', flag: 'ES' },
   { code: 'zh', name: '中文', flag: 'CN' },
   { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' }
+  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
+  { code: 'de', name: 'Deutsch', flag: 'DE' }
 ];
 
 interface CreativeTemplateProps {
@@ -73,6 +74,21 @@ const translations = {
     videoIntroduction: "Video Tanıtım",
     viewCertificate: "Sertifikayı Görüntüle",
     contactInfo: "İletişim Bilgileri"
+  },
+  de: {
+    languages: "Sprachen",
+    skills: "Fähigkeiten",
+    certificates: "Zertifikate",
+    professionalSummary: "Berufliche Zusammenfassung",
+    workExperience: "Berufserfahrung",
+    education: "Ausbildung",
+    present: "Aktuell",
+    changeLanguage: "Sprache ändern",
+    loading: "Laden...",
+    error: "Ein Fehler ist aufgetreten",
+    videoIntroduction: "Video-Vorstellung",
+    viewCertificate: "Zertifikat anzeigen",
+    contactInfo: "Kontaktinformationen"
   },
   en: {
     languages: "Languages",

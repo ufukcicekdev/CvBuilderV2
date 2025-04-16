@@ -66,7 +66,8 @@ const LANGUAGES = [
   { code: 'es', name: 'Español', flag: 'ES' },
   { code: 'zh', name: '中文', flag: 'CN' },
   { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' }
+  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
+  { code: 'de', name: 'Deutsch', flag: 'DE' }
 ];
 
 const translations = {
@@ -82,6 +83,19 @@ const translations = {
     loading: "Yükleniyor...",
     error: "Bir hata oluştu",
     videoIntroduction: "Video Tanıtım"
+  },
+  de: {
+    languages: "Sprachen",
+    skills: "Fähigkeiten",
+    certificates: "Zertifikate",
+    professionalSummary: "Berufliche Zusammenfassung",
+    workExperience: "Berufserfahrung",
+    education: "Ausbildung",
+    present: "Aktuell",
+    changeLanguage: "Sprache ändern",
+    loading: "Laden...",
+    error: "Ein Fehler ist aufgetreten",
+    videoIntroduction: "Video-Vorstellung"
   },
   en: {
     languages: "Languages",

@@ -22,10 +22,11 @@ import { useAuth } from '../contexts/AuthContext';
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
   { code: 'en', name: 'English', flag: 'GB' },
+  { code: 'de', name: 'Deutsch', flag: 'DE' },
   { code: 'es', name: 'Español', flag: 'ES' },
   { code: 'zh', name: '中文', flag: 'CN' },
   { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' }
+  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
 ];
 
 export default function Navbar() {

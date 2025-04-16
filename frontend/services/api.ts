@@ -34,7 +34,8 @@ export const SUPPORTED_LANGUAGES = {
   es: 'Español',
   zh: '中文',
   ar: 'العربية',
-  hi: 'हिन्दी'
+  hi: 'हिन्दी',
+  de: 'Deutsch'
 };
 
 // Token yenileme için değişkenler
