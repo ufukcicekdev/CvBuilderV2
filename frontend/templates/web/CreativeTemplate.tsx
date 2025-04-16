@@ -38,7 +38,10 @@ import {
   Menu as MenuIcon,
   Person,
   Image as ImageIcon,
-  PictureAsPdf
+  PictureAsPdf,
+  LinkedIn,
+  GitHub,
+  Public
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Flag from 'react-world-flags';
@@ -482,7 +485,7 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ cv: initialCv }) =>
                   transition={{ duration: 0.5, delay: 0.3 }}
                 >
                   <Typography variant="h6" sx={{ mb: 2, opacity: 0.9, color: colors.secondary }}>
-                    {cv.personal_info.title || cv.title}
+                    {cv.personal_info.full_name || cv.title}
                   </Typography>
                 </motion.div>
 
@@ -547,6 +550,72 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ cv: initialCv }) =>
                           borderRadius: '8px',
                           px: 1,
                           backdropFilter: 'blur(4px)'
+                        }}
+                      />
+                    )}
+                    
+                    {cv.personal_info.linkedin && (
+                      <Chip 
+                        icon={<LinkedIn sx={{ color: colors.light }} />}
+                        label="LinkedIn"
+                        component="a"
+                        href={cv.personal_info.linkedin}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        clickable
+                        sx={{ 
+                          bgcolor: 'rgba(255,255,255,0.2)', 
+                          color: colors.light,
+                          borderRadius: '8px',
+                          px: 1,
+                          backdropFilter: 'blur(4px)',
+                          '&:hover': {
+                            bgcolor: 'rgba(255,255,255,0.3)'
+                          }
+                        }}
+                      />
+                    )}
+                    
+                    {cv.personal_info.github && (
+                      <Chip 
+                        icon={<GitHub sx={{ color: colors.light }} />}
+                        label="GitHub"
+                        component="a"
+                        href={cv.personal_info.github}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        clickable
+                        sx={{ 
+                          bgcolor: 'rgba(255,255,255,0.2)', 
+                          color: colors.light,
+                          borderRadius: '8px',
+                          px: 1,
+                          backdropFilter: 'blur(4px)',
+                          '&:hover': {
+                            bgcolor: 'rgba(255,255,255,0.3)'
+                          }
+                        }}
+                      />
+                    )}
+                    
+                    {cv.personal_info.website && (
+                      <Chip 
+                        icon={<Public sx={{ color: colors.light }} />}
+                        label="Website"
+                        component="a"
+                        href={cv.personal_info.website}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        clickable
+                        sx={{ 
+                          bgcolor: 'rgba(255,255,255,0.2)', 
+                          color: colors.light,
+                          borderRadius: '8px',
+                          px: 1,
+                          backdropFilter: 'blur(4px)',
+                          '&:hover': {
+                            bgcolor: 'rgba(255,255,255,0.3)'
+                          }
                         }}
                       />
                     )}

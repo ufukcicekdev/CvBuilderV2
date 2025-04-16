@@ -21,7 +21,8 @@ import {
   useTheme,
   useMediaQuery,
   Card,
-  CardContent
+  CardContent,
+  Avatar
 } from '@mui/material';
 import { CV } from '@/types/cv';
 import {
@@ -38,7 +39,8 @@ import {
   School,
   Language,
   Description,
-  Person
+  Person,
+  Star
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Flag from 'react-world-flags';
@@ -353,9 +355,7 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
         <Container maxWidth="lg">
           <Toolbar>
             <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-              <Typography variant="h6" component="div" sx={{ color: colors.primary, mr: 2 }}>
-                {cv.personal_info.first_name} {cv.personal_info.last_name}
-              </Typography>
+              
               <Typography 
                 variant="body1" 
                 component="div" 
@@ -410,28 +410,49 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
           <motion.div variants={itemVariants}>
             <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
               <Grid container spacing={4} alignItems="center">
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={3}>
                   {cv.personal_info.photo && (
                     <Box
                       component="img"
                       src={cv.personal_info.photo}
                       alt={`${cv.personal_info.first_name} ${cv.personal_info.last_name}`}
                       sx={{
-                        width: '100%',
-                        height: 'auto',
+                        width: '160px',
+                        height: '160px',
+                        objectFit: 'cover',
                         borderRadius: '50%',
-                        border: `4px solid ${colors.primary}`
+                        border: `4px solid ${colors.primary}`,
+                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                        mx: { xs: 'auto', md: 0 },
+                        display: 'block'
                       }}
                     />
                   )}
                 </Grid>
-                <Grid item xs={12} md={8}>
-                  <Typography variant="h4" sx={{ color: colors.primary, mb: 2 }}>
+                <Grid item xs={12} md={9}>
+                  <Typography variant="h4" sx={{ color: colors.primary, mb: 1, fontWeight: 600, textAlign: { xs: 'center', md: 'left' } }}>
                     {cv.personal_info.first_name} {cv.personal_info.last_name}
                   </Typography>
-                  <Typography variant="h4" sx={{ color: colors.text, mb: 3 }}>
-                    {cv.personal_info.title || cv.title}
+                  <Typography variant="h6" sx={{ color: colors.text, mb: 2, textAlign: { xs: 'center', md: 'left' } }}>
+                    {cv.personal_info.full_name || cv.title}
                   </Typography>
+                  
+                  {cv.personal_info.summary && (
+                    <Typography variant="body1" sx={{ 
+                      color: colors.text,
+                      mb: 2, 
+                      textAlign: { xs: 'center', md: 'left' },
+                      fontSize: '0.95rem',
+                      lineHeight: 1.7,
+                      fontStyle: 'italic',
+                      p: 2,
+                      borderRadius: 2,
+                      bgcolor: `${colors.primary}05`,
+                      borderLeft: `3px solid ${colors.primary}`,
+                    }}>
+                      {cv.personal_info.summary}
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
             </Paper>
@@ -440,31 +461,152 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
           {/* Contact Info */}
           <motion.div variants={itemVariants}>
             <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
-              <Typography variant="h5" sx={{ mb: 3, color: colors.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="h5" sx={{ 
+                mb: 3, 
+                color: colors.primary, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1,
+                fontWeight: 600,
+                fontSize: { xs: '1.25rem', md: '1.5rem' },
+                borderBottom: `2px solid ${colors.primary}20`,
+                pb: 1
+              }}>
                 <Email /> {t('contactInfo')}
               </Typography>
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 {cv.personal_info.email && (
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Email sx={{ color: colors.primary }} />
-                      <Typography>{cv.personal_info.email}</Typography>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2,
+                      p: 1,
+                      borderRadius: 2,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: `${colors.primary}08`
+                      }
+                    }}>
+                      <Avatar sx={{ bgcolor: `${colors.primary}15`, color: colors.primary, width: 36, height: 36 }}>
+                        <Email fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2">{cv.personal_info.email}</Typography>
                     </Box>
                   </Grid>
                 )}
                 {cv.personal_info.phone && (
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Phone sx={{ color: colors.primary }} />
-                      <Typography>{cv.personal_info.phone}</Typography>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2,
+                      p: 1,
+                      borderRadius: 2,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: `${colors.primary}08`
+                      }
+                    }}>
+                      <Avatar sx={{ bgcolor: `${colors.primary}15`, color: colors.primary, width: 36, height: 36 }}>
+                        <Phone fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2">{cv.personal_info.phone}</Typography>
                     </Box>
                   </Grid>
                 )}
                 {cv.personal_info.location && (
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <LocationOn sx={{ color: colors.primary }} />
-                      <Typography>{cv.personal_info.location}</Typography>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2,
+                      p: 1,
+                      borderRadius: 2,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: `${colors.primary}08`
+                      }
+                    }}>
+                      <Avatar sx={{ bgcolor: `${colors.primary}15`, color: colors.primary, width: 36, height: 36 }}>
+                        <LocationOn fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2">{cv.personal_info.location}</Typography>
+                    </Box>
+                  </Grid>
+                )}
+                {cv.personal_info.linkedin && (
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2,
+                      p: 1,
+                      borderRadius: 2,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: `${colors.primary}08`
+                      }
+                    }}>
+                      <Avatar sx={{ bgcolor: `${colors.primary}15`, color: colors.primary, width: 36, height: 36 }}>
+                        <LinkedIn fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2">
+                        <a href={cv.personal_info.linkedin} target="_blank" rel="noopener noreferrer" 
+                           style={{ color: colors.text, textDecoration: 'none' }}>
+                          LinkedIn
+                        </a>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                )}
+                {cv.personal_info.github && (
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2,
+                      p: 1,
+                      borderRadius: 2,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: `${colors.primary}08`
+                      }
+                    }}>
+                      <Avatar sx={{ bgcolor: `${colors.primary}15`, color: colors.primary, width: 36, height: 36 }}>
+                        <GitHub fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2">
+                        <a href={cv.personal_info.github} target="_blank" rel="noopener noreferrer" 
+                           style={{ color: colors.text, textDecoration: 'none' }}>
+                          GitHub
+                        </a>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                )}
+                {cv.personal_info.website && (
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2,
+                      p: 1,
+                      borderRadius: 2,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        bgcolor: `${colors.primary}08`
+                      }
+                    }}>
+                      <Avatar sx={{ bgcolor: `${colors.primary}15`, color: colors.primary, width: 36, height: 36 }}>
+                        <Public fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2">
+                        <a href={cv.personal_info.website} target="_blank" rel="noopener noreferrer" 
+                           style={{ color: colors.text, textDecoration: 'none' }}>
+                          Website
+                        </a>
+                      </Typography>
                     </Box>
                   </Grid>
                 )}
@@ -472,58 +614,68 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
             </Paper>
           </motion.div>
 
-          {/* Professional Summary */}
-          {cv.personal_info.summary && (
-            <motion.div variants={itemVariants}>
-              <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
-                <Typography variant="h5" sx={{ mb: 3, color: colors.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Person /> {t('professionalSummary')}
-                </Typography>
-                <Box sx={{
-                  bgcolor: `${colors.primary}10`,
-                  borderRadius: 2,
-                  p: 2,
-                  borderLeft: `4px solid ${colors.primary}`,
-                }}>
-                  <Typography variant="body1" sx={{
-                    color: colors.text,
-                    lineHeight: 1.6,
-                    fontStyle: 'italic',
-                  }}>
-                    {cv.personal_info.summary}
-                  </Typography>
-                </Box>
-              </Paper>
-            </motion.div>
-          )}
-
           {/* Skills */}
           {cv.skills && cv.skills.length > 0 && (
             <motion.div variants={itemVariants}>
               <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
-                <Typography variant="h5" sx={{ mb: 3, color: colors.primary }}>
-                  {t('skills')}
+                <Typography variant="h5" sx={{ 
+                  mb: 3, 
+                  color: colors.primary, 
+                  fontWeight: 600,
+                  fontSize: { xs: '1.25rem', md: '1.5rem' },
+                  borderBottom: `2px solid ${colors.primary}20`,
+                  pb: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}>
+                  <Star /> {t('skills')}
                 </Typography>
                 <Grid container spacing={3}>
                   {cv.skills.map((skill, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Box sx={{ mb: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                          <ColorLens sx={{ color: colors.primary, mr: 1 }} />
-                          <Typography variant="body1" sx={{ color: colors.text }}>
+                      <Box sx={{ 
+                        mb: 2, 
+                        p: 1, 
+                        borderRadius: 2,
+                        transition: 'all 0.2s',
+                        '&:hover': {
+                          bgcolor: `${colors.primary}08`,
+                          transform: 'translateY(-2px)'
+                        }
+                      }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'space-between' }}>
+                          <Typography variant="body1" sx={{ 
+                            color: colors.text, 
+                            fontWeight: 500,
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}>
+                            <ColorLens sx={{ color: colors.primary, mr: 1, fontSize: '1rem' }} />
                             {skill.name}
+                          </Typography>
+                          <Typography variant="caption" sx={{ 
+                            color: colors.primary,
+                            bgcolor: `${colors.primary}15`,
+                            px: 1,
+                            py: 0.5,
+                            borderRadius: 5,
+                            fontWeight: 600
+                          }}>
+                            {skill.level}
                           </Typography>
                         </Box>
                         <LinearProgress
                           variant="determinate"
                           value={getSkillLevel(skill.level) * 20}
                           sx={{
-                            height: 10,
+                            height: 6,
                             borderRadius: 3,
                             bgcolor: `${colors.primary}22`,
                             '& .MuiLinearProgress-bar': {
                               bgcolor: colors.primary,
-                              borderRadius: 3
+                              borderRadius: 3,
+                              backgroundImage: `linear-gradient(90deg, ${colors.primary}, ${colors.accent1})`
                             }
                           }}
                         />
@@ -539,30 +691,56 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
           {cv.languages && cv.languages.length > 0 && (
             <motion.div variants={itemVariants}>
               <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
-                <Typography variant="h5" sx={{ mb: 3, color: colors.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant="h5" sx={{ 
+                  mb: 3, 
+                  color: colors.primary, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  fontWeight: 600,
+                  fontSize: { xs: '1.25rem', md: '1.5rem' },
+                  borderBottom: `2px solid ${colors.primary}20`,
+                  pb: 1
+                }}>
                   <Language /> {t('languages')}
                 </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+                <Grid container spacing={2}>
                   {cv.languages.map((lang, index) => (
-                    <Chip
-                      key={index}
-                      label={`${lang.name} (${lang.level})`}
-                      sx={{ 
-                        bgcolor: `${colors.primary}15`,
-                        color: colors.text,
-                        fontWeight: 500,
-                        borderRadius: '16px',
-                        px: 1,
-                        py: 2.5,
+                    <Grid item xs={6} sm={4} md={3} key={index}>
+                      <Box sx={{
+                        bgcolor: `${colors.primary}10`,
+                        borderRadius: 2,
+                        p: 2,
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                        transition: 'all 0.3s',
                         '&:hover': {
-                          bgcolor: `${colors.primary}25`,
-                          transform: 'translateY(-3px)',
-                        },
-                        transition: 'transform 0.2s, background-color 0.2s',
-                      }}
-                    />
+                          bgcolor: `${colors.primary}20`,
+                          transform: 'translateY(-4px)',
+                          boxShadow: '0 6px 10px rgba(0,0,0,0.05)'
+                        }
+                      }}>
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: colors.primary, mb: 1 }}>
+                          {lang.name}
+                        </Typography>
+                        <Chip
+                          label={lang.level}
+                          size="small"
+                          sx={{ 
+                            bgcolor: `${colors.primary}15`,
+                            color: colors.primary,
+                            fontWeight: 500,
+                            fontSize: '0.75rem'
+                          }}
+                        />
+                      </Box>
+                    </Grid>
                   ))}
-                </Box>
+                </Grid>
               </Paper>
             </motion.div>
           )}
@@ -571,30 +749,118 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
           {cv.experience && cv.experience.length > 0 && (
             <motion.div variants={itemVariants}>
               <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
-                <Typography variant="h5" sx={{ mb: 3, color: colors.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant="h5" sx={{ 
+                  mb: 3, 
+                  color: colors.primary, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  fontWeight: 600,
+                  fontSize: { xs: '1.25rem', md: '1.5rem' },
+                  borderBottom: `2px solid ${colors.primary}20`,
+                  pb: 1
+                }}>
                   <Work /> {t('workExperience')}
                 </Typography>
                 {cv.experience.map((exp, index) => (
-                  <Box key={index} sx={{ mb: index < cv.experience.length - 1 ? 4 : 0 }}>
+                  <Box key={index} sx={{ 
+                    mb: index < cv.experience.length - 1 ? 4 : 0,
+                    position: 'relative',
+                    pl: { xs: 0, md: 4 },
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      left: { xs: 12, md: 16 },
+                      top: 40,
+                      bottom: 0,
+                      width: 2,
+                      bgcolor: `${colors.primary}30`,
+                      display: { xs: 'none', md: 'block' }
+                    }
+                  }}>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <Typography variant="h6" sx={{ color: colors.text }}>
-                          {exp.position}
-                        </Typography>
-                        <Typography variant="subtitle1" sx={{ color: colors.primary, mb: 1 }}>
-                          {exp.company}
-                          {exp.location && ` • ${exp.location}`}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: colors.subtext, mb: 2 }}>
-                          {exp.start_date} - {exp.end_date || t('present')}
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: colors.text }}>
-                          {exp.description}
-                        </Typography>
+                        <Box sx={{ 
+                          position: 'relative',
+                          '&::before': {
+                            content: '""',
+                            position: 'absolute',
+                            left: -32,
+                            top: 8,
+                            width: 16,
+                            height: 16,
+                            borderRadius: '50%',
+                            bgcolor: colors.primary,
+                            display: { xs: 'none', md: 'block' }
+                          }
+                        }}>
+                          <Typography variant="h6" sx={{ 
+                            color: colors.text, 
+                            fontWeight: 600, 
+                            fontSize: '1.15rem',
+                            mb: 0.5
+                          }}>
+                            {exp.position}
+                          </Typography>
+                          <Typography variant="subtitle1" sx={{ 
+                            color: colors.primary, 
+                            mb: 1,
+                            fontWeight: 500, 
+                            fontSize: '0.95rem',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            gap: 0.5
+                          }}>
+                            {exp.company}
+                            {exp.location && (
+                              <>
+                                <Box component="span" sx={{ 
+                                  display: 'inline-block', 
+                                  mx: 0.5, 
+                                  bgcolor: colors.primary,
+                                  width: 4,
+                                  height: 4,
+                                  borderRadius: '50%'
+                                }} />
+                                {exp.location}
+                              </>
+                            )}
+                          </Typography>
+                          <Typography variant="body2" sx={{ 
+                            color: colors.subtext, 
+                            mb: 2,
+                            display: 'flex',
+                            alignItems: 'center',
+                            fontSize: '0.85rem'
+                          }}>
+                            <Box component="span" sx={{ 
+                              display: 'inline-flex',
+                              alignItems: 'center', 
+                              bgcolor: `${colors.primary}15`,
+                              color: colors.primary,
+                              px: 1,
+                              py: 0.5,
+                              borderRadius: 10,
+                              mr: 1,
+                              fontSize: '0.75rem',
+                              fontWeight: 500
+                            }}>
+                              {exp.start_date} - {exp.end_date || t('present')}
+                            </Box>
+                          </Typography>
+                          <Typography variant="body1" sx={{ 
+                            color: colors.text,
+                            fontSize: '0.9rem',
+                            lineHeight: 1.6
+                          }}>
+                            {exp.description}
+                          </Typography>
+                        </Box>
                       </Grid>
                     </Grid>
                     {index < cv.experience.length - 1 && (
-                      <Divider sx={{ my: 3 }} />
+                      <Divider sx={{ my: 3, opacity: 0, display: { xs: 'block', md: 'none' } }} />
                     )}
                   </Box>
                 ))}
@@ -606,26 +872,85 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
           {cv.education && cv.education.length > 0 && (
             <motion.div variants={itemVariants}>
               <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg, borderRadius: 4 }}>
-                <Typography variant="h5" sx={{ mb: 3, color: colors.primary }}>
-                  {t('education')}
+                <Typography variant="h5" sx={{ 
+                  mb: 3, 
+                  color: colors.primary, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  fontWeight: 600,
+                  fontSize: { xs: '1.25rem', md: '1.5rem' },
+                  borderBottom: `2px solid ${colors.primary}20`,
+                  pb: 1
+                }}>
+                  <School /> {t('education')}
                 </Typography>
-                <Grid container spacing={4}>
+                <Grid container spacing={3}>
                   {cv.education.map((edu, index) => (
                     <Grid item xs={12} md={6} key={index}>
-                      <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" sx={{ color: colors.text }}>
+                      <Box sx={{ 
+                        mb: 3, 
+                        p: 2,
+                        borderLeft: `3px solid ${colors.secondary}`,
+                        borderRadius: 1,
+                        bgcolor: `${colors.primary}05`,
+                        transition: 'all 0.2s',
+                        '&:hover': {
+                          boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
+                          transform: 'translateY(-2px)',
+                          bgcolor: `${colors.primary}08`
+                        }
+                      }}>
+                        <Typography variant="h6" sx={{ 
+                          color: colors.text, 
+                          fontWeight: 600,
+                          fontSize: '1.1rem',
+                          mb: 0.5
+                        }}>
                           {edu.degree}
                         </Typography>
-                        <Typography variant="subtitle1" sx={{ color: colors.primary, mb: 1 }}>
+                        <Typography variant="subtitle1" sx={{ 
+                          color: colors.primary, 
+                          mb: 1,
+                          fontWeight: 500,
+                          fontSize: '0.95rem'
+                        }}>
                           {edu.school}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: colors.subtext, mb: 2 }}>
-                          {edu.start_date} - {edu.end_date || t('present')}
-                          {edu.location && ` • ${edu.location}`}
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: colors.text }}>
-                          {edu.description}
-                        </Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.5 }}>
+                          <Typography variant="body2" sx={{ 
+                            color: colors.primary,
+                            bgcolor: `${colors.primary}15`,
+                            px: 1.5,
+                            py: 0.5,
+                            borderRadius: 10,
+                            fontSize: '0.75rem',
+                            fontWeight: 500
+                          }}>
+                            {edu.start_date} - {edu.end_date || t('present')}
+                          </Typography>
+                          {edu.location && (
+                            <Typography variant="body2" sx={{ 
+                              color: colors.subtext,
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius: 10,
+                              fontSize: '0.75rem',
+                              bgcolor: 'rgba(0,0,0,0.05)'
+                            }}>
+                              {edu.location}
+                            </Typography>
+                          )}
+                        </Box>
+                        {edu.description && (
+                          <Typography variant="body2" sx={{ 
+                            color: colors.text,
+                            fontSize: '0.85rem',
+                            lineHeight: 1.5
+                          }}>
+                            {edu.description}
+                          </Typography>
+                        )}
                       </Box>
                     </Grid>
                   ))}

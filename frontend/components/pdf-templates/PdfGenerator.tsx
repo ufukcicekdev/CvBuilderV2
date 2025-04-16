@@ -107,6 +107,27 @@ const PdfGenerator = dynamic(
             throw new Error('PDF container not found');
           }
           
+          // Resimlerin yüklenmesini bekle
+          const images = pdfContainer.querySelectorAll('img');
+          if (images.length > 0) {
+            await Promise.all(
+              Array.from(images).map(
+                (img) =>
+                  new Promise((resolve) => {
+                    if (img.complete) {
+                      resolve(true);
+                    } else {
+                      img.onload = () => resolve(true);
+                      img.onerror = () => resolve(false);
+                    }
+                  })
+              )
+            );
+            
+            // Yükleme tamamlandıktan sonra kısa bir bekleme süresi ekle
+            await new Promise(resolve => setTimeout(resolve, 300));
+          }
+          
           // PDF oluştur ve indir
           const success = await pdfService.generatePdf({
             element: pdfContainer as HTMLElement,
@@ -263,7 +284,7 @@ const PdfGenerator = dynamic(
               border: '1px solid #e0e0e0', 
               borderRadius: 1,
               p: { xs: 1, sm: 2 }, // Mobilde padding azalt
-              backgroundColor: '#f9f9f9',
+              backgroundColor: '#ffffff', // Arka planı beyaz yap
               maxWidth: '100%',
               overflow: 'auto',
               // PDF şablonlarının mobil görünümü için
@@ -283,7 +304,30 @@ const PdfGenerator = dynamic(
               }
             }}
           >
-            {renderTemplate()}
+            <div id="pdf-container" style={{ 
+              width: '210mm', 
+              maxWidth: '100%',
+              margin: '0 auto',
+              padding: '0',
+              backgroundColor: '#ffffff',
+              boxSizing: 'border-box',
+              overflow: 'hidden'
+            }}>
+              <style dangerouslySetInnerHTML={{ __html: `
+                #pdf-container img {
+                  max-width: 100%;
+                  height: auto;
+                  display: block;
+                }
+                #pdf-container img[width="80"][height="80"] {
+                  width: 80px !important;
+                  height: 80px !important;
+                  border-radius: 50%;
+                  object-fit: cover;
+                }
+              `}} />
+              {renderTemplate()}
+            </div>
           </Box>
         </Box>
       );

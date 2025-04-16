@@ -54,17 +54,32 @@ export const pdfService = {
         // Elementi klonla ve tam boyutlu ayarla
         const clone = element.cloneNode(true) as HTMLElement;
         
-        // Stili sıfırla
+        // Render edilmesi için gerekli tüm stilleri uygula
         clone.style.margin = '0';
-        clone.style.padding = '0';
+        clone.style.padding = '20px'; // Padding arttır
         clone.style.width = '210mm'; // A4 genişliği
         clone.style.maxWidth = '210mm';
         clone.style.height = 'auto';
         clone.style.boxSizing = 'border-box';
         clone.style.boxShadow = 'none';
+        clone.style.backgroundColor = '#ffffff';
+        clone.style.overflow = 'hidden';
+        
+        // Yazı tipi için stil ekle
+        const fontStyle = document.createElement('style');
+        fontStyle.textContent = `
+          @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+          #pdf-container * {
+            font-family: 'Roboto', Arial, sans-serif;
+          }
+        `;
+        document.head.appendChild(fontStyle);
         
         // Klonu konteynere ekle
         tempContainer.appendChild(clone);
+        
+        // Elementin tam olarak render edilmesi için bir süre bekle
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         // Canvas oluştur - yüksek çözünürlük için ölçeği artır
         const canvas = await html2canvas(clone, {
@@ -74,8 +89,41 @@ export const pdfService = {
           backgroundColor: '#FFFFFF',
           logging: false,
           windowWidth: clone.scrollWidth,
-          windowHeight: clone.scrollHeight
+          windowHeight: clone.scrollHeight,
+          imageTimeout: 15000, // Resim yükleme zaman aşımını arttır
+          foreignObjectRendering: false, // SVG ve diğer yabancı objeleri canvas olarak render et
+          ignoreElements: (element) => {
+            // Görünmez elementleri atlayarak performansı artır
+            const style = window.getComputedStyle(element);
+            return style.display === 'none' || style.visibility === 'hidden';
+          },
+          onclone: (document, clonedDoc) => {
+            // Klonlanmış dokümanda ek stil düzenlemeleri yapılabilir
+            const clonedElement = clonedDoc.querySelector('#pdf-container');
+            if (clonedElement) {
+              // Image elementleri için düzeltmeler
+              const images = clonedElement.querySelectorAll('img');
+              images.forEach((img: HTMLImageElement) => {
+                img.style.maxWidth = '100%';
+                if (!img.hasAttribute('crossorigin')) {
+                  img.crossOrigin = 'anonymous';
+                }
+                
+                // Base64 veya data URL resimleri için özel işlem gerekmez
+                if (img.src && !img.src.startsWith('data:') && !img.src.startsWith('blob:')) {
+                  // Resmin yüklenmesini bekleyip render etme sorunlarını önle
+                  img.setAttribute('loading', 'eager');
+                  
+                  // Resimlerin oranlarını koru
+                  img.style.objectFit = 'cover';
+                }
+              });
+            }
+          }
         });
+        
+        // Stilleri temizle
+        document.head.removeChild(fontStyle);
         
         // Geçici elemanları temizle
         tempContainer.removeChild(clone);
@@ -88,7 +136,8 @@ export const pdfService = {
           orientation: orientation, 
           unit: 'mm',
           format: 'a4',
-          compress: true
+          compress: true,
+          hotfixes: ['px_scaling'] // Piksel ölçekleme sorunlarını çöz
         });
         
         // PDF A4 boyutları
@@ -96,7 +145,7 @@ export const pdfService = {
         const pdfHeight = pdf.internal.pageSize.getHeight();
         
         // Kenar boşluğu olmadan kullanılabilir alan
-        const contentWidth = pdfWidth;
+        const contentWidth = pdfWidth - (margin[0] + margin[2]);
         
         // Canvas'ı JPEG'e dönüştür - yüksek kalite
         const imgData = canvas.toDataURL('image/jpeg', 1.0);
@@ -111,58 +160,63 @@ export const pdfService = {
           const imgHeight = contentWidth * canvasRatio;
           
           // İçerik sayfaya sığıyor mu kontrol et
-          if (imgHeight <= pdfHeight) {
+          if (imgHeight <= pdfHeight - (margin[1] + margin[3])) {
             // İçerik sayfaya sığıyor - sayfayı ortalama
-            pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'JPEG', margin[0], margin[1], imgWidth, imgHeight);
           } else {
             // İçerik tek sayfadan büyük - içeriği ölçeklendirerek sığdır
-            const scaleFactor = pdfHeight / imgHeight;
+            const scaleFactor = (pdfHeight - (margin[1] + margin[3])) / imgHeight;
             const scaledWidth = imgWidth * scaleFactor;
-            const xOffset = (pdfWidth - scaledWidth) / 2;
+            const xOffset = margin[0] + (contentWidth - scaledWidth) / 2;
             
-            pdf.addImage(imgData, 'JPEG', xOffset, 0, scaledWidth, pdfHeight);
+            pdf.addImage(imgData, 'JPEG', xOffset, margin[1], scaledWidth, pdfHeight - (margin[1] + margin[3]));
           }
         } else {
-          // Çoklu sayfa - şu an kullanılmıyor ama opsiyonel olarak bulunuyor
+          // Çoklu sayfa modu - içeriği sayfalar halinde böl
           const imgWidth = contentWidth;
           const imgHeight = contentWidth * canvasRatio;
           
-          if (imgHeight <= pdfHeight) {
+          if (imgHeight <= pdfHeight - (margin[1] + margin[3])) {
             // İçerik tek sayfaya sığıyor
-            pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'JPEG', margin[0], margin[1], imgWidth, imgHeight);
           } else {
-            // A4 sayfası oranında bir scale faktörü hesapla
-            const pageRatio = pdfHeight / pdfWidth;
+            // Her sayfada ne kadar içerik gösterileceğini hesapla
+            const pageHeight = pdfHeight - (margin[1] + margin[3]);
+            const contentHeight = imgHeight;
+            const pageCount = Math.ceil(contentHeight / pageHeight);
             
-            // İçerik genişliğini sayfaya sığdır ve kağıdı doldur
-            const scaledWidth = pdfWidth;
-            const scaledHeight = pdfWidth * canvasRatio;
-            
-            // Sayfa sayısını hesapla
-            const pageCount = Math.ceil(scaledHeight / pdfHeight);
-            
+            // Her sayfa için işlem yap
             for (let i = 0; i < pageCount; i++) {
               if (i > 0) {
                 pdf.addPage();
               }
               
-              // Geçerli sayfa için görüntü konumu
-              const position = (pdfHeight * i) / scaledHeight;
-              const height = Math.min(pdfHeight / scaledHeight, 1 - position);
+              // Sayfada gösterilecek içeriğin pozisyonunu ve yüksekliğini hesapla
+              const sourceY = pageHeight * i;
+              const sourceHeight = Math.min(pageHeight, contentHeight - sourceY);
               
-              // Görüntüyü sayfaya ekle, tüm sayfayı kapla
-              // addImage için alternatif bir yöntem kullan - clip kullanarak
-              const clipY = position * scaledHeight;
-              const clipHeight = height * scaledHeight;
+              // Kaynak ve hedef boyutlarını belirle
+              const sx = 0;
+              const sy = (sourceY / imgHeight) * canvas.height;
+              const sWidth = canvas.width;
+              const sHeight = (sourceHeight / imgHeight) * canvas.height;
               
-              // Tek parça olarak işlenecek alan
+              // Hedef konumu ve boyutları belirle
+              const dx = margin[0];
+              const dy = margin[1];
+              const dWidth = imgWidth;
+              const dHeight = sourceHeight;
+              
+              // Görüntüyü sayfaya ekle
               pdf.addImage(
                 imgData, 
                 'JPEG', 
-                0, 
-                -clipY, 
-                pdfWidth, 
-                scaledHeight
+                dx, 
+                dy, 
+                dWidth, 
+                dHeight, 
+                undefined, 
+                'FAST'
               );
             }
           }

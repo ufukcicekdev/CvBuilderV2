@@ -140,8 +140,19 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
   };
 
   const handleCurrentChange = (index: number, checked: boolean) => {
+    // Checkbox durumunu güncelle
+    setValue(`education.${index}.current`, checked, { 
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true
+    });
+    
+    // Eğer "şu anda okuyorum" seçiliyse, endDate'i temizle
     if (checked) {
-      setValue(`education.${index}.endDate`, '');
+      setValue(`education.${index}.endDate`, '', {
+        shouldValidate: true,
+        shouldDirty: true
+      });
     }
   };
 
@@ -268,9 +279,11 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                   <FormControlLabel
                     control={
                       <Checkbox
-                        {...register(`education.${index}.current` as const)}
                         checked={watchCurrentFields[index] || false}
-                        onChange={(e) => handleCurrentChange(index, e.target.checked)}
+                        onChange={(e) => {
+                          handleCurrentChange(index, e.target.checked);
+                        }}
+                        inputProps={{ 'aria-label': 'current education checkbox' }}
                       />
                     }
                     label={t('cv.education.current')}
@@ -284,10 +297,10 @@ const EducationForm = ({ cvId, onPrev, onStepComplete, initialData }: EducationF
                       label={t('cv.education.endDate')}
                       InputLabelProps={{ shrink: true }}
                       {...register(`education.${index}.endDate` as const, { 
-                        required: !watchCurrentFields[index] 
+                        required: !watchCurrentFields[index] ? t('common.required') as string : false
                       })}
-                      error={!watchCurrentFields[index] && !!errors.education?.[index]?.endDate}
-                      helperText={!watchCurrentFields[index] && errors.education?.[index]?.endDate && t('common.required')}
+                      error={!!errors.education?.[index]?.endDate}
+                      helperText={errors.education?.[index]?.endDate?.message}
                       variant="outlined"
                     />
                   )}

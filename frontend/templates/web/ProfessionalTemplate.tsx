@@ -35,7 +35,10 @@ import {
   Language,
   Menu as MenuIcon,
   Person,
-  Description
+  Description,
+  LinkedIn,
+  GitHub,
+  Public
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Flag from 'react-world-flags';
@@ -410,25 +413,57 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ cv: initial
                 <Grid item xs={12} md={4}>
                   {cv.personal_info.photo && (
                     <Box
-                      component="img"
-                      src={cv.personal_info.photo}
-                      alt={`${cv.personal_info.first_name} ${cv.personal_info.last_name}`}
                       sx={{
-                        width: '100%',
-                        height: 'auto',
-                        borderRadius: '50%',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%'
                       }}
-                    />
+                    >
+                      <Box
+                        component="img"
+                        src={cv.personal_info.photo}
+                        alt={`${cv.personal_info.full_name}`}
+                        sx={{
+                          width: '200px',
+                          height: '200px',
+                          objectFit: 'cover',
+                          borderRadius: '50%',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                        }}
+                      />
+                    </Box>
                   )}
                 </Grid>
                 <Grid item xs={12} md={8}>
                   <Typography variant="h4" sx={{ color: colors.primary, mb: 2 }}>
-                    {cv.personal_info.first_name} {cv.personal_info.last_name}
+                    {cv.personal_info.full_name} 
                   </Typography>
-                  <Typography variant="h5" sx={{ color: colors.text, mb: 3 }}>
-                    {cv.personal_info.title || cv.title}
-                  </Typography>
+                 
+                 
+                 
+                  
+                  {/* Professional Summary */}
+                  {cv.personal_info.summary && (
+                    <Box sx={{ mt: 2 }}>
+                     
+                      
+                      <Box sx={{
+                        bgcolor: 'rgba(0, 0, 0, 0.02)',
+                        borderRadius: 1,
+                        p: 2,
+                        borderLeft: `4px solid ${colors.primary}`,
+                      }}>
+                        <Typography variant="body1" sx={{
+                          color: colors.text,
+                          lineHeight: 1.6,
+                          fontStyle: 'italic',
+                        }}>
+                          {cv.personal_info.summary}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
                 </Grid>
               </Grid>
             </Paper>
@@ -465,34 +500,48 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ cv: initial
                     </Box>
                   </Grid>
                 )}
+                {cv.personal_info.linkedin && (
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <LinkedIn sx={{ color: colors.primary }} />
+                      <Typography>
+                        <a href={cv.personal_info.linkedin} target="_blank" rel="noopener noreferrer" 
+                           style={{ color: colors.text, textDecoration: 'none' }}>
+                          LinkedIn
+                        </a>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                )}
+                {cv.personal_info.github && (
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <GitHub sx={{ color: colors.primary }} />
+                      <Typography>
+                        <a href={cv.personal_info.github} target="_blank" rel="noopener noreferrer" 
+                           style={{ color: colors.text, textDecoration: 'none' }}>
+                          GitHub
+                        </a>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                )}
+                {cv.personal_info.website && (
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Public sx={{ color: colors.primary }} />
+                      <Typography>
+                        <a href={cv.personal_info.website} target="_blank" rel="noopener noreferrer" 
+                           style={{ color: colors.text, textDecoration: 'none' }}>
+                          Website
+                        </a>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                )}
               </Grid>
             </Paper>
           </motion.div>
-
-          {/* Professional Summary */}
-          {cv.personal_info.summary && (
-            <motion.div variants={itemVariants}>
-              <Paper elevation={2} sx={{ p: 3, mb: 3, bgcolor: colors.cardBg }}>
-                <Typography variant="h5" sx={{ mb: 3, color: colors.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Person /> {t('professionalSummary')}
-                </Typography>
-                <Box sx={{
-                  bgcolor: 'rgba(0, 0, 0, 0.02)',
-                  borderRadius: 1,
-                  p: 2,
-                  borderLeft: `4px solid ${colors.primary}`,
-                }}>
-                  <Typography variant="body1" sx={{
-                    color: colors.text,
-                    lineHeight: 1.6,
-                    fontStyle: 'italic',
-                  }}>
-                    {cv.personal_info.summary}
-                  </Typography>
-                </Box>
-              </Paper>
-            </motion.div>
-          )}
 
           {/* Skills */}
           {cv.skills && cv.skills.length > 0 && (

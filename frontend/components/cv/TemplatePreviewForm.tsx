@@ -829,6 +829,16 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       // PDF işlemine başlandığını bildir
       toast.success(t('cv.preview.pdfGenerating', 'PDF oluşturuluyor...'));
       
+      // Profil resmi ön yüklemeye başla (varsa)
+      if (data.personal_info?.photo) {
+        // TypeScript için HTMLImageElement kullanarak Image constructor'ını düzeltelim
+        const preloadImg = document.createElement('img');
+        preloadImg.src = data.personal_info.photo;
+      }
+      
+      // Render için biraz bekle - profil resminin yüklenmesi için
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
       if (isCustomTemplate && selectedCustomTemplate) {
         // console.log('Using custom template for PDF generation:', selectedCustomTemplate.name);
         
@@ -933,6 +943,12 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
         // Önce CV verilerini API'den al
         const cvResponse = await axiosInstance.get(`/api/cvs/${cvId}/?language=${selectedLanguage}`);
         const cvData = cvResponse.data;
+        
+        // Önce preview'ı açarak işlem yapalım ki pdf-container render edilsin
+        setOpen(true);
+        
+        // Render için biraz bekle
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         // Frontend'de PDF oluştur
         const result = await generatePdfInFrontend(cvData);
@@ -1089,6 +1105,65 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
       'cv.template.templates.creativePdf.description': t('cv.template.templates.creativePdf.description'),
       'cv.template.templates.professionalPdf.name': t('cv.template.templates.professionalPdf.name'),
       'cv.template.templates.professionalPdf.description': t('cv.template.templates.professionalPdf.description')
+    },
+    de: {
+      summary: "Berufsprofil",
+      experience: "Berufserfahrung",
+      education: "Ausbildung",
+      skills: "Fähigkeiten",
+      languages: "Sprachen",
+      certificates: "Zertifikate",
+      present: "Aktuell",
+      skill_level: 'von 5',
+      // Section visibility translations
+      sectionVisibility: "Abschnittssichtbarkeit",
+      header: "Kopfzeile",
+      layout: "Layout",
+      layoutSettings: "Layout-Einstellungen",
+      showPhoto: "Foto anzeigen",
+      photoStyle: "Foto-Stil",
+      photoSize: "Foto-Größe",
+      colors: "Farben",
+      typography: "Typografie",
+      primaryColor: "Primärfarbe",
+      secondaryColor: "Sekundärfarbe",
+      backgroundColor: "Hintergrundfarbe",
+      textColor: "Textfarbe",
+      fontSize: "Schriftgröße",
+      fontFamily: "Schriftart",
+      // Layout options
+      singleColumn: "Einspaltig",
+      doubleColumn: "Zweispaltig",
+      // Photo styles
+      circle: "Rund",
+      square: "Quadratisch",
+      rounded: "Abgerundet",
+      // ATS related
+      atsOptimization: "ATS-Optimierung",
+      enableAtsOptimization: "ATS-Optimierung aktivieren",
+      atsExplanation: "Optimiert Ihren Lebenslauf für eine bessere Erkennung durch ATS (Bewerbermanagementsysteme)",
+      // Web template translations
+      'cv.template.templates.modernWeb.name': "Moderne Web-Vorlage",
+      'cv.template.templates.modernWeb.description': "Ein schlankes, professionelles Design mit modernem Layout",
+      'cv.template.templates.minimalWeb.name': "Minimalistische Web-Vorlage",
+      'cv.template.templates.minimalWeb.description': "Ein schlichtes, elegantes Design mit Fokus auf Inhalt",
+      'cv.template.templates.colorfulWeb.name': "Farbenfrohe Web-Vorlage",
+      'cv.template.templates.colorfulWeb.description': "Ein auffälliges Design mit lebendigen Farben",
+      'cv.template.templates.professionalWeb.name': "Professionelle Web-Vorlage",
+      'cv.template.templates.professionalWeb.description': "Ein strukturiertes Layout für den Unternehmenseinsatz",
+      'cv.template.templates.creativeWeb.name': "Kreative Web-Vorlage",
+      'cv.template.templates.creativeWeb.description': "Ein einzigartiges Design für kreative Berufe",
+      // PDF template translations
+      'cv.template.templates.modernPdf.name': "Moderne PDF-Vorlage",
+      'cv.template.templates.modernPdf.description': "Ein elegantes, zeitgemäßes Design für Ihren Lebenslauf",
+      'cv.template.templates.classicPdf.name': "Klassische PDF-Vorlage",
+      'cv.template.templates.classicPdf.description': "Eine traditionelle Vorlage für alle Branchen",
+      'cv.template.templates.minimalPdf.name': "Minimalistische PDF-Vorlage",
+      'cv.template.templates.minimalPdf.description': "Ein schlichtes, klares Design für Ihren Lebenslauf",
+      'cv.template.templates.creativePdf.name': "Kreative PDF-Vorlage",
+      'cv.template.templates.creativePdf.description': "Eine innovative Vorlage, die Ihre Persönlichkeit zeigt",
+      'cv.template.templates.professionalPdf.name': "Professionelle PDF-Vorlage",
+      'cv.template.templates.professionalPdf.description': "Eine formelle, professionelle Vorlage für Fachleute"
     },
     ar: {
       summary: "ملخص مهني",
@@ -1611,6 +1686,8 @@ const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoad
                   <MenuItem value="es">Español</MenuItem>
                   <MenuItem value="hi">हिन्दी</MenuItem>
                   <MenuItem value="ar">العربية</MenuItem>
+                  <MenuItem value="de">Deutsch</MenuItem>
+
                 </Select>
               </FormControl>
             )}

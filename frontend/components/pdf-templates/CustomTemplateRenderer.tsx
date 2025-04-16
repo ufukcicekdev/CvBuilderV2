@@ -425,7 +425,7 @@ const CustomTemplateRenderer: React.FC<CustomTemplateRendererProps> = ({
             fontSize: `${(headerSection.settings.fontSize || 16) * 0.75}pt`,
             opacity: 0.9
           }}>
-            {data && data.personal_info && data.personal_info.title || 'Profession / Title'}
+            {data && data.personal_info && data.personal_info.title }
           </p>
           
           {hasContactInfo && (

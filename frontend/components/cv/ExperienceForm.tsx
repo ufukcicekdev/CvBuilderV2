@@ -142,10 +142,21 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
     }
   };
 
-  // Current seçildiğinde endDate'i temizle
+  // Current seçildiğinde endDate'i temizle ve form state'ini güncelle
   const handleCurrentChange = (index: number, checked: boolean) => {
+    // Checkbox durumunu güncelle
+    setValue(`experience.${index}.current`, checked, { 
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true
+    });
+    
+    // Eğer "şu anda çalışıyorum" seçiliyse, endDate'i temizle
     if (checked) {
-      setValue(`experience.${index}.endDate`, '');
+      setValue(`experience.${index}.endDate`, '', {
+        shouldValidate: true,
+        shouldDirty: true
+      });
     }
   };
 
@@ -259,9 +270,11 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
                   <FormControlLabel
                     control={
                       <Checkbox
-                        {...register(`experience.${index}.current` as const)}
                         checked={watchCurrentFields[index] || false}
-                        onChange={(e) => handleCurrentChange(index, e.target.checked)}
+                        onChange={(e) => {
+                          handleCurrentChange(index, e.target.checked);
+                        }}
+                        inputProps={{ 'aria-label': 'current job checkbox' }}
                       />
                     }
                     label={t('cv.experience.current')}
@@ -275,10 +288,10 @@ const ExperienceForm = ({ cvId, onPrev, onStepComplete, initialData }: Experienc
                       label={t('cv.experience.endDate')}
                       InputLabelProps={{ shrink: true }}
                       {...register(`experience.${index}.endDate` as const, { 
-                        required: !watchCurrentFields[index] 
+                        required: !watchCurrentFields[index] ? t('common.required') as string : false
                       })}
-                      error={!watchCurrentFields[index] && !!errors.experience?.[index]?.endDate}
-                      helperText={!watchCurrentFields[index] && errors.experience?.[index]?.endDate && t('common.required')}
+                      error={!!errors.experience?.[index]?.endDate}
+                      helperText={errors.experience?.[index]?.endDate?.message}
                       variant="outlined"
                     />
                   )}

@@ -13,7 +13,6 @@ const Template1: React.FC<PDFTemplateProps> = ({ data, language, translations = 
 
   return (
     <div
-      id="pdf-container"
       style={{
         fontFamily: 'Arial, sans-serif',
         lineHeight: 1.4, // daha kompakt satır yüksekliği
@@ -39,12 +38,11 @@ const Template1: React.FC<PDFTemplateProps> = ({ data, language, translations = 
       >
         {data.personal_info?.photo && (
           <div style={{ marginBottom: '8px' }}>
-            <Image
+            <img
               src={data.personal_info.photo}
               alt="Profile"
               width={80}
               height={80}
-              priority={true}
               style={{
                 borderRadius: '50%',
                 objectFit: 'cover'

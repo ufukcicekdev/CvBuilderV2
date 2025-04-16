@@ -718,7 +718,7 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                       }
                     }}
                   >
-                    {cv.personal_info.first_name?.[0]}{cv.personal_info.last_name?.[0]}
+                    {cv.personal_info.full_name}
                   </Avatar>
                 )}
               </Grid>
@@ -801,6 +801,54 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                       }}>
                         <LocationOn fontSize="small" />
                         {cv.personal_info.address}
+                      </Box>
+                    </Tooltip>
+                  )}
+                  {cv.personal_info.linkedin && (
+                    <Tooltip title="LinkedIn">
+                      <Box component="a" href={cv.personal_info.linkedin} target="_blank" rel="noopener noreferrer" sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 1,
+                        transition: 'transform 0.2s',
+                        '&:hover': {
+                          transform: 'translateY(-2px)'
+                        }
+                      }}>
+                        <LinkedIn fontSize="small" />
+                        LinkedIn
+                      </Box>
+                    </Tooltip>
+                  )}
+                  {cv.personal_info.github && (
+                    <Tooltip title="GitHub">
+                      <Box component="a" href={cv.personal_info.github} target="_blank" rel="noopener noreferrer" sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 1,
+                        transition: 'transform 0.2s',
+                        '&:hover': {
+                          transform: 'translateY(-2px)'
+                        }
+                      }}>
+                        <GitHub fontSize="small" />
+                        GitHub
+                      </Box>
+                    </Tooltip>
+                  )}
+                  {cv.personal_info.website && (
+                    <Tooltip title="Website">
+                      <Box component="a" href={cv.personal_info.website} target="_blank" rel="noopener noreferrer" sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 1,
+                        transition: 'transform 0.2s',
+                        '&:hover': {
+                          transform: 'translateY(-2px)'
+                        }
+                      }}>
+                        <Public fontSize="small" />
+                        Website
                       </Box>
                     </Tooltip>
                   )}

@@ -13,7 +13,6 @@ const Template2: React.FC<PDFTemplateProps> = ({ data, language, translations = 
 
   return (
     <div
-      id="pdf-container"
       style={{
         fontFamily: 'Arial, sans-serif',
         lineHeight: 1.4,
@@ -62,12 +61,11 @@ const Template2: React.FC<PDFTemplateProps> = ({ data, language, translations = 
         {/* Profile picture */}
         {data.personal_info?.photo && (
           <div>
-            <Image
+            <img
               src={data.personal_info.photo}
               alt="Profile"
               width={80}
               height={80}
-              priority={true}
               style={{
                 borderRadius: '50%',
                 objectFit: 'cover',

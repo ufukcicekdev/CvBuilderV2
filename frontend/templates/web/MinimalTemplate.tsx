@@ -643,19 +643,24 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
 
   return (
     <Box sx={{ bgcolor: '#f9f9f9', minHeight: '100vh', pb: 8 }}>
-      <Container maxWidth="lg" sx={{ pt: 4 }}>
-        {/* Loading Backdrop */}
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={isLoading}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ ml: 2 }}>{t('loading')}</Typography>
-        </Backdrop>
+      {/* Loading Backdrop */}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+        <Typography sx={{ ml: 2 }}>{t('loading')}</Typography>
+      </Backdrop>
 
-        {/* Navbar */}
-        <AppBar position="static" color="primary" elevation={1}>
-          <Container maxWidth="lg">
+      {/* Navbar */}
+      <AppBar position="static" color="transparent" elevation={0} sx={{ 
+        bgcolor: 'white', 
+        borderBottom: '1px solid #eaeaea',
+        boxShadow: 'none',
+        width: '100%'
+      }}>
+        <Container disableGutters maxWidth={false}>
+          <Box px={3}>
             <Toolbar sx={{ justifyContent: 'space-between' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Typography 
@@ -664,12 +669,13 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                   href="/"
                   sx={{ 
                     fontWeight: 600,
-                    color: 'inherit',
+                    color: 'text.primary',
                     textDecoration: 'none',
                     '&:hover': {
                       opacity: 0.8
                     },
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    fontSize: '1.1rem'
                   }}
                 >
                   CV Builder
@@ -677,20 +683,31 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
               </Box>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 {/* Language Selection */}
-                <Tooltip title={t('changeLanguage')}>
-                  <IconButton
-                    color="inherit"
-                    onClick={handleClick}
-                    disabled={isLoading}
-                  >
-                    <Language />
-                  </IconButton>
-                </Tooltip>
+                <Button
+                  onClick={handleClick}
+                  disabled={isLoading}
+                  endIcon={<ArrowDropDown />}
+                  sx={{ 
+                    color: 'text.primary',
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    '&:hover': {
+                      bgcolor: 'rgba(0,0,0,0.04)'
+                    }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Flag height="20" code={currentLanguage.flag} />
+                    {currentLanguage.name}
+                  </Box>
+                </Button>
                 <Menu
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleClose}
                   TransitionComponent={Fade}
+                  elevation={1}
+                  sx={{ mt: 1 }}
                 >
                   {LANGUAGES.map((language) => (
                     <MenuItem 
@@ -702,7 +719,8 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
-                        minWidth: '150px'
+                        minWidth: '150px',
+                        fontSize: '0.9rem'
                       }}
                     >
                       <Flag height="20" code={language.flag} />
@@ -712,16 +730,25 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                 </Menu>
               </Box>
             </Toolbar>
-          </Container>
-        </AppBar>
+          </Box>
+        </Container>
+      </AppBar>
 
-        {/* Main Content */}
-        <Container maxWidth="md" sx={{ py: 4 }}>
-          <Box sx={{ bgcolor: '#ffffff', minHeight: '100vh', py: 6 }}>
-            <Container maxWidth="md">
-              {/* Header Section */}
-              <Box sx={{ textAlign: 'center', mb: 6 }}>
-                {cv.personal_info.photo ? (
+      {/* Main Content */}
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Box sx={{ bgcolor: '#ffffff', minHeight: '100vh', py: 6 }}>
+          <Container maxWidth="md">
+            {/* Header Section */}
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+              {cv.personal_info.photo ? (
+                <Box 
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%'
+                  }}
+                >
                   <Avatar
                     src={cv.personal_info.photo}
                     sx={{
@@ -732,89 +759,221 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                       border: '4px solid',
                       borderColor: 'primary.main',
                       boxShadow: 2,
+                      objectFit: 'cover'
                     }}
                   />
-                ) : (
-                  <Avatar
-                    sx={{
-                      width: 180,
-                      height: 180,
-                      mx: 'auto',
-                      mb: 3,
-                      border: '4px solid',
-                      borderColor: 'primary.main',
-                      boxShadow: 2,
-                      fontSize: '4rem',
-                      bgcolor: 'primary.main',
-                    }}
-                  >
-                    {cv.personal_info.first_name?.charAt(0) || ''}{cv.personal_info.last_name?.charAt(0) || ''}
-                  </Avatar>
-                )}
-                <Typography variant="h3" gutterBottom sx={{ fontWeight: 700 }}>
-                  {cv.personal_info.full_name}
-                </Typography>
-               
-               
-               
-                {cv.personal_info.description && (
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      maxWidth: 800,
-                      mx: 'auto',
-                      mt: 2,
-                      mb: 4,
-                      color: 'text.secondary',
-                      lineHeight: 1.8,
-                    }}
-                  >
-                    {cv.personal_info.description}
-                  </Typography>
-                )}
-                <Box sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  gap: 4,
-                  flexWrap: 'wrap',
-                  '& a': {
-                    color: 'text.primary',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
-                    '&:hover': { color: 'primary.main' }
-                  }
-                }}>
-                  {cv.personal_info.email && (
-                    <Tooltip title="Email">
-                      <Link href={`mailto:${cv.personal_info.email}`} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Email fontSize="small" />
-                        {cv.personal_info.email}
-                      </Link>
-                    </Tooltip>
-                  )}
-                  {cv.personal_info.phone && (
-                    <Tooltip title="Phone">
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Phone fontSize="small" />
-                        {cv.personal_info.phone}
-                      </Box>
-                    </Tooltip>
-                  )}
-                  {cv.personal_info.address && (
-                    <Tooltip title="Location">
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <LocationOn fontSize="small" />
-                        {cv.personal_info.address}
-                      </Box>
-                    </Tooltip>
-                  )}
                 </Box>
+              ) : (
+                <Avatar
+                  sx={{
+                    width: 180,
+                    height: 180,
+                    mx: 'auto',
+                    mb: 3,
+                    border: '4px solid',
+                    borderColor: 'primary.main',
+                    boxShadow: 2,
+                    fontSize: '4rem',
+                    bgcolor: 'primary.main',
+                  }}
+                >
+                  {cv.personal_info.first_name?.charAt(0) || ''}{cv.personal_info.last_name?.charAt(0) || ''}
+                </Avatar>
+              )}
+              <Typography variant="h3" gutterBottom sx={{ fontWeight: 700 }}>
+                {cv.personal_info.full_name}
+              </Typography>
+             
+              {/* Professional Summary in the header */}
+              {cv.personal_info.summary && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    maxWidth: 800,
+                    mx: 'auto',
+                    mt: 2,
+                    mb: 4,
+                    color: 'text.secondary',
+                    lineHeight: 1.8,
+                    fontWeight: 500,
+                    fontStyle: 'italic',
+                    borderLeft: '4px solid',
+                    borderColor: 'primary.main',
+                    pl: 2,
+                    py: 1,
+                    textAlign: 'left'
+                  }}
+                >
+                  {cv.personal_info.summary}
+                </Typography>
+              )}
+             
+             
+             
+              {cv.personal_info.description && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    maxWidth: 800,
+                    mx: 'auto',
+                    mt: 2,
+                    mb: 4,
+                    color: 'text.secondary',
+                    lineHeight: 1.8,
+                  }}
+                >
+                  {cv.personal_info.description}
+                </Typography>
+              )}
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                gap: 4,
+                flexWrap: 'wrap',
+                '& a': {
+                  color: 'text.primary',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
+                  '&:hover': { color: 'primary.main' }
+                }
+              }}>
+                {cv.personal_info.email && (
+                  <Tooltip title="Email">
+                    <Link href={`mailto:${cv.personal_info.email}`} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Email fontSize="small" />
+                      {cv.personal_info.email}
+                    </Link>
+                  </Tooltip>
+                )}
+                {cv.personal_info.phone && (
+                  <Tooltip title="Phone">
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Phone fontSize="small" />
+                      {cv.personal_info.phone}
+                    </Box>
+                  </Tooltip>
+                )}
+                {cv.personal_info.address && (
+                  <Tooltip title="Location">
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <LocationOn fontSize="small" />
+                      {cv.personal_info.address}
+                    </Box>
+                  </Tooltip>
+                )}
+                {cv.personal_info.linkedin && (
+                  <Tooltip title="LinkedIn">
+                    <Link href={cv.personal_info.linkedin} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <LinkedIn fontSize="small" />
+                      LinkedIn
+                    </Link>
+                  </Tooltip>
+                )}
+                {cv.personal_info.github && (
+                  <Tooltip title="GitHub">
+                    <Link href={cv.personal_info.github} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <GitHub fontSize="small" />
+                      GitHub
+                    </Link>
+                  </Tooltip>
+                )}
+                {cv.personal_info.website && (
+                  <Tooltip title="Website">
+                    <Link href={cv.personal_info.website} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Public fontSize="small" />
+                      Website
+                    </Link>
+                  </Tooltip>
+                )}
               </Box>
+            </Box>
 
-              <Grid container spacing={6}>
-                {/* Left Column */}
-                <Grid item xs={12} md={4}>
-                  {/* Languages Section */}
+            <Grid container spacing={6}>
+              {/* Left Column */}
+              <Grid item xs={12} md={4}>
+                {/* Languages Section */}
+                <Box sx={{ mb: 6 }}>
+                  <Typography variant="h6" gutterBottom sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1,
+                    fontWeight: 600,
+                    color: 'primary.main',
+                    borderBottom: '2px solid',
+                    borderColor: 'primary.main',
+                    pb: 1,
+                  }}>
+                    <Language /> {t('languages')}
+                  </Typography>
+                  <List>
+                    {cv.languages.map((lang, index) => (
+                      <ListItem key={index} sx={{ px: 0 }}>
+                        <ListItemText
+                          primary={
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                                {lang.name}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                {lang.level}
+                              </Typography>
+                            </Box>
+                          }
+                          secondary={
+                            <LinearProgress 
+                              variant="determinate" 
+                              value={getSkillLevel(lang.level) * 20} 
+                              sx={{ 
+                                mt: 1, 
+                                height: 6, 
+                                borderRadius: 1,
+                                backgroundColor: 'rgba(0,0,0,0.1)',
+                                '& .MuiLinearProgress-bar': {
+                                  backgroundColor: 'primary.main'
+                                }
+                              }}
+                            />
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+
+                {/* Skills Section */}
+                <Box sx={{ mb: 6 }}>
+                  <Typography variant="h6" gutterBottom sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1,
+                    fontWeight: 600,
+                    color: 'primary.main',
+                    borderBottom: '2px solid',
+                    borderColor: 'primary.main',
+                    pb: 1,
+                  }}>
+                    <Code /> {t('skills')}
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
+                    {cv.skills.map((skill, index) => (
+                      <Chip
+                        key={index}
+                        label={`${skill.name} (${skill.level})`}
+                        color="primary"
+                        variant="filled"
+                        sx={{ 
+                          borderRadius: '8px',
+                          '& .MuiChip-label': {
+                            fontWeight: 500
+                          }
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                {/* Certificates Section */}
+                {cv.certificates.length > 0 && (
                   <Box sx={{ mb: 6 }}>
                     <Typography variant="h6" gutterBottom sx={{ 
                       display: 'flex', 
@@ -826,226 +985,111 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                       borderColor: 'primary.main',
                       pb: 1,
                     }}>
-                      <Language /> {t('languages')}
+                      <Star /> {t('certificates')}
                     </Typography>
                     <List>
-                      {cv.languages.map((lang, index) => (
-                        <ListItem key={index} sx={{ px: 0 }}>
+                      {cv.certificates.map((cert, index) => (
+                        <ListItem key={index} sx={{ px: 0, py: 2 }}>
                           <ListItemText
                             primary={
-                              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                                  {lang.name}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                  {lang.level}
-                                </Typography>
-                              </Box>
+                              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                                {cert.name}
+                              </Typography>
                             }
                             secondary={
-                              <LinearProgress 
-                                variant="determinate" 
-                                value={getSkillLevel(lang.level) * 20} 
-                                sx={{ 
-                                  mt: 1, 
-                                  height: 6, 
-                                  borderRadius: 1,
-                                  backgroundColor: 'rgba(0,0,0,0.1)',
-                                  '& .MuiLinearProgress-bar': {
-                                    backgroundColor: 'primary.main'
-                                  }
-                                }}
-                              />
+                              <Box>
+                                <Typography variant="body2" color="text.secondary">
+                                  {cert.issuer}
+                                </Typography>
+                                {cert.date && (
+                                  <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
+                                    <CalendarToday fontSize="small" />
+                                    {cert.date}
+                                  </Typography>
+                                )}
+                                {cert.description && (
+                                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                    {cert.description}
+                                  </Typography>
+                                )}
+                              </Box>
                             }
                           />
+                          {cert.documentUrl && (
+                            <IconButton
+                              size="small"
+                              onClick={() => handleCertificateClick(cert)}
+                              sx={{
+                                color: 'primary.main',
+                                '&:hover': {
+                                  backgroundColor: 'primary.light',
+                                  color: 'white'
+                                }
+                              }}
+                            >
+                              {cert.document_type === 'image' ? <ImageIcon /> : <PictureAsPdf />}
+                            </IconButton>
+                          )}
                         </ListItem>
                       ))}
                     </List>
                   </Box>
+                )}
+              </Grid>
 
-                  {/* Skills Section */}
-                  <Box sx={{ mb: 6 }}>
-                    <Typography variant="h6" gutterBottom sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 1,
-                      fontWeight: 600,
-                      color: 'primary.main',
-                      borderBottom: '2px solid',
-                      borderColor: 'primary.main',
-                      pb: 1,
-                    }}>
-                      <Code /> {t('skills')}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
-                      {cv.skills.map((skill, index) => (
-                        <Chip
-                          key={index}
-                          label={`${skill.name} (${skill.level})`}
-                          color="primary"
-                          variant="filled"
-                          sx={{ 
-                            borderRadius: '8px',
-                            '& .MuiChip-label': {
-                              fontWeight: 500
+              {/* Right Column */}
+              <Grid item xs={12} md={8}>
+                {/* Video Section */}
+                {cv.video_info && cv.video_info.video_url && cv.video_info.video_url.trim() !== '' && (
+                  <>
+                    {/* console.log('Rendering video section in MinimalTemplate, video_url:', cv.video_info.video_url) */}
+                    <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Videocam sx={{ mr: 1.5, color: 'text.secondary' }} />
+                        <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                          {t('videoIntroduction')}
+                        </Typography>
+                      </Box>
+                      <Divider sx={{ mb: 2 }} />
+                      
+                      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                        <video
+                          controls
+                          style={{ 
+                            width: '100%', 
+                            maxWidth: '640px', 
+                            borderRadius: '4px',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                          }}
+                          src={cv.video_info.video_url}
+                          onError={(e) => {
+                            console.error('Video loading error:', e);
+                            // Video yüklenemezse elementi gizle
+                            const target = e.target as HTMLVideoElement;
+                            target.style.display = 'none';
+                            // Hata mesajı göster
+                            const parent = target.parentElement;
+                            if (parent) {
+                              const errorMsg = document.createElement('p');
+                              errorMsg.textContent = 'Video yüklenemedi.';
+                              errorMsg.style.color = 'red';
+                              parent.appendChild(errorMsg);
                             }
                           }}
                         />
-                      ))}
-                    </Box>
-                  </Box>
+                      </Box>
+                      
+                      {cv.video_info.description && (
+                        <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
+                          {cv.video_info.description}
+                        </Typography>
+                      )}
+                    </Paper>
+                  </>
+                )}
 
-                  {/* Certificates Section */}
-                  {cv.certificates.length > 0 && (
-                    <Box sx={{ mb: 6 }}>
-                      <Typography variant="h6" gutterBottom sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: 1,
-                        fontWeight: 600,
-                        color: 'primary.main',
-                        borderBottom: '2px solid',
-                        borderColor: 'primary.main',
-                        pb: 1,
-                      }}>
-                        <Star /> {t('certificates')}
-                      </Typography>
-                      <List>
-                        {cv.certificates.map((cert, index) => (
-                          <ListItem key={index} sx={{ px: 0, py: 2 }}>
-                            <ListItemText
-                              primary={
-                                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                                  {cert.name}
-                                </Typography>
-                              }
-                              secondary={
-                                <Box>
-                                  <Typography variant="body2" color="text.secondary">
-                                    {cert.issuer}
-                                  </Typography>
-                                  {cert.date && (
-                                    <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
-                                      <CalendarToday fontSize="small" />
-                                      {cert.date}
-                                    </Typography>
-                                  )}
-                                  {cert.description && (
-                                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                                      {cert.description}
-                                    </Typography>
-                                  )}
-                                </Box>
-                              }
-                            />
-                            {cert.documentUrl && (
-                              <IconButton
-                                size="small"
-                                onClick={() => handleCertificateClick(cert)}
-                                sx={{
-                                  color: 'primary.main',
-                                  '&:hover': {
-                                    backgroundColor: 'primary.light',
-                                    color: 'white'
-                                  }
-                                }}
-                              >
-                                {cert.document_type === 'image' ? <ImageIcon /> : <PictureAsPdf />}
-                              </IconButton>
-                            )}
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Box>
-                  )}
-                </Grid>
-
-                {/* Right Column */}
-                <Grid item xs={12} md={8}>
-                  {/* Video Section */}
-                  {cv.video_info && cv.video_info.video_url && cv.video_info.video_url.trim() !== '' && (
-                    <>
-                      {/* console.log('Rendering video section in MinimalTemplate, video_url:', cv.video_info.video_url) */}
-                      <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                          <Videocam sx={{ mr: 1.5, color: 'text.secondary' }} />
-                          <Typography variant="h6" sx={{ fontWeight: 500 }}>
-                            {t('videoIntroduction')}
-                          </Typography>
-                        </Box>
-                        <Divider sx={{ mb: 2 }} />
-                        
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                          <video
-                            controls
-                            style={{ 
-                              width: '100%', 
-                              maxWidth: '640px', 
-                              borderRadius: '4px',
-                              boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-                            }}
-                            src={cv.video_info.video_url}
-                            onError={(e) => {
-                              console.error('Video loading error:', e);
-                              // Video yüklenemezse elementi gizle
-                              const target = e.target as HTMLVideoElement;
-                              target.style.display = 'none';
-                              // Hata mesajı göster
-                              const parent = target.parentElement;
-                              if (parent) {
-                                const errorMsg = document.createElement('p');
-                                errorMsg.textContent = 'Video yüklenemedi.';
-                                errorMsg.style.color = 'red';
-                                parent.appendChild(errorMsg);
-                              }
-                            }}
-                          />
-                        </Box>
-                        
-                        {cv.video_info.description && (
-                          <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
-                            {cv.video_info.description}
-                          </Typography>
-                        )}
-                      </Paper>
-                    </>
-                  )}
-
-                  {/* Summary Section */}
-                  {cv.personal_info.summary && (
-                    <Box sx={{ mb: 6 }}>
-                      <Typography variant="h6" gutterBottom sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: 1,
-                        fontWeight: 600,
-                        color: 'primary.main',
-                        borderBottom: '2px solid',
-                        borderColor: 'primary.main',
-                        pb: 1,
-                        mb: 3,
-                      }}>
-                        <Person /> {t('professionalSummary')}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: 'text.secondary',
-                          lineHeight: 1.8,
-                          fontWeight: 'bold',
-                          fontStyle: 'italic',
-                          borderLeft: '4px solid',
-                          borderColor: 'primary.main',
-                          pl: 2,
-                          py: 1,
-                        }}
-                      >
-                        {cv.personal_info.summary}
-                      </Typography>
-                    </Box>
-                  )}
-
-                  {/* Experience Section */}
+                {/* Summary Section */}
+                {cv.personal_info.summary && (
                   <Box sx={{ mb: 6 }}>
                     <Typography variant="h6" gutterBottom sx={{ 
                       display: 'flex', 
@@ -1058,186 +1102,218 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                       pb: 1,
                       mb: 3,
                     }}>
-                      <Work /> {t('workExperience')}
+                      <Person /> {t('professionalSummary')}
                     </Typography>
-                    {cv.experience.map((exp, index) => (
-                      <Box key={index} sx={{ mb: 4 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                          {exp.position}
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                            {exp.company}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary" sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center',
-                            gap: 0.5
-                          }}>
-                            <Place fontSize="small" />
-                            {exp.location}
-                          </Typography>
-                        </Box>
-                        <Typography variant="body2" color="text.secondary" sx={{ 
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 0.5,
-                          mb: 2
-                        }}>
-                          <CalendarToday fontSize="small" />
-                          {exp.start_date} - {exp.end_date || t('present')}
-                        </Typography>
-                        <Typography variant="body1" sx={{ 
-                          color: 'text.secondary',
-                          lineHeight: 1.8
-                        }}>
-                          {exp.description}
-                        </Typography>
-                        {index < cv.experience.length - 1 && <Divider sx={{ mt: 3 }} />}
-                      </Box>
-                    ))}
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: 'text.secondary',
+                        lineHeight: 1.8,
+                        fontWeight: 'bold',
+                        fontStyle: 'italic',
+                        borderLeft: '4px solid',
+                        borderColor: 'primary.main',
+                        pl: 2,
+                        py: 1,
+                      }}
+                    >
+                      {cv.personal_info.summary}
+                    </Typography>
                   </Box>
+                )}
 
-                  {/* Education Section */}
-                  <Box>
-                    <Typography variant="h6" gutterBottom sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 1,
-                      fontWeight: 600,
-                      color: 'primary.main',
-                      borderBottom: '2px solid',
-                      borderColor: 'primary.main',
-                      pb: 1,
-                      mb: 3,
-                    }}>
-                      <School /> {t('education')}
-                    </Typography>
-                    {cv.education.map((edu, index) => (
-                      <Box key={index} sx={{ mb: 4 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                          {edu.degree}
+                {/* Experience Section */}
+                <Box sx={{ mb: 6 }}>
+                  <Typography variant="h6" gutterBottom sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1,
+                    fontWeight: 600,
+                    color: 'primary.main',
+                    borderBottom: '2px solid',
+                    borderColor: 'primary.main',
+                    pb: 1,
+                    mb: 3,
+                  }}>
+                    <Work /> {t('workExperience')}
+                  </Typography>
+                  {cv.experience.map((exp, index) => (
+                    <Box key={index} sx={{ mb: 4 }}>
+                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        {exp.position}
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          {exp.company}
                         </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                            {edu.school}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary" sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center',
-                            gap: 0.5
-                          }}>
-                            <Place fontSize="small" />
-                            {edu.location}
-                          </Typography>
-                        </Box>
                         <Typography variant="body2" color="text.secondary" sx={{ 
-                          display: 'flex',
+                          display: 'flex', 
                           alignItems: 'center',
-                          gap: 0.5,
-                          mb: 2
+                          gap: 0.5
                         }}>
-                          <CalendarToday fontSize="small" />
-                          {edu.start_date} - {edu.end_date || t('present')}
+                          <Place fontSize="small" />
+                          {exp.location}
                         </Typography>
-                        <Typography variant="body1" sx={{ 
-                          color: 'text.secondary',
-                          lineHeight: 1.8
-                        }}>
-                          {edu.description}
-                        </Typography>
-                        {index < cv.education.length - 1 && <Divider sx={{ mt: 3 }} />}
                       </Box>
-                    ))}
-                  </Box>
-                </Grid>
+                      <Typography variant="body2" color="text.secondary" sx={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        mb: 2
+                      }}>
+                        <CalendarToday fontSize="small" />
+                        {exp.start_date} - {exp.end_date || t('present')}
+                      </Typography>
+                      <Typography variant="body1" sx={{ 
+                        color: 'text.secondary',
+                        lineHeight: 1.8
+                      }}>
+                        {exp.description}
+                      </Typography>
+                      {index < cv.experience.length - 1 && <Divider sx={{ mt: 3 }} />}
+                    </Box>
+                  ))}
+                </Box>
+
+                {/* Education Section */}
+                <Box>
+                  <Typography variant="h6" gutterBottom sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1,
+                    fontWeight: 600,
+                    color: 'primary.main',
+                    borderBottom: '2px solid',
+                    borderColor: 'primary.main',
+                    pb: 1,
+                    mb: 3,
+                  }}>
+                    <School /> {t('education')}
+                  </Typography>
+                  {cv.education.map((edu, index) => (
+                    <Box key={index} sx={{ mb: 4 }}>
+                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        {edu.degree}
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          {edu.school}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          gap: 0.5
+                        }}>
+                          <Place fontSize="small" />
+                          {edu.location}
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" sx={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        mb: 2
+                      }}>
+                        <CalendarToday fontSize="small" />
+                        {edu.start_date} - {edu.end_date || t('present')}
+                      </Typography>
+                      <Typography variant="body1" sx={{ 
+                        color: 'text.secondary',
+                        lineHeight: 1.8
+                      }}>
+                        {edu.description}
+                      </Typography>
+                      {index < cv.education.length - 1 && <Divider sx={{ mt: 3 }} />}
+                    </Box>
+                  ))}
+                </Box>
               </Grid>
-            </Container>
-          </Box>
-        </Container>
+            </Grid>
+          </Container>
+        </Box>
+      </Container>
 
-        {/* Certificate Modal */}
-        <Modal
-          open={Boolean(selectedCertificate)}
-          onClose={handleCloseModal}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            '& .MuiModal-backdrop': {
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            },
-          }}
-        >
-          <Fade in={Boolean(selectedCertificate)}>
-            <Box
+      {/* Certificate Modal */}
+      <Modal
+        open={Boolean(selectedCertificate)}
+        onClose={handleCloseModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          '& .MuiModal-backdrop': {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          },
+        }}
+      >
+        <Fade in={Boolean(selectedCertificate)}>
+          <Box
+            sx={{
+              position: 'relative',
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: 24,
+              p: 4,
+              overflow: 'auto',
+            }}
+          >
+            {selectedCertificate?.name && (
+              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+                {selectedCertificate.name}
+              </Typography>
+            )}
+            
+            {selectedCertificate?.description && (
+              <Typography variant="body1" sx={{ mb: 3 }}>
+                {selectedCertificate.description}
+              </Typography>
+            )}
+            
+            {selectedCertificate?.document_type === 'image' ? (
+              <img
+                src={selectedCertificate.documentUrl}
+                alt="Certificate"
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '80vh',
+                  objectFit: 'contain',
+                }}
+              />
+            ) : (
+              <iframe
+                src={selectedCertificate?.documentUrl}
+                style={{
+                  width: '100%',
+                  height: '80vh',
+                  border: 'none',
+                }}
+              />
+            )}
+            <IconButton
+              onClick={handleCloseModal}
               sx={{
-                position: 'relative',
-                maxWidth: '90vw',
-                maxHeight: '90vh',
-                bgcolor: 'background.paper',
-                borderRadius: 2,
-                boxShadow: 24,
-                p: 4,
-                overflow: 'auto',
+                position: 'absolute',
+                right: 8,
+                top: 8,
+                color: 'white',
+                bgcolor: 'rgba(0, 0, 0, 0.5)',
+                '&:hover': {
+                  bgcolor: 'rgba(0, 0, 0, 0.7)',
+                },
               }}
             >
-              {selectedCertificate?.name && (
-                <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
-                  {selectedCertificate.name}
-                </Typography>
-              )}
-              
-              {selectedCertificate?.description && (
-                <Typography variant="body1" sx={{ mb: 3 }}>
-                  {selectedCertificate.description}
-                </Typography>
-              )}
-              
-              {selectedCertificate?.document_type === 'image' ? (
-                <img
-                  src={selectedCertificate.documentUrl}
-                  alt="Certificate"
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '80vh',
-                    objectFit: 'contain',
-                  }}
-                />
-              ) : (
-                <iframe
-                  src={selectedCertificate?.documentUrl}
-                  style={{
-                    width: '100%',
-                    height: '80vh',
-                    border: 'none',
-                  }}
-                />
-              )}
-              <IconButton
-                onClick={handleCloseModal}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: 'white',
-                  bgcolor: 'rgba(0, 0, 0, 0.5)',
-                  '&:hover': {
-                    bgcolor: 'rgba(0, 0, 0, 0.7)',
-                  },
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-          </Fade>
-        </Modal>
-      </Container>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Fade>
+      </Modal>
     </Box>
   );
 };

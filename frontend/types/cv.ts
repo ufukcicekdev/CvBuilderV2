@@ -16,6 +16,9 @@ export interface CV {
     full_name?: string;
     description?: string;
     summary?: string;
+    linkedin?: string;
+    github?: string;
+    website?: string;
   };
   video_info?: {
     video_url: string | null;
