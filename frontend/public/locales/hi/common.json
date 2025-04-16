@@ -498,7 +498,10 @@
       "description": "नौकरी का विवरण और जिम्मेदारियां",
       "addMore": "अनुभव जोड़ें",
       "noExperience": "अभी तक कोई कार्य अनुभव नहीं जोड़ा गया",
-      "experienceItem": "अनुभव"
+      "experienceItem": "अनुभव",
+      "descriptionPlaceholder": "अपने कर्तव्यों, उपलब्धियों और जिम्मेदारियों का वर्णन करें",
+      "companyPlaceholder": "कंपनी का नाम दर्ज करें",
+      "positionPlaceholder": "अपना पद/नौकरी शीर्षक दर्ज करें"
     },
     "languages": {
       "title": "भाषाएँ",

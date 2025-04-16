@@ -498,7 +498,10 @@
       "description": "İş Tanımı ve Sorumluluklar",
       "addMore": "Deneyim Ekle",
       "noExperience": "Henüz iş deneyimi eklenmedi",
-      "experienceItem": "Deneyim"
+      "experienceItem": "Deneyim",
+      "descriptionPlaceholder": "İşiniz hakkında kısa bir açıklama ekleyin",
+      "companyPlaceholder": "Şirket adını girin",
+      "positionPlaceholder": "Pozisyonunuzu girin"
     },
     "languages": {
       "title": "Diller",

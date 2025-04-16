@@ -498,7 +498,10 @@
       "description": "Descripción del Trabajo y Responsabilidades",
       "addMore": "Agregar Experiencia",
       "noExperience": "No se ha agregado experiencia laboral aún",
-      "experienceItem": "Experiencia"
+      "experienceItem": "Experiencia",
+      "descriptionPlaceholder": "Describe tus funciones, logros y responsabilidades",
+      "companyPlaceholder": "Ingresa el nombre de la empresa",
+      "positionPlaceholder": "Ingresa tu cargo/título profesional"
     },
     "languages": {
       "title": "Idiomas",

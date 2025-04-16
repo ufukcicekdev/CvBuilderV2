@@ -498,7 +498,10 @@
       "description": "工作职责描述",
       "addMore": "添加经历",
       "noExperience": "尚未添加工作经验",
-      "experienceItem": "经历"
+      "experienceItem": "经历",
+      "descriptionPlaceholder": "描述您的职责、成就和责任",
+      "companyPlaceholder": "输入公司名称",
+      "positionPlaceholder": "输入您的职位/职称"
     },
     "languages": {
       "title": "语言能力",

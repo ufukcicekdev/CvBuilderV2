@@ -498,7 +498,10 @@
       "description": "وصف الوظيفة والمسؤوليات",
       "addMore": "إضافة خبرة",
       "noExperience": "لم تتم إضافة أي خبرة عمل بعد",
-      "experienceItem": "خبرة"
+      "experienceItem": "خبرة",
+      "descriptionPlaceholder": "صف مهامك وإنجازاتك ومسؤولياتك",
+      "companyPlaceholder": "أدخل اسم الشركة",
+      "positionPlaceholder": "أدخل منصبك/مسماك الوظيفي"
     },
     "languages": {
       "title": "اللغات",

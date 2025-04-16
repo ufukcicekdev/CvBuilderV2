@@ -1,18 +1,17 @@
 {
   "app": {
     "name": "CV Builder",
-    "tagline": "Erstellen Sie Ihren professionellen Lebenslauf und kommen Sie in Ihrer Karriere voran",
-    "description": "Vereinfachen Sie Ihren Bewerbungsprozess und finden Sie Ihren Traumjob"
+    "tagline": "Erstellen Sie Ihren professionellen Lebenslauf und machen Sie einen Schritt vorwärts in Ihrer Karriere",
+    "description": "Vereinfachen Sie Ihre Jobsuche und finden Sie Ihren Traumjob"
   },
   "nav": {
-    "home": "Startseite",
     "dashboard": "Dashboard",
     "jobs": "Stellenangebote",
     "profile": "Mein Profil",
     "login": "Anmelden",
-    "logout": "Abmelden",
     "register": "Registrieren",
-    "search": "Suchen",
+    "logout": "Abmelden",
+    "search": "Suche",
     "notifications": "Benachrichtigungen",
     "settings": "Einstellungen",
     "help": "Hilfe",
@@ -27,12 +26,12 @@
     "password": "Passwort",
     "login": "Anmelden",
     "confirmPassword": "Passwort bestätigen",
-    "forgotPassword": "Passwort vergessen?",
+    "forgotPassword": "Passwort vergessen",
     "rememberMe": "Angemeldet bleiben",
     "loginSuccess": "Anmeldung erfolgreich!",
-    "loginError": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Angaben.",
+    "loginError": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.",
     "registerSuccess": "Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse.",
-    "registerError": "Registrierung fehlgeschlagen. Bitte überprüfen Sie Ihre Angaben.",
+    "registerError": "Registrierung fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.",
     "orLoginWith": "oder anmelden mit",
     "googleLogin": "Mit Google anmelden",
     "userType": "Benutzertyp",
@@ -41,11 +40,11 @@
     "companyWebsite": "Firmenwebsite",
     "phone": "Telefon",
     "register": "Registrieren",
-    "alreadyHaveAccount": "Sie haben bereits ein Konto?",
-    "dontHaveAccount": "Sie haben noch kein Konto?",
-    "resendVerificationEmail": "Bestätigungs-E-Mail erneut senden",
-    "verificationEmailSent": "Bestätigungs-E-Mail gesendet. Bitte überprüfen Sie Ihren Posteingang.",
-    "verificationEmailFailed": "Bestätigungs-E-Mail konnte nicht gesendet werden.",
+    "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+    "dontHaveAccount": "Noch kein Konto?",
+    "resendVerificationEmail": "Bestätigungsmail erneut senden",
+    "verificationEmailSent": "Bestätigungsmail wurde gesendet. Bitte überprüfen Sie Ihren Posteingang.",
+    "verificationEmailFailed": "Bestätigungsmail konnte nicht gesendet werden.",
     "passwordRequirements": {
       "minLength": "Mindestens 8 Zeichen",
       "number": "Mindestens eine Zahl",
@@ -54,9 +53,9 @@
     },
     "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "tokenRefreshed": "Ihre Sitzung wurde aktualisiert.",
-    "logoutSuccess": "Sie haben sich erfolgreich abgemeldet.",
+    "logoutSuccess": "Sie wurden erfolgreich abgemeldet.",
     "errors": {
-      "userNotFound": "Kein Benutzer mit dieser E-Mail-Adresse gefunden",
+      "userNotFound": "Benutzer mit dieser E-Mail-Adresse nicht gefunden",
       "invalidPassword": "Ungültiges Passwort",
       "invalidCredentials": "Ungültige E-Mail oder Passwort",
       "emailExists": "Diese E-Mail-Adresse wird bereits verwendet",
@@ -68,15 +67,15 @@
       "passwordRequired": "Passwort ist erforderlich",
       "googleLoginFailed": "Google-Anmeldung fehlgeschlagen",
       "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
-      "fedcmDisabled": "Browser-Authentifizierungs-API ist deaktiviert",
+      "fedcmDisabled": "Browser-Authentifizierungs-API deaktiviert",
       "googleScriptError": "Google-Anmeldedienst konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
       "loginCancelled": "Anmeldung abgebrochen",
       "invalidResponse": "Ungültige Antwort vom Server",
-      "redirectFailed": "Weiterleitung fehlgeschlagen. Alternative Methode wird versucht."
+      "redirectFailed": "Weiterleitung fehlgeschlagen. Alternativer Versuch wird gestartet."
     },
-    "checkEmail": "Bitte überprüfen Sie Ihren E-Mail-Posteingang und klicken Sie auf den Bestätigungslink",
+    "checkEmail": "Bitte überprüfen Sie Ihren Posteingang und klicken Sie auf den Bestätigungslink",
     "forgotPasswordInstructions": "Geben Sie Ihre registrierte E-Mail-Adresse ein, um Ihr Passwort zurückzusetzen.",
-    "forgotPasswordSuccess": "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet.",
+    "forgotPasswordSuccess": "Ein Link zum Zurücksetzen Ihres Passworts wurde an Ihre E-Mail-Adresse gesendet.",
     "forgotPasswordError": "Beim Zurücksetzen des Passworts ist ein Fehler aufgetreten.",
     "sendResetLink": "Link zum Zurücksetzen senden",
     "backToLogin": "Zurück zur Anmeldung",
@@ -86,15 +85,15 @@
     "resetPasswordError": "Beim Zurücksetzen des Passworts ist ein Fehler aufgetreten.",
     "newPassword": "Neues Passwort",
     "confirmNewPassword": "Neues Passwort bestätigen",
-    "resetPasswordButton": "Mein Passwort zurücksetzen",
+    "resetPasswordButton": "Passwort zurücksetzen",
     "invalidResetToken": "Ungültiger oder abgelaufener Link zum Zurücksetzen des Passworts.",
     "passwordResetExpired": "Der Link zum Zurücksetzen des Passworts ist abgelaufen. Bitte fordern Sie einen neuen an.",
     "emailNotFound": "E-Mail-Adresse nicht gefunden.",
     "emailVerification": "E-Mail-Bestätigung",
-    "verifyingEmail": "Ihre E-Mail wird überprüft...",
+    "verifyingEmail": "Ihre E-Mail wird bestätigt...",
     "emailVerifiedSuccess": "Ihre E-Mail wurde erfolgreich bestätigt!",
     "canLoginNow": "Sie können sich jetzt anmelden.",
-    "verificationLinkExpired": "Der Bestätigungslink ist möglicherweise abgelaufen.",
+    "verificationLinkExpired": "Der Bestätigungslink könnte abgelaufen sein.",
     "emailSendingFailed": "E-Mail konnte nicht gesendet werden."
   },
   "profile": {
@@ -135,7 +134,7 @@
     "errors": {
       "fileTooLarge": "Datei ist zu groß (maximal 5MB)",
       "invalidFileType": "Ungültiger Dateityp. Bitte wählen Sie eine Bilddatei",
-      "uploadFailed": "Bildupload fehlgeschlagen",
+      "uploadFailed": "Bild konnte nicht hochgeladen werden",
       "noFile": "Bitte wählen Sie eine Bilddatei"
     }
   },
@@ -144,14 +143,14 @@
     "search": "Jobs suchen",
     "location": "Standort",
     "category": "Kategorie",
-    "type": "Jobtyp",
+    "type": "Art der Anstellung",
     "salary": "Gehalt",
     "apply": "Bewerben",
     "posted": "Veröffentlichungsdatum",
     "deadline": "Bewerbungsfrist"
   },
   "footer": {
-    "quickLinks": "Schnelllinks",
+    "quickLinks": "Schnellzugriff",
     "home": "Startseite",
     "about": "Über uns",
     "contact": "Kontakt",
@@ -163,240 +162,6 @@
     "phone": "Telefon",
     "email": "E-Mail"
   },
-  "contact": {
-    "title": "Kontakt",
-    "description": "Kontaktieren Sie uns. Wir melden uns schnellstmöglich bei Ihnen.",
-    "name": "Ihr Name",
-    "email": "Ihre E-Mail",
-    "subject": "Betreff",
-    "message": "Ihre Nachricht",
-    "send": "Senden",
-    "successMessage": "Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns in Kürze bei Ihnen.",
-    "errorMessage": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
-    "subjects": {
-      "general": "Allgemeine Frage",
-      "technical": "Technischer Support",
-      "billing": "Zahlungsangelegenheiten",
-      "feedback": "Feedback",
-      "other": "Sonstiges"
-    }
-  },
-  "cv": {
-    "create": "Lebenslauf erstellen",
-    "edit": "Lebenslauf bearbeiten",
-    "preview": "Vorschau",
-    "download": "Herunterladen",
-    "personalInfo": "Persönliche Informationen",
-    "experience": "Berufserfahrung",
-    "education": "Ausbildung",
-    "skills": "Fähigkeiten",
-    "languages": "Sprachen",
-    "projects": "Projekte",
-    "references": "Referenzen",
-    "createSuccess": "Lebenslauf erfolgreich erstellt",
-    "createError": "Bei der Erstellung des Lebenslaufs ist ein Fehler aufgetreten",
-    "chooseTemplate": "Vorlage auswählen",
-    "steps": {
-      "personalInfo": "Persönliche Informationen",
-      "experience": "Berufserfahrung",
-      "education": "Ausbildung",
-      "skills": "Fähigkeiten",
-      "languages": "Sprachen",
-      "certificates": "Zertifikate",
-      "video": "Video",
-      "template": "Vorlage",
-      "completed": "Abgeschlossen"
-    },
-    "templates": {
-      "modern": {
-        "name": "Moderne Vorlage",
-        "description": "Modernes und interaktives Webdesign"
-      },
-      "minimal": {
-        "name": "Minimale Vorlage",
-        "description": "Klares und elegantes Webdesign"
-      },
-      "colorful": {
-        "name": "Farbenfrohe Vorlage",
-        "description": "Lebendige und moderne Vorlage mit farbigen Akzenten"
-      },
-      "professional": {
-        "name": "Professionelle Vorlage",
-        "description": "Klare und professionelle Vorlage für Unternehmensprofile"
-      },
-      "creative": {
-        "name": "Kreative Vorlage",
-        "description": "Einzigartige und kreative Vorlage für künstlerische Profile"
-      }
-    },
-    "personalInfo": {
-      "title": "Persönliche Informationen",
-      "fullName": "Vollständiger Name",
-      "jobTitle": "Berufsbezeichnung",
-      "summary": "Zusammenfassung",
-      "phone": "Telefon",
-      "location": "Standort",
-      "summaryPlaceholder": "Beschreiben Sie kurz Ihren beruflichen Hintergrund und Ihre Karriereziele",
-      "socialLinks": "Social-Media-Links"
-    },
-    "experience": {
-      "title": "Berufserfahrung",
-      "subtitle": "Fügen Sie Ihren beruflichen Werdegang hinzu, beginnend mit Ihrer aktuellsten Position",
-      "company": "Firmenname",
-      "position": "Position",
-      "startDate": "Startdatum",
-      "endDate": "Enddatum",
-      "current": "Ich arbeite derzeit hier",
-      "description": "Stellenbeschreibung und Verantwortlichkeiten",
-      "addMore": "Berufserfahrung hinzufügen",
-      "noExperience": "Noch keine Berufserfahrung hinzugefügt",
-      "experienceItem": "Erfahrung"
-    },
-    "languages": {
-      "title": "Sprachen",
-      "subtitle": "Fügen Sie Sprachen hinzu, die Sie kennen, und deren Kenntnisstufen",
-      "name": "Sprache",
-      "level": "Kenntnisstufe",
-      "certificate": "Zertifikat",
-      "addMore": "Sprache hinzufügen",
-      "namePlaceholder": "Geben Sie den Namen der Sprache ein",
-      "certificatePlaceholder": "Geben Sie Zertifikatsinformationen ein (z.B. TOEFL, IELTS)",
-      "certificateHelper": "Geben Sie Ihr Sprachzertifikat an, falls vorhanden (Optional)",
-      "noLanguages": "Noch keine Sprachen hinzugefügt",
-      "languageItem": "Sprache",
-      "a1": "Grundlegend - Anfänger",
-      "a2": "Grundlegend - Elementar",
-      "b1": "Fortgeschritten - Schwelle",
-      "b2": "Fortgeschritten - Erweitert",
-      "c1": "Fließend - Kompetent",
-      "c2": "Fließend - Beherrschung"
-    },
-    "education": {
-      "title": "Ausbildung",
-      "subtitle": "Fügen Sie Ihren Bildungsweg hinzu, beginnend mit Ihrer aktuellsten Ausbildung",
-      "school": "Schule/Universität",
-      "degree": "Abschluss",
-      "field": "Studienfach",
-      "startDate": "Startdatum",
-      "endDate": "Enddatum",
-      "current": "Ich studiere derzeit hier",
-      "description": "Beschreibung (Optional)",
-      "addMore": "Ausbildung hinzufügen",
-      "noEducation": "Noch keine Ausbildung hinzugefügt"
-    },
-    "draft": "Entwurf",
-    "continue": "Fortfahren",
-    "edit": "Bearbeiten",
-    "untitled": "Unbenannter Lebenslauf",
-    "lastUpdated": "Zuletzt aktualisiert",
-    "saveAndExit": "Speichern und beenden",
-    "saveSuccess": "Ihr Fortschritt wurde gespeichert",
-    "saveError": "Beim Speichern ist ein Fehler aufgetreten",
-    "loadError": "Beim Laden des Lebenslaufs ist ein Fehler aufgetreten",
-    "errors": {
-      "personalInfoRequired": "Bitte füllen Sie alle persönlichen Informationen aus",
-      "experienceRequired": "Sie müssen mindestens eine Berufserfahrung eingeben",
-      "educationRequired": "Sie müssen mindestens eine Ausbildung eingeben",
-      "skillsRequired": "Sie müssen mindestens eine Fähigkeit hinzufügen",
-      "languagesRequired": "Sie müssen mindestens eine Sprache eingeben",
-      "experienceFieldsRequired": "Bitte geben Sie den Firmennamen, die Position und das Startdatum für die Berufserfahrung ein",
-      "educationFieldsRequired": "Bitte geben Sie Schule/Universität, Abschluss, Studienfach und Startdatum ein",
-      "endDateRequired": "Enddatum ist erforderlich, wenn Sie nicht aktuell studieren",
-      "titleRequired": "Bitte geben Sie einen Titel für den Lebenslauf ein",
-      "skillNameRequired": "Bitte geben Sie den Namen der Fähigkeit ein",
-      "certificateFieldsRequired": "Bitte füllen Sie den Zertifikatsnamen, die ausstellende Organisation und das Ausstellungsdatum aus",
-      "noSkills": "Noch keine Fähigkeiten hinzugefügt"
-    },
-    "currentStep": "Aktueller Schritt",
-    "deleteConfirmTitle": "Lebenslauf löschen",
-    "deleteConfirmMessage": "Sind Sie sicher, dass Sie diesen Lebenslauf löschen möchten?",
-    "deleteSuccess": "Lebenslauf erfolgreich gelöscht",
-    "deleteError": "Beim Löschen des Lebenslaufs ist ein Fehler aufgetreten",
-    "noCVs": "Sie haben noch keine Lebensläufe erstellt",
-    "createFirst": "Erstellen Sie Ihren ersten Lebenslauf",
-    "titleLabel": "Lebenslauf-Titel",
-    "titlePlaceholder": "Geben Sie einen Titel für Ihren Lebenslauf ein",
-    "titleHelper": "Dieser Titel hilft Ihnen, Ihren Lebenslauf zu identifizieren (z.B. 'Softwareentwickler-Lebenslauf')",
-    "startCreating": "Lebenslauf erstellen",
-    "loadSuccess": "Lebenslauf erfolgreich geladen",
-    "skills": {
-      "title": "Fähigkeiten",
-      "subtitle": "Fügen Sie Ihre technischen und persönlichen Fähigkeiten hinzu",
-      "name": "Fähigkeit",
-      "level": "Kenntnisstufe",
-      "description": "Beschreibung",
-      "addMore": "Fähigkeit hinzufügen",
-      "namePlaceholder": "Geben Sie den Namen der Fähigkeit ein",
-      "levelPlaceholder": "Wählen Sie Ihre Kenntnisstufe aus",
-      "descriptionPlaceholder": "Beschreiben Sie kurz Ihre Erfahrung mit dieser Fähigkeit",
-      "descriptionHelper": "Fügen Sie eine kurze Beschreibung zu dieser Fähigkeit hinzu (Optional)",
-      "beginner": "Anfänger",
-      "intermediate": "Fortgeschritten",
-      "advanced": "Erfahren",
-      "expert": "Experte",
-      "skillItem": "Fähigkeit"
-    },
-    "certificates": {
-      "title": "Zertifikate",
-      "subtitle": "Fügen Sie Zertifikate und Dokumente hinzu, die Sie besitzen",
-      "name": "Zertifikatsname",
-      "issuer": "Ausstellende Organisation",
-      "issueDate": "Ausstellungsdatum",
-      "expiryDate": "Ablaufdatum",
-      "expiryDateHelper": "Ablaufdatum des Zertifikats, falls vorhanden",
-      "credentialId": "Zertifikats-/Dokumentennummer",
-      "description": "Beschreibung",
-      "uploadFile": "Zertifikatsdatei hochladen",
-      "addMore": "Zertifikat hinzufügen",
-      "uploadSuccess": "Zertifikatsdatei erfolgreich hochgeladen",
-      "uploadError": "Beim Hochladen der Zertifikatsdatei ist ein Fehler aufgetreten",
-      "namePlaceholder": "Geben Sie den Zertifikatsnamen ein",
-      "issuerPlaceholder": "Geben Sie die ausstellende Organisation ein",
-      "credentialIdPlaceholder": "Geben Sie die Zertifikats-/Referenznummer ein, falls vorhanden",
-      "credentialIdHelper": "Zertifikatsreferenz oder ID-Nummer (Optional)",
-      "descriptionPlaceholder": "Geben Sie eine kurze Beschreibung des Zertifikats ein",
-      "noCertificates": "Noch keine Zertifikate hinzugefügt"
-    },
-    "progress": "Fortschritt",
-    "video": {
-      "title": "Video-Vorstellung",
-      "dragDrop": "Ziehen Sie Ihre Videodatei hierher oder klicken Sie zum Durchsuchen",
-      "maxSize": "Maximale Dateigröße: 50MB",
-      "selectVideo": "Video auswählen",
-      "deleteSuccess": "Video erfolgreich gelöscht",
-      "deleteError": "Beim Löschen des Videos ist ein Fehler aufgetreten",
-      "confirmDelete": "Sind Sie sicher, dass Sie das Video löschen möchten?"
-    },
-    "preview": {
-      "title": "Lebenslauf-Vorschau",
-      "templatePreview": "Vorlagen-Vorschau",
-      "selectTemplate": "Bitte wählen Sie zuerst eine Vorlage aus",
-      "loadError": "Fehler beim Laden der Lebenslaufdaten",
-      "noData": "Keine Daten zum Anzeigen",
-      "templateNotFound": "Vorlage nicht gefunden",
-      "downloadPdf": "PDF herunterladen",
-      "generating": "Wird generiert...",
-      "downloadFailed": "Download fehlgeschlagen",
-      "templateSelection": "Vorlagenauswahl",
-      "standardTemplates": "Standardvorlagen",
-      "customTemplates": "Benutzerdefinierte Vorlagen",
-      "customBuilderTab": "Benutzerdefinierter Vorlagen-Builder",
-      "savedTemplates": "Ihre gespeicherten Vorlagen",
-      "noCustomTemplates": "Sie haben noch keine benutzerdefinierten Vorlagen",
-      "createCustomTemplate": "Erstellen Sie Ihre erste Vorlage",
-      "ready": "Lebenslauf-Vorschau bereit",
-      "createSuccess": "Lebenslauf erfolgreich erstellt",
-      "close": "Schließen",
-      "openCv": "Lebenslauf öffnen",
-      "pdfGenerating": "PDF wird generiert...",
-      "pdfError": "Beim Generieren des PDFs ist ein Fehler aufgetreten",
-      "createExplanation": "Diese Vorlage ermöglicht es Ihnen, Ihren Lebenslauf anzupassen"
-    },
-    "editDisabled": "Sie können Ihren Lebenslauf nicht bearbeiten, da Sie kein aktives Abonnement haben. Sie befinden sich im Anzeigemodus.",
-    "editNotAllowed": "Aktives Abonnement erforderlich für die Lebenslaufbearbeitung.",
-    "professionalSummary": "Berufliche Zusammenfassung",
-    "present": "Gegenwärtig"
-  },
   "common": {
     "save": "Speichern",
     "cancel": "Abbrechen",
@@ -407,17 +172,17 @@
     "previous": "Zurück",
     "delete": "Löschen",
     "add": "Hinzufügen",
-    "search": "Suchen",
+    "search": "Suche",
     "filter": "Filtern",
     "sort": "Sortieren",
-    "loading": "Laden...",
-    "uploading": "Hochladen...",
+    "loading": "Wird geladen...",
+    "uploading": "Wird hochgeladen...",
     "error": "Ein Fehler ist aufgetreten",
-    "success": "Vorgang erfolgreich",
+    "success": "Aktion erfolgreich",
     "required": "Dieses Feld ist erforderlich",
     "invalidEmail": "Ungültige E-Mail-Adresse",
     "passwordMismatch": "Passwörter stimmen nicht überein",
-    "submitting": "Wird gesendet...",
+    "submitting": "Wird übermittelt...",
     "openInNewTab": "In neuem Tab öffnen",
     "languages": "Sprachen",
     "skills": "Fähigkeiten",
@@ -428,43 +193,39 @@
     "errors": {
       "badRequest": "Ungültige Anfrage",
       "unauthorized": "Bitte melden Sie sich an",
-      "forbidden": "Sie haben keine Berechtigung für diesen Vorgang",
+      "forbidden": "Sie haben keine Berechtigung für diese Aktion",
       "notFound": "Anfrage nicht gefunden",
       "serverError": "Serverfehler aufgetreten",
       "unknown": "Ein unbekannter Fehler ist aufgetreten",
       "networkError": "Netzwerkverbindungsfehler",
-      "validationError": "Bitte überprüfen Sie die Formularinformationen",
+      "validationError": "Bitte überprüfen Sie die Formulardaten",
       "errorOccurred": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut"
     },
     "uploadSuccess": "Datei erfolgreich hochgeladen",
-    "confirm": "Bestätigen",
-    "remove": "Entfernen",
-    "back": "Zurück",
-    "submit": "Absenden",
-    "optional": "Optional"
+    "confirm": "Bestätigen"
   },
   "home": {
     "hero": {
-      "title": "Lebenslauferstellung der nächsten Generation",
-      "subtitle": "Erstellen Sie KI-gestützte, dynamische und interaktive Lebensläufe",
-      "cta": "Jetzt starten",
+      "title": "Die nächste Generation der Lebenslauf-Erstellung",
+      "subtitle": "Erstellen Sie dynamische und interaktive Lebensläufe mit KI-Unterstützung",
+      "cta": "Starten",
       "badge": "Neue Funktionen",
-      "feature1": "Völlig kostenlose 7-tägige Testversion",
+      "feature1": "7-tägige kostenlose Testversion",
       "feature2": "Moderne und professionelle Vorlagen",
-      "feature3": "Lebensläufe im Web- und PDF-Format",
+      "feature3": "Lebensläufe in Web- und PDF-Formaten",
       "toDashboard": "Zum Dashboard"
     },
     "features": {
       "title": "Warum CV Builder?",
-      "subtitle": "Innovative Funktionen, die Ihren Bewerbungsprozess transformieren",
+      "subtitle": "Innovative Funktionen, die Ihre Jobsuche transformieren",
       "overline": "FUNKTIONEN",
       "feature1": {
         "title": "Professionelle Vorlagen",
-        "description": "Moderne und professionelle Lebenslaufvorlagen, die die Aufmerksamkeit von Arbeitgebern auf sich ziehen"
+        "description": "Moderne und professionelle Lebenslauf-Vorlagen, die Arbeitgeber beeindrucken"
       },
       "feature2": {
         "title": "Einfache Bearbeitung",
-        "description": "Passen Sie Ihren Lebenslauf einfach mit der Drag-and-Drop-Oberfläche an"
+        "description": "Passen Sie Ihren Lebenslauf mit einer Drag-and-Drop-Oberfläche einfach an"
       },
       "feature3": {
         "title": "Karriereentwicklung",
@@ -472,42 +233,42 @@
       },
       "feature4": {
         "title": "Schnelle Erstellung",
-        "description": "Erstellen Sie in wenigen Minuten einen professionellen Lebenslauf und beginnen Sie sofort mit der Bewerbung"
+        "description": "Erstellen Sie in Minuten einen professionellen Lebenslauf und starten Sie sofort mit Bewerbungen"
       },
       "realtime": {
         "title": "Echtzeit-Updates",
-        "description": "Aktualisieren Sie Ihren Lebenslauf in Echtzeit. Neues Zertifikat erhalten? Fügen Sie es sofort hinzu und verwenden Sie Ihren aktualisierten Lebenslauf in Bewerbungen."
+        "description": "Aktualisieren Sie Ihren Lebenslauf in Echtzeit. Neues Zertifikat? Fügen Sie es hinzu und nutzen Sie den aktualisierten Lebenslauf für Bewerbungen."
       },
       "video": {
         "title": "Video-Lebenslauf-Unterstützung",
-        "description": "Stellen Sie sich mit einem Video vor. Präsentieren Sie Ihre Persönlichkeit und Fähigkeiten effektiver. Die moderne Art, mit Arbeitgebern in Kontakt zu treten."
+        "description": "Stellen Sie sich mit einem Video vor. Zeigen Sie Ihre Persönlichkeit und Fähigkeiten effektiver. Der moderne Weg, sich Arbeitgebern zu präsentieren."
       },
       "aiAssistant": {
         "title": "KI-Assistent",
-        "description": "Erhalten Sie KI-gestützte Vorschläge zur Optimierung Ihres Lebenslaufs. Passen Sie Ihren Lebenslauf an bestimmte Stellenausschreibungen an und erhöhen Sie Ihre Erfolgschancen."
+        "description": "Erhalten Sie KI-gestützte Empfehlungen zur Optimierung Ihres Lebenslaufs. Passen Sie Ihren Lebenslauf auf Stellenangebote an und erhöhen Sie Ihre Chancen."
       },
       "analytics": {
-        "title": "Lebenslauf-Analytik",
-        "description": "Verfolgen Sie die Leistung Ihres Lebenslaufs. Welche Arbeitgeber haben Ihr Profil angesehen? Wie oft wurde Ihr Lebenslauf angesehen? Alle Statistiken auf einen Blick."
+        "title": "Lebenslauf-Analyse",
+        "description": "Verfolgen Sie die Performance Ihres Lebenslaufs. Welche Arbeitgeber haben Ihr Profil gesehen? Wie oft wurde Ihr Lebenslauf aufgerufen? Alle Statistiken auf einen Blick."
       }
     },
     "templates": {
-      "title": "Professionelle Lebenslaufvorlagen",
-      "subtitle": "Moderne und beeindruckende Vorlagen, die die Aufmerksamkeit von Arbeitgebern auf sich ziehen",
+      "title": "Professionelle Lebenslauf-Vorlagen",
+      "subtitle": "Moderne und beeindruckende Vorlagen, die Arbeitgeber überzeugen",
       "overline": "VORLAGEN",
-      "cta": "Vorlagen erkunden"
+      "cta": "Vorlagen entdecken"
     },
     "howItWorks": {
-      "title": "Wie funktioniert es?",
-      "overline": "BENUTZERHANDBUCH",
+      "title": "So funktioniert's",
+      "overline": "BENUTZERANLEITUNG",
       "steps": [
         {
           "title": "Profil erstellen",
-          "description": "Erstellen Sie Ihr professionelles Profil mit grundlegenden Informationen"
+          "description": "Erstellen Sie Ihr Profil mit grundlegenden Informationen"
         },
         {
-          "title": "Passen Sie Ihren Lebenslauf an",
-          "description": "Personalisieren Sie Ihren Lebenslauf durch die Auswahl moderner Vorlagen"
+          "title": "Lebenslauf anpassen",
+          "description": "Wählen Sie aus modernen Vorlagen und personalisieren Sie Ihren Lebenslauf"
         },
         {
           "title": "Video hinzufügen",
@@ -522,27 +283,27 @@
     "testimonials": {
       "title": "Nutzererfahrungen",
       "subtitle": "Erfolgsgeschichten und Nutzerbewertungen",
-      "overline": "ERFAHRUNGSBERICHTE"
+      "overline": "BEWERTUNGEN"
     },
     "trustedBy": {
-      "title": "Vertraut von führenden Unternehmen"
+      "title": "Vertrauen führender Unternehmen"
     },
     "stats": {
       "users": "Aktive Nutzer",
       "companies": "Partnerunternehmen",
       "cvs": "Erstellte Lebensläufe",
-      "hires": "Einstellungen"
+      "hires": "Vermittlungen"
     },
     "cta": {
-      "title": "Kommen Sie in Ihrer Karriere voran",
+      "title": "Machen Sie einen Schritt nach vorn in Ihrer Karriere",
       "subtitle": "Erstellen Sie Ihren professionellen Lebenslauf und finden Sie Ihren Traumjob",
       "button": "Kostenlos starten"
     }
   },
   "blog": {
     "title": "Blog",
-    "description": "Aktuelle Artikel über Karriere und Lebenslauferstellung",
-    "searchPlaceholder": "Blog-Beiträge durchsuchen...",
+    "description": "Aktuelle Artikel zu Karriere und Lebenslauf-Erstellung",
+    "searchPlaceholder": "Blogbeiträge durchsuchen...",
     "categories": "Kategorien",
     "readMore": "Weiterlesen",
     "comments": "Kommentare",
@@ -550,11 +311,29 @@
     "noComments": "Noch keine Kommentare",
     "relatedPosts": "Ähnliche Beiträge"
   },
+  "contact": {
+    "title": "Kontakt",
+    "description": "Kontaktieren Sie uns. Wir melden uns schnellstmöglich bei Ihnen.",
+    "name": "Ihr Name",
+    "email": "Ihre E-Mail-Adresse",
+    "subject": "Betreff",
+    "message": "Ihre Nachricht",
+    "send": "Senden",
+    "successMessage": "Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns bald bei Ihnen.",
+    "errorMessage": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+    "subjects": {
+      "general": "Allgemeine Frage",
+      "technical": "Technischer Support",
+      "billing": "Abrechnungsfrage",
+      "feedback": "Feedback",
+      "other": "Anderes"
+    }
+  },
   "pricing": {
     "title": "Preise",
-    "description": "Wählen Sie den Plan, der zu Ihren Bedürfnissen passt",
+    "description": "Wählen Sie den Plan, der zu Ihnen passt",
     "pageTitle": "Abonnementpläne - CV Builder",
-    "pageDescription": "Wählen Sie den professionellen Lebenslauferstellungsplan, der zu Ihren Bedürfnissen passt und kommen Sie in Ihrer Karriere voran.",
+    "pageDescription": "Wählen Sie den passenden professionellen Lebenslauf-Erstellungsplan und kommen Sie in Ihrer Karriere voran.",
     "monthly": "Monatlich",
     "yearly": "Jährlich",
     "free": {
@@ -563,25 +342,25 @@
     },
     "premium": {
       "title": "Premium-Plan",
-      "description": "Alle Funktionen, die Sie für die Erstellung eines professionellen Lebenslaufs benötigen"
+      "description": "Alle Funktionen, die Sie für einen professionellen Lebenslauf benötigen"
     },
     "currency": "EUR",
     "perMonth": "/Monat",
     "perYear": "/Jahr",
-    "selectPlan": "Plan auswählen",
+    "selectPlan": "Plan wählen",
     "currentPlan": "Aktueller Plan",
     "changePlan": "Plan ändern",
     "alreadySubscribed": "Sie haben bereits ein aktives Abonnement",
     "saveYearly": "Sparen Sie 15% mit jährlicher Zahlung",
     "features": {
-      "feature.basicCvTemplates": "Grundlegende Lebenslaufvorlagen",
-      "feature.limitedCvCount": "Bis zu 3 Lebensläufe",
+      "feature.basicCvTemplates": "Grundlegende Lebenslauf-Vorlagen",
+      "feature.limitedCvCount": "Maximal 3 Lebensläufe",
       "feature.pdfDownload": "Als PDF herunterladen",
       "feature.basicSupport": "Grundlegender Support",
       "feature.videoCV": "Video-Lebenslauf-Unterstützung",
       "feature.aiAssistant": "KI-Assistent",
       "feature.premiumTemplates": "Premium-Vorlagen",
-      "feature.prioritySupport": "Prioritäts-Support",
+      "feature.prioritySupport": "Priorisierter Support",
       "feature.unlimitedCvs": "Unbegrenzte Lebensläufe"
     },
     "subscribe": "Abonnieren",
@@ -604,42 +383,42 @@
     "cancelSuccess": "Ihr Abonnement wurde erfolgreich gekündigt.",
     "cancelError": "Fehler beim Kündigen des Abonnements. Bitte versuchen Sie es erneut.",
     "periodUpdateSuccess": "Abrechnungszeitraum erfolgreich aktualisiert.",
-    "periodUpdateError": "Fehler beim Aktualisieren des Abrechnungszeitraums.",
-    "switchToMonthly": "Zu monatlicher Abrechnung wechseln",
-    "switchToYearly": "Zu jährlicher Abrechnung wechseln",
+    "periodUpdateError": "Abrechnungszeitraum konnte nicht aktualisiert werden.",
+    "switchToMonthly": "Auf monatliche Abrechnung umstellen",
+    "switchToYearly": "Auf jährliche Abrechnung umstellen",
     "resubscribe": "Erneut abonnieren",
     "checkout": "Zur Kasse",
     "checkoutDescription": "Bitte überprüfen Sie Ihre Bestellung und schließen Sie die Zahlung ab, um Ihr Abonnement zu aktivieren.",
     "orderSummary": "Bestellübersicht",
     "total": "Gesamt",
     "paymentDetails": "Zahlungsdetails",
-    "demoNotice": "Dies ist eine Demo-Zahlungsseite. In einer echten Anwendung würden Sie hier Ihre Zahlungsdetails eingeben. Für jetzt können Sie auf die Schaltfläche unten klicken, um eine erfolgreiche Zahlung zu simulieren.",
+    "demoNotice": "Dies ist eine Demo-Zahlungsseite. In einer echten Anwendung würden Sie hier Ihre Zahlungsdaten eingeben. Für den Moment können Sie auf die Schaltfläche unten klicken, um eine erfolgreiche Zahlung zu simulieren.",
     "completePayment": "Zahlung abschließen",
     "customerPortal": "Kundenportal",
     "paddleNotLoaded": "Zahlungssystem konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
-    "checkoutError": "Beim Öffnen der Checkout-Seite ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-    "checkoutOpened": "Checkout-Seite geöffnet.",
-    "processingCheckout": "Checkout wird vorbereitet...",
+    "checkoutError": "Fehler beim Öffnen der Zahlungsseite. Bitte versuchen Sie es erneut.",
+    "checkoutOpened": "Zahlungsseite geöffnet.",
+    "processingCheckout": "Zahlung wird vorbereitet...",
     "selectPaymentMethod": "Zahlungsmethode auswählen",
     "selectPaymentProvider": "Bitte wählen Sie einen Zahlungsanbieter",
-    "missingUserInfo": "Adress- und Telefoninformationen sind für die PayTR-Zahlung erforderlich. Bitte füllen Sie Ihre Profilinformationen aus."
+    "missingUserInfo": "Für PayTR-Zahlungen sind Adress- und Telefoninformationen erforderlich. Bitte vervollständigen Sie Ihre Profilinformationen."
   },
   "toast": {
     "success": "Erfolg!",
     "error": "Fehler!",
     "warning": "Warnung!",
-    "info": "Info"
+    "info": "Information"
   },
   "errors": {
     "404": {
       "title": "Seite nicht gefunden",
-      "description": "Die gesuchte Seite existiert nicht oder wurde möglicherweise verschoben."
+      "description": "Die gesuchte Seite existiert nicht oder wurde verschoben."
     },
     "500": {
       "title": "Serverfehler",
       "description": "Entschuldigung, etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut."
     },
-    "backToHome": "Zurück zur Startseite",
+    "backToHome": "Zur Startseite",
     "tryAgain": "Erneut versuchen",
     "usernameExists": "Dieser Benutzername ist bereits vergeben",
     "emailExists": "Diese E-Mail-Adresse wird bereits verwendet",
@@ -651,14 +430,355 @@
     "formErrors": "Bitte beheben Sie die Formularfehler",
     "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut",
     "pleaseFixErrors": "Bitte beheben Sie die folgenden Fehler",
-    "present": "Gegenwärtig"
+    "present": "Aktuell"
   },
   "dashboard": {
     "title": "Meine Lebensläufe",
     "createNew": "Neuen Lebenslauf erstellen",
-    "fetchError": "Beim Laden der Lebensläufe ist ein Fehler aufgetreten",
+    "fetchError": "Fehler beim Laden der Lebensläufe",
     "deleteSuccess": "Lebenslauf erfolgreich gelöscht",
-    "deleteError": "Beim Löschen des Lebenslaufs ist ein Fehler aufgetreten"
+    "deleteError": "Fehler beim Löschen des Lebenslaufs"
+  },
+  "cv": {
+    "create": "Lebenslauf erstellen",
+    "createSuccess": "Lebenslauf erfolgreich erstellt",
+    "createError": "Fehler beim Erstellen des Lebenslaufs",
+    "chooseTemplate": "Vorlage auswählen",
+    "steps": {
+      "personalInfo": "Persönliche Informationen",
+      "experience": "Berufserfahrung",
+      "education": "Ausbildung",
+      "skills": "Fähigkeiten",
+      "languages": "Sprachen",
+      "certificates": "Zertifikate",
+      "video": "Video",
+      "template": "Vorlage",
+      "completed": "Abgeschlossen"
+    },
+    "templates": {
+      "modern": {
+        "name": "Moderne Vorlage",
+        "description": "Modernes und interaktives Webdesign"
+      },
+      "minimal": {
+        "name": "Minimalistische Vorlage",
+        "description": "Sauberes und elegantes Webdesign"
+      },
+      "colorful": {
+        "name": "Farbenfrohe Vorlage",
+        "description": "Lebendiges und modernes Design mit farbigen Akzenten"
+      },
+      "professional": {
+        "name": "Professionelle Vorlage",
+        "description": "Saubere und professionelle Vorlage für Unternehmensprofile"
+      },
+      "creative": {
+        "name": "Kreative Vorlage",
+        "description": "Einzigartige und kreative Vorlage für künstlerische Profile"
+      }
+    },
+    "personalInfo": {
+      "title": "Persönliche Informationen",
+      "fullName": "Vollständiger Name",
+      "jobTitle": "Berufsbezeichnung",
+      "summary": "Zusammenfassung",
+      "phone": "Telefon",
+      "location": "Standort",
+      "summaryPlaceholder": "Beschreiben Sie kurz Ihren beruflichen Hintergrund und Karriereziele",
+      "socialLinks": "Soziale Medien Links"
+    },
+    "experience": {
+      "title": "Berufserfahrung",
+      "subtitle": "Fügen Sie Ihren Berufsweg hinzu, beginnend mit der letzten Stelle",
+      "company": "Unternehmen",
+      "position": "Position",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "current": "Aktuell hier beschäftigt",
+      "description": "Aufgaben und Verantwortlichkeiten",
+      "addMore": "Erfahrung hinzufügen",
+      "noExperience": "Noch keine Berufserfahrung hinzugefügt",
+      "experienceItem": "Erfahrung",
+      "descriptionPlaceholder": "Fügen Sie eine kurze Beschreibung Ihrer Tätigkeit hinzu",
+      "companyPlaceholder": "Geben Sie den Unternehmensnamen ein",
+      "positionPlaceholder": "Geben Sie Ihre Position ein"
+    },
+    "languages": {
+      "title": "Sprachen",
+      "subtitle": "Fügen Sie Sprachen und Ihr Niveau hinzu",
+      "name": "Sprache",
+      "level": "Kenntnisstand",
+      "certificate": "Zertifikat",
+      "addMore": "Sprache hinzufügen",
+      "namePlaceholder": "Sprache eingeben",
+      "certificatePlaceholder": "Zertifikatsinformationen eingeben (z.B. TOEFL, IELTS)",
+      "certificateHelper": "Falls vorhanden, geben Sie Ihr Sprachzertifikat an (optional)",
+      "noLanguages": "Noch keine Sprachen hinzugefügt",
+      "languageItem": "Sprache",
+      "a1": "Grundlagen - Anfänger",
+      "a2": "Grundlagen - Grundkenntnisse",
+      "b1": "Mittelstufe - Fortgeschrittene Grundkenntnisse",
+      "b2": "Mittelstufe - Fortgeschritten",
+      "c1": "Fortgeschritten - Kompetent",
+      "c2": "Fortgeschritten - Beherrschung"
+    },
+    "education": {
+      "title": "Ausbildung",
+      "subtitle": "Fügen Sie Ihren Bildungsweg hinzu, beginnend mit der letzten Einrichtung",
+      "school": "Schule/Universität",
+      "degree": "Abschluss",
+      "field": "Studienfach",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "current": "Aktuell hier eingeschrieben",
+      "description": "Beschreibung (optional)",
+      "addMore": "Ausbildung hinzufügen",
+      "noEducation": "Noch keine Ausbildung hinzugefügt"
+    },
+    "draft": "Entwurf",
+    "continue": "Weiter",
+    "edit": "Bearbeiten",
+    "untitled": "Unbenannter Lebenslauf",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "saveAndExit": "Speichern und verlassen",
+    "saveSuccess": "Ihr Fortschritt wurde gespeichert",
+    "saveError": "Fehler beim Speichern",
+    "loadError": "Fehler beim Laden des Lebenslaufs",
+    "errors": {
+     "personalInfoRequired": "Bitte füllen Sie alle persönlichen Informationen aus",
+     "experienceRequired": "Sie müssen mindestens eine Berufserfahrung angeben",
+     "educationRequired": "Sie müssen mindestens eine Ausbildung angeben",
+     "skillsRequired": "Sie müssen mindestens eine Fähigkeit hinzufügen",
+     "languagesRequired": "Sie müssen mindestens eine Sprache angeben",
+     "experienceFieldsRequired": "Bitte geben Sie Unternehmen, Position und Startdatum für die Berufserfahrung an",
+     "educationFieldsRequired": "Bitte geben Sie Schule, Abschluss, Studienfach und Startdatum für die Ausbildung an",
+     "endDateRequired": "Enddatum ist erforderlich, wenn Sie nicht mehr eingeschrieben sind",
+     "titleRequired": "Bitte geben Sie einen Titel für den Lebenslauf ein",
+     "skillNameRequired": "Bitte geben Sie den Namen der Fähigkeit ein",
+     "certificateFieldsRequired": "Bitte geben Sie Zertifikatsname, ausstellende Organisation und Ausstellungsdatum an"
+   },
+    "currentStep": "Aktueller Schritt",
+    "deleteConfirmTitle": "Lebenslauf löschen",
+    "deleteConfirmMessage": "Sind Sie sicher, dass Sie diesen Lebenslauf löschen möchten?",
+    "deleteSuccess": "Lebenslauf erfolgreich gelöscht",
+    "deleteError": "Fehler beim Löschen des Lebenslaufs",
+    "noCVs": "Sie haben noch keine Lebensläufe erstellt",
+    "createFirst": "Erstellen Sie Ihren ersten Lebenslauf",
+    "titleLabel": "Lebenslauf-Titel",
+    "titlePlaceholder": "Geben Sie einen Titel für Ihren Lebenslauf ein",
+    "titleHelper": "Dieser Titel hilft Ihnen, Ihren Lebenslauf zu identifizieren (z.B. 'Softwareentwickler-Lebenslauf')",
+    "startCreating": "Lebenslauf erstellen",
+    "loadSuccess": "Lebenslauf erfolgreich geladen",
+    "skills": {
+      "title": "Fähigkeiten",
+      "subtitle": "Fügen Sie technische und persönliche Fähigkeiten hinzu",
+      "name": "Fähigkeit",
+      "level": "Kenntnisstand",
+      "description": "Beschreibung",
+      "addMore": "Fähigkeit hinzufügen",
+      "namePlaceholder": "Geben Sie den Namen der Fähigkeit ein",
+      "levelPlaceholder": "Wählen Sie Ihren Kenntnisstand",
+      "descriptionPlaceholder": "Beschreiben Sie kurz Ihre Erfahrung mit dieser Fähigkeit",
+      "descriptionHelper": "Fügen Sie eine kurze Beschreibung zu dieser Fähigkeit hinzu (optional)",
+      "beginner": "Anfänger",
+      "intermediate": "Mittelstufe",
+      "advanced": "Fortgeschritten",
+      "expert": "Experte",
+      "skillItem": "Fähigkeit",
+      "noSkills": "Noch keine Fähigkeiten hinzugefügt"
+    },
+    "certificates": {
+      "title": "Zertifikate",
+      "subtitle": "Fügen Sie erworbene Zertifikate und Bescheinigungen hinzu",
+      "name": "Zertifikatsname",
+      "issuer": "Ausstellende Organisation",
+      "issueDate": "Ausstellungsdatum",
+      "expiryDate": "Ablaufdatum",
+      "expiryDateHelper": "Falls vorhanden, Ablaufdatum des Zertifikats",
+      "credentialId": "Zertifikats-/Bescheinigungsnummer",
+      "description": "Beschreibung",
+      "uploadFile": "Zertifikatsdatei hochladen",
+      "addMore": "Zertifikat hinzufügen",
+      "uploadSuccess": "Zertifikatsdatei erfolgreich hochgeladen",
+      "uploadError": "Fehler beim Hochladen der Zertifikatsdatei",
+      "namePlaceholder": "Geben Sie den Zertifikatsnamen ein",
+      "issuerPlaceholder": "Geben Sie die ausstellende Organisation ein",
+      "credentialIdPlaceholder": "Geben Sie die Zertifikats-/ID-Nummer ein, falls vorhanden",
+      "credentialIdHelper": "Referenz- oder ID-Nummer des Zertifikats (optional)",
+      "descriptionPlaceholder": "Geben Sie eine kurze Beschreibung des Zertifikats ein",
+      "noCertificates": "Noch keine Zertifikate hinzugefügt"
+    },
+    "progress": "Fortschritt",
+    "template": {
+      "selectTitle": "Lebenslauf-Vorlage auswählen",
+      "webVersion": "Web-Version",
+      "pdfVersion": "PDF-Version",
+      "preview": "Vorschau",
+      "generateWeb": "Web-Lebenslauf erstellen",
+      "generatePDF": "PDF-Lebenslauf erstellen",
+      "pdfButton": "PDF-Lebenslauf erstellen",
+      "templates": {
+        "modern": {
+          "name": "Moderne Vorlage",
+          "description": "Modernes und interaktives Webdesign"
+        },
+        "minimal": {
+          "name": "Minimalistische Vorlage",
+          "description": "Sauberes und elegantes Webdesign"
+        },
+        "colorful": {
+          "name": "Farbenfrohe Vorlage",
+          "description": "Lebendiges und modernes Design mit farbigen Akzenten"
+        },
+        "professional": {
+          "name": "Professionelle Vorlage",
+          "description": "Saubere und professionelle Vorlage für Unternehmensprofile"
+        },
+        "creative": {
+          "name": "Kreative Vorlage",
+          "description": "Einzigartige und kreative Vorlage für künstlerische Profile"
+        },
+        "modernPdf": {
+          "name": "Moderne PDF-Vorlage",
+          "description": "Zeitgemäßes Design mit sauberer Typografie"
+        },
+        "classicPdf": {
+          "name": "Klassische PDF-Vorlage",
+          "description": "Traditionelles Lebenslauf-Layout mit zeitloser Eleganz"
+        },
+        "minimalPdf": {
+          "name": "Minimalistische PDF-Vorlage",
+          "description": "Sauberes und minimalistisches Design"
+        },
+        "creativePdf": {
+          "name": "Kreative PDF-Vorlage",
+          "description": "Mutiges Design, um sich abzuheben"
+        },
+        "professionalPdf": {
+          "name": "Professionelle PDF-Vorlage",
+          "description": "Geschäftsorientiertes Layout mit modernen Elementen"
+        },
+        "modernWeb": {
+          "name": "Moderne Web-Vorlage",
+          "description": "Sauberes und professionelles Design mit modernem Layout"
+        },
+        "minimalWeb": {
+          "name": "Minimalistische Web-Vorlage",
+          "description": "Einfaches und elegantes Design mit Fokus auf Inhalt"
+        },
+        "colorfulWeb": {
+          "name": "Farbenfrohe Web-Vorlage",
+          "description": "Lebendiges und auffälliges Design mit farbigen Akzenten"
+        },
+        "professionalWeb": {
+          "name": "Professionelle Web-Vorlage",
+          "description": "Unternehmensstil mit strukturiertem Layout"
+        },
+        "creativeWeb": {
+          "name": "Kreative Web-Vorlage",
+          "description": "Einzigartiges Design für kreative Profis"
+        }
+      },
+      "customBuilder": "Benutzerdefinierte Vorlagenerstellung",
+      "templateName": "Vorlagenname",
+      "saveTemplate": "Vorlage speichern",
+      "nameRequired": "Bitte geben Sie einen Namen für die Vorlage ein",
+      "layout": "Layout",
+      "colors": "Farben",
+      "typography": "Typografie",
+      "layoutSettings": "Layout-Einstellungen",
+      "singleColumn": "Einspaltig",
+      "doubleColumn": "Zweispaltig",
+      "sidebarLeft": "Seitenleiste links",
+      "sidebarRight": "Seitenleiste rechts",
+      "threeColumn": "Dreispaltig",
+      "headerHighlight": "Kopfzeilen-Hervorhebung",
+      "primaryColor": "Primärfarbe",
+      "secondaryColor": "Sekundärfarbe",
+      "backgroundColor": "Hintergrundfarbe",
+      "textColor": "Textfarbe",
+      "fontSize": "Schriftgröße",
+      "fontFamily": "Schriftart",
+      "showPhoto": "Foto anzeigen",
+      "photoStyle": "Foto-Stil",
+      "photoSize": "Foto-Größe",
+      "circle": "Kreis",
+      "square": "Quadrat",
+      "rounded": "Abgerundet",
+      "sections": "Abschnitte",
+      "moveUp": "Nach oben verschieben",
+      "moveDown": "Nach unten verschieben",
+      "hide": "Ausblenden",
+      "show": "Anzeigen",
+      "edit": "Bearbeiten",
+      "colorSettings": "Farbeinstellungen",
+      "sectionColors": "Abschnittsfarben",
+      "typographySettings": "Typografie-Einstellungen",
+      "sectionTypography": "Abschnitts-Typografie",
+      "useGlobal": "Globale Einstellungen verwenden",
+      "savedSuccess": "Vorlage erfolgreich gespeichert",
+      "savedError": "Fehler beim Speichern der Vorlage",
+      "deleteSuccess": "Vorlage erfolgreich gelöscht",
+      "deleteError": "Fehler beim Löschen der Vorlage",
+      "header": "Kopfzeile",
+      "editSection": "Abschnitt bearbeiten",
+      "editing": "Bearbeitung",
+      "photo": "Foto",
+      "fullName": "Vollständiger Name",
+      "profession": "Beruf/Position",
+      "sectionVisibility": "Abschnitts-Sichtbarkeit",
+      "headerEditWarning": "Kopfzeilen-Bearbeitungen werden in der Vorschau möglicherweise nicht korrekt angezeigt. Nach dem Speichern werden sie korrekt dargestellt.",
+      "atsOptimized": "ATS-optimiert",
+      "atsOptimizedLabel": "ATS-Optimierung aktivieren",
+      "atsDescription": "Optimiert Ihren Lebenslauf für eine bessere Erkennung durch Bewerber-Tracking-Systeme (ATS)",
+      "atsTips": "ATS-Tipps",
+      "atsKeywords": "Schlüsselwörter",
+      "atsKeywordsLabel": "Schlüsselwörter aus der Stellenanzeige",
+      "atsKeywordsPlaceholder": "Geben Sie Schlüsselwörter aus der Stellenanzeige ein",
+      "atsCompatibilityScore": "ATS-Kompatibilitäts-Score",
+      "atsCompatible": "ATS-kompatibel",
+      "atsSuggestions": "ATS-Empfehlungen",
+      "viewCertificate": "Zertifikat anzeigen",
+      "close": "Schließen"
+    },
+    "video": {
+      "title": "Video-Vorstellung",
+      "dragDrop": "Ziehen Sie Ihre Videodatei hierher oder klicken Sie, um sie auszuwählen",
+      "maxSize": "Maximale Dateigröße: 50MB",
+      "selectVideo": "Video auswählen",
+      "deleteSuccess": "Video erfolgreich gelöscht",
+      "deleteError": "Fehler beim Löschen des Videos",
+      "confirmDelete": "Sind Sie sicher, dass Sie das Video löschen möchten?"
+    },
+    "preview": {
+      "title": "Lebenslauf-Vorschau",
+      "templatePreview": "Vorlagen-Vorschau",
+      "selectTemplate": "Bitte wählen Sie zuerst eine Vorlage aus",
+      "loadError": "Fehler beim Laden der Lebenslauf-Daten",
+      "noData": "Keine Daten zum Anzeigen",
+      "templateNotFound": "Vorlage nicht gefunden",
+      "downloadPdf": "PDF herunterladen",
+      "generating": "Wird erstellt...",
+      "downloadFailed": "Download fehlgeschlagen",
+      "templateSelection": "Vorlagen-Auswahl",
+      "standardTemplates": "Standard-Vorlagen",
+      "customTemplates": "Benutzerdefinierte Vorlagen",
+      "customBuilderTab": "Benutzerdefinierte Vorlagenerstellung",
+      "savedTemplates": "Ihre gespeicherten Vorlagen",
+      "noCustomTemplates": "Sie haben noch keine benutzerdefinierten Vorlagen",
+      "createCustomTemplate": "Erstellen Sie Ihre erste Vorlage",
+      "ready": "Lebenslauf-Vorschau bereit",
+      "createSuccess": "Lebenslauf erfolgreich erstellt",
+      "close": "Schließen",
+      "openCv": "Lebenslauf öffnen",
+      "pdfGenerating": "PDF wird erstellt...",
+      "pdfError": "Fehler beim Erstellen der PDF",
+      "createExplanation": "Diese Vorlage ermöglicht die Anpassung Ihres Lebenslaufs"
+    },
+    "editDisabled": "Sie können Ihren Lebenslauf nicht bearbeiten, da Sie kein aktives Abonnement haben. Sie befinden sich im Ansichtsmodus.",
+    "editNotAllowed": "Zum Bearbeiten des Lebenslaufs ist ein aktives Abonnement erforderlich.",
+    "professionalSummary": "Berufliche Zusammenfassung",
+    "present": "Aktuell"
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich",
@@ -675,7 +795,7 @@
     "title": "Meine Abonnements",
     "noSubscription": "Sie haben kein aktives Abonnement",
     "activeSubscription": "Ihr aktives Abonnement",
-    "details": "Abonnementdetails",
+    "details": "Abonnement-Details",
     "plan": "Plan",
     "status": "Status",
     "period": "Zeitraum",
@@ -687,28 +807,28 @@
     "update": "Abonnement aktualisieren",
     "cancelConfirm": "Sind Sie sicher, dass Sie Ihr Abonnement kündigen möchten?",
     "cancelSuccess": "Ihr Abonnement wurde erfolgreich gekündigt",
-    "cancelError": "Bei der Kündigung des Abonnements ist ein Fehler aufgetreten",
+    "cancelError": "Fehler beim Kündigen des Abonnements",
     "updateCard": "Zahlungsmethode aktualisieren",
     "updateCardSuccess": "Ihre Zahlungsmethode wurde erfolgreich aktualisiert",
-    "updateCardError": "Bei der Aktualisierung der Zahlungsmethode ist ein Fehler aufgetreten",
+    "updateCardError": "Fehler beim Aktualisieren der Zahlungsmethode",
     "active": "Aktiv",
     "canceled": "Gekündigt",
     "expired": "Abgelaufen",
     "monthly": "Monatlich",
     "yearly": "Jährlich",
     "trial": "Testversion",
-    "paymentHistory": "Zahlungsverlauf",
+    "paymentHistory": "Zahlungshistorie",
     "warningTitle": "Abonnement-Warnung",
-    "upgradeToCreate": "Aktualisieren Sie Ihr Abonnement, um mehr Lebensläufe zu erstellen.",
+    "upgradeToCreate": "Upgraden Sie Ihr Abonnement, um weitere Lebensläufe zu erstellen.",
     "goToPricing": "Pläne anzeigen",
     "trialLimit": "Testnutzer können nur einen Lebenslauf erstellen. Bitte upgraden Sie für mehr.",
-    "trialLimitWithDays": "Ihre Testversion läuft in {{days}} Tagen ab. Testnutzer können nur einen Lebenslauf erstellen.",
-    "trialActive": "Ihre Testversion läuft in {{days}} Tagen ab.",
+    "trialLimitWithDays": "Ihre Testversion endet in {{days}} Tagen. Testnutzer können nur einen Lebenslauf erstellen.",
+    "trialActive": "Ihre Testversion endet in {{days}} Tagen.",
     "trialDaysLeft": "Sie haben noch {{days}} Tage in Ihrer Testversion",
     "trialExpired": "Ihre Testversion ist abgelaufen",
     "upgrade": "Jetzt upgraden",
     "freeTrialText": "Starten Sie mit einer 7-tägigen kostenlosen Testversion",
-    "freeTrialDescription": "Testen Sie alle Premium-Funktionen für 7 Tage, bevor Sie sich entscheiden"
+    "freeTrialDescription": "Testen Sie alle Premium-Funktionen 7 Tage lang kostenlos, bevor Sie sich entscheiden"
   },
   "privacy": {
     "pageTitle": "Datenschutzrichtlinie - CV Builder",
@@ -716,62 +836,62 @@
     "title": "Datenschutzrichtlinie",
     "lastUpdated": "Zuletzt aktualisiert",
     "lastUpdatedDate": "29. März 2023",
-    "introduction": "Diese Datenschutzrichtlinie beschreibt, wie CV Builder (\"wir\", \"unser\" oder \"uns\") Ihre persönlichen Informationen sammelt, verwendet und offenlegt, wenn Sie unseren Service nutzen. Wir sind bestrebt, Ihre Privatsphäre zu schützen und Ihnen ein positives Erlebnis bei der Nutzung unserer Website und Dienste zu gewährleisten.",
+    "introduction": "Diese Datenschutzrichtlinie beschreibt, wie CV Builder ('wir', 'uns' oder 'unser') Ihre persönlichen Daten sammelt, verwendet und offenlegt, wenn Sie unseren Service nutzen. Wir sind bestrebt, Ihre Privatsphäre zu schützen und Ihnen eine positive Erfahrung bei der Nutzung unserer Website und Dienste zu bieten.",
     "dataCollection": {
-      "title": "Informationen, die wir sammeln",
-      "description": "Wir können verschiedene Arten von Informationen von und über Benutzer unseres Dienstes sammeln, darunter:",
-      "personalInfo": "Persönliche Identifikationsinformationen (wie Ihren Namen, Ihre E-Mail-Adresse und Telefonnummer)",
-      "profileInfo": "Profilinformationen (wie Ihren beruflichen Hintergrund, Ihre Ausbildung, Fähigkeiten und andere karrierebezogene Informationen)",
-      "resumeData": "Informationen, die in Lebensläufen und CVs enthalten sind, die Sie mit unserem Dienst erstellen",
-      "usageInfo": "Nutzungsdetails (wie Sie mit unserem Dienst interagieren, Ihre Zugriffszeiten und angesehene Seiten)"
+      "title": "Welche Daten wir sammeln",
+      "description": "Wir können verschiedene Arten von Informationen von unseren Nutzern und über sie sammeln, darunter:",
+      "personalInfo": "Persönliche Identifikationsdaten (wie Ihr Name, Ihre E-Mail-Adresse und Telefonnummer)",
+      "profileInfo": "Profilinformationen (wie Ihr beruflicher Hintergrund, Ausbildung, Fähigkeiten und andere karrierebezogene Informationen)",
+      "resumeData": "Informationen in den Lebensläufen und CVs, die Sie mit unserem Service erstellen",
+      "usageInfo": "Nutzungsdetails (wie Sie mit unserem Service interagieren, Zugriffszeiten und angesehene Seiten)"
     },
     "dataUsage": {
-      "title": "Wie wir Ihre Informationen verwenden?",
-      "description": "Wir verwenden Informationen, die wir über Sie sammeln oder die Sie uns zur Verfügung stellen, für verschiedene Zwecke, darunter:",
-      "providingService": "Um unsere Dienste bereitzustellen, zu warten und zu verbessern",
-      "improving": "Um zu verstehen und zu analysieren, wie Sie unseren Dienst nutzen und um neue Produkte, Dienste, Funktionen und Funktionalitäten zu entwickeln",
-      "personalizing": "Um Ihre Erfahrung zu personalisieren und Inhalte zu liefern, die für Ihre Interessen relevant sind",
-      "communications": "Um mit Ihnen über unseren Dienst zu kommunizieren, einschließlich dienstbezogener Mitteilungen und Werbebotschaften"
+      "title": "Wie wir Ihre Daten verwenden",
+      "description": "Wir verwenden die über Sie gesammelten oder von Ihnen bereitgestellten Informationen für verschiedene Zwecke, darunter:",
+      "providingService": "Bereitstellung, Aufrechterhaltung und Verbesserung unserer Dienste",
+      "improving": "Verstehen und Analysieren, wie Sie unseren Service nutzen, um neue Produkte, Dienste, Funktionen und Funktionalitäten zu entwickeln",
+      "personalizing": "Personalisierung Ihrer Erfahrung und Bereitstellung von Inhalten, die Ihren Interessen entsprechen",
+      "communications": "Kommunikation mit Ihnen über unseren Service, einschließlich Service-Mitteilungen und Werbenachrichten"
     },
     "dataSharing": {
-      "title": "Wie wir Ihre Informationen teilen?",
-      "description": "Wir können Ihre persönlichen Informationen unter folgenden Umständen offenlegen:",
-      "serviceProviders": "Mit Dienstleistern, die in unserem Namen arbeiten und Zugriff auf Ihre Informationen benötigen, um ihre Dienstleistungen zu erbringen",
-      "legal": "Wie gesetzlich vorgeschrieben oder um unsere Rechte, Privatsphäre, Sicherheit oder Eigentum oder das unserer Benutzer oder anderer zu schützen",
-      "business": "Im Zusammenhang mit einer Transaktion, wie einer Fusion, einem Verkauf von Vermögenswerten oder einem Konkurs"
+      "title": "Wie wir Ihre Daten teilen",
+      "description": "Wir können Ihre persönlichen Daten in folgenden Situationen offenlegen:",
+      "serviceProviders": "Mit Dienstleistern, die in unserem Auftrag arbeiten und für die Erbringung ihrer Dienste auf Ihre Daten zugreifen müssen",
+      "legal": "Wenn gesetzlich vorgeschrieben oder zum Schutz unserer Rechte, Privatsphäre, Sicherheit oder Eigentum oder der Rechte unserer Nutzer oder anderer",
+      "business": "Im Zusammenhang mit einer Transaktion wie einer Fusion, einem Verkauf von Vermögenswerten oder Insolvenz"
     },
     "dataSecurity": {
       "title": "Datensicherheit",
-      "description": "Wir implementieren angemessene Sicherheitsmaßnahmen, um Ihre persönlichen Informationen vor unbefugtem Zugriff, Änderung, Offenlegung oder Zerstörung zu schützen. Bitte beachten Sie jedoch, dass keine Übertragungsmethode über das Internet oder elektronische Speichermethode 100% sicher ist, sodass wir deren absolute Sicherheit nicht garantieren können."
+      "description": "Wir implementieren angemessene Sicherheitsmaßnahmen, um Ihre persönlichen Daten vor unbefugtem Zugriff, Änderung, Offenlegung oder Zerstörung zu schützen. Beachten Sie jedoch, dass keine Methode der Internetübertragung oder elektronischen Speicherung 100% sicher ist, daher können wir absolute Sicherheit nicht garantieren."
     },
     "dataRetention": {
-      "title": "Datenspeicherung",
-      "description": "Wir speichern Ihre persönlichen Informationen so lange, wie es zur Erfüllung der in dieser Datenschutzrichtlinie dargelegten Zwecke erforderlich ist, es sei denn, eine längere Aufbewahrungsfrist ist gesetzlich vorgeschrieben oder zulässig."
+      "title": "Datenaufbewahrung",
+      "description": "Wir bewahren Ihre persönlichen Daten so lange auf, wie es zur Erfüllung der in dieser Datenschutzrichtlinie genannten Zwecke erforderlich ist, es sei denn, das Gesetz verlangt oder erlaubt eine längere Aufbewahrungsfrist."
     },
     "userRights": {
       "title": "Ihre Rechte",
-      "description": "Je nach Ihrem Standort haben Sie möglicherweise bestimmte Rechte in Bezug auf Ihre persönlichen Informationen, darunter:",
-      "access": "Das Recht auf Zugang und Überprüfung der persönlichen Informationen, die wir über Sie sammeln",
-      "correction": "Das Recht auf Berichtigung ungenauer oder unvollständiger Informationen",
-      "deletion": "Das Recht, die Löschung Ihrer persönlichen Informationen zu verlangen",
-      "objection": "Das Recht, der Verarbeitung Ihrer persönlichen Informationen zu widersprechen",
-      "withdrawal": "Das Recht, Ihre Einwilligung jederzeit zu widerrufen, wenn wir uns auf Ihre Einwilligung stützen, um Ihre Informationen zu verarbeiten"
+      "description": "Abhängig von Ihrem Standort haben Sie möglicherweise bestimmte Rechte in Bezug auf Ihre persönlichen Daten, darunter:",
+      "access": "Das Recht, die über Sie gesammelten persönlichen Daten einzusehen und zu überprüfen",
+      "correction": "Das Recht, unrichtige oder unvollständige Informationen zu berichtigen",
+      "deletion": "Das Recht, die Löschung Ihrer persönlichen Daten zu verlangen",
+      "objection": "Das Recht, der Verarbeitung Ihrer persönlichen Daten zu widersprechen",
+      "withdrawal": "Das Recht, Ihre Einwilligung, sofern wir uns auf sie stützen, jederzeit zu widerrufen"
     },
     "cookies": {
       "title": "Cookies und Tracking-Technologien",
-      "description": "Wir verwenden Cookies und ähnliche Tracking-Technologien, um Aktivitäten auf unserem Dienst zu verfolgen und bestimmte Informationen zu speichern. Cookies sind Dateien mit einer kleinen Datenmenge, die möglicherweise eine anonyme eindeutige Kennung enthalten. Sie können Ihren Browser anweisen, alle Cookies abzulehnen oder anzuzeigen, wenn ein Cookie gesendet wird."
+      "description": "Wir verwenden Cookies und ähnliche Tracking-Technologien, um Aktivitäten auf unserem Service zu verfolgen und bestimmte Informationen zu speichern. Cookies sind kleine Datendateien, die eine anonyme eindeutige Kennung enthalten können. Sie können Ihrem Browser anweisen, alle Cookies abzulehnen oder anzugeben, wann ein Cookie gesendet wird."
     },
     "thirdParty": {
-      "title": "Dienste von Drittanbietern",
-      "description": "Unser Dienst kann Links zu anderen Websites oder Diensten enthalten, die nicht von uns betrieben werden. Wenn Sie auf einen Link eines Drittanbieters klicken, werden Sie auf die Seite dieses Drittanbieters weitergeleitet. Wir empfehlen Ihnen dringend, die Datenschutzrichtlinie jeder Website, die Sie besuchen, zu überprüfen. Wir haben keine Kontrolle über und übernehmen keine Verantwortung für den Inhalt, die Datenschutzrichtlinien oder Praktiken von Websites oder Diensten Dritter."
+      "title": "Drittanbieter-Dienste",
+      "description": "Unser Service kann Links zu anderen Websites oder Diensten enthalten, die nicht von uns betrieben werden. Wenn Sie auf einen Drittanbieter-Link klicken, werden Sie zu deren Website weitergeleitet. Wir empfehlen dringend, die Datenschutzrichtlinie jeder von Ihnen besuchten Website zu überprüfen. Wir haben keine Kontrolle über und übernehmen keine Verantwortung für Inhalte, Datenschutzrichtlinien oder Praktiken von Drittanbieter-Websites oder -Diensten."
     },
     "children": {
       "title": "Datenschutz für Kinder",
-      "description": "Unser Dienst ist nicht für die Nutzung durch Kinder unter 16 Jahren bestimmt. Wir sammeln wissentlich keine persönlichen Informationen von Kindern unter 16 Jahren. Wenn Sie ein Elternteil oder Erziehungsberechtigter sind und wissen, dass Ihr Kind uns persönliche Informationen zur Verfügung gestellt hat, kontaktieren Sie uns bitte, damit wir die notwendigen Maßnahmen ergreifen können."
+      "description": "Unser Service richtet sich nicht an Personen unter 16 Jahren. Wir sammeln wissentlich keine persönlichen Daten von Kindern unter 16 Jahren. Wenn Sie ein Elternteil oder Vormund sind und feststellen, dass Ihr Kind uns persönliche Daten bereitgestellt hat, kontaktieren Sie uns bitte, damit wir die notwendigen Maßnahmen ergreifen können."
     },
     "changes": {
-      "title": "Änderungen an dieser Datenschutzrichtlinie",
-      "description": "Wir können unsere Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wir werden Sie über Änderungen informieren, indem wir die neue Datenschutzrichtlinie auf dieser Seite veröffentlichen und das Datum der \"Letzten Aktualisierung\" aktualisieren. Es wird empfohlen, diese Datenschutzrichtlinie regelmäßig auf Änderungen zu überprüfen."
+      "title": "Änderungen dieser Datenschutzrichtlinie",
+      "description": "Wir können unsere Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wir werden Sie über Änderungen informieren, indem wir die neue Datenschutzrichtlinie auf dieser Seite veröffentlichen und das 'Zuletzt aktualisiert'-Datum aktualisieren. Es wird empfohlen, diese Datenschutzrichtlinie regelmäßig auf Änderungen zu überprüfen."
     },
     "contact": {
       "title": "Kontaktieren Sie uns",
@@ -781,74 +901,74 @@
   },
   "terms": {
     "pageTitle": "Nutzungsbedingungen - CV Builder",
-    "pageDescription": "Lesen Sie die Nutzungsbedingungen für die Nutzung der Dienste von CV Builder",
+    "pageDescription": "Lesen Sie die Bedingungen und Konditionen für die Nutzung der CV Builder-Dienste",
     "title": "Nutzungsbedingungen",
     "lastUpdated": "Zuletzt aktualisiert",
     "lastUpdatedDate": "29. März 2023",
-    "introduction": "Diese Nutzungsbedingungen (\"Bedingungen\") regeln Ihren Zugang zu und die Nutzung der Website, Dienste und Anwendungen von CV Builder (zusammen der \"Dienst\"). Durch den Zugriff auf oder die Nutzung des Dienstes erklären Sie sich mit diesen Bedingungen einverstanden. Wenn Sie mit einem Teil der Bedingungen nicht einverstanden sind, dürfen Sie nicht auf den Dienst zugreifen.",
+    "introduction": "Diese Nutzungsbedingungen ('Bedingungen') regeln Ihren Zugriff auf und die Nutzung der Website, Dienste und Anwendungen von CV Builder (gemeinsam 'Service'). Durch den Zugriff auf oder die Nutzung des Services erklären Sie sich damit einverstanden, an diese Bedingungen gebunden zu sein. Wenn Sie mit einem Teil der Bedingungen nicht einverstanden sind, können Sie den Service nicht nutzen.",
     "acceptance": {
       "title": "Annahme der Bedingungen",
-      "description": "Durch die Erstellung eines Kontos oder die Nutzung unseres Dienstes bestätigen Sie, dass Sie diese Bedingungen gelesen und verstanden haben und damit einverstanden sind, an diese gebunden zu sein. Wenn Sie den Dienst im Namen einer Organisation nutzen, stimmen Sie diesen Bedingungen für diese Organisation zu."
+      "description": "Durch die Erstellung eines Kontos oder die Nutzung unseres Services bestätigen Sie, dass Sie diese Bedingungen gelesen, verstanden und sich damit einverstanden erklärt haben. Wenn Sie den Service im Namen einer Organisation nutzen, erklären Sie sich damit einverstanden, diese Bedingungen im Namen dieser Organisation zu akzeptieren."
     },
     "accountRegistration": {
-      "title": "Kontoregistrierung und Sicherheit",
-      "description": "Möglicherweise müssen Sie ein Konto erstellen, um bestimmte Funktionen unseres Dienstes zu nutzen. Bei der Erstellung eines Kontos erklären Sie sich damit einverstanden:",
-      "accurate": "Genaue, aktuelle und vollständige Informationen über sich selbst anzugeben",
-      "oneAccount": "Nur ein Konto zu führen, sofern nicht ausdrücklich erlaubt",
-      "security": "Die Sicherheit Ihres Kontos zu wahren, indem Sie Ihr Passwort schützen und den Zugriff einschränken",
-      "prohibited": "Anderen nicht zu gestatten, Ihr Konto zu nutzen oder Ihr Konto an eine andere Person oder Einrichtung zu übertragen"
+      "title": "Konto-Registrierung und Sicherheit",
+      "description": "Für die Nutzung bestimmter Funktionen unseres Services müssen Sie möglicherweise ein Konto erstellen. Bei der Kontoerstellung erklären Sie sich damit einverstanden:",
+      "accurate": "Wahrheitsgemäße, aktuelle und vollständige Informationen über sich selbst bereitzustellen",
+      "oneAccount": "Nur ein Konto zu unterhalten, sofern nicht ausdrücklich erlaubt",
+      "security": "Die Sicherheit Ihres Kontos zu gewährleisten, indem Sie Ihr Passwort schützen und den Zugriff auf Ihr Konto einschränken",
+      "prohibited": "Nicht zuzulassen, dass andere Ihr Konto nutzen oder Ihr Konto an eine andere Person oder Organisation übertragen"
     },
     "userContent": {
-      "title": "Benutzerinhalte",
-      "description": "Unser Dienst ermöglicht es Ihnen, Inhalte wie Lebensläufe, CVs und Profilinformationen (‚Benutzerinhalte') zu erstellen, zu speichern und zu teilen. In Bezug auf Benutzerinhalte erklären Sie sich mit Folgendem einverstanden:",
-      "ownership": "Sie behalten alle geistigen Eigentumsrechte, die Sie an den Benutzerinhalten haben",
-      "license": "Sie gewähren CV Builder eine weltweite, gebührenfreie Lizenz zur Nutzung, Reproduktion, Änderung, Verteilung und Anzeige der Benutzerinhalte, um den Dienst bereitzustellen und zu verbessern",
-      "prohibited": "Sie werden keine Inhalte hochladen, teilen oder erstellen, die gegen diese Bedingungen oder geltende Gesetze oder Vorschriften verstoßen"
+      "title": "Nutzerinhalte",
+      "description": "Unser Service ermöglicht es Ihnen, Inhalte wie Lebensläufe, CVs und Profilinformationen zu erstellen, zu speichern und zu teilen ('Nutzerinhalte'). In Bezug auf Nutzerinhalte erklären Sie sich damit einverstanden:",
+      "ownership": "Alle geistigen Eigentumsrechte, die Sie an den Nutzerinhalten haben, zu behalten",
+      "license": "CV Builder eine weltweite, gebührenfreie Lizenz zu erteilen, die Nutzerinhalte zu nutzen, zu vervielfältigen, zu modifizieren, zu verbreiten und anzuzeigen, um den Service bereitzustellen und zu verbessern",
+      "prohibited": "Keine Inhalte hochzuladen, zu teilen oder zu erstellen, die diese Bedingungen oder geltende Gesetze oder Vorschriften verletzen"
     },
     "subscriptions": {
       "title": "Abonnements und Zahlungen",
-      "description": "Wir bieten kostenlose und kostenpflichtige Abonnementpläne für unseren Dienst an. Durch das Abonnieren eines kostenpflichtigen Plans stimmen Sie den folgenden Bedingungen zu:",
-      "payment": "Sie erklären sich damit einverstanden, alle mit Ihrem Abonnementplan verbundenen Gebühren zu bezahlen",
+      "description": "Wir bieten kostenlose und kostenpflichtige Abonnementpläne für unseren Service an. Durch das Abonnieren eines kostenpflichtigen Plans erklären Sie sich damit einverstanden:",
+      "payment": "Alle mit Ihrem Abonnementplan verbundenen Gebühren zu zahlen",
       "renewal": "Abonnements verlängern sich automatisch am Ende jedes Abrechnungszeitraums, sofern sie nicht vor dem Verlängerungsdatum gekündigt werden",
       "cancellation": "Sie können Ihr Abonnement jederzeit über Ihre Kontoeinstellungen oder durch Kontaktaufnahme mit uns kündigen",
-      "refunds": "Erstattungen werden gemäß unserer Erstattungsrichtlinie und geltenden Gesetzen bereitgestellt"
+      "refunds": "Erstattungen werden gemäß unserer Rückgabepolitik und geltendem Recht gewährt"
     },
     "intellectualProperty": {
-      "title": "Geistige Eigentumsrechte",
-      "description": "Der Dienst und seine ursprünglichen Inhalte, Funktionen und Funktionalitäten bleiben das ausschließliche Eigentum von CV Builder und seinen Lizenzgebern. Der Dienst ist durch Urheberrecht, Markenrecht und andere Gesetze sowohl Ihres Landes als auch anderer Länder geschützt. Unsere Marken und Handelsaufmachung dürfen nicht im Zusammenhang mit einem Produkt oder Dienst ohne unsere vorherige schriftliche Zustimmung verwendet werden."
+      "title": "Geistiges Eigentum",
+      "description": "Der Service und seine ursprünglichen Inhalte, Funktionen und Funktionalitäten sind und bleiben Eigentum von CV Builder und seinen Lizenzgebern. Der Service ist durch Urheberrechts-, Marken- und andere Gesetze Ihres Landes und ausländischer Länder geschützt. Unsere Marken und unser Erscheinungsbild dürfen ohne vorherige schriftliche Zustimmung von CV Builder nicht in Verbindung mit einem Produkt oder Dienst verwendet werden."
     },
     "prohibition": {
       "title": "Verbotene Nutzungen",
-      "description": "Sie erklären sich damit einverstanden, den Dienst nicht auf folgende Weise zu nutzen:",
-      "illegal": "Unter Verstoß gegen geltende Gesetze oder Vorschriften",
-      "harmful": "Schädlich, bedrohlich, beleidigend, verleumderisch oder anderweitig anstößig",
-      "impersonation": "Durch Vortäuschung der Identität einer Person oder Entität oder Falschdarstellung Ihrer Zugehörigkeit",
-      "data": "Versuch, Informationen über andere Benutzer ohne deren Wissen oder Zustimmung zu sammeln",
-      "interference": "Beeinträchtigung oder Störung der Integrität oder Leistung des Dienstes"
+      "description": "Sie erklären sich damit einverstanden, den Service nicht auf folgende Weise zu nutzen:",
+      "illegal": "Die gegen geltende Gesetze oder Vorschriften verstößt",
+      "harmful": "Schädlich, bedrohlich, belästigend, verleumderisch oder anderweitig störend ist",
+      "impersonation": "Das Vortäuschen einer anderen Person oder Organisation oder eine falsche Angabe Ihrer Verbindung zu einer Person oder Organisation beinhaltet",
+      "data": "Das Sammeln oder Speichern von Informationen über andere Nutzer ohne deren Wissen und ausdrückliche Zustimmung",
+      "interference": "Die Integrität oder Leistung des Service oder seiner Komponenten beeinträchtigt oder unterbricht"
     },
     "termination": {
       "title": "Kündigung",
-      "description": "Wir können Ihr Konto und den Zugriff auf den Dienst sofort, ohne vorherige Ankündigung oder Haftung, aus beliebigen Gründen, einschließlich eines Verstoßes gegen diese Bedingungen, aussetzen oder kündigen. Mit der Kündigung erlischt Ihr Recht zur Nutzung des Dienstes sofort. Wenn Sie Ihr Konto kündigen möchten, können Sie einfach die Nutzung des Dienstes einstellen oder Ihr Konto über die Kontoeinstellungen löschen."
+      "description": "Wir können Ihr Konto und Ihren Zugriff auf den Service ohne vorherige Ankündigung und ohne Haftung aus jedem Grund, einschließlich Verstoß gegen diese Bedingungen, sofort aussetzen oder beenden. Bei Kündigung endet Ihr Recht auf Nutzung des Service sofort. Wenn Sie Ihr Konto kündigen möchten, können Sie einfach aufhören, den Service zu nutzen, oder Ihr Konto über die Kontoeinstellungen löschen."
     },
     "disclaimer": {
       "title": "Haftungsausschluss",
-      "description": "Der Dienst wird \"wie besehen\" und \"wie verfügbar\" ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt, einschließlich, aber nicht beschränkt auf Gewährleistungen der Marktgängigkeit, Eignung für einen bestimmten Zweck oder Nichtverletzung. Wir garantieren nicht, dass der Dienst ununterbrochen, zeitgerecht, sicher oder fehlerfrei sein wird."
+      "description": "Der Service wird 'wie besehen' und 'wie verfügbar' bereitgestellt, ohne jegliche Gewährleistung, ausdrücklich oder implizit, einschließlich, aber nicht beschränkt auf Gewährleistungen der Marktgängigkeit, Eignung für einen bestimmten Zweck oder Nichtverletzung. Wir garantieren nicht, dass der Service unterbrechungsfrei, zeitgerecht, sicher oder fehlerfrei sein wird."
     },
     "limitation": {
       "title": "Haftungsbeschränkung",
-      "description": "Soweit gesetzlich zulässig, haften CV Builder, seine Direktoren, Mitarbeiter, Partner, Vertreter, Lieferanten oder verbundenen Unternehmen in keinem Fall für indirekte, zufällige, besondere, Folge- oder Strafschäden, einschließlich, aber nicht beschränkt auf Verlust von Gewinnen, Daten, Nutzung, Goodwill oder andere immaterielle Verluste."
+      "description": "In keinem Fall haften CV Builder, seine Direktoren, Mitarbeiter, Partner, Vertreter, Lieferanten oder verbundenen Unternehmen für indirekte, besondere, zufällige, Folgeschäden oder Strafschäden, einschließlich, aber nicht beschränkt auf Gewinnverluste, Daten, Nutzung, Ruf oder andere immaterielle Verluste."
     },
     "indemnification": {
-      "title": "Entschädigung",
-      "description": "Sie erklären sich damit einverstanden, CV Builder und seine Lizenzgeber, Dienstleister, Mitarbeiter, Vertreter, Führungskräfte und Direktoren von allen Ansprüchen, Verbindlichkeiten, Schäden, Urteilen, Auszeichnungen, Verlusten, Kosten, Ausgaben oder Gebühren (einschließlich angemessener Anwaltsgebühren) zu verteidigen, zu entschädigen und schadlos zu halten, die sich aus oder im Zusammenhang mit Ihrem Verstoß gegen diese Bedingungen oder Ihrer Nutzung des Dienstes ergeben."
+      "title": "Freistellung",
+      "description": "Sie erklären sich damit einverstanden, CV Builder und seine Lizenzgeber, Dienstleister, Mitarbeiter, Vertreter, Direktoren und Vorstandsmitglieder von allen Ansprüchen, Haftungen, Schäden, Urteilen, Auszeichnungen, Verlusten, Kosten, Ausgaben oder Gebühren (einschließlich angemessener Anwaltsgebühren) freizustellen, die sich aus Ihrer Verletzung dieser Bedingungen oder Ihrer Nutzung des Service ergeben."
     },
     "governing": {
-      "title": "Geltendes Recht",
-      "description": "Diese Bedingungen unterliegen den Gesetzen des Landes, in dem CV Builder ansässig ist, und werden in Übereinstimmung mit diesen ausgelegt, ohne Rücksicht auf dessen Kollisionsrechtbestimmungen. Unser Verzicht auf die Durchsetzung eines Rechts oder einer Bestimmung dieser Bedingungen wird nicht als Verzicht auf diese Rechte angesehen."
+      "title": "Anwendbares Recht",
+      "description": "Diese Bedingungen werden nach den Gesetzen des Landes, in dem CV Builder gegründet ist, ausgelegt und angewendet, unabhängig von kollidierenden Rechtsvorschriften. Das Unterlassen der Durchsetzung eines Rechts oder einer Bestimmung dieser Bedingungen stellt keinen Verzicht auf dieses Recht oder diese Bestimmung dar."
     },
     "changes": {
       "title": "Änderungen der Bedingungen",
-      "description": "Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern oder zu ersetzen. Bei einer wesentlichen Änderung werden wir mindestens 30 Tage vor Inkrafttreten der neuen Bedingungen eine Mitteilung machen. Was eine wesentliche Änderung darstellt, wird nach unserem alleinigen Ermessen bestimmt. Indem Sie weiterhin auf unseren Dienst zugreifen oder diesen nutzen, nachdem Änderungen wirksam werden, erklären Sie sich mit den überarbeiteten Bedingungen einverstanden."
+      "description": "Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern oder zu modifizieren. Wenn wir wesentliche Änderungen vornehmen, werden wir Sie mindestens 30 Tage vor Inkrafttreten der neuen Bedingungen benachrichtigen. Was eine wesentliche Änderung ausmacht, bestimmen wir allein. Durch den weiteren Zugriff auf oder die Nutzung des Service nach Inkrafttreten der Änderungen erklären Sie sich mit den geänderten Bedingungen einverstanden."
     },
     "contact": {
       "title": "Kontaktieren Sie uns",
@@ -861,14 +981,14 @@
       "title": "Zahlung erfolgreich",
       "description": "Ihre Zahlung wurde erfolgreich abgeschlossen. Ihr Abonnement wurde aktiviert.",
       "goDashboard": "Zum Dashboard",
-      "goProfile": "Mein Profil"
+      "goProfile": "Zum Profil"
     },
     "fail": {
       "title": "Zahlung fehlgeschlagen",
-      "description": "Während des Zahlungsvorgangs ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie unser Support-Team.",
-      "notice": "Wenn Sie glauben, dass Ihr Konto belastet wurde, kontaktieren Sie uns bitte. Wir werden das Problem so schnell wie möglich lösen.",
+      "description": "Bei der Zahlungsabwicklung ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie unser Support-Team.",
+      "notice": "Wenn Sie glauben, dass Ihr Konto belastet wurde, kontaktieren Sie uns bitte. Wir werden das Problem schnellstmöglich lösen.",
       "tryAgain": "Erneut versuchen",
       "contactSupport": "Support kontaktieren"
     }
   }
-} 
+}
