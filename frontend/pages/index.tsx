@@ -34,6 +34,13 @@ import NextLink from 'next/link';
 import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 
+// Add proper declaration for gtag
+declare global {
+  interface Window {
+    gtag: (command: string, action: string, params: any) => void;
+  }
+}
+
 // Hero SVG
 const HeroSvg = () => (
   <svg width="100%" height="100%" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
@@ -117,8 +124,41 @@ export default function Home() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { isAuthenticated, user } = useAuth();
 
+  // Function to measure LCP
+  const measureLCP = () => {
+    if (typeof window !== 'undefined') {
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        const lastEntry = entries[entries.length - 1] as unknown as {
+          startTime: number;
+          element?: Element;
+        };
+        const lcpTime = lastEntry.startTime;
+        console.log(`LCP: ${lcpTime}ms`);
+        
+        // Send to analytics if available
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'web_vitals', {
+            metric_name: 'LCP',
+            metric_value: lcpTime,
+          });
+        }
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
+    
+    // Start LCP measurement
+    measureLCP();
+    
+    // Optimize hero image loading
+    const heroImg = document.querySelector('.hero-image') as HTMLImageElement;
+    if (heroImg) {
+      heroImg.loading = 'eager';
+      heroImg.fetchPriority = 'high';
+    }
   }, []);
 
   const features = [
