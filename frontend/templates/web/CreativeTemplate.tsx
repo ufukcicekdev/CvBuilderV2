@@ -47,6 +47,7 @@ import { useRouter } from 'next/router';
 import Flag from 'react-world-flags';
 import axiosInstance from '@/utils/axios';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
@@ -447,19 +448,29 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ cv: initialCv }) =>
                     transition={{ duration: 0.5 }}
                   >
                     <Box
-                      component="img"
-                      src={cv.personal_info.photo}
-                      alt={`${cv.personal_info.first_name} ${cv.personal_info.last_name}`}
                       sx={{
+                        position: 'relative',
                         width: '70%',
-                        height: 'auto',
+                        paddingTop: '70%',
                         borderRadius: '50%',
                         boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
                         border: `3px solid ${colors.light}`,
                         mx: 'auto',
-                        display: 'block'
+                        overflow: 'hidden'
                       }}
-                    />
+                    >
+                      <Image
+                        src={cv.personal_info.photo}
+                        alt={`${cv.personal_info.first_name} ${cv.personal_info.last_name}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        style={{
+                          objectFit: 'cover',
+                          borderRadius: '50%',
+                        }}
+                        priority
+                      />
+                    </Box>
                   </motion.div>
                 </Grid>
               )}

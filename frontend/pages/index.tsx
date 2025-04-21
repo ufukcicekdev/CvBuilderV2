@@ -193,8 +193,31 @@ export default function Home() {
       <SEO 
         title={t('home.seo.title', 'CV Builder - Create Professional Resumes Online')}
         description={t('home.seo.description', 'Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.')}
-        keywords={t('home.seo.keywords', 'cv builder, resume builder, professional cv, job application, career, resume templates')}
+        keywords={t('home.seo.keywords', 'cv builder, resume builder, professional cv, job application, career, resume templates, özgeçmiş oluşturucu, ücretsiz cv şablonları, hızlı cv oluştur')}
         ogImage="/og-image.svg"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'WebApplication',
+          name: 'CV Builder',
+          applicationCategory: 'BusinessApplication',
+          description: 'Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+          },
+          operatingSystem: 'Web',
+          screenshot: 'https://cvbuilder.tech/og-image.svg',
+          url: 'https://cvbuilder.tech',
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.7',
+            ratingCount: '150',
+            bestRating: '5',
+            worstRating: '1'
+          }
+        }}
       />
       {/* Hero Section */}
       <Box

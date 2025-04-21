@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Static Sitemap
 Sitemap: https://cvbuilder.tech/sitemap.xml
 
 # Disallow specific paths
@@ -11,4 +11,7 @@ Disallow: /dashboard/
 Disallow: /profile/
 Disallow: /cv/edit/
 Disallow: /reset-password/
-Disallow: /verify-email/ 
+Disallow: /verify-email/
+
+# Crawl delay
+Crawl-delay: 10 

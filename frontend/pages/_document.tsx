@@ -21,11 +21,19 @@ export default function Document() {
         {/* Preconnect to important domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        
+        {/* Preload critical resources */}
+        <link rel="preload" href="/og-image.svg" as="image" type="image/svg+xml" />
         
         {/* Meta tags that don't change between pages */}
         <meta name="theme-color" content="#3F51B5" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="format-detection" content="telephone=no" />
+        
+        {/* Performance optimization headers */}
+        <meta httpEquiv="Cache-Control" content="public, max-age=31536000, immutable" />
+        <meta httpEquiv="Permissions-Policy" content="interest-cohort=()" />
       </Head>
       <body>
         <Main />

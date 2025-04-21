@@ -8,7 +8,6 @@ const nextConfig = {
   compiler: {
     emotion: true,
   },
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   
   // API isteklerini backend'e yönlendirmek için proxy ayarları
   async rewrites() {
@@ -45,13 +44,17 @@ const nextConfig = {
             value: 'same-origin-allow-popups',
           },
           {
-            key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' https://*.paddle.com https://sandbox-buy.paddle.com https://*.paddle.com:* http://localhost:* http://localhost;",
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
           },
         ],
-      },
+      }
     ];
-  },
+  }
 };
 
 module.exports = nextConfig; 

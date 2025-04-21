@@ -13,6 +13,7 @@ import { LanguageProvider } from '../contexts/LanguageContext';
 import Script from 'next/script';
 import Head from 'next/head';
 import { SessionProvider } from "next-auth/react";
+import { initializePerformanceOptimizations } from '../utils/performanceOptimization';
 
 const cacheRtl = createCache({
   key: 'muirtl',
@@ -30,7 +31,36 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     setIsSSR(false);
-  }, []);
+    
+    // Initialize performance optimizations
+    initializePerformanceOptimizations();
+
+    // Register route change performance markers
+    const handleRouteChangeStart = () => {
+      if (typeof window !== 'undefined' && 'performance' in window) {
+        window.performance.mark('routeChangeStart');
+      }
+    };
+
+    const handleRouteChangeComplete = () => {
+      if (typeof window !== 'undefined' && 'performance' in window) {
+        window.performance.mark('routeChangeComplete');
+        window.performance.measure(
+          'routeChange',
+          'routeChangeStart',
+          'routeChangeComplete'
+        );
+      }
+    };
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router.events]);
 
   if (isSSR) {
     return null;
