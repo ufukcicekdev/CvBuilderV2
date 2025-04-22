@@ -205,15 +205,21 @@
     "confirm": "Bestätigen"
   },
   "home": {
+    "seo": {
+      "title": "CV Builder - Erstellen Sie professionelle Lebensläufe online",
+      "description": "Erstellen Sie professionelle Lebensläufe mit unserem benutzerfreundlichen Online-Lebenslauf-Builder. Wählen Sie aus mehreren Vorlagen und personalisieren Sie Ihren Lebenslauf in Minuten.",
+      "keywords": "lebenslauf erstellen, cv erstellen, professioneller lebenslauf, bewerbung, karriere, lebenslauf vorlagen, kostenlose cv vorlagen, schnell lebenslauf erstellen"
+    },
     "hero": {
-      "title": "Die nächste Generation der Lebenslauf-Erstellung",
-      "subtitle": "Erstellen Sie dynamische und interaktive Lebensläufe mit KI-Unterstützung",
+      "title": "Lebenslauf-Erstellungsplattform der nächsten Generation",
+      "subtitle": "Erstellen Sie KI-gestützte, dynamische und interaktive Lebensläufe",
       "cta": "Starten",
       "badge": "Neue Funktionen",
-      "feature1": "7-tägige kostenlose Testversion",
+      "feature1": "Vollständig kostenlose 7-tägige Testversion",
       "feature2": "Moderne und professionelle Vorlagen",
       "feature3": "Lebensläufe in Web- und PDF-Formaten",
-      "toDashboard": "Zum Dashboard"
+      "toDashboard": "Zum Dashboard",
+      "secondaryCta": "Anmelden"
     },
     "features": {
       "title": "Warum CV Builder?",

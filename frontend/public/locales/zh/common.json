@@ -205,15 +205,21 @@
     "confirm": "确认"
   },
   "home": {
+    "seo": {
+      "title": "简历生成器 - 在线创建专业简历",
+      "description": "使用我们易于使用的在线简历生成器创建专业简历。从多种模板中选择并在几分钟内自定义您的简历。",
+      "keywords": "简历生成器, 履历生成器, 专业简历, 求职应用, 职业, 简历模板, 免费简历模板, 快速创建简历"
+    },
     "hero": {
       "title": "新一代简历创建平台",
-      "subtitle": "创建AI驱动的动态交互式简历",
-      "cta": "开始使用",
+      "subtitle": "创建AI驱动、动态和交互式的简历",
+      "cta": "开始",
       "badge": "新功能",
-      "feature1": "7天免费试用",
-      "feature2": "现代专业模板",
-      "feature3": "网页和PDF格式简历",
-      "toDashboard": "前往仪表盘"
+      "feature1": "完全免费7天试用",
+      "feature2": "现代和专业的模板",
+      "feature3": "网页和PDF格式的简历",
+      "toDashboard": "前往仪表板",
+      "secondaryCta": "登录"
     },
     "features": {
       "title": "为什么选择简历生成器？",

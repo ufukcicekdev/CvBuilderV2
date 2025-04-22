@@ -205,6 +205,11 @@
     "confirm": "Confirm"
   },
   "home": {
+    "seo": {
+      "title": "CV Builder - Create Professional Resumes Online",
+      "description": "Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.",
+      "keywords": "cv builder, resume builder, professional cv, job application, career, resume templates, free cv templates, create cv fast"
+    },
     "hero": {
       "title": "Next Generation CV Creation Platform",
       "subtitle": "Create AI-powered, dynamic and interactive CVs",
@@ -213,7 +218,8 @@
       "feature1": "Completely free 7-day trial",
       "feature2": "Modern and professional templates",
       "feature3": "CVs in web and PDF formats",
-      "toDashboard": "Go to Dashboard"
+      "toDashboard": "Go to Dashboard",
+      "secondaryCta": "Sign In"
     },
     "features": {
       "title": "Why CV Builder?",

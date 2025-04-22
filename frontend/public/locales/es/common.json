@@ -205,15 +205,21 @@
     "confirm": "Confirmar"
   },
   "home": {
+    "seo": {
+      "title": "CV Builder - Crea Currículums Profesionales en Línea",
+      "description": "Crea currículums profesionales con nuestro creador de CV en línea fácil de usar. Elige entre múltiples plantillas y personaliza tu currículum en minutos.",
+      "keywords": "creador de cv, creador de currículum, cv profesional, solicitud de empleo, carrera, plantillas de currículum, plantillas de cv gratis, crear cv rápido"
+    },
     "hero": {
       "title": "Plataforma de Creación de CV de Nueva Generación",
-      "subtitle": "Crea CVs con IA, dinámicos e interactivos",
+      "subtitle": "Crea CV dinámicos e interactivos con tecnología de IA",
       "cta": "Comenzar",
       "badge": "Nuevas Funciones",
       "feature1": "Prueba gratuita de 7 días",
       "feature2": "Plantillas modernas y profesionales",
-      "feature3": "CVs en formatos web y PDF",
-      "toDashboard": "Ir al Panel"
+      "feature3": "CV en formatos web y PDF",
+      "toDashboard": "Ir al Panel",
+      "secondaryCta": "Iniciar Sesión"
     },
     "features": {
       "title": "¿Por qué Constructor de CV?",

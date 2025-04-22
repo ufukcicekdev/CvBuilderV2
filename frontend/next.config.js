@@ -63,6 +63,10 @@ const nextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'Priority',
+            value: 'high'
+          }
         ],
       },
       {
@@ -92,6 +96,19 @@ const nextConfig = {
           }
         ],
       },
+      {
+        source: '/images/hero-image.svg',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Priority',
+            value: 'highest'
+          }
+        ],
+      },
     ];
   },
   
@@ -116,6 +133,20 @@ const nextConfig = {
               priority: -20,
               reuseExistingChunk: true,
             },
+            framework: {
+              name: 'framework',
+              test: /[\\/]node_modules[\\/](react|react-dom|@mui)[\\/]/,
+              priority: 40,
+              chunks: 'all',
+              enforce: true,
+            },
+            commons: {
+              name: 'commons',
+              minChunks: 3,
+              priority: 30,
+              chunks: 'all',
+              reuseExistingChunk: true,
+            }
           },
         },
       };
@@ -124,8 +155,14 @@ const nextConfig = {
     return config;
   },
   
-  // Karasız özellikleri tamamen kaldırıldı
-  experimental: {}
+  // Performance optimizations
+  experimental: {
+    modern: true,
+    serverComponents: false,
+    optimizeCss: true,
+    optimizeServerInsertedHtml: true,
+    esmExternals: true,
+  }
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

@@ -205,6 +205,11 @@
     "confirm": "Onayla"
   },
   "home": {
+    "seo": {
+      "title": "CV Builder - Online Profesyonel Özgeçmişler Oluşturun",
+      "description": "Kullanımı kolay online CV oluşturucumuzla profesyonel özgeçmişler ve CV'ler oluşturun. Birden fazla şablon arasından seçim yapın ve CV'nizi dakikalar içinde özelleştirin.",
+      "keywords": "cv oluşturucu, özgeçmiş oluşturucu, profesyonel cv, iş başvurusu, kariyer, özgeçmiş şablonları, ücretsiz cv şablonları, hızlı cv oluştur"
+    },
     "hero": {
       "title": "Yeni Nesil CV Oluşturma Platformu",
       "subtitle": "Yapay zeka destekli, dinamik ve etkileşimli CV'ler oluşturun",
@@ -213,7 +218,8 @@
       "feature1": "Tamamen ücretsiz 7 günlük deneme süresi",
       "feature2": "Modern ve profesyonel şablonlar",
       "feature3": "Web ve PDF formatlarında CV'ler",
-      "toDashboard": "Panele Git"
+      "toDashboard": "Panele Git",
+      "secondaryCta": "Giriş Yap"
     },
     "features": {
       "title": "Neden CV Oluşturucu?",
