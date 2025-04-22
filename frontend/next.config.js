@@ -197,7 +197,6 @@ const nextConfig = {
     workerThreads: true,
   },
   
-  output: 'standalone',
   productionBrowserSourceMaps: false, // Disable source maps in production for better performance
 };
 
