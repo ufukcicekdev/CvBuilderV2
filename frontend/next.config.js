@@ -70,6 +70,23 @@ const nextConfig = {
         ],
       },
       {
+        source: '/',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+          {
+            key: 'Priority',
+            value: 'critical'
+          },
+          {
+            key: 'x-nextjs-page',
+            value: '/'
+          }
+        ],
+      },
+      {
         source: '/fonts/:path*',
         headers: [
           {
@@ -89,6 +106,24 @@ const nextConfig = {
       },
       {
         source: '/:path*.svg',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          }
+        ],
+      },
+      {
+        source: '/:path*.css',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          }
+        ],
+      },
+      {
+        source: '/:path*.js',
         headers: [
           {
             key: 'Cache-Control',
@@ -155,14 +190,15 @@ const nextConfig = {
     return config;
   },
   
-  // Performance optimizations
+  // Performance optimizations for Next.js 14.1.3
   experimental: {
-    modern: true,
-    serverComponents: false,
     optimizeCss: true,
-    optimizeServerInsertedHtml: true,
-    esmExternals: true,
-  }
+    scrollRestoration: true,
+    workerThreads: true,
+  },
+  
+  output: 'standalone',
+  productionBrowserSourceMaps: false, // Disable source maps in production for better performance
 };
 
 module.exports = nextConfig;

@@ -41,9 +41,18 @@ declare global {
   }
 }
 
-// Hero SVG
+// Hero SVG - Optimized with accessibility improvements
 const HeroSvg = () => (
-  <svg width="100%" height="100%" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <svg 
+    width="100%" 
+    height="100%" 
+    viewBox="0 0 800 600" 
+    xmlns="http://www.w3.org/2000/svg"
+    aria-label="CV Builder Illustration"
+    role="img"
+  >
+    <title>CV Builder Illustration</title>
+    <desc>An illustration showing a CV document with various sections</desc>
     <defs>
       <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.8"/>
@@ -85,23 +94,21 @@ const HeroSvg = () => (
       <rect x="130" y="395" width="540" height="10" rx="5" fill="#E5E7EB" />
       <rect x="130" y="415" width="540" height="10" rx="5" fill="#E5E7EB" />
     </g>
-    
-    {/* Animated Elements */}
-    <circle cx="750" cy="200" r="15" fill="#4F46E5" opacity="0.7">
-      <animate attributeName="cy" values="200;180;200" dur="3s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="50" cy="350" r="10" fill="#7C3AED" opacity="0.7">
-      <animate attributeName="cy" values="350;370;350" dur="2.5s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="400" cy="500" r="12" fill="#4F46E5" opacity="0.7">
-      <animate attributeName="cy" values="500;520;500" dur="4s" repeatCount="indefinite" />
-    </circle>
   </svg>
 );
 
-// Template SVG
+// Template SVG - Optimized with accessibility improvements
 const TemplateSvg = () => (
-  <svg width="100%" height="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <svg 
+    width="100%" 
+    height="100%" 
+    viewBox="0 0 400 300" 
+    xmlns="http://www.w3.org/2000/svg"
+    aria-label="CV Template Example"
+    role="img"
+  >
+    <title>CV Template Example</title>
+    <desc>A simplified illustration of a CV template design</desc>
     <rect width="400" height="300" fill="#F9FAFB" rx="8" />
     <rect x="20" y="20" width="100" height="100" rx="50" fill="#4F46E5" />
     <rect x="140" y="30" width="240" height="20" rx="4" fill="#111827" />
@@ -134,7 +141,10 @@ export default function Home() {
           element?: Element;
         };
         const lcpTime = lastEntry.startTime;
-        console.log(`LCP: ${lcpTime}ms`);
+        // Only log in development
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`LCP: ${lcpTime}ms`);
+        }
         
         // Send to analytics if available
         if (typeof window !== 'undefined' && window.gtag) {
@@ -159,6 +169,20 @@ export default function Home() {
       heroImg.loading = 'eager';
       heroImg.fetchPriority = 'high';
     }
+    
+    // Preconnect to important domains
+    const links = [
+      { rel: 'preconnect', href: 'https://web-production-9f41e.up.railway.app' },
+      { rel: 'preconnect', href: 'https://cekfisi.fra1.cdn.digitaloceanspaces.com' },
+    ];
+    
+    links.forEach(linkData => {
+      const link = document.createElement('link');
+      link.rel = linkData.rel;
+      link.href = linkData.href;
+      document.head.appendChild(link);
+    });
+    
   }, []);
 
   const features = [
@@ -231,63 +255,37 @@ export default function Home() {
   return (
     <Layout>
       <SEO 
-        title={t('home.seo.title', 'CV Builder - Create Professional Resumes Online')}
-        description={t('home.seo.description', 'Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.')}
-        keywords={t('home.seo.keywords', 'cv builder, resume builder, professional cv, job application, career, resume templates, özgeçmiş oluşturucu, ücretsiz cv şablonları, hızlı cv oluştur')}
-        ogImage="/og-image.svg"
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'WebApplication',
-          name: 'CV Builder',
-          applicationCategory: 'BusinessApplication',
-          description: 'Create professional CVs and resumes with our easy-to-use online CV builder. Choose from multiple templates and customize your resume in minutes.',
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'USD',
-            availability: 'https://schema.org/InStock',
-          },
-          operatingSystem: 'Web',
-          screenshot: 'https://cvbuilder.tech/og-image.svg',
-          url: 'https://cvbuilder.tech',
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.7',
-            ratingCount: '150',
-            bestRating: '5',
-            worstRating: '1'
-          }
-        }}
+        title={t('home.seo.title')}
+        description={t('home.seo.description')}
+        canonicalUrl="/"
       />
+      
       {/* Hero Section */}
-      <Box
+      <Box 
+        component="section" 
+        aria-labelledby="hero-heading"
         sx={{
-          background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
-          pt: { xs: 8, md: 12 },
-          pb: { xs: 8, md: 12 },
           position: 'relative',
+          bgcolor: 'background.paper',
+          pt: { xs: 4, sm: 8 },
+          pb: { xs: 8, sm: 12 },
           overflow: 'hidden',
         }}
       >
         <Container maxWidth="lg">
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Box sx={{ position: 'relative', zIndex: 2 }}>
-                <Chip 
-                  label={t('home.hero.badge')} 
-                  color="primary" 
-                  size="small" 
-                  sx={{ mb: 2, fontWeight: 'bold' }} 
-                />
+              <Box>
                 <Typography
+                  id="hero-heading"
                   component="h1"
                   variant="h2"
                   color="text.primary"
                   gutterBottom
-                  sx={{ 
+                  sx={{
                     fontWeight: 800,
+                    lineHeight: 1.2,
                     fontSize: { xs: '2.5rem', md: '3.5rem' },
-                    lineHeight: 1.2
                   }}
                 >
                   {t('home.hero.title')}
@@ -296,7 +294,7 @@ export default function Home() {
                   variant="h5"
                   color="text.secondary"
                   paragraph
-                  sx={{ mb: 4, fontSize: { xs: '1rem', md: '1.25rem' } }}
+                  sx={{ mb: 4, maxWidth: '90%' }}
                 >
                   {t('home.hero.subtitle')}
                 </Typography>
@@ -328,6 +326,8 @@ export default function Home() {
                       zIndex: 1
                     }
                   }}
+                  role="complementary"
+                  aria-label={t('subscription.freeTrialText')}
                 >
                   <Typography 
                     variant="h4" 
@@ -367,6 +367,7 @@ export default function Home() {
                         boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
                       }}
                       endIcon={<ArrowForwardIcon />}
+                      aria-label={t('home.hero.toDashboard')}
                     >
                       {t('home.hero.toDashboard')}
                     </Button>
@@ -385,6 +386,7 @@ export default function Home() {
                           boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
                         }}
                         endIcon={<ArrowForwardIcon />}
+                        aria-label={t('home.hero.cta')}
                       >
                         {t('home.hero.cta')}
                       </Button>
@@ -399,29 +401,32 @@ export default function Home() {
                           borderRadius: '8px',
                           fontWeight: 'bold'
                         }}
+                        aria-label={t('auth.dontHaveAccount')}
                       >
                         {t('auth.dontHaveAccount')}
                       </Button>
                     </>
                   )}
                 </Box>
-                <Box sx={{ mt: 4, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CheckCircleIcon color="success" fontSize="small" />
-                  <Typography variant="body2" color="text.secondary">
-                    {t('home.hero.feature1')}
-                  </Typography>
-                </Box>
-                <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CheckCircleIcon color="success" fontSize="small" />
-                  <Typography variant="body2" color="text.secondary">
-                    {t('home.hero.feature2')}
-                  </Typography>
-                </Box>
-                <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CheckCircleIcon color="success" fontSize="small" />
-                  <Typography variant="body2" color="text.secondary">
-                    {t('home.hero.feature3')}
-                  </Typography>
+                <Box component="ul" sx={{ mt: 4, pl: 0, listStyle: 'none' }}>
+                  <Box component="li" sx={{ mt: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
+                    <Typography variant="body2" color="text.secondary">
+                      {t('home.hero.feature1')}
+                    </Typography>
+                  </Box>
+                  <Box component="li" sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
+                    <Typography variant="body2" color="text.secondary">
+                      {t('home.hero.feature2')}
+                    </Typography>
+                  </Box>
+                  <Box component="li" sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
+                    <Typography variant="body2" color="text.secondary">
+                      {t('home.hero.feature3')}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
             </Grid>
@@ -436,6 +441,7 @@ export default function Home() {
                     transition: 'transform 0.3s ease-in-out',
                   },
                 }}
+                className="hero-image"
               >
                 <HeroSvg />
               </Box>
@@ -445,7 +451,7 @@ export default function Home() {
       </Box>
 
       {/* Features Section */}
-      <Box sx={{ py: 8 }}>
+      <Box component="section" aria-labelledby="features-heading" sx={{ py: 8 }}>
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: 6 }}>
             <Typography
@@ -456,6 +462,7 @@ export default function Home() {
               {t('home.features.overline')}
             </Typography>
             <Typography
+              id="features-heading"
               component="h2"
               variant="h3"
               color="text.primary"
@@ -499,6 +506,8 @@ export default function Home() {
                 zIndex: 0
               }
             }}
+            role="complementary"
+            aria-label={t('subscription.freeTrialText')}
           >
             <Box sx={{ position: 'relative', zIndex: 1 }}>
               <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
