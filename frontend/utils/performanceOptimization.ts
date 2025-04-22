@@ -42,6 +42,7 @@ export const initializePerformanceOptimizations = (): void => {
       deferNonCriticalResources();
       optimizeAnimations();
       detectAndFixLayoutShifts();
+      optimizeLargestContentfulPaint();
     }, 50);
   });
 };
@@ -239,6 +240,12 @@ function optimizeAfterLoad(): void {
   
   // Start monitoring performance metrics
   monitorPerformance();
+  
+  // Implement aggressive optimizations for LCP improvement
+  optimizeLargestContentfulPaint();
+  
+  // Implement code splitting for delayed loading
+  implementIntersectionObservers();
 }
 
 /**
@@ -354,7 +361,7 @@ function monitorPerformance(): void {
 /**
  * Optimize the critical rendering path
  */
-function optimizeCriticalRenderingPath() {
+function optimizeCriticalRenderingPath(): void {
   if (typeof window === 'undefined') return;
   
   // Preload critical resources
@@ -368,6 +375,28 @@ function optimizeCriticalRenderingPath() {
   
   // Set up observer to monitor LCP element
   observeLargestContentfulPaint();
+  
+  // Inject performance CSS
+  injectPerformanceCSS();
+  
+  // Use font-display: swap via CSS instead of direct property
+  const fontStyleEl = document.createElement('style');
+  fontStyleEl.textContent = `
+    @font-face {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-display: swap;
+    }
+  `;
+  document.head.appendChild(fontStyleEl);
+  
+  // Block CSS rendering for non-critical styles
+  const links = document.querySelectorAll('link[rel="stylesheet"]:not([data-critical="true"])');
+  links.forEach(link => {
+    (link as HTMLLinkElement).media = 'print';
+    setTimeout(() => {
+      (link as HTMLLinkElement).media = 'all';
+    }, 500);
+  });
 }
 
 /**
@@ -908,4 +937,241 @@ export function reportWebVitals(metric: NextWebVitalsMetric): void {
   // In production, send to analytics
   // TODO: Implement analytics reporting
   // Example: sendToAnalytics(metric);
+}
+
+/**
+ * Optimize Largest Contentful Paint elements specifically
+ * Added to target the 9.1s LCP metric seen in performance results
+ */
+function optimizeLargestContentfulPaint(): void {
+  if (typeof window === 'undefined') return;
+  
+  // Find potential LCP elements
+  const potentialLCPElements = document.querySelectorAll('img, video, h1, h2, .hero-section *, main > *:first-child, [class*="hero"], [class*="banner"]');
+  
+  potentialLCPElements.forEach(element => {
+    // Apply specific optimizations to potential LCP elements
+    if (element.tagName.toLowerCase() === 'img') {
+      const img = element as HTMLImageElement;
+      
+      // Set priority loading for potentially large images
+      img.loading = 'eager';
+      img.decoding = 'async';
+      
+      // Add fetchpriority attribute for browsers that support it
+      img.setAttribute('fetchpriority', 'high');
+      
+      // Ensure proper width/height are set to prevent layout shifts
+      if (!img.width && !img.height && img.getAttribute('width') === null && img.getAttribute('height') === null) {
+        // Set default dimensions to prevent CLS
+        img.style.aspectRatio = '16/9';
+      }
+      
+      // For SVG images, add direct inline SVG if possible
+      if (img.src.endsWith('.svg')) {
+        // Fetch and inline SVG for faster rendering
+        fetch(img.src)
+          .then(response => response.text())
+          .then(svgText => {
+            if (svgText.startsWith('<svg')) {
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = svgText;
+              const svg = tempDiv.querySelector('svg');
+              if (svg && img.parentNode) {
+                // Copy dimensions
+                const width = img.width || img.clientWidth;
+                const height = img.height || img.clientHeight;
+                svg.setAttribute('width', `${width}px`);
+                svg.setAttribute('height', `${height}px`);
+                
+                // Replace img with SVG
+                img.parentNode.replaceChild(svg, img);
+              }
+            }
+          })
+          .catch(() => {
+            // If inline fails, ensure the image is still optimized
+            img.style.visibility = 'visible';
+          });
+      }
+    }
+    
+    // Apply specific styles for headers and text elements
+    if (['h1', 'h2', 'p'].includes(element.tagName.toLowerCase())) {
+      const textElement = element as HTMLElement;
+      
+      // Ensure text rendering is optimized
+      textElement.style.textRendering = 'optimizeSpeed';
+      
+      // Prevent layout shifts by setting min-height
+      if (textElement.tagName.toLowerCase() === 'h1') {
+        textElement.style.minHeight = '40px';
+      } else if (textElement.tagName.toLowerCase() === 'h2') {
+        textElement.style.minHeight = '32px';
+      }
+    }
+  });
+  
+  // Create an observer to track the actual LCP element
+  if ('PerformanceObserver' in window) {
+    const lcpObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      if (entries.length > 0) {
+        // Type the LCP entry properly to access element property
+        const lcpEntry = entries[entries.length - 1] as PerformanceEntry & {
+          element?: Element;
+        };
+        
+        // Report LCP to analytics
+        if (window.gtag) {
+          window.gtag('event', 'web_vitals', {
+            event_category: 'Web Vitals',
+            event_action: 'LCP',
+            event_value: Math.round(lcpEntry.startTime + lcpEntry.duration),
+            event_label: lcpEntry.entryType,
+            non_interaction: true,
+          });
+        }
+        
+        // Try to optimize this specific element even more
+        if (lcpEntry.element) {
+          // Apply super-priority optimizations to actual LCP element
+          const lcpElement = lcpEntry.element;
+          
+          if (lcpElement.tagName.toLowerCase() === 'img') {
+            const img = lcpElement as HTMLImageElement;
+            
+            // Force immediate display
+            img.style.display = 'block';
+            img.style.visibility = 'visible';
+            
+            // If source is an external URL, consider preconnect
+            const imgUrl = new URL(img.src, window.location.origin);
+            if (imgUrl.origin !== window.location.origin) {
+              // Add preconnect for this domain
+              const link = document.createElement('link');
+              link.rel = 'preconnect';
+              link.href = imgUrl.origin;
+              link.crossOrigin = 'anonymous';
+              document.head.appendChild(link);
+            }
+          }
+          
+          // Force the LCP element to be visible
+          (lcpElement as HTMLElement).style.visibility = 'visible';
+          (lcpElement as HTMLElement).style.opacity = '1';
+          (lcpElement as HTMLElement).style.display = 'block';
+        }
+      }
+      
+      // Disconnect after getting the LCP
+      lcpObserver.disconnect();
+    });
+    
+    // Start observing
+    lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+  }
+}
+
+/**
+ * Implement Intersection Observers for lazy loading components
+ * This helps reduce initial page load time
+ */
+function implementIntersectionObservers(): void {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+  
+  // Find non-critical sections that can be lazily enhanced
+  const lazySections = document.querySelectorAll('.features-section, .pricing-section, .testimonials-section, footer, [class*="section"]:not(.hero-section)');
+  
+  // Create observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const section = entry.target;
+        
+        // Remove all optimization limitations once visible
+        section.classList.add('section-visible');
+        
+        // Re-enable animations
+        const elements = section.querySelectorAll('*');
+        elements.forEach(el => {
+          if (el instanceof HTMLElement) {
+            el.style.animationDuration = '';
+            el.style.transitionDuration = '';
+          }
+        });
+        
+        // Load any lazy-loaded images
+        const lazyImages = section.querySelectorAll('img[loading="lazy"]');
+        lazyImages.forEach(img => {
+          if (img instanceof HTMLImageElement) {
+            // Convert data-src to src if present
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              delete img.dataset.src;
+            }
+          }
+        });
+        
+        // Stop observing this section
+        observer.unobserve(section);
+      }
+    });
+  }, {
+    rootMargin: '200px', // Start loading 200px before it comes into viewport
+    threshold: 0.1 // Trigger when 10% of the element is visible
+  });
+  
+  // Start observing sections
+  lazySections.forEach(section => {
+    observer.observe(section);
+  });
+}
+
+// Add stylesheet to help with layout shifts and implement performance CSS
+function injectPerformanceCSS(): void {
+  if (typeof document === 'undefined') return;
+  
+  const styleEl = document.createElement('style');
+  styleEl.id = 'performance-css';
+  styleEl.textContent = `
+    /* Prevent layout shifts */
+    img {
+      aspect-ratio: attr(width) / attr(height);
+    }
+    
+    /* Ensure all images have appropriate background */
+    img:not([src]) {
+      background-color: #f0f0f0;
+    }
+    
+    /* Optimize transitions */
+    .section-visible * {
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out !important;
+    }
+    
+    /* Optimize font rendering */
+    body {
+      text-rendering: optimizeSpeed;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Fix layout shift issues for specific elements */
+    .hero-section {
+      contain: layout style;
+    }
+    
+    /* Layout containment for performance */
+    .container, section, main, [class*="section"] {
+      contain: content;
+    }
+    
+    /* Optimize SVG rendering */
+    svg {
+      contain: strict;
+      will-change: transform;
+    }
+  `;
+  
+  document.head.appendChild(styleEl);
 }

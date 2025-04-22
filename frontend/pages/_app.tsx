@@ -13,7 +13,7 @@ import { LanguageProvider } from '../contexts/LanguageContext';
 import Script from 'next/script';
 import Head from 'next/head';
 import { SessionProvider } from "next-auth/react";
-import { initializePerformanceOptimizations } from '../utils/performanceOptimization';
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 const cacheRtl = createCache({
   key: 'muirtl',
@@ -32,8 +32,27 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     setIsSSR(false);
     
-    // Initialize performance optimizations
-    initializePerformanceOptimizations();
+    // Performans optimizasyonları yerine basit optimizasyonlar
+    const optimizePerformance = () => {
+      // Basit performans iyileştirmeleri
+      if (typeof window !== 'undefined') {
+        // Kritik görsellere eager loading ekle
+        document.querySelectorAll('img.critical-image').forEach(img => {
+          (img as HTMLImageElement).loading = 'eager';
+          (img as HTMLImageElement).decoding = 'async';
+        });
+        
+        // Kritik olmayan görsellere lazy loading ekle
+        document.querySelectorAll('img:not(.critical-image)').forEach(img => {
+          if (!(img as HTMLImageElement).loading) {
+            (img as HTMLImageElement).loading = 'lazy';
+          }
+        });
+      }
+    };
+    
+    // Basit optimizasyonları çalıştır
+    optimizePerformance();
 
     // Register route change performance markers
     const handleRouteChangeStart = () => {
@@ -72,26 +91,79 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <title>CV Builder</title>
+        
+        {/* Critical preconnects for performance */}
+        <link rel="preconnect" href="https://web-production-9f41e.up.railway.app" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cekfisi.fra1.cdn.digitaloceanspaces.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Preload critical assets */}
+        <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
+        
+        {/* DNS prefetch for performance */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        
+        {/* Inline critical CSS */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+          }
+          
+          .hero-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            padding: 48px 0;
+            min-height: 600px;
+            overflow: hidden;
+            position: relative;
+          }
+        `}} />
       </Head>
       <SessionProvider session={pageProps.session}>
         <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
-          {/* Google Analytics */}
+          {/* Google Analytics - load with higher priority but after paint */}
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-HDJ50NB3XE"
             strategy="afterInteractive"
+            onLoad={() => {
+              // Mark analytics as loaded for performance tracking
+              if (typeof window !== 'undefined' && 'performance' in window) {
+                window.performance.mark('analytics-loaded');
+              }
+            }}
           />
           <Script id="google-analytics" strategy="afterInteractive">
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-HDJ50NB3XE');
+              gtag('config', 'G-HDJ50NB3XE', {
+                send_page_view: false, // Manually track page views for better performance
+              });
+              
+              // Track initial page view after the page is interactive
+              document.addEventListener('DOMContentLoaded', function() {
+                gtag('event', 'page_view', {
+                  page_title: document.title,
+                  page_location: window.location.href,
+                  page_path: window.location.pathname,
+                });
+              });
             `}
           </Script>
           
           <AuthProvider>
             <LanguageProvider>
               <Providers>
+                {/* Add progress bar for better perceived performance */}
+                <ProgressBar
+                  height="3px"
+                  color="#38a169"
+                  options={{ showSpinner: false }}
+                  shallowRouting
+                />
                 <Component {...pageProps} />
                 <Toaster position={isRTL ? "top-left" : "top-right"} />
               </Providers>
