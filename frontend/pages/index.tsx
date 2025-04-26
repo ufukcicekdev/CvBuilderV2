@@ -281,6 +281,7 @@ export default function Home() {
                   component="h1"
                   variant="h2"
                   color="text.primary"
+                  
                   gutterBottom
                   sx={{
                     fontWeight: 800,
@@ -331,7 +332,7 @@ export default function Home() {
                 >
                   <Typography 
                     variant="h4" 
-                    component="div" 
+                    component="h2" 
                     sx={{ 
                       fontWeight: 'bold',
                       position: 'relative',
@@ -342,6 +343,7 @@ export default function Home() {
                   </Typography>
                   <Typography 
                     variant="subtitle1" 
+                    component="p"
                     sx={{
                       mt: 1,
                       position: 'relative',
@@ -411,19 +413,19 @@ export default function Home() {
                 <Box component="ul" sx={{ mt: 4, pl: 0, listStyle: 'none' }}>
                   <Box component="li" sx={{ mt: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" component="span" color="text.secondary">
                       {t('home.hero.feature1')}
                     </Typography>
                   </Box>
                   <Box component="li" sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" component="span" color="text.secondary">
                       {t('home.hero.feature2')}
                     </Typography>
                   </Box>
                   <Box component="li" sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" component="span" color="text.secondary">
                       {t('home.hero.feature3')}
                     </Typography>
                   </Box>
@@ -473,6 +475,7 @@ export default function Home() {
             </Typography>
             <Typography
               variant="h6"
+              component="p"
               color="text.secondary"
               sx={{ maxWidth: '800px', mx: 'auto' }}
             >
@@ -510,10 +513,10 @@ export default function Home() {
             aria-label={t('subscription.freeTrialText')}
           >
             <Box sx={{ position: 'relative', zIndex: 1 }}>
-              <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
                 {t('subscription.freeTrialText')}
               </Typography>
-              <Typography variant="h6" sx={{ mb: 3 }}>
+              <Typography variant="h5" component="h3" sx={{ mb: 3 }}>
                 {t('subscription.freeTrialDescription')}
               </Typography>
 
@@ -521,7 +524,7 @@ export default function Home() {
                 <Grid item xs={12} sm={4}>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <CheckCircleIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    <Typography variant="subtitle1" component="h4" sx={{ fontWeight: 'bold' }}>
                       {t('home.hero.feature1')}
                     </Typography>
                   </Box>
@@ -529,7 +532,7 @@ export default function Home() {
                 <Grid item xs={12} sm={4}>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <CheckCircleIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    <Typography variant="subtitle1" component="h4" sx={{ fontWeight: 'bold' }}>
                       {t('home.hero.feature2')}
                     </Typography>
                   </Box>
@@ -537,7 +540,7 @@ export default function Home() {
                 <Grid item xs={12} sm={4}>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <CheckCircleIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    <Typography variant="subtitle1" component="h4" sx={{ fontWeight: 'bold' }}>
                       {t('home.hero.feature3')}
                     </Typography>
                   </Box>
@@ -599,7 +602,7 @@ export default function Home() {
                     <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
                       {feature.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" component="p" color="text.secondary">
                       {feature.description}
                     </Typography>
                   </CardContent>
@@ -631,7 +634,8 @@ export default function Home() {
               {t('home.templates.title')}
             </Typography>
             <Typography
-              variant="h6"
+              variant="subtitle1"
+              component="p"
               color="text.secondary"
               sx={{ maxWidth: '800px', mx: 'auto' }}
             >
@@ -748,7 +752,7 @@ export default function Home() {
                     <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
                       {step.title}
                     </Typography>
-                    <Typography color="text.secondary">
+                    <Typography variant="body1" component="p" color="text.secondary">
                       {step.description}
                     </Typography>
                   </CardContent>
@@ -781,6 +785,7 @@ export default function Home() {
             </Typography>
             <Typography
               variant="h6"
+              component="p"
               color="text.secondary"
               sx={{ maxWidth: '800px', mx: 'auto' }}
             >
@@ -814,7 +819,7 @@ export default function Home() {
                         />
                       ))}
                     </Box>
-                    <Typography variant="body1" paragraph sx={{ fontStyle: 'italic', mb: 3 }}>
+                    <Typography variant="subtitle1" component="p" sx={{ fontStyle: 'italic', mb: 3 }}>
                       &ldquo;{testimonial.content}&rdquo;
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
@@ -828,10 +833,10 @@ export default function Home() {
                         {testimonial.name.charAt(0)}
                       </Avatar>
                       <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                        <Typography variant="subtitle2" component="p" sx={{ fontWeight: 'bold' }}>
                           {testimonial.name}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" component="p" color="text.secondary">
                           {testimonial.role}
                         </Typography>
                       </Box>
@@ -848,17 +853,27 @@ export default function Home() {
       <Box sx={{ py: 8, bgcolor: 'primary.main', color: 'white' }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
-            {stats.map((stat) => (
-              <Grid item xs={6} md={3} key={stat.key}>
+            {stats.map((stat, index) => (
+              <Grid item xs={6} md={3} key={index}>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography
-                    variant="h2"
-                    gutterBottom
-                    sx={{ fontWeight: 800, color: 'white' }}
+                  <Typography 
+                    variant="h3" 
+                    component="h3"
+                    sx={{
+                      fontWeight: 'bold',
+                      mb: 1,
+                      color: 'white'
+                    }}
                   >
                     {stat.value}
                   </Typography>
-                  <Typography variant="h6" sx={{ opacity: 0.9 }}>
+                  <Typography 
+                    variant="h6" 
+                    component="p"
+                    sx={{
+                      opacity: 0.9
+                    }}
+                  >
                     {t(`home.stats.${stat.key}`)}
                   </Typography>
                 </Box>
@@ -891,7 +906,8 @@ export default function Home() {
                 {t('home.cta.title')}
               </Typography>
               <Typography
-                variant="h6"
+                variant="subtitle1"
+                component="p"
                 align="center"
                 sx={{ color: 'white', opacity: 0.9, mb: 4 }}
               >
