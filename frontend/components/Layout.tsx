@@ -14,9 +14,26 @@ export default function Layout({ children }: LayoutProps) {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        minHeight: '100vh',
+        position: 'relative',
+        overflow: 'hidden',
+        width: '100%',
+      }}
+    >
       <Navbar />
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1,
+          position: 'relative',
+          width: '100%',
+          overflow: 'auto'
+        }}
+      >
         {children}
       </Box>
       <Footer />

@@ -4,12 +4,14 @@ const { i18n } = require('./next-i18next.config');
 const nextConfig = {
   i18n,
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: false, // For better source maps, disable swcMinify
   compiler: {
     emotion: true,
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
+    // Enable source maps for better debugging
+    sourceMap: true,
   },
   
   // API isteklerini backend'e yönlendirmek için proxy ayarları
@@ -37,7 +39,7 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
-  // HTTP Headers with cache optimizations
+  // HTTP Headers with cache optimizations and security
   async headers() {
     return [
       {
@@ -66,6 +68,16 @@ const nextConfig = {
           {
             key: 'Priority',
             value: 'high'
+          },
+          // Add Content-Security-Policy to restrict third-party resources
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://web-production-9f41e.up.railway.app; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content; base-uri 'self';"
+          },
+          // Add cookie policies
+          {
+            key: 'Set-Cookie',
+            value: 'Path=/; HttpOnly; Secure; SameSite=Strict'
           }
         ],
       },
@@ -132,6 +144,15 @@ const nextConfig = {
         ],
       },
       {
+        source: '/:path*.js.map',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          }
+        ],
+      },
+      {
         source: '/images/hero-image.svg',
         headers: [
           {
@@ -149,12 +170,44 @@ const nextConfig = {
   
   // Webpack optimizasyonları
   webpack: (config, { dev, isServer }) => {
+    // For better source maps in both development and production
+    if (!isServer) {
+      // More detailed source maps for development
+      if (dev) {
+        config.devtool = 'eval-source-map';
+      } else {
+        // Proper source maps for production
+        config.devtool = 'source-map';
+        
+        // Ensure source maps are generated for specific files
+        config.module.rules.push({
+          test: /\.(js|jsx|ts|tsx)$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              sourceMaps: true,
+              inputSourceMap: true,
+            }
+          }
+        });
+      }
+    }
+    
     // Only run in production client-side build
     if (!dev && !isServer) {
       // Optimize for production
       config.optimization = {
         ...config.optimization,
         minimize: true,
+        minimizer: [
+          ...config.optimization.minimizer || [],
+          // Ensure terser generates source maps
+          new (require('terser-webpack-plugin'))({
+            terserOptions: {
+              sourceMap: true,
+            },
+          }),
+        ],
         splitChunks: {
           chunks: 'all',
           cacheGroups: {
@@ -185,6 +238,19 @@ const nextConfig = {
           },
         },
       };
+      
+      // Add plugins for source map generation
+      config.plugins.push(
+        new (require('webpack')).SourceMapDevToolPlugin({
+          filename: '[file].map',
+          // Specifically include these files
+          include: [
+            /pages[\\/]index\.js/,
+            /pages[\\/]_app\.js/,
+            /chunks[\\/]main\.js/,
+          ],
+        })
+      );
     }
     
     return config;
@@ -197,7 +263,8 @@ const nextConfig = {
     workerThreads: true,
   },
   
-  productionBrowserSourceMaps: false, // Disable source maps in production for better performance
+  // Enable source maps in production
+  productionBrowserSourceMaps: true,
 };
 
 module.exports = nextConfig;
