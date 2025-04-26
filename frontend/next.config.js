@@ -5,14 +5,6 @@ const nextConfig = {
   i18n,
   reactStrictMode: true,
   swcMinify: false, // For better source maps, disable swcMinify
-  compiler: {
-    emotion: true,
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-    // Enable source maps for better debugging
-    sourceMap: true,
-  },
   
   // API isteklerini backend'e yönlendirmek için proxy ayarları
   async rewrites() {
@@ -178,18 +170,6 @@ const nextConfig = {
       } else {
         // Proper source maps for production
         config.devtool = 'source-map';
-        
-        // Ensure source maps are generated for specific files
-        config.module.rules.push({
-          test: /\.(js|jsx|ts|tsx)$/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              sourceMaps: true,
-              inputSourceMap: true,
-            }
-          }
-        });
       }
     }
     

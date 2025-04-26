@@ -42,8 +42,21 @@ class MyDocument extends Document {
             href="/hero-image.svg" 
             as="image" 
             type="image/svg+xml" 
-            fetchPriority="high" 
           />
+          
+          {/* Add fetchpriority with HTML method that bypasses React's prop system */}
+          {(() => {
+            // This executes on render and manipulates the DOM directly
+            if (typeof document !== 'undefined') {
+              setTimeout(() => {
+                const link = document.querySelector('link[href="/hero-image.svg"]');
+                if (link) {
+                  link.setAttribute('fetchpriority', 'high');
+                }
+              }, 0);
+            }
+            return null;
+          })()}
           
           {/* Make sure critical fonts are loaded early, but don't block rendering */}
           <link
