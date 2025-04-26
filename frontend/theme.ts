@@ -1,21 +1,53 @@
 import { createTheme } from '@mui/material/styles';
+import { ThemeOptions } from '@mui/material/styles';
 
-export const theme = createTheme({
+// Create a theme instance with shared options
+const getThemeOptions = (mode: 'light' | 'dark'): ThemeOptions => ({
   palette: {
-    primary: {
-      main: '#2196f3',
-      light: '#64b5f6',
-      dark: '#1976d2',
-    },
-    secondary: {
-      main: '#f50057',
-      light: '#ff4081',
-      dark: '#c51162',
-    },
-    background: {
-      default: '#f5f5f5',
-      paper: '#ffffff',
-    },
+    mode,
+    ...(mode === 'light'
+      ? {
+          // Light mode palette
+          primary: {
+            main: '#1565c0',
+            light: '#4f83cc',
+            dark: '#0d47a1',
+          },
+          secondary: {
+            main: '#c2185b',
+            light: '#e91e63',
+            dark: '#880e4f',
+          },
+          background: {
+            default: '#f5f5f5',
+            paper: '#ffffff',
+          },
+          text: {
+            primary: '#212121',
+            secondary: '#616161',
+          },
+        }
+      : {
+          // Dark mode palette
+          primary: {
+            main: '#82b1ff',
+            light: '#aed8ff',
+            dark: '#5472d3',
+          },
+          secondary: {
+            main: '#ff80ab',
+            light: '#ffb2dd',
+            dark: '#c94f7c',
+          },
+          background: {
+            default: '#121212',
+            paper: '#1e1e1e',
+          },
+          text: {
+            primary: '#ffffff',
+            secondary: '#aaaaaa',
+          },
+        }),
   },
   typography: {
     fontFamily: [
@@ -80,6 +112,9 @@ export const theme = createTheme({
     },
   },
 });
+
+// Create the light theme (default)
+export const theme = createTheme(getThemeOptions('light'));
 
 // TypeScript için tema tipini genişlet
 declare module '@mui/material/styles' {

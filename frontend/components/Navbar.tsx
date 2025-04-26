@@ -178,6 +178,7 @@ export default function Navbar() {
             <IconButton
               color="inherit"
               onClick={handleLangMenuClick}
+              aria-label={t('nav.selectLanguage')}
             >
               <LanguageIcon />
             </IconButton>
@@ -192,6 +193,7 @@ export default function Navbar() {
               onClick={handleLangMenuClick}
               edge="end"
               sx={{ mr: 1 }}
+              aria-label={t('nav.selectLanguage')}
             >
               <LanguageIcon />
             </IconButton>
@@ -199,6 +201,7 @@ export default function Navbar() {
               color="inherit"
               onClick={handleMobileMenuClick}
               edge="end"
+              aria-label={t('nav.openMenu')}
             >
               <MenuIcon />
             </IconButton>

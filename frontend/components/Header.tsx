@@ -90,6 +90,7 @@ export default function Header() {
               onClick={handleMenu}
               color="inherit"
               edge="end"
+              aria-label={t('nav.userMenu')}
             >
               {user?.email ? (
                 <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
