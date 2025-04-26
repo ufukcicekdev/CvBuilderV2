@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+  <rect width="800" height="600" fill="#F8F9FA"/>
+  <path d="M400 150C303.471 150 225 228.471 225 325C225 421.529 303.471 500 400 500C496.529 500 575 421.529 575 325C575 228.471 496.529 150 400 150Z" stroke="#4F46E5" stroke-width="8"/>
+  <path d="M325 325L375 375L475 275" stroke="#4F46E5" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> 
