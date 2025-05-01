@@ -64,7 +64,8 @@ const nextConfig = {
           // Add Content-Security-Policy to restrict third-party resources
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://web-production-9f41e.up.railway.app; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content; base-uri 'self';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' www.googletagmanager.com www.google-analytics.com www.gstatic.com www.google.com accounts.google.com googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com accounts.google.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https: www.google-analytics.com www.googletagmanager.com www.google.com www.gstatic.com; connect-src 'self' https://web-production-9f41e.up.railway.app www.google-analytics.com www.googletagmanager.com www.google.com www.gstatic.com accounts.google.com google.com; frame-ancestors 'self'; frame-src www.google.com www.gstatic.com www.googletagmanager.com accounts.google.com td.doubleclick.net; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content; base-uri 'self';"
+
           },
           // Add cookie policies
           {
