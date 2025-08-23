@@ -151,7 +151,7 @@ export default function PrivacyPolicy() {
               {t('privacy.contact.description')}
             </Typography>
             <Typography variant="body1" paragraph>
-              {t('privacy.contact.email')}: info@cvbuilder.tech
+              {t('privacy.contact.email')}: info@cvbuilder.dev
             </Typography>
           </Box>
         </Paper>

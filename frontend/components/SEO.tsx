@@ -36,8 +36,8 @@ const defaultStructuredData = {
     availability: 'https://schema.org/InStock',
   },
   operatingSystem: 'Web',
-  screenshot: 'https://cvbuilder.tech/og-image.svg',
-  url: 'https://cvbuilder.tech',
+  screenshot: 'https://cvbuilder.dev/og-image.svg',
+  url: 'https://cvbuilder.dev',
   aggregateRating: {
     '@type': 'AggregateRating',
     ratingValue: '4.7',
@@ -59,7 +59,7 @@ export default function SEO({
   structuredData = defaultStructuredData,
 }: SEOProps) {
   const router = useRouter();
-  const fullUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cvbuilder.tech';
+  const fullUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cvbuilder.dev';
   const currentPath = router.asPath;
   const currentUrl = `${fullUrl}${currentPath}`;
   const canonical = canonicalUrl || currentUrl;

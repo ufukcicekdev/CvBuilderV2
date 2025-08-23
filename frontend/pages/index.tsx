@@ -257,7 +257,7 @@ export default function Home() {
       <SEO 
         title={t('home.seo.title')}
         description={t('home.seo.description')}
-        canonicalUrl="https://cvbuilder.tech"
+        canonicalUrl="https://cvbuilder.dev"
       />
       
       {/* Hero Section */}

@@ -169,7 +169,7 @@ export default function TermsOfService() {
               {t('terms.contact.description')}
             </Typography>
             <Typography variant="body1" paragraph>
-              {t('terms.contact.email')}: info@cvbuilder.tech
+              {t('terms.contact.email')}: info@cvbuilder.dev
             </Typography>
           </Box>
         </Paper>

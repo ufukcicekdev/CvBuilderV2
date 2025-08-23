@@ -5,7 +5,7 @@
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <!-- Homepage -->
   <url>
-    <loc>https://cvbuilder.tech/</loc>
+    <loc>https://cvbuilder.dev/</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>1.00</priority>
     <changefreq>weekly</changefreq>
@@ -13,7 +13,7 @@
   
   <!-- Login Page -->
   <url>
-    <loc>https://cvbuilder.tech/login</loc>
+    <loc>https://cvbuilder.dev/login</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.80</priority>
     <changefreq>monthly</changefreq>
@@ -21,7 +21,7 @@
   
   <!-- Register Page -->
   <url>
-    <loc>https://cvbuilder.tech/register</loc>
+    <loc>https://cvbuilder.dev/register</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.80</priority>
     <changefreq>monthly</changefreq>
@@ -29,7 +29,7 @@
   
   <!-- Contact Page -->
   <url>
-    <loc>https://cvbuilder.tech/contact</loc>
+    <loc>https://cvbuilder.dev/contact</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.70</priority>
     <changefreq>monthly</changefreq>
@@ -37,7 +37,7 @@
   
   <!-- Pricing Page -->
   <url>
-    <loc>https://cvbuilder.tech/pricing</loc>
+    <loc>https://cvbuilder.dev/pricing</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.90</priority>
     <changefreq>monthly</changefreq>
@@ -45,7 +45,7 @@
 
   <!-- Privacy Policy Page -->
   <url>
-    <loc>https://cvbuilder.tech/privacy-policy</loc>
+    <loc>https://cvbuilder.dev/privacy-policy</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.60</priority>
     <changefreq>monthly</changefreq>
@@ -53,7 +53,7 @@
 
   <!-- Terms of Service Page -->
   <url>
-    <loc>https://cvbuilder.tech/terms-of-service</loc>
+    <loc>https://cvbuilder.dev/terms-of-service</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.60</priority>
     <changefreq>monthly</changefreq>
@@ -61,7 +61,7 @@
 
   <!-- Templates Pages -->
   <url>
-    <loc>https://cvbuilder.tech/templates</loc>
+    <loc>https://cvbuilder.dev/templates</loc>
     <lastmod>2024-04-21T12:00:00+00:00</lastmod>
     <priority>0.85</priority>
     <changefreq>weekly</changefreq>
