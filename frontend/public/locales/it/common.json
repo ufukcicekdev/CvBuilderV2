@@ -1,1 +1,13 @@
- 
+{
+  "cookie": {
+    "bannerText": "Il nostro sito utilizza i cookie per migliorare l'esperienza dell'utente e per fornire i nostri servizi.",
+    "moreInfo": "Per ulteriori informazioni, è possibile consultare la nostra <link>politica sulla privacy</link>.",
+    "decline": "Rifiuta",
+    "accept": "Accetta"
+  },
+  "auth": {
+    "errors": {
+      "cookieConsentRequired": "Devi accettare i cookie per accedere con Google."
+    }
+  }
+}

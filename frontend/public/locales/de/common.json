@@ -71,7 +71,8 @@
       "googleScriptError": "Google-Anmeldedienst konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
       "loginCancelled": "Anmeldung abgebrochen",
       "invalidResponse": "Ungültige Antwort vom Server",
-      "redirectFailed": "Weiterleitung fehlgeschlagen. Alternativer Versuch wird gestartet."
+      "redirectFailed": "Weiterleitung fehlgeschlagen. Alternativer Versuch wird gestartet.",
+      "cookieConsentRequired": "Sie müssen Cookies akzeptieren, um sich mit Google anzumelden."
     },
     "checkEmail": "Bitte überprüfen Sie Ihren Posteingang und klicken Sie auf den Bestätigungslink",
     "forgotPasswordInstructions": "Geben Sie Ihre registrierte E-Mail-Adresse ein, um Ihr Passwort zurückzusetzen.",
@@ -551,18 +552,18 @@
     "saveError": "Fehler beim Speichern",
     "loadError": "Fehler beim Laden des Lebenslaufs",
     "errors": {
-     "personalInfoRequired": "Bitte füllen Sie alle persönlichen Informationen aus",
-     "experienceRequired": "Sie müssen mindestens eine Berufserfahrung angeben",
-     "educationRequired": "Sie müssen mindestens eine Ausbildung angeben",
-     "skillsRequired": "Sie müssen mindestens eine Fähigkeit hinzufügen",
-     "languagesRequired": "Sie müssen mindestens eine Sprache angeben",
-     "experienceFieldsRequired": "Bitte geben Sie Unternehmen, Position und Startdatum für die Berufserfahrung an",
-     "educationFieldsRequired": "Bitte geben Sie Schule, Abschluss, Studienfach und Startdatum für die Ausbildung an",
-     "endDateRequired": "Enddatum ist erforderlich, wenn Sie nicht mehr eingeschrieben sind",
-     "titleRequired": "Bitte geben Sie einen Titel für den Lebenslauf ein",
-     "skillNameRequired": "Bitte geben Sie den Namen der Fähigkeit ein",
-     "certificateFieldsRequired": "Bitte geben Sie Zertifikatsname, ausstellende Organisation und Ausstellungsdatum an"
-   },
+      "personalInfoRequired": "Bitte füllen Sie alle persönlichen Informationen aus",
+      "experienceRequired": "Sie müssen mindestens eine Berufserfahrung angeben",
+      "educationRequired": "Sie müssen mindestens eine Ausbildung angeben",
+      "skillsRequired": "Sie müssen mindestens eine Fähigkeit hinzufügen",
+      "languagesRequired": "Sie müssen mindestens eine Sprache angeben",
+      "experienceFieldsRequired": "Bitte geben Sie Unternehmen, Position und Startdatum für die Berufserfahrung an",
+      "educationFieldsRequired": "Bitte geben Sie Schule, Abschluss, Studienfach und Startdatum für die Ausbildung an",
+      "endDateRequired": "Enddatum ist erforderlich, wenn Sie nicht mehr eingeschrieben sind",
+      "titleRequired": "Bitte geben Sie einen Titel für den Lebenslauf ein",
+      "skillNameRequired": "Bitte geben Sie den Namen der Fähigkeit ein",
+      "certificateFieldsRequired": "Bitte geben Sie Zertifikatsname, ausstellende Organisation und Ausstellungsdatum an"
+    },
     "currentStep": "Aktueller Schritt",
     "deleteConfirmTitle": "Lebenslauf löschen",
     "deleteConfirmMessage": "Sind Sie sicher, dass Sie diesen Lebenslauf löschen möchten?",
@@ -996,5 +997,12 @@
       "tryAgain": "Erneut versuchen",
       "contactSupport": "Support kontaktieren"
     }
+  },
+  "cookie": {
+    "bannerText": "Unsere Seite verwendet Cookies, um die Benutzererfahrung zu verbessern und unsere Dienste bereitzustellen.",
+    "moreInfo": "Weitere Informationen finden Sie in unserer <link>Datenschutzerklärung</link>.",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren",
+    "privacyPolicy": "Datenschutzrichtlinie"
   }
 }

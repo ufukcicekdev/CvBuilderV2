@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { 
   Container, 
@@ -8,14 +9,12 @@ import {
   Box, 
   Button, 
   Grid,
-  Paper,
   useTheme,
   useMediaQuery,
   Card,
   CardContent,
   Divider,
-  Avatar,
-  Chip
+  Avatar
 } from '@mui/material';
 import { 
   Description as DescriptionIcon,
@@ -33,6 +32,7 @@ import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
+import { motion, useInView } from 'framer-motion';
 
 // Add proper declaration for gtag
 declare global {
@@ -41,135 +41,142 @@ declare global {
   }
 }
 
-// Hero SVG - Optimized with accessibility improvements
-const HeroSvg = () => (
-  <svg 
-    width="100%" 
-    height="100%" 
-    viewBox="0 0 800 600" 
-    xmlns="http://www.w3.org/2000/svg"
-    aria-label="CV Builder Illustration"
-    role="img"
-  >
-    <title>CV Builder Illustration</title>
-    <desc>An illustration showing a CV document with various sections</desc>
-    <defs>
-      <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.8"/>
-        <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.9"/>
-      </linearGradient>
-      <clipPath id="screenMask">
-        <rect x="110" y="70" width="580" height="380" rx="20" />
-      </clipPath>
-    </defs>
-    
-    {/* Background Elements */}
-    <circle cx="650" cy="120" r="80" fill="url(#gradient1)" opacity="0.1" />
-    <circle cx="150" cy="500" r="100" fill="url(#gradient1)" opacity="0.1" />
-    <circle cx="400" cy="300" r="150" fill="url(#gradient1)" opacity="0.05" />
-    
-    {/* CV Document */}
-    <rect x="110" y="70" width="580" height="380" rx="20" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="2" />
-    
-    {/* CV Content */}
-    <g clipPath="url(#screenMask)">
-      {/* Header */}
-      <rect x="110" y="70" width="580" height="80" fill="#F9FAFB" />
-      <circle cx="170" cy="110" r="30" fill="#4F46E5" />
-      <rect x="220" y="95" width="200" height="12" rx="6" fill="#111827" />
-      <rect x="220" y="115" width="150" height="10" rx="5" fill="#6B7280" />
-      
-      {/* Content */}
-      <rect x="130" y="170" width="200" height="15" rx="7" fill="#4F46E5" />
-      <rect x="130" y="195" width="540" height="10" rx="5" fill="#E5E7EB" />
-      <rect x="130" y="215" width="540" height="10" rx="5" fill="#E5E7EB" />
-      <rect x="130" y="235" width="540" height="10" rx="5" fill="#E5E7EB" />
-      
-      <rect x="130" y="270" width="200" height="15" rx="7" fill="#4F46E5" />
-      <rect x="130" y="295" width="540" height="10" rx="5" fill="#E5E7EB" />
-      <rect x="130" y="315" width="540" height="10" rx="5" fill="#E5E7EB" />
-      <rect x="130" y="335" width="540" height="10" rx="5" fill="#E5E7EB" />
-      
-      <rect x="130" y="370" width="200" height="15" rx="7" fill="#4F46E5" />
-      <rect x="130" y="395" width="540" height="10" rx="5" fill="#E5E7EB" />
-      <rect x="130" y="415" width="540" height="10" rx="5" fill="#E5E7EB" />
-    </g>
-  </svg>
+// Animated Hero SVG
+const HeroSvg = () => {
+  const svgVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
+  return (
+    <motion.svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 800 600"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="CV Builder Illustration"
+      role="img"
+      variants={svgVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <title>CV Builder Illustration</title>
+      <desc>An illustration showing a CV document with various sections</desc>
+      <defs>
+        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.9" />
+        </linearGradient>
+        <clipPath id="screenMask">
+          <rect x="110" y="70" width="580" height="380" rx="20" />
+        </clipPath>
+      </defs>
+
+      <motion.circle cx="650" cy="120" r="80" fill="url(#gradient1)" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 0.1, scale: 1, transition: { duration: 1 } }} />
+      <motion.circle cx="150" cy="500" r="100" fill="url(#gradient1)" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 0.1, scale: 1, transition: { duration: 1, delay: 0.2 } }} />
+
+      <motion.g variants={itemVariants}>
+        <rect x="110" y="70" width="580" height="380" rx="20" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="2" />
+      </motion.g>
+
+      <g clipPath="url(#screenMask)">
+        <motion.g variants={itemVariants}>
+          <rect x="110" y="70" width="580" height="80" fill="#F9FAFB" />
+          <circle cx="170" cy="110" r="30" fill="#4F46E5" />
+          <rect x="220" y="95" width="200" height="12" rx="6" fill="#111827" />
+          <rect x="220" y="115" width="150" height="10" rx="5" fill="#6B7280" />
+        </motion.g>
+
+        <motion.g variants={itemVariants}>
+          <rect x="130" y="170" width="200" height="15" rx="7" fill="#4F46E5" />
+          <rect x="130" y="195" width="540" height="10" rx="5" fill="#E5E7EB" />
+          <rect x="130" y="215" width="540" height="10" rx="5" fill="#E5E7EB" />
+        </motion.g>
+
+        <motion.g variants={itemVariants}>
+          <rect x="130" y="270" width="200" height="15" rx="7" fill="#4F46E5" />
+          <rect x="130" y="295" width="540" height="10" rx="5" fill="#E5E7EB" />
+          <rect x="130" y="315" width="540" height="10" rx="5" fill="#E5E7EB" />
+        </motion.g>
+        
+        <motion.g variants={itemVariants}>
+          <rect x="130" y="370" width="200" height="15" rx="7" fill="#4F46E5" />
+          <rect x="130" y="395" width="540" height="10" rx="5" fill="#E5E7EB" />
+        </motion.g>
+      </g>
+    </motion.svg>
+  );
+};
+
+// Animated Template SVG for preview
+const TemplateSvg = () => (
+    <motion.svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 400 300"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="CV Template Example"
+      role="img"
+      whileHover={{ scale: 1.05 }}
+      transition={{ duration: 0.3 }}
+    >
+      <title>CV Template Example</title>
+      <desc>A simplified illustration of a CV template design</desc>
+      <rect width="400" height="300" fill="#F9FAFB" rx="8" />
+      <motion.circle cx="70" cy="70" r="50" fill="#4F46E5" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, duration: 0.5 }} />
+      <motion.rect x="140" y="30" width="240" height="20" rx="4" fill="#111827" initial={{ width: 0 }} animate={{ width: 240 }} transition={{ delay: 0.4, duration: 0.5 }} />
+      <motion.rect x="140" y="60" width="180" height="15" rx="4" fill="#6B7280" initial={{ width: 0 }} animate={{ width: 180 }} transition={{ delay: 0.6, duration: 0.5 }} />
+      <motion.rect x="140" y="85" width="220" height="15" rx="4" fill="#6B7280" initial={{ width: 0 }} animate={{ width: 220 }} transition={{ delay: 0.8, duration: 0.5 }} />
+      <rect x="20" y="140" width="360" height="1" fill="#E5E7EB" />
+      <motion.rect x="20" y="160" width="150" height="15" rx="4" fill="#4F46E5" initial={{ width: 0 }} animate={{ width: 150 }} transition={{ delay: 1, duration: 0.5 }} />
+      <motion.rect x="20" y="185" width="360" height="10" rx="4" fill="#E5E7EB" initial={{ width: 0 }} animate={{ width: 360 }} transition={{ delay: 1.2, duration: 0.5 }} />
+      <motion.rect x="20" y="205" width="360" height="10" rx="4" fill="#E5E7EB" initial={{ width: 0 }} animate={{ width: 360 }} transition={{ delay: 1.3, duration: 0.5 }} />
+      <motion.rect x="20" y="225" width="180" height="10" rx="4" fill="#E5E7EB" initial={{ width: 0 }} animate={{ width: 180 }} transition={{ delay: 1.4, duration: 0.5 }} />
+    </motion.svg>
 );
 
-// Template SVG - Optimized with accessibility improvements
-const TemplateSvg = () => (
-  <svg 
-    width="100%" 
-    height="100%" 
-    viewBox="0 0 400 300" 
-    xmlns="http://www.w3.org/2000/svg"
-    aria-label="CV Template Example"
-    role="img"
-  >
-    <title>CV Template Example</title>
-    <desc>A simplified illustration of a CV template design</desc>
-    <rect width="400" height="300" fill="#F9FAFB" rx="8" />
-    <rect x="20" y="20" width="100" height="100" rx="50" fill="#4F46E5" />
-    <rect x="140" y="30" width="240" height="20" rx="4" fill="#111827" />
-    <rect x="140" y="60" width="180" height="15" rx="4" fill="#6B7280" />
-    <rect x="140" y="85" width="220" height="15" rx="4" fill="#6B7280" />
-    <rect x="20" y="140" width="360" height="1" fill="#E5E7EB" />
-    <rect x="20" y="160" width="150" height="15" rx="4" fill="#4F46E5" />
-    <rect x="20" y="185" width="360" height="10" rx="4" fill="#E5E7EB" />
-    <rect x="20" y="205" width="360" height="10" rx="4" fill="#E5E7EB" />
-    <rect x="20" y="225" width="360" height="10" rx="4" fill="#E5E7EB" />
-    <rect x="20" y="245" width="180" height="10" rx="4" fill="#E5E7EB" />
-  </svg>
-);
+// Section wrapper for animations
+const AnimatedSection = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 50 }}
+      transition={{ duration: 0.8, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const [mounted, setMounted] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { isAuthenticated, user } = useAuth();
 
-  // Function to measure LCP
-  const measureLCP = () => {
-    if (typeof window !== 'undefined') {
-      new PerformanceObserver((entryList) => {
-        const entries = entryList.getEntries();
-        const lastEntry = entries[entries.length - 1] as unknown as {
-          startTime: number;
-          element?: Element;
-        };
-        const lcpTime = lastEntry.startTime;
-        // Only log in development
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(`LCP: ${lcpTime}ms`);
-        }
-        
-        // Send to analytics if available
-        if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'web_vitals', {
-            metric_name: 'LCP',
-            metric_value: lcpTime,
-          });
-        }
-      }).observe({ type: 'largest-contentful-paint', buffered: true });
-    }
-  };
-
   useEffect(() => {
-    setMounted(true);
-    
-    // Start LCP measurement
-    measureLCP();
-    
-    // Optimize hero image loading
-    const heroImg = document.querySelector('.hero-image') as HTMLImageElement;
-    if (heroImg) {
-      heroImg.loading = 'eager';
-      heroImg.fetchPriority = 'high';
-    }
-    
     // Preconnect to important domains
     const links = [
       { rel: 'preconnect', href: 'https://web-production-9f41e.up.railway.app' },
@@ -182,7 +189,6 @@ export default function Home() {
       link.href = linkData.href;
       document.head.appendChild(link);
     });
-    
   }, []);
 
   const features = [
@@ -238,19 +244,32 @@ export default function Home() {
     }
   ];
 
-  if (!mounted) {
-    return (
-      <Layout>
-        <Container maxWidth="sm">
-          <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography component="h1" variant="h3" gutterBottom>
-              CV Builder
-            </Typography>
-          </Box>
-        </Container>
-      </Layout>
-    );
-  }
+  const heroVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const heroItemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeInOut" as any,
+      },
+    },
+  };
+
+  const lightGradient1 = 'linear-gradient(170deg, #e9eaff 0%, #f5f7ff 100%)';
+  const lightGradient2 = 'linear-gradient(170deg, #f8f9ff 0%, #f1f3ff 100%)';
+  const darkGradient1 = `linear-gradient(170deg, ${theme.palette.background.default} 0%, #1a1d24 100%)`;
+  const darkGradient2 = `linear-gradient(170deg, #1a1d24 0%, #121418 100%)`;
 
   return (
     <Layout>
@@ -266,347 +285,167 @@ export default function Home() {
         aria-labelledby="hero-heading"
         sx={{
           position: 'relative',
-          bgcolor: 'background.paper',
-          pt: { xs: 4, sm: 8 },
-          pb: { xs: 8, sm: 12 },
+          background: theme.palette.mode === 'dark' ? darkGradient1 : lightGradient1,
+          pt: { xs: 6, sm: 10 },
+          pb: { xs: 10, sm: 16 },
           overflow: 'hidden',
         }}
       >
         <Container maxWidth="lg">
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Box>
-                <Typography
-                  id="hero-heading"
-                  component="h1"
-                  variant="h2"
-                  color="text.primary"
-                  
-                  gutterBottom
-                  sx={{
-                    fontWeight: 800,
-                    lineHeight: 1.2,
-                    fontSize: { xs: '2.5rem', md: '3.5rem' },
-                  }}
-                >
-                  {t('home.hero.title')}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  color="text.secondary"
-                  paragraph
-                  sx={{ mb: 4, maxWidth: '90%' }}
-                >
-                  {t('home.hero.subtitle')}
-                </Typography>
-
-                {/* 7 Günlük Ücretsiz Deneme Banner'ı */}
-                <Box 
-                  sx={{ 
-                    mb: 4, 
-                    p: 2, 
-                    bgcolor: 'primary.main', 
-                    borderRadius: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    color: 'white',
-                    boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.4)',
-                    transform: 'scale(1.05)',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%)',
-                      zIndex: 1
-                    }
-                  }}
-                  role="complementary"
-                  aria-label={t('subscription.freeTrialText')}
-                >
-                  <Typography 
-                    variant="h4" 
-                    component="h2" 
-                    sx={{ 
-                      fontWeight: 'bold',
-                      position: 'relative',
-                      zIndex: 2
-                    }}
-                  >
-                    {t('subscription.freeTrialText')}
-                  </Typography>
-                  <Typography 
-                    variant="subtitle1" 
-                    component="p"
+              <motion.div variants={heroVariants} initial="hidden" animate="visible">
+                <motion.div variants={heroItemVariants}>
+                  <Typography
+                    id="hero-heading"
+                    component="h1"
+                    variant="h2"
+                    color="text.primary"
+                    gutterBottom
                     sx={{
-                      mt: 1,
-                      position: 'relative',
-                      zIndex: 2
+                      fontWeight: 800,
+                      lineHeight: 1.2,
+                      fontSize: { xs: '2.8rem', md: '3.8rem' },
                     }}
                   >
-                    {t('subscription.freeTrialDescription')}
+                    {t('home.hero.title')}
                   </Typography>
-                </Box>
+                </motion.div>
+                <motion.div variants={heroItemVariants}>
+                  <Typography
+                    variant="h5"
+                    color="text.secondary"
+                    paragraph
+                    sx={{ mb: 4, maxWidth: '90%' }}
+                  >
+                    {t('home.hero.subtitle')}
+                  </Typography>
+                </motion.div>
 
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                  {isAuthenticated ? (
-                    <Button
-                      component={NextLink}
-                      href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
-                      variant="contained"
-                      size="large"
-                      sx={{ 
-                        px: 4, 
-                        py: 1.5, 
-                        borderRadius: '8px',
-                        fontWeight: 'bold',
-                        boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
-                      }}
-                      endIcon={<ArrowForwardIcon />}
-                      aria-label={t('home.hero.toDashboard')}
-                    >
-                      {t('home.hero.toDashboard')}
-                    </Button>
-                  ) : (
-                    <>
+                <motion.div variants={heroItemVariants}>
+                  <Box 
+                    sx={{ 
+                      mb: 4, 
+                      p: 2.5, 
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      borderRadius: 3,
+                      color: 'white',
+                      boxShadow: '0 10px 20px -5px rgba(102, 126, 234, 0.5)',
+                      textAlign: 'center'
+                    }}
+                    role="complementary"
+                    aria-label={t('subscription.freeTrialText')}
+                  >
+                    <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold' }}>
+                      {t('subscription.freeTrialText')}
+                    </Typography>
+                    <Typography variant="subtitle1" component="p" sx={{ mt: 1, opacity: 0.9 }}>
+                      {t('subscription.freeTrialDescription')}
+                    </Typography>
+                  </Box>
+                </motion.div>
+
+                <motion.div variants={heroItemVariants}>
+                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                    {isAuthenticated ? (
                       <Button
                         component={NextLink}
-                        href="/register"
+                        href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
                         variant="contained"
                         size="large"
-                        sx={{ 
-                          px: 4, 
-                          py: 1.5, 
-                          borderRadius: '8px',
-                          fontWeight: 'bold',
-                          boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)'
-                        }}
+                        sx={{ px: 4, py: 1.5, borderRadius: '12px', fontWeight: 'bold' }}
                         endIcon={<ArrowForwardIcon />}
-                        aria-label={t('home.hero.cta')}
+                        aria-label={t('home.hero.toDashboard')}
                       >
-                        {t('home.hero.cta')}
+                        {t('home.hero.toDashboard')}
                       </Button>
-                      <Button
-                        component={NextLink}
-                        href="/login"
-                        variant="outlined"
-                        size="large"
-                        sx={{ 
-                          px: 4, 
-                          py: 1.5, 
-                          borderRadius: '8px',
-                          fontWeight: 'bold'
-                        }}
-                        aria-label={t('auth.dontHaveAccount')}
-                      >
-                        {t('auth.dontHaveAccount')}
-                      </Button>
-                    </>
-                  )}
-                </Box>
-                <Box component="ul" sx={{ mt: 4, pl: 0, listStyle: 'none' }}>
-                  <Box component="li" sx={{ mt: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
-                    <Typography variant="body2" component="span" color="text.secondary">
-                      {t('home.hero.feature1')}
-                    </Typography>
+                    ) : (
+                      <>
+                        <Button
+                          component={NextLink}
+                          href="/register"
+                          variant="contained"
+                          size="large"
+                          sx={{ px: 4, py: 1.5, borderRadius: '12px', fontWeight: 'bold' }}
+                          endIcon={<ArrowForwardIcon />}
+                          aria-label={t('home.hero.cta')}
+                        >
+                          {t('home.hero.cta')}
+                        </Button>
+                        <Button
+                          component={NextLink}
+                          href="/login"
+                          variant="outlined"
+                          size="large"
+                          sx={{ px: 4, py: 1.5, borderRadius: '12px', fontWeight: 'bold' }}
+                          aria-label={t('auth.dontHaveAccount')}
+                        >
+                          {t('auth.dontHaveAccount')}
+                        </Button>
+                      </>
+                    )}
                   </Box>
-                  <Box component="li" sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
-                    <Typography variant="body2" component="span" color="text.secondary">
-                      {t('home.hero.feature2')}
-                    </Typography>
+                </motion.div>
+                <motion.div variants={heroItemVariants}>
+                  <Box component="ul" sx={{ mt: 4, pl: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {[t('home.hero.feature1'), t('home.hero.feature2'), t('home.hero.feature3')].map((feature, i) => (
+                      <Box component="li" key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <CheckCircleIcon color="success" />
+                        <Typography variant="body1" component="span" color="text.secondary">
+                          {feature}
+                        </Typography>
+                      </Box>
+                    ))}
                   </Box>
-                  <Box component="li" sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <CheckCircleIcon color="success" fontSize="small" aria-hidden="true" />
-                    <Typography variant="body2" component="span" color="text.secondary">
-                      {t('home.hero.feature3')}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
+                </motion.div>
+              </motion.div>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  position: 'relative',
-                  zIndex: 1,
-                  transform: { xs: 'scale(0.9)', md: 'scale(1)' },
-                  '&:hover': {
-                    transform: { xs: 'scale(0.92)', md: 'scale(1.02)' },
-                    transition: 'transform 0.3s ease-in-out',
-                  },
-                }}
-                className="hero-image"
-              >
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}>
                 <HeroSvg />
-              </Box>
+              </motion.div>
             </Grid>
           </Grid>
         </Container>
       </Box>
 
       {/* Features Section */}
-      <Box component="section" aria-labelledby="features-heading" sx={{ py: 8 }}>
+      <Box component="section" aria-labelledby="features-heading" sx={{ py: 12, background: theme.palette.mode === 'dark' ? darkGradient2 : lightGradient2 }}>
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              variant="overline"
-              color="primary"
-              sx={{ fontWeight: 'bold', letterSpacing: 1.2 }}
-            >
-              {t('home.features.overline')}
-            </Typography>
-            <Typography
-              id="features-heading"
-              component="h2"
-              variant="h3"
-              color="text.primary"
-              gutterBottom
-              sx={{ fontWeight: 700, mt: 1 }}
-            >
-              {t('home.features.title')}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="p"
-              color="text.secondary"
-              sx={{ maxWidth: '800px', mx: 'auto' }}
-            >
-              {t('home.features.subtitle')}
-            </Typography>
-          </Box>
-
-          {/* 7 Günlük Ücretsiz Deneme Feature Box */}
-          <Box
-            sx={{
-              p: 3,
-              mb: 5,
-              borderRadius: 3,
-              bgcolor: 'primary.light',
-              background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
-              color: 'white',
-              position: 'relative',
-              overflow: 'hidden',
-              textAlign: 'center',
-              boxShadow: '0 20px 25px -5px rgba(79, 70, 229, 0.3), 0 10px 10px -5px rgba(79, 70, 229, 0.2)',
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '100%',
-                height: '100%',
-                backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\' fill=\'%23ffffff\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")',
-                backgroundSize: 'cover',
-                opacity: 0.2,
-                zIndex: 0
-              }
-            }}
-            role="complementary"
-            aria-label={t('subscription.freeTrialText')}
-          >
-            <Box sx={{ position: 'relative', zIndex: 1 }}>
-              <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
-                {t('subscription.freeTrialText')}
+          <AnimatedSection>
+            <Box sx={{ textAlign: 'center', mb: 8 }}>
+              <Typography variant="overline" color="primary" sx={{ fontWeight: 'bold', letterSpacing: 1.5 }}>
+                {t('home.features.overline')}
               </Typography>
-              <Typography variant="h5" component="h3" sx={{ mb: 3 }}>
-                {t('subscription.freeTrialDescription')}
+              <Typography id="features-heading" component="h2" variant="h3" color="text.primary" gutterBottom sx={{ fontWeight: 700, mt: 1 }}>
+                {t('home.features.title')}
               </Typography>
-
-              <Grid container spacing={2} justifyContent="center" sx={{ mt: 3 }}>
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <CheckCircleIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="subtitle1" component="h4" sx={{ fontWeight: 'bold' }}>
-                      {t('home.hero.feature1')}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <CheckCircleIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="subtitle1" component="h4" sx={{ fontWeight: 'bold' }}>
-                      {t('home.hero.feature2')}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <CheckCircleIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <Typography variant="subtitle1" component="h4" sx={{ fontWeight: 'bold' }}>
-                      {t('home.hero.feature3')}
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-
-              <Button
-                component={NextLink}
-                href="/register"
-                variant="contained"
-                size="large"
-                sx={{ 
-                  mt: 4,
-                  bgcolor: 'white', 
-                  color: 'primary.main', 
-                  fontWeight: 'bold',
-                  px: 6,
-                  py: 1.5,
-                  borderRadius: 2,
-                  '&:hover': {
-                    bgcolor: 'grey.100',
-                  }
-                }}
-              >
-                {t('home.hero.cta')}
-              </Button>
+              <Typography variant="h6" component="p" color="text.secondary" sx={{ maxWidth: '800px', mx: 'auto' }}>
+                {t('home.features.subtitle')}
+              </Typography>
             </Box>
-          </Box>
+          </AnimatedSection>
 
           <Grid container spacing={4}>
-            {features.map((feature) => (
+            {features.map((feature, index) => (
               <Grid item xs={12} sm={6} md={3} key={feature.title}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    borderRadius: '16px',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[10],
-                    },
-                  }}
-                >
-                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                    <Box
-                      sx={{
-                        display: 'inline-flex',
-                        p: 2,
-                        borderRadius: '12px',
-                        bgcolor: 'primary.light',
-                        color: 'primary.main',
-                        mb: 2,
-                      }}
-                    >
-                      {feature.icon}
-                    </Box>
-                    <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
-                      {feature.title}
-                    </Typography>
-                    <Typography variant="body2" component="p" color="text.secondary">
-                      {feature.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <AnimatedSection delay={index * 0.1}>
+                  <motion.div whileHover={{ y: -10, transition: { duration: 0.3 } }}>
+                    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: '20px', boxShadow: theme.shadows[2], overflow: 'hidden', background: theme.palette.background.paper }}>
+                      <CardContent sx={{ flexGrow: 1, p: 4 }}>
+                        <Box sx={{ display: 'inline-flex', p: 2, borderRadius: 3, bgcolor: 'primary.light', color: 'primary.main', mb: 2.5 }}>
+                          {feature.icon}
+                        </Box>
+                        <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
+                          {feature.title}
+                        </Typography>
+                        <Typography variant="body1" component="p" color="text.secondary">
+                          {feature.description}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </AnimatedSection>
               </Grid>
             ))}
           </Grid>
@@ -614,149 +453,84 @@ export default function Home() {
       </Box>
 
       {/* Templates Preview Section */}
-      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
+      <Box sx={{ py: 12, background: theme.palette.mode === 'dark' ? darkGradient1 : lightGradient1 }}>
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              variant="overline"
-              color="primary"
-              sx={{ fontWeight: 'bold', letterSpacing: 1.2 }}
-            >
-              {t('home.templates.overline')}
-            </Typography>
-            <Typography
-              component="h2"
-              variant="h3"
-              color="text.primary"
-              gutterBottom
-              sx={{ fontWeight: 700, mt: 1 }}
-            >
-              {t('home.templates.title')}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              component="p"
-              color="text.secondary"
-              sx={{ maxWidth: '800px', mx: 'auto' }}
-            >
-              {t('home.templates.subtitle')}
-            </Typography>
-          </Box>
+          <AnimatedSection>
+            <Box sx={{ textAlign: 'center', mb: 8 }}>
+              <Typography variant="overline" color="primary" sx={{ fontWeight: 'bold', letterSpacing: 1.5 }}>
+                {t('home.templates.overline')}
+              </Typography>
+              <Typography component="h2" variant="h3" color="text.primary" gutterBottom sx={{ fontWeight: 700, mt: 1 }}>
+                {t('home.templates.title')}
+              </Typography>
+              <Typography variant="h6" component="p" color="text.secondary" sx={{ maxWidth: '800px', mx: 'auto' }}>
+                {t('home.templates.subtitle')}
+              </Typography>
+            </Box>
+          </AnimatedSection>
 
-          <Grid container spacing={4} justifyContent="center">
-            {[1, 2, 3].map((template) => (
+          <Grid container spacing={5} justifyContent="center">
+            {[1, 2, 3].map((template, index) => (
               <Grid item xs={12} sm={6} md={4} key={template}>
-                <Box
-                  sx={{
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    boxShadow: theme.shadows[2],
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'scale(1.03)',
-                      boxShadow: theme.shadows[8],
-                    },
-                  }}
-                >
-                  <TemplateSvg />
-                </Box>
+                <AnimatedSection delay={index * 0.1}>
+                  <motion.div whileHover={{ scale: 1.05, boxShadow: theme.shadows[12], transition: { duration: 0.3 } }} style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: theme.shadows[4] }}>
+                    <TemplateSvg />
+                  </motion.div>
+                </AnimatedSection>
               </Grid>
             ))}
           </Grid>
 
-          <Box sx={{ textAlign: 'center', mt: 6 }}>
-            {isAuthenticated ? (
+          <AnimatedSection>
+            <Box sx={{ textAlign: 'center', mt: 8 }}>
               <Button
                 component={NextLink}
-                href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
+                href={isAuthenticated ? (user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv') : "/register"}
                 variant="contained"
                 size="large"
-                sx={{ borderRadius: '8px', px: 4, py: 1.5 }}
+                sx={{ borderRadius: '12px', px: 5, py: 1.5, fontWeight: 'bold' }}
               >
-                {t('home.hero.toDashboard')}
+                {isAuthenticated ? t('home.hero.toDashboard') : t('home.templates.cta')}
               </Button>
-            ) : (
-              <Button
-                component={NextLink}
-                href="/register"
-                variant="contained"
-                size="large"
-                sx={{ borderRadius: '8px', px: 4, py: 1.5 }}
-              >
-                {t('home.templates.cta')}
-              </Button>
-            )}
-          </Box>
+            </Box>
+          </AnimatedSection>
         </Container>
       </Box>
 
       {/* How It Works Section */}
-      <Box sx={{ py: 8 }}>
+      <Box sx={{ py: 12, background: theme.palette.mode === 'dark' ? darkGradient2 : lightGradient2 }}>
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              variant="overline"
-              color="primary"
-              sx={{ fontWeight: 'bold', letterSpacing: 1.2 }}
-            >
-              {t('home.howItWorks.overline')}
-            </Typography>
-            <Typography
-              component="h2"
-              variant="h3"
-              color="text.primary"
-              gutterBottom
-              sx={{ fontWeight: 700, mt: 1 }}
-            >
-              {t('home.howItWorks.title')}
-            </Typography>
-          </Box>
+          <AnimatedSection>
+            <Box sx={{ textAlign: 'center', mb: 8 }}>
+              <Typography variant="overline" color="primary" sx={{ fontWeight: 'bold', letterSpacing: 1.5 }}>
+                {t('home.howItWorks.overline')}
+              </Typography>
+              <Typography component="h2" variant="h3" color="text.primary" gutterBottom sx={{ fontWeight: 700, mt: 1 }}>
+                {t('home.howItWorks.title')}
+              </Typography>
+            </Box>
+          </AnimatedSection>
 
           <Grid container spacing={4}>
             {steps.map((step: any, index: number) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    position: 'relative',
-                    borderRadius: '16px',
-                    overflow: 'visible',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[8],
-                    },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: -20,
-                      left: 20,
-                      width: 40,
-                      height: 40,
-                      borderRadius: '50%',
-                      bgcolor: 'primary.main',
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold',
-                      fontSize: '1.25rem',
-                      boxShadow: theme.shadows[4],
-                    }}
-                  >
-                    {index + 1}
-                  </Box>
-                  <CardContent sx={{ pt: 4, px: 3, pb: 3 }}>
-                    <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
-                      {step.title}
-                    </Typography>
-                    <Typography variant="body1" component="p" color="text.secondary">
-                      {step.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <AnimatedSection delay={index * 0.1}>
+                  <motion.div whileHover={{ y: -10, transition: { duration: 0.3 } }} style={{ height: '100%' }}>
+                    <Card sx={{ height: '100%', position: 'relative', borderRadius: '20px', overflow: 'visible', boxShadow: theme.shadows[2], background: theme.palette.background.paper }}>
+                      <Box sx={{ position: 'absolute', top: -24, left: '50%', transform: 'translateX(-50%)', width: 48, height: 48, borderRadius: '50%', bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.5rem', boxShadow: theme.shadows[6] }}>
+                        {index + 1}
+                      </Box>
+                      <CardContent sx={{ pt: 5, px: 3, pb: 3, textAlign: 'center' }}>
+                        <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600, mt: 2 }}>
+                          {step.title}
+                        </Typography>
+                        <Typography variant="body1" component="p" color="text.secondary">
+                          {step.description}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </AnimatedSection>
               </Grid>
             ))}
           </Grid>
@@ -764,85 +538,55 @@ export default function Home() {
       </Box>
 
       {/* Testimonials Section */}
-      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
+      <Box sx={{ py: 12, background: theme.palette.mode === 'dark' ? darkGradient1 : lightGradient1 }}>
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              variant="overline"
-              color="primary"
-              sx={{ fontWeight: 'bold', letterSpacing: 1.2 }}
-            >
-              {t('home.testimonials.overline')}
-            </Typography>
-            <Typography
-              component="h2"
-              variant="h3"
-              color="text.primary"
-              gutterBottom
-              sx={{ fontWeight: 700, mt: 1 }}
-            >
-              {t('home.testimonials.title')}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="p"
-              color="text.secondary"
-              sx={{ maxWidth: '800px', mx: 'auto' }}
-            >
-              {t('home.testimonials.subtitle')}
-            </Typography>
-          </Box>
+          <AnimatedSection>
+            <Box sx={{ textAlign: 'center', mb: 8 }}>
+              <Typography variant="overline" color="primary" sx={{ fontWeight: 'bold', letterSpacing: 1.5 }}>
+                {t('home.testimonials.overline')}
+              </Typography>
+              <Typography component="h2" variant="h3" color="text.primary" gutterBottom sx={{ fontWeight: 700, mt: 1 }}>
+                {t('home.testimonials.title')}
+              </Typography>
+              <Typography variant="h6" component="p" color="text.secondary" sx={{ maxWidth: '800px', mx: 'auto' }}>
+                {t('home.testimonials.subtitle')}
+              </Typography>
+            </Box>
+          </AnimatedSection>
 
           <Grid container spacing={4}>
             {testimonials.map((testimonial, index) => (
               <Grid item xs={12} md={4} key={index}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    borderRadius: '16px',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[8],
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    <Box sx={{ display: 'flex', mb: 2 }}>
-                      {[...Array(5)].map((_, i) => (
-                        <StarIcon
-                          key={i}
-                          sx={{
-                            color: i < testimonial.rating ? 'warning.main' : 'action.disabled',
-                            fontSize: '1.25rem',
-                          }}
-                        />
-                      ))}
-                    </Box>
-                    <Typography variant="subtitle1" component="p" sx={{ fontStyle: 'italic', mb: 3 }}>
-                      &ldquo;{testimonial.content}&rdquo;
-                    </Typography>
-                    <Divider sx={{ mb: 2 }} />
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar
-                        sx={{
-                          bgcolor: `primary.${index % 2 === 0 ? 'main' : 'dark'}`,
-                          mr: 2,
-                        }}
-                      >
-                        {testimonial.name.charAt(0)}
-                      </Avatar>
-                      <Box>
-                        <Typography variant="subtitle2" component="p" sx={{ fontWeight: 'bold' }}>
-                          {testimonial.name}
+                <AnimatedSection delay={index * 0.1}>
+                  <motion.div whileHover={{ y: -10, transition: { duration: 0.3 } }} style={{ height: '100%' }}>
+                    <Card sx={{ height: '100%', borderRadius: '20px', boxShadow: theme.shadows[2], background: theme.palette.background.paper }}>
+                      <CardContent sx={{ p: 4 }}>
+                        <Box sx={{ display: 'flex', mb: 2 }}>
+                          {[...Array(5)].map((_, i) => (
+                            <StarIcon key={i} sx={{ color: i < testimonial.rating ? 'warning.main' : 'action.disabled' }} />
+                          ))}
+                        </Box>
+                        <Typography variant="body1" component="p" sx={{ fontStyle: 'italic', mb: 3 }}>
+                          &ldquo;{testimonial.content}&rdquo;
                         </Typography>
-                        <Typography variant="body2" component="p" color="text.secondary">
-                          {testimonial.role}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
+                        <Divider sx={{ mb: 2 }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                            {testimonial.name.charAt(0)}
+                          </Avatar>
+                          <Box>
+                            <Typography variant="subtitle1" component="p" sx={{ fontWeight: 'bold' }}>
+                              {testimonial.name}
+                            </Typography>
+                            <Typography variant="body2" component="p" color="text.secondary">
+                              {testimonial.role}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </AnimatedSection>
               </Grid>
             ))}
           </Grid>
@@ -850,33 +594,21 @@ export default function Home() {
       </Box>
 
       {/* Stats Section */}
-      <Box sx={{ py: 8, bgcolor: 'primary.main', color: 'white' }}>
+      <Box sx={{ py: 10, background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)', color: 'white' }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {stats.map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography 
-                    variant="h3" 
-                    component="h3"
-                    sx={{
-                      fontWeight: 'bold',
-                      mb: 1,
-                      color: 'white'
-                    }}
-                  >
-                    {stat.value}
-                  </Typography>
-                  <Typography 
-                    variant="h6" 
-                    component="p"
-                    sx={{
-                      opacity: 0.9
-                    }}
-                  >
-                    {t(`home.stats.${stat.key}`)}
-                  </Typography>
-                </Box>
+                <AnimatedSection delay={index * 0.1}>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="h2" component="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+                      {stat.value}
+                    </Typography>
+                    <Typography variant="h6" component="p" sx={{ opacity: 0.9 }}>
+                      {t(`home.stats.${stat.key}`)}
+                    </Typography>
+                  </Box>
+                </AnimatedSection>
               </Grid>
             ))}
           </Grid>
@@ -884,99 +616,31 @@ export default function Home() {
       </Box>
 
       {/* CTA Section */}
-      <Box sx={{ py: 10 }}>
+      <Box sx={{ py: 12, background: theme.palette.mode === 'dark' ? darkGradient2 : lightGradient2 }}>
         <Container maxWidth="md">
-          <Card
-            sx={{
-              borderRadius: '24px',
-              overflow: 'hidden',
-              position: 'relative',
-              background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
-              boxShadow: theme.shadows[10],
-            }}
-          >
-            <CardContent sx={{ p: { xs: 4, md: 6 }, position: 'relative', zIndex: 1 }}>
-              <Typography
-                variant="h3"
-                component="h2"
-                align="center"
-                gutterBottom
-                sx={{ color: 'white', fontWeight: 700 }}
-              >
-                {t('home.cta.title')}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                component="p"
-                align="center"
-                sx={{ color: 'white', opacity: 0.9, mb: 4 }}
-              >
-                {t('home.cta.subtitle')}
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                {isAuthenticated ? (
+          <AnimatedSection>
+            <motion.div whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}>
+              <Card sx={{ borderRadius: '24px', overflow: 'hidden', position: 'relative', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', boxShadow: theme.shadows[10] }}>
+                <CardContent sx={{ p: { xs: 4, md: 6 }, position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                  <Typography variant="h3" component="h2" gutterBottom sx={{ color: 'white', fontWeight: 700 }}>
+                    {t('home.cta.title')}
+                  </Typography>
+                  <Typography variant="h6" component="p" sx={{ color: 'white', opacity: 0.9, mb: 4 }}>
+                    {t('home.cta.subtitle')}
+                  </Typography>
                   <Button
                     component={NextLink}
-                    href={user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv'}
+                    href={isAuthenticated ? (user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard/create-cv') : "/register"}
                     variant="contained"
                     size="large"
-                    sx={{
-                      px: 6,
-                      py: 1.5,
-                      bgcolor: 'white',
-                      color: 'primary.main',
-                      fontWeight: 'bold',
-                      '&:hover': {
-                        bgcolor: 'grey.100',
-                      },
-                      borderRadius: '8px',
-                    }}
+                    sx={{ px: 6, py: 1.5, bgcolor: 'white', color: 'primary.main', fontWeight: 'bold', '&:hover': { bgcolor: 'grey.100' }, borderRadius: '12px' }}
                   >
-                    {t('home.hero.toDashboard')}
+                    {isAuthenticated ? t('home.hero.toDashboard') : t('home.cta.button')}
                   </Button>
-                ) : (
-                  <Button
-                    component={NextLink}
-                    href="/register"
-                    variant="contained"
-                    size="large"
-                    sx={{
-                      px: 6,
-                      py: 1.5,
-                      bgcolor: 'white',
-                      color: 'primary.main',
-                      fontWeight: 'bold',
-                      '&:hover': {
-                        bgcolor: 'grey.100',
-                      },
-                      borderRadius: '8px',
-                    }}
-                  >
-                    {t('home.cta.button')}
-                  </Button>
-                )}
-              </Box>
-            </CardContent>
-            
-            {/* Background Elements */}
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                opacity: 0.1,
-                zIndex: 0,
-              }}
-            >
-              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10%" cy="20%" r="80" fill="white" />
-                <circle cx="90%" cy="60%" r="100" fill="white" />
-                <circle cx="50%" cy="90%" r="60" fill="white" />
-              </svg>
-            </Box>
-          </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </AnimatedSection>
         </Container>
       </Box>
     </Layout>
@@ -989,4 +653,4 @@ export const getStaticProps: GetStaticProps = async ({ locale = 'tr' }) => {
       ...(await serverSideTranslations(locale, ['common'])),
     },
   };
-}; 
+};

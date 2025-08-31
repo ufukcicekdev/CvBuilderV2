@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { Box } from '@mui/material';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import CookieConsentBanner from './CookieConsentBanner';
 import { useAuth } from '../contexts/AuthContext';
 
 interface LayoutProps {
@@ -37,6 +38,7 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </Box>
       <Footer />
+      <CookieConsentBanner />
     </Box>
   );
 } 

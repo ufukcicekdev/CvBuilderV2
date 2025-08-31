@@ -71,7 +71,8 @@
       "googleScriptError": "Google login service could not be loaded. Please try again later.",
       "loginCancelled": "Login process cancelled",
       "invalidResponse": "Invalid response from server",
-      "redirectFailed": "Redirection failed. Trying alternative method."
+      "redirectFailed": "Redirection failed. Trying alternative method.",
+      "cookieConsentRequired": "You must accept cookies to log in with Google."
     },
     "checkEmail": "Please check your email inbox and click the verification link",
     "forgotPasswordInstructions": "Enter your registered email address to reset your password.",
@@ -551,18 +552,18 @@
     "saveError": "An error occurred while saving",
     "loadError": "An error occurred while loading CV",
     "errors": {
-     "personalInfoRequired": "Please fill in all personal information",
-     "experienceRequired": "You must enter at least one work experience",
-     "educationRequired": "You must enter at least one education",
-     "skillsRequired": "You must add at least one skill",
-     "languagesRequired": "You must enter at least one language",
-     "experienceFieldsRequired": "Please fill in company name, position and start date for experience",
-     "educationFieldsRequired": "Please fill in school, degree, field of study and start date for education",
-     "endDateRequired": "End date is required if you're not currently studying",
-     "titleRequired": "Please enter a title for the CV",
-     "skillNameRequired": "Please enter skill name",
-     "certificateFieldsRequired": "Please fill in certificate name, issuing organization and issue date"
-   },
+      "personalInfoRequired": "Please fill in all personal information",
+      "experienceRequired": "You must enter at least one work experience",
+      "educationRequired": "You must enter at least one education",
+      "skillsRequired": "You must add at least one skill",
+      "languagesRequired": "You must enter at least one language",
+      "experienceFieldsRequired": "Please fill in company name, position and start date for experience",
+      "educationFieldsRequired": "Please fill in school, degree, field of study and start date for education",
+      "endDateRequired": "End date is required if you're not currently studying",
+      "titleRequired": "Please enter a title for the CV",
+      "skillNameRequired": "Please enter skill name",
+      "certificateFieldsRequired": "Please fill in certificate name, issuing organization and issue date"
+    },
     "currentStep": "Current Step",
     "deleteConfirmTitle": "Delete CV",
     "deleteConfirmMessage": "Are you sure you want to delete this CV?",
@@ -996,5 +997,13 @@
       "tryAgain": "Try Again",
       "contactSupport": "Contact Support"
     }
+  },
+  "cookie": {
+    "bannerText": "Our site uses cookies to improve user experience and to provide our services.",
+    "moreInfo": "For more information, you can review our <link>privacy policy</link>.",
+    "decline": "Decline",
+    "accept": "Accept",
+    "privacyPolicy": "Privacy Policy"
+
   }
 }

@@ -265,7 +265,7 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ cv: initialCv }) =>
       transition: {
         type: "spring",
         stiffness: 100
-      }
+      } as any,
     }
   };
 

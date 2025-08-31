@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -9,15 +9,19 @@ import {
   Menu,
   MenuItem,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  alpha,
+  Container
 } from '@mui/material';
-import { Menu as MenuIcon, Language as LanguageIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Language as LanguageIcon, ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import Flag from 'react-world-flags';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import Logo from './Logo';
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: 'TR' },
@@ -34,53 +38,20 @@ export default function Navbar() {
   const { t, i18n } = useTranslation('common');
   const { changeLanguage } = useLanguage();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
   const [langMenuAnchor, setLangMenuAnchor] = useState<null | HTMLElement>(null);
-  const [mounted, setMounted] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    
-    // Dil ayarını kontrol et ve API için ayarla
-    const initializeLanguage = async () => {
-      const savedLanguage = localStorage.getItem('selectedLanguage');
-      const currentLocale = router.locale || 'en';
-      
-      // Eğer localStorage'da dil yoksa veya farklıysa, güncel dili kaydet
-      if (!savedLanguage || savedLanguage !== currentLocale) {
-        localStorage.setItem('selectedLanguage', currentLocale);
-        
-        // API için Accept-Language header'ını ayarla
-        const { setLanguage } = await import('../services/api');
-        setLanguage(currentLocale);
-      }
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
     };
 
-    // Sayfa yüklendiğinde ve her değişimde token kontrolü
-    const checkAuth = () => {
-      const token = localStorage.getItem('accessToken');
-      setIsLoggedIn(!!token);
-    };
-
-    initializeLanguage();
-    checkAuth();
-    
-    // Route değişikliklerinde kontrolleri yap
-    router.events.on('routeChangeComplete', () => {
-      initializeLanguage();
-      checkAuth();
-    });
-
-    return () => {
-      router.events.off('routeChangeComplete', () => {
-        initializeLanguage();
-        checkAuth();
-      });
-    };
-  }, [router]);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleMobileMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -99,180 +70,185 @@ export default function Navbar() {
   };
 
   const handleLanguageChange = async (locale: string) => {
-    try {
-      // Context'i güncelle
-      changeLanguage(locale);
-      
-      // Mevcut URL'yi al
-      const currentPath = router.asPath;
-      
-      // Next.js route'unu güncelle
-      await router.push(currentPath, currentPath, { 
-        locale,
-        scroll: false // Sayfanın en üste kaymasını önle
-      });
-      
-      // Menüyü kapat
-      handleLangMenuClose();
-    } catch (error) {
-      console.error('Error changing language:', error);
-    }
+    changeLanguage(locale);
+    const currentPath = router.asPath;
+    await router.push(currentPath, currentPath, { locale, scroll: false });
+    handleLangMenuClose();
   };
 
   const handleLogout = () => {
     logout();
     router.push('/login');
+    handleMobileMenuClose();
   };
 
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography 
-          variant="h6" 
-          component={Link}
-          href="/"
-          sx={{ 
-            flexGrow: 1,
-            color: 'inherit',
-            textDecoration: 'none',
-            '&:hover': {
-              opacity: 0.8
-            },
-            cursor: 'pointer'
-          }}
-        >
-          {!mounted ? 'CV Builder' : t('app.name')}
-        </Typography>
+  const navLinks = [
+    { name: t('nav.pricing'), href: '/pricing' },
+    // Add other main navigation links here if needed
+  ];
 
-        {/* Desktop Menu */}
-        {!isMobile && (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button color="inherit" component={Link} href="/pricing">
-              {t('nav.pricing')}
+  const authLinks = isAuthenticated ? [
+    { name: t('nav.dashboard'), href: user?.user_type === 'employer' ? '/dashboard/employer' : '/dashboard' },
+    { name: t('nav.profile'), href: '/profile' },
+  ] : [];
+
+  const menuVariants = {
+    hidden: {
+      opacity: 0,
+      y: -10,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+    exit: {
+        opacity: 0,
+        y: -10,
+    }
+  };
+
+  const menuItemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const currentLanguage = LANGUAGES.find(lang => lang.code === router.locale) || LANGUAGES[0];
+
+  return (
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
+        background: scrolled 
+          ? alpha(theme.palette.background.paper, 0.85)
+          : 'transparent',
+        backdropFilter: scrolled ? 'blur(10px)' : 'none',
+        boxShadow: scrolled ? theme.shadows[2] : 'none',
+        transition: theme.transitions.create(['background-color', 'box-shadow', 'backdrop-filter'], {
+          duration: theme.transitions.duration.short,
+        }),
+      }}
+    >
+      <Container maxWidth="lg">
+        <Toolbar disableGutters>
+          <Logo />
+
+          <Box sx={{ flexGrow: 1 }} />
+
+          {/* Desktop Menu */}
+          {!isMobile && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {navLinks.map(link => (
+                <Button key={link.name} sx={{ color: 'text.primary', fontWeight: 500 }} component={Link} href={link.href}>
+                  {link.name}
+                </Button>
+              ))}
+              {authLinks.map(link => (
+                <Button key={link.name} sx={{ color: 'text.primary', fontWeight: 500 }} component={Link} href={link.href}>
+                  {link.name}
+                </Button>
+              ))}
+            </Box>
+          )}
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: isMobile ? 0 : 2 }}>
+            {/* Language Selector */}
+            <Button
+              color="inherit"
+              onClick={handleLangMenuClick}
+              aria-label={t('nav.selectLanguage')}
+              endIcon={<ArrowDropDownIcon />}
+              sx={{ color: 'text.primary', textTransform: 'none' }}
+            >
+              <Flag code={currentLanguage.flag} height="16" style={{ marginRight: '8px', borderRadius: '2px' }} aria-hidden="true" />
+              {isMobile ? currentLanguage.code.toUpperCase() : currentLanguage.name}
             </Button>
-            {isLoggedIn ? (
-              <>
-                <Button color="inherit" component={Link} href="/dashboard">
-                  {t('nav.dashboard')}
-                </Button>
-                <Button color="inherit" component={Link} href="/profile">
-                  {t('nav.profile')}
-                </Button>
-                <Button 
-                  color="inherit" 
-                  onClick={handleLogout}
+            <Menu
+              anchorEl={langMenuAnchor}
+              open={Boolean(langMenuAnchor)}
+              onClose={handleLangMenuClose}
+              MenuListProps={{ sx: { py: 1 } }}
+              PaperProps={{ sx: { borderRadius: 2, mt: 1.5, boxShadow: theme.shadows[4] } }}
+            >
+              {LANGUAGES.map((lang) => (
+                <MenuItem 
+                  key={lang.code}
+                  onClick={() => handleLanguageChange(lang.code)}
+                  selected={router.locale === lang.code}
+                  sx={{ gap: 1.5, px: 2, py: 1, borderRadius: 1, mx: 1 }}
                 >
-                  {t('nav.logout')}
-                </Button>
+                  <Flag code={lang.flag} height="16" style={{ borderRadius: '2px' }} aria-hidden="true" />
+                  {lang.name}
+                </MenuItem>
+              ))}
+            </Menu>
+
+            {/* Auth Buttons / Mobile Menu Toggle */}
+            {isMobile ? (
+              <>
+                <IconButton
+                  color="inherit"
+                  onClick={handleMobileMenuClick}
+                  edge="end"
+                  aria-label={t('nav.openMenu')}
+                  sx={{ color: 'text.primary' }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={mobileMenuAnchor}
+                  open={Boolean(mobileMenuAnchor)}
+                  onClose={handleMobileMenuClose}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  PaperProps={{ sx: { width: '200px', borderRadius: 2, mt: 1.5, boxShadow: theme.shadows[4] } }}
+                >
+                  <AnimatePresence>
+                    {Boolean(mobileMenuAnchor) && (
+                      <motion.div variants={menuVariants} initial="hidden" animate="visible" exit="exit">
+                        {[...navLinks, ...authLinks].map(link => (
+                          <motion.div key={link.href} variants={menuItemVariants}>
+                            <MenuItem component={Link} href={link.href} onClick={handleMobileMenuClose}>{link.name}</MenuItem>
+                          </motion.div>
+                        ))}
+                        {isAuthenticated ? (
+                          <motion.div variants={menuItemVariants}>
+                            <MenuItem onClick={handleLogout}>{t('nav.logout')}</MenuItem>
+                          </motion.div>
+                        ) : (
+                          <motion.div variants={menuItemVariants}>
+                            <MenuItem component={Link} href="/login" onClick={handleMobileMenuClose}>{t('nav.login')}</MenuItem>
+                            <MenuItem component={Link} href="/register" onClick={handleMobileMenuClose}>{t('nav.register')}</MenuItem>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Menu>
               </>
             ) : (
-              <>
-                <Button color="inherit" component={Link} href="/login">
-                  {t('nav.login')}
-                </Button>
-                <Button color="inherit" component={Link} href="/register">
-                  {t('nav.register')}
-                </Button>
-              </>
-            )}
-            <IconButton
-              color="inherit"
-              onClick={handleLangMenuClick}
-              aria-label={t('nav.selectLanguage')}
-            >
-              <LanguageIcon />
-            </IconButton>
-          </Box>
-        )}
-
-        {/* Mobile Menu */}
-        {isMobile && (
-          <>
-            <IconButton
-              color="inherit"
-              onClick={handleLangMenuClick}
-              edge="end"
-              sx={{ mr: 1 }}
-              aria-label={t('nav.selectLanguage')}
-            >
-              <LanguageIcon />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              onClick={handleMobileMenuClick}
-              edge="end"
-              aria-label={t('nav.openMenu')}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={mobileMenuAnchor}
-              open={Boolean(mobileMenuAnchor)}
-              onClose={handleMobileMenuClose}
-            >
-              {isLoggedIn ? (
-                <>
-                  <MenuItem component={Link} href="/dashboard" onClick={handleMobileMenuClose}>
-                    {t('nav.dashboard')}
-                  </MenuItem>
-                  {/* <MenuItem component={Link} href="/jobs" onClick={handleMobileMenuClose}> */}
-                    {/* {t('nav.jobs')} */}
-                  {/* </MenuItem> */}
-                  <MenuItem component={Link} href="/profile" onClick={handleMobileMenuClose}>
-                    {t('nav.profile')}
-                  </MenuItem>
-                  <MenuItem 
-                    onClick={handleLogout}
-                  >
-                    {t('nav.logout')}
-                  </MenuItem>
-                </>
-              ) : (
-                <>
-                  <MenuItem component={Link} href="/login" onClick={handleMobileMenuClose}>
+              !isAuthenticated && (
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button sx={{ color: 'text.primary' }} component={Link} href="/login">
                     {t('nav.login')}
-                  </MenuItem>
-                  <MenuItem component={Link} href="/register" onClick={handleMobileMenuClose}>
+                  </Button>
+                  <Button variant="contained" component={Link} href="/register">
                     {t('nav.register')}
-                  </MenuItem>
-                </>
-              )}
-            </Menu>
-          </>
-        )}
-
-        {/* Language Menu */}
-        <Menu
-          anchorEl={langMenuAnchor}
-          open={Boolean(langMenuAnchor)}
-          onClose={handleLangMenuClose}
-        >
-          {LANGUAGES.map((lang) => (
-            <MenuItem 
-              key={lang.code}
-              onClick={() => handleLanguageChange(lang.code)}
-              selected={router.locale === lang.code}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                minWidth: '150px'
-              }}
-            >
-              <Flag 
-                code={lang.flag} 
-                height="16" 
-                fallback={<span>🏳️</span>}
-                style={{ 
-                  border: '1px solid rgba(0,0,0,0.1)',
-                  borderRadius: '2px'
-                }}
-              />
-              {lang.name}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Toolbar>
+                  </Button>
+                </Box>
+              )
+            )}
+            {isAuthenticated && !isMobile && (
+                <Button variant="outlined" onClick={handleLogout}>
+                    {t('nav.logout')}
+                </Button>
+            )}
+          </Box>
+        </Toolbar>
+      </Container>
     </AppBar>
   );
-} 
+}

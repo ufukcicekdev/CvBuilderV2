@@ -61,7 +61,7 @@ const Template2: React.FC<PDFTemplateProps> = ({ data, language, translations = 
         {/* Profile picture */}
         {data.personal_info?.photo && (
           <div>
-            <img
+            <Image
               src={data.personal_info.photo}
               alt="Profile"
               width={80}

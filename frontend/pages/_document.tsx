@@ -30,11 +30,11 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://cekfisi.fra1.cdn.digitaloceanspaces.com" crossOrigin="anonymous" />
           
           {/* DNS Prefetch for third-party resources */}
-          <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-          <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-          <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-          <link rel="dns-prefetch" href="https://web-production-9f41e.up.railway.app" />
-          <link rel="dns-prefetch" href="https://cekfisi.fra1.cdn.digitaloceanspaces.com" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
+          <link rel="preconnect" href="https://www.googletagmanager.com" />
+          <link rel="preconnect" href="https://web-production-9f41e.up.railway.app" />
+          <link rel="preconnect" href="https://cekfisi.fra1.cdn.digitaloceanspaces.com" />
           
           {/* Preload absolutely critical resources for index page */}
           <link 

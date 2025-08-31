@@ -16,5 +16,16 @@
       "feedback": "Retour d'expérience",
       "other": "Autre"
     }
+  },
+  "cookie": {
+    "bannerText": "Notre site utilise des cookies pour améliorer l'expérience utilisateur et pour fournir nos services.",
+    "moreInfo": "Pour plus d'informations, vous pouvez consulter notre <link>politique de confidentialité</link>.",
+    "decline": "Refuser",
+    "accept": "Accepter"
+  },
+  "auth": {
+    "errors": {
+      "cookieConsentRequired": "Vous devez accepter les cookies pour vous connecter avec Google."
+    }
   }
-} 
+}

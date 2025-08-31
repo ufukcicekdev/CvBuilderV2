@@ -38,7 +38,7 @@ const Template1: React.FC<PDFTemplateProps> = ({ data, language, translations = 
       >
         {data.personal_info?.photo && (
           <div style={{ marginBottom: '8px' }}>
-            <img
+            <Image
               src={data.personal_info.photo}
               alt="Profile"
               width={80}

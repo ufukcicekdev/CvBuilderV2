@@ -14,6 +14,7 @@ import Script from 'next/script';
 import Head from 'next/head';
 import { SessionProvider } from "next-auth/react";
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import Analytics from '../components/Analytics';
 
 const cacheRtl = createCache({
   key: 'muirtl',
@@ -123,36 +124,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <SessionProvider session={pageProps.session}>
         <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
-          {/* Google Analytics - load with higher priority but after paint */}
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-HDJ50NB3XE"
-            strategy="afterInteractive"
-            onLoad={() => {
-              // Mark analytics as loaded for performance tracking
-              if (typeof window !== 'undefined' && 'performance' in window) {
-                window.performance.mark('analytics-loaded');
-              }
-            }}
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-HDJ50NB3XE', {
-                send_page_view: false, // Manually track page views for better performance
-              });
-              
-              // Track initial page view after the page is interactive
-              document.addEventListener('DOMContentLoaded', function() {
-                gtag('event', 'page_view', {
-                  page_title: document.title,
-                  page_location: window.location.href,
-                  page_path: window.location.pathname,
-                });
-              });
-            `}
-          </Script>
+          <Analytics />
           
           <AuthProvider>
             <LanguageProvider>

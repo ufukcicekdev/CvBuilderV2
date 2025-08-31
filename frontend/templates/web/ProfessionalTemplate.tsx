@@ -261,7 +261,7 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ cv: initial
       transition: {
         type: "spring",
         stiffness: 100
-      }
+      } as any,
     }
   };
 

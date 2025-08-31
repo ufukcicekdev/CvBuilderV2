@@ -71,7 +71,8 @@
       "googleScriptError": "Google giriş hizmeti yüklenemedi. Lütfen daha sonra tekrar deneyin.",
       "loginCancelled": "Giriş işlemi iptal edildi",
       "invalidResponse": "Sunucudan geçersiz yanıt",
-      "redirectFailed": "Yönlendirme başarısız. Alternatif yöntem deneniyor."
+      "redirectFailed": "Yönlendirme başarısız. Alternatif yöntem deneniyor.",
+      "cookieConsentRequired": "Google ile giriş yapmak için çerezleri kabul etmelisiniz."
     },
     "checkEmail": "Lütfen e-posta gelen kutunuzu kontrol edin ve doğrulama bağlantısına tıklayın",
     "forgotPasswordInstructions": "Şifrenizi sıfırlamak için kayıtlı e-posta adresinizi girin.",
@@ -551,18 +552,18 @@
     "saveError": "Kaydedilirken bir hata oluştu",
     "loadError": "CV yüklenirken bir hata oluştu",
     "errors": {
-     "personalInfoRequired": "Lütfen tüm kişisel bilgileri doldurun",
-     "experienceRequired": "En az bir deneyim girmelisiniz",
-     "educationRequired": "En az bir eğitim girmelisiniz",
-     "skillsRequired": "En az bir yetenek eklemelisiniz",
-     "languagesRequired": "En az bir dil girmelisiniz",
-     "experienceFieldsRequired": "Lütfen deneyim için şirket adı, pozisyon ve başlangıç tarihini doldurun",
-     "educationFieldsRequired": "Lütfen okul, derece, çalışma alanı ve başlangıç tarihini doldurun",
-     "endDateRequired": "Şu anda okumuyorsanız, bitiş tarihi gereklidir",
-     "titleRequired": "Lütfen CV için bir başlık girin",
-     "skillNameRequired": "Lütfen yetenek adını girin",
-     "certificateFieldsRequired": "Lütfen sertifika adı, veren kuruluş ve veriliş tarihini doldurun"
-   },
+      "personalInfoRequired": "Lütfen tüm kişisel bilgileri doldurun",
+      "experienceRequired": "En az bir deneyim girmelisiniz",
+      "educationRequired": "En az bir eğitim girmelisiniz",
+      "skillsRequired": "En az bir yetenek eklemelisiniz",
+      "languagesRequired": "En az bir dil girmelisiniz",
+      "experienceFieldsRequired": "Lütfen deneyim için şirket adı, pozisyon ve başlangıç tarihini doldurun",
+      "educationFieldsRequired": "Lütfen okul, derece, çalışma alanı ve başlangıç tarihini doldurun",
+      "endDateRequired": "Şu anda okumuyorsanız, bitiş tarihi gereklidir",
+      "titleRequired": "Lütfen CV için bir başlık girin",
+      "skillNameRequired": "Lütfen yetenek adını girin",
+      "certificateFieldsRequired": "Lütfen sertifika adı, veren kuruluş ve veriliş tarihini doldurun"
+    },
     "currentStep": "Mevcut Adım",
     "deleteConfirmTitle": "CV'yi Sil",
     "deleteConfirmMessage": "Bu CV'yi silmek istediğinizden emin misiniz?",
@@ -996,5 +997,12 @@
       "tryAgain": "Tekrar Deneyin",
       "contactSupport": "Destekle İletişime Geçin"
     }
+  },
+  "cookie": {
+    "bannerText": "Sitemiz, kullanıcı deneyimini geliştirmek ve hizmetlerimizi sunmak için çerezleri kullanır.",
+    "moreInfo": "Daha fazla bilgi için <link>gizlilik politikamızı</link> inceleyebilirsiniz.",
+    "decline": "Reddet",
+    "accept": "Kabul Et",
+    "privacyPolicy": "Gizlilik Politikası"
   }
 }

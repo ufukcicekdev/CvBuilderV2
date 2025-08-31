@@ -71,7 +71,8 @@
       "googleScriptError": "Error al cargar servicio de inicio de sesión de Google. Por favor inténtalo más tarde.",
       "loginCancelled": "Inicio de sesión cancelado",
       "invalidResponse": "Respuesta inválida del servidor",
-      "redirectFailed": "Redirección fallida. Intentando método alternativo."
+      "redirectFailed": "Redirección fallida. Intentando método alternativo.",
+      "cookieConsentRequired": "Debe aceptar las cookies para iniciar sesión con Google."
     },
     "checkEmail": "Por favor revisa tu bandeja de entrada y haz clic en el enlace de verificación",
     "forgotPasswordInstructions": "Ingresa tu correo electrónico registrado para restablecer tu contraseña.",
@@ -897,7 +898,7 @@
     },
     "changes": {
       "title": "Cambios a esta Política de Privacidad",
-      "description": "Podemos actualizar nuestra Política de Privacidad de vez en cuando. Te notificaremos de cualquier cambio publicando la nueva Política de Privacidad en esta página y actualizando la fecha de 'Última actualización'. Te recomendamos que revises esta Política de Privacidad periódicamente para cualquier cambio."
+      "description": "Podemos actualizar nuestra Política de Privacidad de vez en cuando. Te notificaremos de cualquier cambio publicando la nueva Política de Privacidad en esta página y actualizando la fecha de 'Última Actualización'. Te recomendamos que revises esta Política de Privacidad periódicamente para cualquier cambio."
     },
     "contact": {
       "title": "Contáctanos",
@@ -996,5 +997,12 @@
       "tryAgain": "Intentar de Nuevo",
       "contactSupport": "Contactar Soporte"
     }
+  },
+  "cookie": {
+    "bannerText": "Nuestro sitio utiliza cookies para mejorar la experiencia del usuario y para proporcionar nuestros servicios.",
+    "moreInfo": "Para obtener más información, puede revisar nuestra <link>política de privacidad</link>.",
+    "decline": "Rechazar",
+    "accept": "Aceptar",
+     "privacyPolicy": "Política de Privacidad"
   }
 }

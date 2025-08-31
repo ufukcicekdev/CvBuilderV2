@@ -263,7 +263,7 @@ const ColorfulTemplate: React.FC<ColorfulTemplateProps> = ({ cv: initialCv }) =>
       transition: {
         type: "spring",
         stiffness: 100
-      }
+      } as any,
     }
   };
 
