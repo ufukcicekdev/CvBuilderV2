@@ -20,7 +20,7 @@ class MyDocument extends Document {
           <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="alternate icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.svg" type="image/svg+xml" />
-          <link rel="manifest" href="/manifest.json" />
+          <link rel="manifest" href="/site.webmanifest" />
           
           {/* Resource Hints - For high priority domains */}
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
