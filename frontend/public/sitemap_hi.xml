@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- Homepage -->
+   <url>
+    <loc>https://cvbuilder.dev/hi</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>1.00</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <!-- Login Page -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/login</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  
+  <!-- Register Page -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/register</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  
+  <!-- Contact Page -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/contact</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.70</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  
+  <!-- Pricing Page -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/pricing</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.90</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Privacy Policy Page -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/privacy-policy</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.60</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Terms of Service Page -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/terms-of-service</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.60</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Templates Pages -->
+  <url>
+    <loc>https://cvbuilder.dev/hi/forgot-password</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+</urlset> 
