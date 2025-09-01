@@ -1,8 +1,11 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
-  <url>
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- Homepage -->
+   <url>
     <loc>https://cvbuilder.dev/</loc>
     <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en" />
@@ -89,4 +92,6 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/templates" />
     <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/templates" />
   </url>
-</urlset>
+
+
+</urlset> 
