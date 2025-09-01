@@ -1,69 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- Homepage -->
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
     <loc>https://cvbuilder.dev/</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>1.00</priority>
-    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi" />
   </url>
   
-  <!-- Login Page -->
   <url>
     <loc>https://cvbuilder.dev/login</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.80</priority>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/login" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/login" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/login" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/login" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/login" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/login" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/login" />
   </url>
   
-  <!-- Register Page -->
   <url>
     <loc>https://cvbuilder.dev/register</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.80</priority>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/register" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/register" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/register" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/register" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/register" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/register" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/register" />
   </url>
-  
-  <!-- Contact Page -->
+
   <url>
     <loc>https://cvbuilder.dev/contact</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.70</priority>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/contact" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/contact" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/contact" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/contact" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/contact" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/contact" />
   </url>
-  
-  <!-- Pricing Page -->
+
   <url>
     <loc>https://cvbuilder.dev/pricing</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.90</priority>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/pricing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/pricing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/pricing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/pricing" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/pricing" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/pricing" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/pricing" />
   </url>
-
-  <!-- Privacy Policy Page -->
+  
   <url>
     <loc>https://cvbuilder.dev/privacy-policy</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.60</priority>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/privacy-policy" />
   </url>
-
-  <!-- Terms of Service Page -->
+  
   <url>
     <loc>https://cvbuilder.dev/terms-of-service</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.60</priority>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/terms-of-service" />
   </url>
 
-  <!-- Templates Pages -->
   <url>
     <loc>https://cvbuilder.dev/templates</loc>
-    <lastmod>2024-04-21T12:00:00+00:00</lastmod>
-    <priority>0.85</priority>
-    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://cvbuilder.dev/templates" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cvbuilder.dev/en/templates" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://cvbuilder.dev/es/templates" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cvbuilder.dev/zh/templates" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://cvbuilder.dev/ar/templates" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://cvbuilder.dev/de/templates" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://cvbuilder.dev/hi/templates" />
   </url>
-</urlset> 
+</urlset>
