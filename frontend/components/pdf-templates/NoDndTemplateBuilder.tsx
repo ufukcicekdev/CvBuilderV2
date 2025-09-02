@@ -341,7 +341,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
   // Layout değişikliğini yönet
   const handleLayoutChange = (event: SelectChangeEvent<string>) => {
     const newLayout = event.target.value as GlobalSettings['layout'];
-    console.log('Layout değiştiriliyor:', newLayout);
+    //console.log('Layout değiştiriliyor:', newLayout);
     
     // Layout değişikliğiyle ilgili otomatik ayarlamaları yapalım
     let updatedSections = [...templateData.sections];
@@ -663,7 +663,7 @@ const NoDndTemplateBuilder: React.FC<TemplateBuilderProps> = ({
 
   // Render template preview based on current settings
   const renderPreview = () => {
-    console.log('Preview render ediliyor, layout:', templateData.globalSettings.layout);
+    //console.log('Preview render ediliyor, layout:', templateData.globalSettings.layout);
     const sortedSections = [...templateData.sections]
       .filter(section => section.visible)
       .sort((a, b) => a.order - b.order);

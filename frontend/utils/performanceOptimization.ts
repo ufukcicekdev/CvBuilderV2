@@ -297,7 +297,7 @@ function monitorPerformance(): void {
       
       if (lastEntry) {
         const lcpTime = Math.round(lastEntry.startTime);
-        console.log(`LCP: ${lcpTime}ms`);
+        //console.log(`LCP: ${lcpTime}ms`);
         
         // Log LCP element
         if (lastEntry.element) {
@@ -487,7 +487,7 @@ function markCriticalContent() {
         
         // Force load priority
         img.loading = 'eager';
-        img.setAttribute('fetchpriority', 'high');
+        img.dataset.fetchpriority = 'high';
       }
     });
   }
@@ -736,7 +736,7 @@ function observeLargestContentfulPaint() {
           if (lcpElement.tagName === 'IMG') {
             const img = lcpElement as HTMLImageElement;
             img.loading = 'eager';
-            img.setAttribute('fetchpriority', 'high');
+            img.dataset.fetchpriority = 'high';
           }
           
           console.info('[Performance] LCP element identified:', lcpElement);
@@ -777,7 +777,7 @@ function optimizeSpecificElement(element: Element) {
     
     // Force loading priority
     img.loading = 'eager';
-    img.setAttribute('fetchpriority', 'high');
+    img.dataset.fetchpriority = 'high';
   }
 }
 
@@ -959,7 +959,7 @@ function optimizeLargestContentfulPaint(): void {
       img.decoding = 'async';
       
       // Add fetchpriority attribute for browsers that support it
-      img.setAttribute('fetchpriority', 'high');
+      img.dataset.fetchpriority = 'high';
       
       // Ensure proper width/height are set to prevent layout shifts
       if (!img.width && !img.height && img.getAttribute('width') === null && img.getAttribute('height') === null) {

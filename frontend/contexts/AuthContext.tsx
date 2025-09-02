@@ -64,12 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Login error response:', errorData);
+        //console.error('Login error response:', errorData);
         throw errorData;
       }
 
       const data = await response.json();
-      console.log('Login response:', data);
+      //console.log('Login response:', data);
 
       const { access, refresh, user } = data;
 
@@ -80,10 +80,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true);
       setUser(user);
 
-      console.log('Login successful:', {
-        user,
-        token: access
-      });
+      // console.log('Login successful:', {
+      //   user,
+      //   token: access
+      // });
 
       // Kullanıcı tipine göre yönlendirme yap
       if (user.user_type === 'jobseeker') {
@@ -119,10 +119,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true);
       setUser(userData);
 
-      console.log('Login with tokens successful:', {
-        user: userData,
-        token: accessToken
-      });
+      // console.log('Login with tokens successful:', {
+      //   user: userData,
+      //   token: accessToken
+      // });
 
       return userData;
     } catch (error) {
