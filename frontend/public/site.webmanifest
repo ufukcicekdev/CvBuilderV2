@@ -1,7 +1,18 @@
 {
   "name": "CV Builder",
   "short_name": "CVBuilder",
+  "id": "/",
   "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
     {
       "src": "/android-chrome-192x192.svg",
       "sizes": "192x192",
@@ -11,6 +22,11 @@
       "src": "/android-chrome-512x512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
     }
   ],
   "theme_color": "#3F51B5",
@@ -18,4 +34,5 @@
   "display": "standalone",
   "start_url": "/",
   "description": "Create professional CVs and resumes with our easy-to-use online CV builder."
-} 
+  
+}
