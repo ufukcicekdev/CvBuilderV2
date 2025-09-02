@@ -242,6 +242,7 @@ const nextConfig = {
     optimizeCss: true,
     scrollRestoration: true,
     workerThreads: true,
+    legacyBrowsers: false
   },
   
   // Enable source maps in production
