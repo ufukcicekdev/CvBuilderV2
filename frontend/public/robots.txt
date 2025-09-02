@@ -13,5 +13,3 @@ Disallow: /cv/edit/
 Disallow: /reset-password/
 Disallow: /verify-email/
 
-# Crawl delay
-Crawl-delay: 10 
