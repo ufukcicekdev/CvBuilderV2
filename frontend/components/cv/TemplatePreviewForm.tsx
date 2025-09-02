@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Suspense, useCallback, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from "next-auth/react";
 import {
   Box,
   Button,
@@ -51,6 +50,7 @@ import CustomTemplateRenderer from '../pdf-templates/CustomTemplateRenderer';
 import { GlobalSettings, CustomTemplateData as NoDndCustomTemplateData } from '../pdf-templates/NoDndTemplateBuilder';
 import { CustomTemplateData as TemplateBuilderCustomTemplateData } from '../pdf-templates/TemplateBuilder';
 import NoDndTemplateBuilder from '../../components/pdf-templates/NoDndTemplateBuilder';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Create a client-only wrapper component for TemplateBuilder
 const ClientOnlyTemplateBuilder = ({ children }: { children: React.ReactNode }) => {
@@ -378,8 +378,7 @@ interface CVData {
 const TemplatePreviewForm = ({ cvId, onPrev, onStepComplete, initialData, isLoading }: TemplatePreviewFormProps) => {
   const router = useRouter();
   const { t, i18n } = useTranslation('common');
-  const { data: session } = useSession();
-  const user = session?.user;
+  const { isAuthenticated, user, logout } = useAuth();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);

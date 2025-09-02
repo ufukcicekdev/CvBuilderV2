@@ -12,7 +12,6 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import Script from 'next/script';
 import Head from 'next/head';
-import { SessionProvider } from "next-auth/react";
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 import Analytics from '../components/Analytics';
 
@@ -122,7 +121,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}} />
       </Head>
-      <SessionProvider session={pageProps.session}>
         <CacheProvider value={isRTL ? cacheRtl : cacheLtr}>
           <Analytics />
           
@@ -142,7 +140,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             </LanguageProvider>
           </AuthProvider>
         </CacheProvider>
-      </SessionProvider>
     </>
   );
 }
