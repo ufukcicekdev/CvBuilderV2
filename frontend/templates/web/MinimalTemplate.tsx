@@ -54,20 +54,20 @@ import {
   Close as CloseIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import Flag from 'react-world-flags';
 import axiosInstance from '../../services/axios';
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import axios from 'axios';
 
 const LANGUAGES = [
-  { code: 'tr', name: 'Türkçe', flag: 'TR' },
-  { code: 'en', name: 'English', flag: 'GB' },
-  { code: 'es', name: 'Español', flag: 'ES' },
-  { code: 'zh', name: '中文', flag: 'CN' },
-  { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
-  { code: 'de', name: 'Deutsch', flag: 'DE' }
+  // flag değerlerini dosya adlarıyla değiştirin
+  { code: 'tr', name: 'Türkçe', flag: 'TR.svg' },
+  { code: 'en', name: 'English', flag: 'GB.svg' },
+  { code: 'de', name: 'Deutsch', flag: 'DE.svg' },
+  { code: 'es', name: 'Español', flag: 'ES.svg' },
+  { code: 'zh', name: '中文', flag: 'CN.svg' },
+  { code: 'ar', name: 'العربية', flag: 'SA.svg' },
+  { code: 'hi', name: 'हिन्दी', flag: 'IN.svg' },
 ];
 
 const translations = {
@@ -697,7 +697,14 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Flag height="20" code={currentLanguage.flag} />
+                     <Image
+                          src={`/flags/${currentLanguage.flag}`}
+                          alt={currentLanguage.name}
+                          width={24}  // height="16" ise, orantılı bir genişlik (örneğin 24) verin
+                          height={20}
+                          style={{ marginRight: '8px', borderRadius: '2px' }}
+                          aria-hidden="true"
+                        />
                     {currentLanguage.name}
                   </Box>
                 </Button>
@@ -723,7 +730,12 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ cv: initialCv }) => {
                         fontSize: '0.9rem'
                       }}
                     >
-                      <Flag height="20" code={language.flag} />
+                      <Image
+                                              src={`/flags/${language.flag}`} // lang.flag'ın 'TR.svg' gibi bir dosya adı olduğunu varsayıyoruz
+                                              alt={language.name}
+                                              width={24} // height={16} ile orantılı bir genişlik
+                                              height={16}
+                                            />
                       {language.name}
                     </MenuItem>
                   ))}

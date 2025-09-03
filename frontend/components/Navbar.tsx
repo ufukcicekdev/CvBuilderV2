@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
+
 import {
   AppBar,
   Toolbar,
@@ -17,20 +19,20 @@ import { Menu as MenuIcon, Language as LanguageIcon, ArrowDropDown as ArrowDropD
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import Flag from 'react-world-flags';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 
 const LANGUAGES = [
-  { code: 'tr', name: 'Türkçe', flag: 'TR' },
-  { code: 'en', name: 'English', flag: 'GB' },
-  { code: 'de', name: 'Deutsch', flag: 'DE' },
-  { code: 'es', name: 'Español', flag: 'ES' },
-  { code: 'zh', name: '中文', flag: 'CN' },
-  { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
+  // flag değerlerini dosya adlarıyla değiştirin
+  { code: 'tr', name: 'Türkçe', flag: 'TR.svg' },
+  { code: 'en', name: 'English', flag: 'GB.svg' },
+  { code: 'de', name: 'Deutsch', flag: 'DE.svg' },
+  { code: 'es', name: 'Español', flag: 'ES.svg' },
+  { code: 'zh', name: '中文', flag: 'CN.svg' },
+  { code: 'ar', name: 'العربية', flag: 'SA.svg' },
+  { code: 'hi', name: 'हिन्दी', flag: 'IN.svg' },
 ];
 
 export default function Navbar() {
@@ -163,7 +165,14 @@ export default function Navbar() {
               endIcon={<ArrowDropDownIcon />}
               sx={{ color: 'text.primary', textTransform: 'none' }}
             >
-              <Flag code={currentLanguage.flag} height="16" style={{ marginRight: '8px', borderRadius: '2px' }} aria-hidden="true" />
+              <Image
+      src={`/flags/${currentLanguage.flag}`}
+      alt={currentLanguage.name}
+      width={24}  // height="16" ise, orantılı bir genişlik (örneğin 24) verin
+      height={16}
+      style={{ marginRight: '8px', borderRadius: '2px' }}
+      aria-hidden="true"
+    />
               {isMobile ? currentLanguage.code.toUpperCase() : currentLanguage.name}
             </Button>
             <Menu
@@ -180,7 +189,14 @@ export default function Navbar() {
                   selected={router.locale === lang.code}
                   sx={{ gap: 1.5, px: 2, py: 1, borderRadius: 1, mx: 1 }}
                 >
-                  <Flag code={lang.flag} height="16" style={{ borderRadius: '2px' }} aria-hidden="true" />
+                  <Image
+          src={`/flags/${lang.flag}`}
+          alt={lang.name}
+          width={24}
+          height={16}
+          style={{ borderRadius: '2px' }}
+          aria-hidden="true"
+        />
                   {lang.name}
                 </MenuItem>
               ))}

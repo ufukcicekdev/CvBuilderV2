@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import CreateCVForm from '../../components/cv/CreateCVForm';
-import CVFormContent from '../../components/cv/CVFormContent';
+
 import { GetServerSideProps } from 'next';
 import subscriptionService from '../../services/subscriptionService';
 import Link from 'next/link';
@@ -14,6 +14,17 @@ import SubscriptionWarningDialog from '../../components/ui/SubscriptionWarningDi
 import { cvService } from '../../services/cvService';
 import axios from 'axios';
 import { showToast } from '../../utils/toast';
+import dynamic from 'next/dynamic';
+
+const DynamicCVFormContent = dynamic(() => import('../../components/cv/CVFormContent'), {
+  loading: () => (
+    <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+      <CircularProgress />
+    </Box>
+  ),
+  ssr: false, // PDF kütüphaneleri genellikle tarayıcıda çalıştığı için SSR'ı kapatmak en güvenlisidir.
+});
+
 
 function CreateCV() {
   const router = useRouter();
@@ -215,7 +226,7 @@ function CreateCV() {
         ) : (
           <Paper sx={{ p: 3 }}>
             {id ? (
-              <CVFormContent
+              <DynamicCVFormContent
                 activeStep={activeStep}
                 cvId={Number(id)}
                 onStepChange={handleStepChange}

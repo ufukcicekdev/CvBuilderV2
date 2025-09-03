@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { 
   Box, 
   Typography, 
@@ -41,18 +42,18 @@ import {
   Public
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import Flag from 'react-world-flags';
 import axiosInstance from '@/utils/axios';
 import { motion } from 'framer-motion';
 
 const LANGUAGES = [
-  { code: 'tr', name: 'Türkçe', flag: 'TR' },
-  { code: 'en', name: 'English', flag: 'GB' },
-  { code: 'es', name: 'Español', flag: 'ES' },
-  { code: 'zh', name: '中文', flag: 'CN' },
-  { code: 'ar', name: 'العربية', flag: 'SA' },
-  { code: 'hi', name: 'हिन्दी', flag: 'IN' },
-  { code: 'de', name: 'Deutsch', flag: 'DE' }
+  // flag değerlerini dosya adlarıyla değiştirin
+  { code: 'tr', name: 'Türkçe', flag: 'TR.svg' },
+  { code: 'en', name: 'English', flag: 'GB.svg' },
+  { code: 'de', name: 'Deutsch', flag: 'DE.svg' },
+  { code: 'es', name: 'Español', flag: 'ES.svg' },
+  { code: 'zh', name: '中文', flag: 'CN.svg' },
+  { code: 'ar', name: 'العربية', flag: 'SA.svg' },
+  { code: 'hi', name: 'हिन्दी', flag: 'IN.svg' },
 ];
 
 interface ProfessionalTemplateProps {
@@ -390,7 +391,12 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ cv: initial
                   selected={currentLang === lang.code}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Flag code={lang.flag} height="16" />
+                    <Image
+                        src={`/flags/${lang.flag}`} // lang.flag'ın 'TR.svg' gibi bir dosya adı olduğunu varsayıyoruz
+                        alt={lang.name}
+                        width={24} // height={16} ile orantılı bir genişlik
+                        height={16}
+                      />
                     {lang.name}
                   </Box>
                 </MenuItem>

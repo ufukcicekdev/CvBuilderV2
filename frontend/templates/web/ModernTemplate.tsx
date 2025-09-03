@@ -22,7 +22,6 @@ import {
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import Flag from 'react-world-flags';
 import axiosInstance from '@/utils/axios';
 import { useTranslation } from 'next-i18next';
 import axios from 'axios';
@@ -647,7 +646,12 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ cv: initialCv }) => {
                       minWidth: '150px'
                     }}
                   >
-                    <Flag height="20" code={language.flag} />
+                    <Image
+                        src={`/flags/${language.flag}`} // lang.flag'ın 'TR.svg' gibi bir dosya adı olduğunu varsayıyoruz
+                        alt={language.name}
+                        width={24} // height={16} ile orantılı bir genişlik
+                        height={16}
+                      />
                     {language.name}
                   </MenuItem>
                 ))}

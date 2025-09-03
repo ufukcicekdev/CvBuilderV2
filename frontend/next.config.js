@@ -1,12 +1,18 @@
+// next.config.js
+
 const { i18n } = require('./next-i18next.config');
+
+// 1. withBundleAnalyzer'ı dosyanın başında tanımlayın
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   i18n,
   reactStrictMode: true,
-  swcMinify: false, // For better source maps, disable swcMinify
-  
-  // API isteklerini backend'e yönlendirmek için proxy ayarları
+  swcMinify: false,
+
   async rewrites() {
     return [
       {
@@ -16,23 +22,23 @@ const nextConfig = {
     ];
   },
   
-  // SEO optimizations
-  poweredByHeader: false, // Remove X-Powered-By header
-  compress: true, // Enable gzip compression
+  poweredByHeader: false,
+  compress: true,
   
-  // Image optimization with more aggressive settings
   images: {
+    // ⚠️ DİKKAT: Bu ayarı 'false' yaptım. 'true' olması tüm resim optimizasyonunu kapatır ve mobil skoru düşürür.
+    unoptimized: false, 
     domains: ['web-production-9f41e.up.railway.app', 'cekfisi.fra1.cdn.digitaloceanspaces.com'],
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 86400, // 24 hours cache
+    minimumCacheTTL: 86400,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Bu satırı sildim çünkü headers içinde daha kapsamlı bir CSP tanımınız var.
+    // contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     unoptimized: true,
   },
   
-  // HTTP Headers with cache optimizations and security
   async headers() {
     return [
       {
@@ -238,7 +244,6 @@ const nextConfig = {
     return config;
   },
   
-  // Performance optimizations for Next.js 14.1.3
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
@@ -246,8 +251,8 @@ const nextConfig = {
     legacyBrowsers: false
   },
   
-  // Enable source maps in production
   productionBrowserSourceMaps: true
 };
 
-module.exports = nextConfig;
+// 3. Mevcut 'nextConfig' objenizi withBundleAnalyzer ile sarmalayarak dışa aktarın
+module.exports = withBundleAnalyzer(nextConfig);
