@@ -51,7 +51,7 @@ class MyDocument extends Document {
               setTimeout(() => {
                 const link = document.querySelector('link[href="/hero-image.svg"]');
                 if (link) {
-                  (link as HTMLElement).dataset.fetchpriority = 'high'; // Cast to HTMLElement
+                  link.setAttribute('fetchpriority', 'high'); // Cast to HTMLElement
                 }
               }, 0);
             }
