@@ -71,6 +71,8 @@ export default function Footer() {
             </Typography>
             <Link href="/" color="text.secondary" display="block">{t('footer.home')}</Link>
             {/* <Link href="/about" color="text.secondary" display="block">{t('footer.about')}</Link> */}
+            <Link href="/blog" color="text.secondary" display="block">{t('footer.blog')}</Link>
+
             <Link href="/contact" color="text.secondary" display="block">{t('footer.contact')}</Link>
             <Link href="/privacy-policy" color="text.secondary" display="block">{t('footer.privacy')}</Link>
             <Link href="/terms-of-service" color="text.secondary" display="block">{t('footer.terms')}</Link>

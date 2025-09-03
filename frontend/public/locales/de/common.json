@@ -16,7 +16,8 @@
     "settings": "Einstellungen",
     "help": "Hilfe",
     "pricing": "Preise",
-    "language": "Sprache"
+    "language": "Sprache",
+    "blog":"Blog"
   },
   "auth": {
     "jobseeker": "Arbeitssuchender",
@@ -161,7 +162,8 @@
     "copyright": "Alle Rechte vorbehalten",
     "address": "Adresse",
     "phone": "Telefon",
-    "email": "E-Mail"
+    "email": "E-Mail",
+    "blog":"Blog"
   },
   "common": {
     "save": "Speichern",

@@ -16,7 +16,8 @@
     "settings": "Ayarlar",
     "help": "Yardım",
     "pricing": "Fiyatlandırma",
-    "language": "Dil"
+    "language": "Dil",
+    "blog":"Blog"
   },
   "auth": {
     "jobseeker": "İş Arayan",
@@ -161,7 +162,8 @@
     "copyright": "Tüm hakları saklıdır",
     "address": "Adres",
     "phone": "Telefon",
-    "email": "E-posta"
+    "email": "E-posta",
+    "blog":"Blog"
   },
   "common": {
     "save": "Kaydet",

@@ -86,6 +86,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: t('nav.pricing'), href: '/pricing' },
+    { name: t('nav.blog'), href: '/blog' },
     // Add other main navigation links here if needed
   ];
 

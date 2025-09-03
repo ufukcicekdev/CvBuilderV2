@@ -16,7 +16,8 @@
     "settings": "设置",
     "help": "帮助",
     "pricing": "定价",
-    "language": "语言"
+    "language": "语言",
+    "blog": "博客"
   },
   "auth": {
     "jobseeker": "求职者",
@@ -161,7 +162,8 @@
     "copyright": "版权所有",
     "address": "地址",
     "phone": "电话",
-    "email": "电子邮件"
+    "email": "电子邮件",
+     "blog": "博客"
   },
   "common": {
     "save": "保存",
