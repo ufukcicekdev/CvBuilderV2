@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { getBlogBySlug, getAllBlogSlugs } from '../../services/blogService';
 import Navbar from '../../components/Navbar'; // Assuming Navbar is the correct header
+import Footer from '../../components/Footer';
 
 interface BlogDetailProps {
     post: {
