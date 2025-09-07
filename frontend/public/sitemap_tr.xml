@@ -67,4 +67,11 @@
     <changefreq>weekly</changefreq>
   </url>
 
+  <url>
+    <loc>https://cvbuilder.dev/blog</loc>
+    <lastmod>2025-09-01T12:00:00+00:00</lastmod>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
 </urlset> 

@@ -310,15 +310,24 @@
     }
   },
   "blog": {
-    "title": "ब्लॉग",
-    "description": "करियर और सीवी तैयारी पर नवीनतम लेख",
-    "searchPlaceholder": "ब्लॉग पोस्ट खोजें...",
-    "categories": "श्रेणियाँ",
-    "readMore": "और पढ़ें",
-    "comments": "टिप्पणियाँ",
-    "leaveComment": "एक टिप्पणी छोड़ें",
-    "noComments": "अभी तक कोई टिप्पणी नहीं",
-    "relatedPosts": "संबंधित पोस्ट"
+    "title": "Blog",
+    "description": "Latest articles about career and CV preparation",
+    "searchPlaceholder": "Search blog posts...",
+    "categories": "Categories",
+    "readMore": "Read More",
+    "comments": "Comments",
+    "leaveComment": "Leave a Comment",
+    "noComments": "No comments yet",
+    "relatedPosts": "Related Posts",
+    "pageTitle": "Blog | CV Builder",
+    "pageDescription": "Read our latest articles and updates on career, CV building, and job searching.",
+    "views": "views",
+    "share": "Share",
+    "shareTitle": "Share Post",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "no_posts": "No blog posts found.",
+    "loading": "Loading..."
   },
   "contact": {
     "title": "संपर्क करें",

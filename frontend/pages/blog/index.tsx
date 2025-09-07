@@ -2,16 +2,22 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { motion } from 'framer-motion';
+import Layout from '@/components/Layout';
+
+// MUI Imports
+import { Container, Grid, Typography, Box } from '@mui/material';
+
+import SEO from '@/components/SEO';
 import { getBlogs } from '../../services/blogService';
 import BlogCard from '../../components/BlogCard';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import Navbar from '../../components/Navbar'; // Assuming Navbar is the correct header
+
 
 // Interfaces based on the new serializers
 interface Translation {
     language: string;
     title: string;
+    content: string;
 }
 
 interface BlogPost {
@@ -19,35 +25,48 @@ interface BlogPost {
     slug: string;
     translations: Translation[];
     created_at: string;
+    view_count: number;
 }
 
 interface BlogPageProps {
     posts: BlogPost[];
 }
 
+
 const BlogPage: React.FC<BlogPageProps> = ({ posts }) => {
     const { t } = useTranslation('common');
 
     return (
-        <>
-            <Navbar />
-            <div style={{ padding: '40px 20px', maxWidth: '800px', margin: '100px auto' }}>
-                <h1>{t('blog.title', 'Blog')}</h1>
-                <div>
+        <Layout>
+            <SEO 
+                title={t('blog.title')}
+                description={t('blog.pageDescription')}
+            />
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Container maxWidth="lg" sx={{ my: { xs: 10, md: 15 } }}>
+                    <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center', mb: 5 }}>
+                        {t('blog.title')}
+                    </Typography>
                     {posts.length > 0 ? (
-                        posts.map(post => (
-                            <BlogCard 
-                                key={post.id} 
-                                post={post} 
-                            />
-                        ))
+                        <Grid container spacing={4}>
+                            {posts.map(post => (
+                                <Grid item key={post.id} xs={12} sm={6} md={4}>
+                                    <BlogCard post={post} />
+                                </Grid>
+                            ))}
+                        </Grid>
                     ) : (
-                        <p>{t('blog.no_posts', 'No blog posts found.')}</p>
+                        <Box textAlign="center" mt={5}>
+                            <Typography>{t('blog.no_posts')}</Typography>
+                        </Box>
                     )}
-                </div>
-            </div>
-            <Footer />
-        </>
+                </Container>
+            </motion.div>
+        </Layout>
     );
 };
 

@@ -318,7 +318,16 @@
     "comments": "Yorumlar",
     "leaveComment": "Yorum Yap",
     "noComments": "Henüz yorum yok",
-    "relatedPosts": "İlgili Yazılar"
+    "relatedPosts": "İlgili Yazılar",
+    "pageTitle": "Blog | CV Builder",
+    "pageDescription": "Kariyer, CV hazırlama ve iş arama üzerine en son makalelerimizi ve güncellemelerimizi okuyun.",
+    "views": "görüntülenme",
+    "share": "Paylaş",
+    "shareTitle": "Yazıyı Paylaş",
+    "copyLink": "Linki Kopyala",
+    "copied": "Kopyalandı!",
+    "no_posts": "Hiç blog yazısı bulunamadı.",
+    "loading": "Yükleniyor..."
   },
   "contact": {
     "title": "İletişim",

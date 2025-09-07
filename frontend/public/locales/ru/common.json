@@ -38,5 +38,25 @@
     "moreInfo": "Для получения дополнительной информации вы можете ознакомиться с нашей <link>политикой конфиденциальности</link>.",
     "decline": "Отклонить",
     "accept": "Принять"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Latest articles about career and CV preparation",
+    "searchPlaceholder": "Search blog posts...",
+    "categories": "Categories",
+    "readMore": "Read More",
+    "comments": "Comments",
+    "leaveComment": "Leave a Comment",
+    "noComments": "No comments yet",
+    "relatedPosts": "Related Posts",
+    "pageTitle": "Blog | CV Builder",
+    "pageDescription": "Read our latest articles and updates on career, CV building, and job searching.",
+    "views": "views",
+    "share": "Share",
+    "shareTitle": "Share Post",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "no_posts": "No blog posts found.",
+    "loading": "Loading..."
   }
 }

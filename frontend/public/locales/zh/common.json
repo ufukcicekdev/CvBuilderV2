@@ -310,15 +310,24 @@
     }
   },
   "blog": {
-    "title": "博客",
-    "description": "关于职业和简历准备的最新文章",
-    "searchPlaceholder": "搜索博客文章...",
-    "categories": "分类",
-    "readMore": "阅读更多",
-    "comments": "评论",
-    "leaveComment": "发表评论",
-    "noComments": "暂无评论",
-    "relatedPosts": "相关文章"
+    "title": "Blog",
+    "description": "Latest articles about career and CV preparation",
+    "searchPlaceholder": "Search blog posts...",
+    "categories": "Categories",
+    "readMore": "Read More",
+    "comments": "Comments",
+    "leaveComment": "Leave a Comment",
+    "noComments": "No comments yet",
+    "relatedPosts": "Related Posts",
+    "pageTitle": "Blog | CV Builder",
+    "pageDescription": "Read our latest articles and updates on career, CV building, and job searching.",
+    "views": "views",
+    "share": "Share",
+    "shareTitle": "Share Post",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "no_posts": "No blog posts found.",
+    "loading": "Loading..."
   },
   "contact": {
     "title": "联系我们",
